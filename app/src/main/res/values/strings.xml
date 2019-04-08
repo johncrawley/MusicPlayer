@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Music Player</string>
+    <string name="menu_button_refresh">Refresh</string>
+    <string name="playlist_refreshed_message">Playlist Refreshed</string>
+    <string name="no_tracks_found">No tracks found!</string>
+    <string name="playlist_item_offset">3</string>
+
+</resources>
