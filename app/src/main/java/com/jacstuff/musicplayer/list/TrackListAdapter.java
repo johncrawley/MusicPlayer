@@ -80,11 +80,10 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     }
 
 
-
-
     private String getStrOf(TrackDetails trackDetails){
         return trackDetails.getArtist() + " : " +  trackDetails.getName();
     }
+
 
     private int selectedPosition = RecyclerView.NO_POSITION;
     private boolean isInitialBind = true;

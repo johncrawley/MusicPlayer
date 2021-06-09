@@ -1,6 +1,11 @@
 package com.jacstuff.musicplayer;
 
 import android.Manifest;
+import android.annotation.TargetApi;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -33,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerView recyclerView;
     private TrackListAdapter mAdapter;
 
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mediaController = new MediaControllerImpl(context, this);
         setupViews();
         mediaController.initPlaylistAndRefreshView();
+        listAudioFiles();
     }
 
 
@@ -233,6 +240,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.trackArtist.setText(artistInfo);
     }
 
+
+/*
+    public void printAudioFiles(){
+        String[] projection={MediaStore.Audio.Media.DATA};
+        Cursor cursor=managedQuery(uri,projection,null,null,null);
+        int column_index=cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+
+
+    }
+
+
+    public String getRealPathFromURI(Uri contentUri) {
+        String res = null;
+        String[] proj = { MediaStore.Audio.Media.DATA };
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        if(cursor.moveToFirst()){;
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            res = cursor.getString(column_index);
+        }
+        cursor.close();
+        return res;
+    }
+    */
+
+    private void log(String msg){
+        System.out.println("MainActivity: "  + msg);
+    }
+
+    public void listAudioFiles(){
+        String[] projection = new String[] { MediaStore.Audio.Albums._ID,
+                MediaStore.Audio.Albums.ALBUM,
+                MediaStore.Audio.Albums.ARTIST,
+                MediaStore.Audio.Albums.ALBUM_ART,
+                MediaStore.Audio.Albums.NUMBER_OF_SONGS };
+        String selection = null;
+        String[] selectionArgs = null;
+        String sortOrder = MediaStore.Audio.Media.ALBUM + " ASC";
+        Cursor cursor = getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection, selection, selectionArgs, sortOrder);
+        log("listAudioFiles() *************************** about to parse!");
+        if(cursor == null){
+            log("listAudioFiles() ************** cursor is null!");
+            return;
+        }
+
+        while(cursor.moveToNext()){
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM);
+            log(" stuff: " + cursor.getString(column_index));
+        }
+        cursor.close();
+        log("listAudioFiles() *********************** exiting!");
+    }
 
 
 }

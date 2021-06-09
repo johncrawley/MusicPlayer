@@ -38,7 +38,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private List<TrackDetails> trackDetailsList;
 
 
-    PlaylistManagerImpl(Context context){
+    public PlaylistManagerImpl(Context context){
 
         this.context = context;
         playlistFile = new File(context.getFilesDir().getAbsolutePath() + playlistFilename);
