@@ -271,15 +271,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void listAudioFiles(){
-        String[] projection = new String[] { MediaStore.Audio.Albums._ID,
+        String[] projection1 = new String[] { MediaStore.Audio.Albums._ID,
                 MediaStore.Audio.Albums.ALBUM,
                 MediaStore.Audio.Albums.ARTIST,
                 MediaStore.Audio.Albums.ALBUM_ART,
                 MediaStore.Audio.Albums.NUMBER_OF_SONGS };
+
+        String[] projection2 = new String[] {
+                MediaStore.Audio.Media.DISPLAY_NAME,
+                MediaStore.Audio.Media.TITLE};
+
         String selection = null;
         String[] selectionArgs = null;
-        String sortOrder = MediaStore.Audio.Media.ALBUM + " ASC";
-        Cursor cursor = getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection, selection, selectionArgs, sortOrder);
+        String sortOrder1 = MediaStore.Audio.Media.ALBUM + " ASC";
+        String sortOrder = MediaStore.Audio.Media.DEFAULT_SORT_ORDER + " ASC";
+        //Cursor cursor1 = getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection1, selection, selectionArgs, sortOrder1);
+        Cursor cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection2, selection, selectionArgs, sortOrder);
         log("listAudioFiles() *************************** about to parse!");
         if(cursor == null){
             log("listAudioFiles() ************** cursor is null!");
@@ -287,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         while(cursor.moveToNext()){
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME);
             log(" stuff: " + cursor.getString(column_index));
         }
         cursor.close();

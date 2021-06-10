@@ -1,6 +1,9 @@
 package com.jacstuff.musicplayer;
 
 
+import android.content.Context;
+import android.database.Cursor;
+import android.provider.MediaStore;
 import android.util.Log;
 import java.io.File;
 import java.util.ArrayList;
@@ -11,6 +14,12 @@ import java.util.Map;
 
 public class SDCardReader {
 
+    private Context context;
+
+    public SDCardReader(Context context){
+        this.context  = context;
+    }
+
 
     public List<String> listAllMusicFilesInPaths(String topDirPath, String musicDirectoryPath, String fileSuffix) {
 
@@ -20,22 +29,56 @@ public class SDCardReader {
         for (String musicPath : musicDirPaths) {
             musicFilePaths.addAll(getFilePaths(new File(musicPath), fileSuffix));
         }
+        listAudioFiles();
         return musicFilePaths;
     }
 
 
-    public Map<String, List<String>> createThumbnailLists(String topDirPath, String musicDirectoryPath, String fileSuffix){
-        Map<String, List<String>> thumbnailsMap = new HashMap<>();
+    public void listAudioFiles(){
+        String[] projection1 = new String[] { MediaStore.Audio.Albums._ID,
+                MediaStore.Audio.Albums.ALBUM,
+                MediaStore.Audio.Albums.ARTIST,
+                MediaStore.Audio.Albums.ALBUM_ART,
+                MediaStore.Audio.Albums.NUMBER_OF_SONGS };
 
-        List<String> musicDirPaths = getAllMusicDirPaths(topDirPath, musicDirectoryPath);
+        String[] projection2 = new String[] {
+                MediaStore.Audio.Media.DISPLAY_NAME,
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.ALBUM};
 
-        for(String path : musicDirPaths){
-
-            thumbnailsMap.put(musicDirectoryPath, getFilePaths(new File(path), fileSuffix));
+        String selection = null;
+        String[] selectionArgs = null;
+        String sortOrder1 = MediaStore.Audio.Media.ALBUM + " ASC";
+        String sortOrder = MediaStore.Audio.Media.DEFAULT_SORT_ORDER + " ASC";
+        //Cursor cursor1 = getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection1, selection, selectionArgs, sortOrder1);
+        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection2, selection, selectionArgs, sortOrder);
+        log("listAudioFiles() *************************** about to parse!");
+        if(cursor == null){
+            log("listAudioFiles() ************** cursor is null!");
+            return;
         }
 
-        return thumbnailsMap;
+        while(cursor.moveToNext()){
+
+            String displayName = getCol(cursor, MediaStore.Audio.Media.DISPLAY_NAME);
+            String artist  = getCol(cursor, MediaStore.Audio.Media.ARTIST);
+            String album  = getCol(cursor, MediaStore.Audio.Media.ALBUM);
+            String title = getCol(cursor, MediaStore.Audio.Media.TITLE);
+
+
+            log(" entry: " + displayName + " album: " + album + " artist: " + artist + " title: " + title);
+        }
+        cursor.close();
+        log("listAudioFiles() *********************** exiting!");
     }
+
+    private String getCol(Cursor cursor, String colName){
+        int col = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME);
+        return cursor.getString(col);
+    }
+
+
 
     private List<String> getFilePaths(File topDir, String fileSuffix) {
 

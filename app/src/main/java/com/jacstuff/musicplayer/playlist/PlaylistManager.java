@@ -12,7 +12,6 @@ public interface PlaylistManager {
     String getNextRandom();
     TrackDetails getNextRandomTrack();
     TrackDetails getNextRandomUnplayedTrack();
-    List<String> getThumbnailPathsForCurrentTrack();
     TrackDetails getTrackDetails(int index);
     void refreshPlaylist();
     List<TrackDetails> getTrackDetailsList();

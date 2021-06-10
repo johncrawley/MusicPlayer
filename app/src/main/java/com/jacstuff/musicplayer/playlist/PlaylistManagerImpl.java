@@ -31,7 +31,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private TrackDetailsParser trackDetailsParser;
     private final int INITIAL_LIST_CAPACITY = 10_000;
     private Context context;
-    private Map<String, List<String>> thumbnailPathsMap;
     private String topDir = "/storage";
     private String musicDir = "/Music";
     private String currentTrackDirectory; //used for assigning the current thumbnails playlist
@@ -45,11 +44,11 @@ public class PlaylistManagerImpl implements PlaylistManager {
         initPlaylistFile();
         pathnames = new ArrayList<>(INITIAL_LIST_CAPACITY);
         unplayedPathnameIndexes = new ArrayList<>();
-        sdCardReader = new SDCardReader();
+        sdCardReader = new SDCardReader(context);
         trackDetailsParser = new TrackDetailsParser();
-        thumbnailPathsMap = sdCardReader.createThumbnailLists( topDir, musicDir,".jpg");
         initTrackDetailsList();
     }
+
 
     private void initTrackDetailsList(){
         trackDetailsList = new ArrayList<>();
@@ -58,6 +57,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
             trackDetailsList.add(trackDetailsParser.parse(pathname));
         }
     }
+
 
     private void initPlaylistFile(){
         try{
@@ -199,10 +199,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         return this.currentIndex;
     }
 
-    public List<String> getThumbnailPathsForCurrentTrack(){
-
-        return thumbnailPathsMap.get(currentTrackDirectory);
-    }
 
     public TrackDetails getTrackDetails(int index){
         if(index > pathnames.size()){

@@ -286,19 +286,12 @@ public class MediaControllerImpl implements MediaController {
         boolean previousTrackWasPlaying = state == State.PLAYING;
         this.stop();
         assignNextTrack();
-        assignNextThumbnailList();
         if(previousTrackWasPlaying) {
             log("next() - not paused, so playing track!");
             this.play();
         }
     }
 
-
-    private List<String>  thumbnailPathsList;
-    private void assignNextThumbnailList(){
-
-        thumbnailPathsList = playlistManager.getThumbnailPathsForCurrentTrack();
-    }
 
     private void log(String msg){
         Log.i("MediaControllerImpl", msg);

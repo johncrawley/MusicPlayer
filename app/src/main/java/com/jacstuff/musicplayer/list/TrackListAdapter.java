@@ -1,6 +1,6 @@
 package com.jacstuff.musicplayer.list;
 
-import android.graphics.Color;
+
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,18 +19,26 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
 
     private List<String> trackNames;
 
+    private MediaPlayerView mediaPlayerView;
+    private int selectedPosition = RecyclerView.NO_POSITION;
+    private boolean isInitialBind = true;
+    private View currentlySelectedView;
+    private int indexToScrollTo = -1;
 
-
+/*
     // Define listener member variable
     private OnItemClickListener listener;
     // Define the listener interface
     public interface OnItemClickListener {
         void onItemClick(View itemView, int position);
     }
+
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
+    */
     class TrackViewHolder extends RecyclerView.ViewHolder {
 
         TextView trackNameTextView;
@@ -59,23 +67,21 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
 
     }
 
-    private MediaPlayerView mediaPlayerView;
 
     public TrackListAdapter(List<TrackDetails> trackDetailsList, MediaPlayerView view){
         this.trackNames = new ArrayList<>();
         this.mediaPlayerView = view;
-        Log.i("TrackListAdapter", "trackDetailsList size: " + trackDetailsList.size());
         for(TrackDetails trackDetails : trackDetailsList){
-            String trackStr = getStrOf(trackDetails);
-            this.trackNames.add(trackStr);
+            this.trackNames.add(getStrOf(trackDetails));
         }
     }
+
+
     @Override
     @NonNull
     public TrackListAdapter.TrackViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.track_list_item_view, parent,false);
-
         return new TrackViewHolder(view);
     }
 
@@ -85,19 +91,12 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     }
 
 
-    private int selectedPosition = RecyclerView.NO_POSITION;
-    private boolean isInitialBind = true;
-    private View currentlySelectedView;
-
     public void deselectCurrentlySelectedItem(){
-
-        Log.i("TrackListAdapter" , " entered deselectCurrentlySelectedItem()");
         if(currentlySelectedView != null){
-            Log.i("TrackListAdapter" , " deselectCurrentlySelectedItem() currentlySelectedView is : " + currentlySelectedView.getTag() + " isSelected: " + currentlySelectedView.isSelected());
             currentlySelectedView.setSelected(false);
-            Log.i("TrackListAdapter" , " deselectCurrentlySelectedItem() currentlySelectedView is : " + currentlySelectedView.getTag() + " isSelected: " + currentlySelectedView.isSelected());
         }
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull TrackViewHolder holder, int position){
@@ -120,25 +119,22 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
         }
     }
 
+
     private void changePositionTo(int newPosition){
         notifyItemChanged(selectedPosition);
         selectedPosition = newPosition;
         notifyItemChanged(selectedPosition);
     }
 
-    private int indexToScrollTo = -1;
+
     public void setIndexToScrollTo(int index){
-        Log.i("TrackListAdapter", "Setting index to scroll to : " + indexToScrollTo);
         this.indexToScrollTo = index;
     }
-
 
 
     @Override
     public int getItemCount(){
         return trackNames.size();
     }
-
-    //public TrackListAdapter
 
 }
