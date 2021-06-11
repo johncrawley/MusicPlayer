@@ -5,7 +5,6 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 
 import com.jacstuff.musicplayer.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
@@ -237,7 +236,7 @@ public class MediaControllerImpl implements MediaController {
             view.setTotalTrackTime(TimeConverter.convert(mediaPlayer.getDuration()));
 
         }catch (IOException e){
-            log("File not found!");
+            e.printStackTrace();
         }
     }
 
@@ -255,12 +254,6 @@ public class MediaControllerImpl implements MediaController {
         if(previousTrackWasPlaying) {
             this.play();
         }
-    }
-
-
-    private void log(String msg){
-        Log.i("MediaControllerImpl", msg);
-
     }
 
 

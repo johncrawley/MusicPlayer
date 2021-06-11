@@ -133,7 +133,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private void loadPlaylist(){}
 
 
-
     private void log(String msg){
         Log.i("PlayListMngImpl", msg);
     }

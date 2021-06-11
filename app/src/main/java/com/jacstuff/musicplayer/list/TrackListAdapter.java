@@ -17,10 +17,8 @@ import java.util.List;
 public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.TrackViewHolder> {
 
     private List<String> trackNames;
-
     private MediaPlayerView mediaPlayerView;
     private int selectedPosition = RecyclerView.NO_POSITION;
-    private boolean isInitialBind = true;
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
 
@@ -43,10 +41,12 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
                     currentlySelectedView = v;
                     currentlySelectedView.setSelected(true);
                     mediaPlayerView.notifyCurrentlySelectedTrack(getLayoutPosition());
+                     mediaPlayerView.scrollToListPosition(getLayoutPosition());
+                    setIndexToScrollTo(getLayoutPosition());
+                    currentlySelectedView.setSelected(true);
                 }
             });
         }
-
     }
 
 
@@ -62,7 +62,6 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     @Override
     @NonNull
     public TrackListAdapter.TrackViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.track_list_item_view, parent,false);
         return new TrackViewHolder(view);
     }
@@ -75,6 +74,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
 
     public void deselectCurrentlySelectedItem(){
         if(currentlySelectedView != null){
+            System.out.println("TrackListAdapter.deselectCurrentlySelectedItem() - setting to false");
             currentlySelectedView.setSelected(false);
         }
     }
@@ -87,11 +87,17 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
         holder.itemView.setSelected(selectedPosition == position);
 
         if(position == indexToScrollTo){
-
+            System.out.println("TrackListAdapter.onBindViewHolder() - about to deselect current item");
             deselectCurrentlySelectedItem();
             currentlySelectedView = holder.itemView;
             currentlySelectedView.setSelected(true);
         }
+    }
+
+
+    @Override
+    public int getItemCount(){
+        return trackNames.size();
     }
 
 
@@ -107,9 +113,5 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     }
 
 
-    @Override
-    public int getItemCount(){
-        return trackNames.size();
-    }
 
 }

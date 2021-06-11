@@ -32,7 +32,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton nextTrackButton;
     private String totalTrackTime = "0:00";
     private RecyclerView recyclerView;
-    private TrackListAdapter mAdapter;
+    private TrackListAdapter trackListAdapter;
+    private int previousIndex = 0;
+
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
@@ -96,8 +98,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setTrackTime("0:00");
     }
 
-    private void setTrackTime(String elapsedTime){
 
+    private void setTrackTime(String elapsedTime){
         TextView trackTime = findViewById(R.id.trackTime);
         if(trackTime == null){
             return;
@@ -106,13 +108,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         trackTime.setText(time);
     }
 
+
     public void displayPlaylistRefreshedMessage(){
         String msg = getResources().getString(R.string.playlist_refreshed_message);
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
-    private void setupViews(){
 
+    private void setupViews(){
         trackTitle = findViewById(R.id.trackTitle);
         trackAlbum = findViewById(R.id.albumTextView);
         trackArtist =findViewById(R.id.artistTextView);
@@ -141,20 +144,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setupRecyclerView(List<TrackDetails> trackDetailsList){
         recyclerView = findViewById(R.id.recyclerView);
-        mAdapter = new TrackListAdapter(trackDetailsList, this);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(mLayoutManager);
+        trackListAdapter = new TrackListAdapter(trackDetailsList, this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(trackListAdapter);
     }
 
 
-    private int previousIndex = 0;
-
-
     public void scrollToListPosition(int index){
-        mAdapter.deselectCurrentlySelectedItem();
-        mAdapter.setIndexToScrollTo(index);
+        trackListAdapter.deselectCurrentlySelectedItem();
+        trackListAdapter.setIndexToScrollTo(index);
         recyclerView.scrollToPosition(calculateIndexWithOffset(index));
     }
 
@@ -181,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         nextTrackButton.setEnabled(true);
     }
 
+
     public void onClick(View view){
         int id = view.getId();
         switch(id){
@@ -195,37 +196,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.refreshButton:
                 mediaController.refreshPlaylist();
         }
-
     }
+
 
     public void showPauseIcon(){
         playButton.setImageResource(android.R.drawable.ic_media_pause);
     }
 
+
     public void showPlayIcon(){
         playButton.setImageResource(android.R.drawable.ic_media_play);
     }
 
-    public void setTrackInfo(String trackInfo){
 
+    public void setTrackInfo(String trackInfo){
         if(trackInfo.isEmpty()){
             trackInfo = getResources().getString(R.string.no_tracks_found);
         }
         this.trackTitle.setText(trackInfo);
     }
 
+
     public void setAlbumInfo(String albumInfo){
         this.trackAlbum.setText(albumInfo);
     }
 
+
     public void setArtistInfo(String artistInfo){
         this.trackArtist.setText(artistInfo);
     }
-
-
-    private void log(String msg){
-        System.out.println("MainActivity: "  + msg);
-    }
-
 
 }
