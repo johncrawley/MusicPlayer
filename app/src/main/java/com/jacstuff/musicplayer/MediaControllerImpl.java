@@ -1,7 +1,6 @@
 package com.jacstuff.musicplayer;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 
 import static com.jacstuff.musicplayer.HandlerCode.ASSIGN_NEXT_TRACK;
 import static com.jacstuff.musicplayer.HandlerCode.PLAYLIST_REFRESHED;
-import static com.jacstuff.musicplayer.HandlerCode.UPDATE_BITMAP;
 import static com.jacstuff.musicplayer.HandlerCode.UPDATE_TIME;
 
 public class MediaControllerImpl implements MediaController {
@@ -33,7 +31,6 @@ public class MediaControllerImpl implements MediaController {
     private TrackDetails currentTrackDetails;
     private static Handler handler;
     private ScheduledExecutorService scheduledExecutor;
-    private ScheduledExecutorService scheduledCoverArtExecutor;
 
     private ExecutorService executorService;
     private TrackTimeUpdater trackTimeUpdater;
@@ -66,7 +63,7 @@ public class MediaControllerImpl implements MediaController {
     }
 
     public List<TrackDetails> getTrackDetailsList(){
-        return playlistManager.getTrackDetailsList();
+        return playlistManager.getTracks();
     }
 
 
@@ -93,11 +90,6 @@ public class MediaControllerImpl implements MediaController {
                         assignNextTrack();
                         view.enableControls();
                         updateViewTrackList();
-                        break;
-
-                    case UPDATE_BITMAP:
-                        Bitmap bitmap = (Bitmap)inputMessage.obj;
-
                 }
             }
         };
@@ -106,9 +98,9 @@ public class MediaControllerImpl implements MediaController {
 
 
     private void updateViewTrackList(){
-        List<TrackDetails> trackDetailsList = playlistManager.getTrackDetailsList();
+        List<TrackDetails> trackDetailsList = playlistManager.getTracks();
         log("track details list size: " + trackDetailsList.size());
-        view.refreshTrackList(playlistManager.getTrackDetailsList());
+        view.refreshTrackList(playlistManager.getTracks());
         view.scrollToListPosition(playlistManager.getCurrentTrackIndex());
     }
 
@@ -266,19 +258,13 @@ public class MediaControllerImpl implements MediaController {
         }catch (IOException e){
             log("File not found!");
         }
-
-
-
     }
-
-
 
 
     public String getTrackNameAt(int position){
         return playlistManager.getTrackNameAt(position);
 
     }
-
 
 
     @Override
@@ -297,6 +283,7 @@ public class MediaControllerImpl implements MediaController {
         Log.i("MediaControllerImpl", msg);
 
     }
+
 
     private void setTrackInfoOnView(){
         //MediaPlayer.TrackInfo[] trackInfo = mediaPlayer.getTrackInfo();

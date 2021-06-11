@@ -2,10 +2,7 @@ package com.jacstuff.musicplayer;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -48,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mediaController = new MediaControllerImpl(context, this);
         setupViews();
         mediaController.initPlaylistAndRefreshView();
-        listAudioFiles();
+        //listAudioFiles();
     }
 
 
@@ -67,10 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void notifyCurrentlySelectedTrack(int position){
-
         mediaController.selectTrack(position);
-
-
     }
 
 
@@ -80,18 +73,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        Log.i("MainActivity", "On options item Selected: id = " + id);
         if(id == R.id.refresh_button) {
-            Log.i("MainActivity", "id is the refresh button");
             mediaController.refreshPlaylist();
         }
         return super.onOptionsItemSelected(item);
     }
 
+
     public void setCoverImage(Bitmap bitmap){
         ImageView coverArt = findViewById(R.id.coverArtImageView);
         coverArt.setImageBitmap(bitmap);
     }
+
 
     public void setElapsedTime(String elapsedTime){
         this.setTrackTime(elapsedTime);
@@ -126,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         playButton = findViewById(R.id.playButton);
         nextTrackButton = findViewById(R.id.nextTrackButton);
         ImageButton refreshPlaylistButton = findViewById(R.id.refreshButton);
-       setupRecyclerView(mediaController.getTrackDetailsList());
+        setupRecyclerView(mediaController.getTrackDetailsList());
 
         trackTitle.setOnClickListener(this);
         playButton.setOnClickListener(this);
@@ -142,11 +135,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void refreshTrackList(List<TrackDetails> trackDetailsList){
-
-        Log.i("MainActivity", "refreshing track list");
-
         setupRecyclerView(trackDetailsList);
     }
+
 
     private void setupRecyclerView(List<TrackDetails> trackDetailsList){
         recyclerView = findViewById(R.id.recyclerView);
@@ -154,43 +145,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        /*
-        mAdapter.setOnItemClickListener(new TrackListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Log.i("MainActivity", "setupRecyclerView trackListAdapter onItemClicked() !!!");
-                Toast.makeText(MainActivity.this, mediaController.getTrackNameAt(position) + " was clicked!", Toast.LENGTH_SHORT).show();
-            }
-        });
-*/
         recyclerView.setAdapter(mAdapter);
     }
 
+
     private int previousIndex = 0;
 
+
     public void scrollToListPosition(int index){
-        Log.i("MainActivity", "scrollToListPosition: scrolling to position: "+  index);
         mAdapter.deselectCurrentlySelectedItem();
         mAdapter.setIndexToScrollTo(index);
-
         recyclerView.scrollToPosition(calculateIndexWithOffset(index));
-
     }
 
-    private int getOffset(){
-        return Integer.valueOf(getString(R.string.playlist_item_offset));
-    }
 
     private int calculateIndexWithOffset(int index){
-        int direction = index > previousIndex ? 1 : -1;
-        int offset = getOffset() * direction;
-        int indexWithOffset = index + offset;
+        int indexWithOffset = getPlaylistItemOffset(index);
         if ( indexWithOffset > mediaController.getNumberOfTracks() || indexWithOffset < 0) {
             indexWithOffset = index;
         }
         previousIndex = index;
         return indexWithOffset;
+    }
+
+
+    private int getPlaylistItemOffset(int index){
+        int direction = index > previousIndex ? 1 : -1;
+        int offset =  getResources().getInteger(R.integer.playlist_item_offset) * direction ;
+        return index + offset;
     }
 
 
@@ -241,64 +223,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-/*
-    public void printAudioFiles(){
-        String[] projection={MediaStore.Audio.Media.DATA};
-        Cursor cursor=managedQuery(uri,projection,null,null,null);
-        int column_index=cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-
-
-    }
-
-
-    public String getRealPathFromURI(Uri contentUri) {
-        String res = null;
-        String[] proj = { MediaStore.Audio.Media.DATA };
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if(cursor.moveToFirst()){;
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            res = cursor.getString(column_index);
-        }
-        cursor.close();
-        return res;
-    }
-    */
-
     private void log(String msg){
         System.out.println("MainActivity: "  + msg);
-    }
-
-    public void listAudioFiles(){
-        String[] projection1 = new String[] { MediaStore.Audio.Albums._ID,
-                MediaStore.Audio.Albums.ALBUM,
-                MediaStore.Audio.Albums.ARTIST,
-                MediaStore.Audio.Albums.ALBUM_ART,
-                MediaStore.Audio.Albums.NUMBER_OF_SONGS };
-
-        String[] projection2 = new String[] {
-                MediaStore.Audio.Media.DISPLAY_NAME,
-                MediaStore.Audio.Media.TITLE};
-
-        String selection = null;
-        String[] selectionArgs = null;
-        String sortOrder1 = MediaStore.Audio.Media.ALBUM + " ASC";
-        String sortOrder = MediaStore.Audio.Media.DEFAULT_SORT_ORDER + " ASC";
-        //Cursor cursor1 = getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection1, selection, selectionArgs, sortOrder1);
-        Cursor cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection2, selection, selectionArgs, sortOrder);
-        log("listAudioFiles() *************************** about to parse!");
-        if(cursor == null){
-            log("listAudioFiles() ************** cursor is null!");
-            return;
-        }
-
-        while(cursor.moveToNext()){
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME);
-            log(" stuff: " + cursor.getString(column_index));
-        }
-        cursor.close();
-        log("listAudioFiles() *********************** exiting!");
     }
 
 

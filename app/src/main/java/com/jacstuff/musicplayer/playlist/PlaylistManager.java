@@ -9,12 +9,11 @@ public interface PlaylistManager {
 
     void savePlaylist();
     String getNext();
-    String getNextRandom();
     TrackDetails getNextRandomTrack();
     TrackDetails getNextRandomUnplayedTrack();
     TrackDetails getTrackDetails(int index);
     void refreshPlaylist();
-    List<TrackDetails> getTrackDetailsList();
+    List<TrackDetails> getTracks();
     void init();
     int getCurrentTrackIndex();
     int getNumberOfTracks();
