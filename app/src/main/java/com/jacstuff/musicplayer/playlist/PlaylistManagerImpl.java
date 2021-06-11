@@ -7,7 +7,7 @@ import com.jacstuff.musicplayer.AudioInfoLoader;
 import com.jacstuff.musicplayer.TrackDetails;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 
 public class PlaylistManagerImpl implements PlaylistManager {
@@ -16,9 +16,11 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private int currentIndex = 0;
     private AudioInfoLoader sdCardReader;
     private List<TrackDetails> tracks;
+    private Random random;
 
 
     public PlaylistManagerImpl(Context context){
+        random = new Random(System.currentTimeMillis());
         unplayedPathnameIndexes = new ArrayList<>();
         sdCardReader = new AudioInfoLoader(context);
         initTrackDetailsList();
@@ -115,9 +117,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
         return tracks.get(index);
     }
 
-
     private int getNextRandomIndex(int listSize){
-        return listSize < 1 ? 0 : ThreadLocalRandom.current().nextInt(listSize -1);
+        return listSize < 1 ? 0 : random.nextInt(listSize -1);
     }
 
 
