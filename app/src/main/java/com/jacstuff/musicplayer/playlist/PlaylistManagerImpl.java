@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.jacstuff.musicplayer.AudioInfoLoader;
-import com.jacstuff.musicplayer.TrackDetails;
+import com.jacstuff.musicplayer.Track;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -15,7 +15,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private List<Integer> unplayedPathnameIndexes;
     private int currentIndex = 0;
     private AudioInfoLoader sdCardReader;
-    private List<TrackDetails> tracks;
+    private List<Track> tracks;
     private Random random;
 
 
@@ -60,7 +60,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
     @Override
-    public TrackDetails getNextRandomTrack(){
+    public Track getNextRandomTrack(){
         return tracks.isEmpty() ? null : tracks.get(getNextRandomIndex(tracks.size()));
     }
 
@@ -86,7 +86,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    public TrackDetails getNextRandomUnplayedTrack(){
+    public Track getNextRandomUnplayedTrack(){
         if(!attemptSetupOfIndexesIfEmpty()){
             return null;
         }
@@ -110,7 +110,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    public TrackDetails getTrackDetails(int index){
+    public Track getTrackDetails(int index){
         if(index > tracks.size()){
             return null;
         }
@@ -122,7 +122,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    public List<TrackDetails> getTracks(){
+    public List<Track> getTracks(){
         return this.tracks;
     }
 

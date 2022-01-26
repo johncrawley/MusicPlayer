@@ -26,5 +26,5 @@ public interface MediaController {
     int getNumberOfTracks();
     void initPlaylistAndRefreshView();
 
-    List<TrackDetails> getTrackDetailsList();
+    List<Track> getTrackDetailsList();
 }

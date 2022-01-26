@@ -6,14 +6,28 @@ public final class DbContract {
 
     private DbContract(){}
 
-    static class SongsEntry implements BaseColumns {
-        static final String TABLE_NAME = "Songs";
+    static class TracksEntry implements BaseColumns {
+        static final String TABLE_NAME = "Tracks";
         static final String COL_PATH = "path";
         static final String COL_NAME = "name";
         static final String COL_ALBUM = "album";
         static final String COL_ARTIST = "artist";
-        static final String COL_LENGTH = "length";
+        //static final String COL_LENGTH = "length";
     }
+
+
+    static class AlbumsEntry implements BaseColumns {
+        static final String TABLE_NAME = "Albums";
+        static final String COL_NAME = "name";
+    }
+
+
+    static class ArtistsEntry implements BaseColumns {
+        static final String TABLE_NAME = "Artists";
+        static final String COL_NAME = "name";
+    }
+
+
 
     static class PlaylistEntry implements BaseColumns {
         static final String TABLE_NAME = "Playlist";

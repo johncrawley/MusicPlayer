@@ -11,7 +11,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 3;
-    private static final String DATABASE_NAME = "Quiz.db";
+    private static final String DATABASE_NAME = "MusicPlayer.db";
 
     private static final String OPENING_BRACKET = " (";
     private static final String CLOSING_BRACKET = " );";
@@ -26,14 +26,13 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_SONGS_TABLE =
             CREATE_TABLE_IF_NOT_EXISTS
-                    + DbContract.SongsEntry.TABLE_NAME
+                    + DbContract.TracksEntry.TABLE_NAME
                     + OPENING_BRACKET
-                    + DbContract.SongsEntry._ID + INTEGER + PRIMARY_KEY + COMMA
-                    + DbContract.SongsEntry.COL_NAME + TEXT + COMMA
-                    + DbContract.SongsEntry.COL_PATH + TEXT + COMMA
-                    + DbContract.SongsEntry.COL_ALBUM + TEXT + COMMA
-                    + DbContract.SongsEntry.COL_ARTIST + TEXT + COMMA
-                    + DbContract.SongsEntry.COL_LENGTH + INTEGER
+                    + DbContract.TracksEntry._ID + INTEGER + PRIMARY_KEY + COMMA
+                    + DbContract.TracksEntry.COL_NAME + TEXT + COMMA
+                    + DbContract.TracksEntry.COL_PATH + TEXT + COMMA
+                    + DbContract.TracksEntry.COL_ALBUM + TEXT + COMMA
+                    + DbContract.TracksEntry.COL_ARTIST + TEXT
                     + CLOSING_BRACKET;
 
 
@@ -43,6 +42,23 @@ public class DbHelper extends SQLiteOpenHelper {
                     + OPENING_BRACKET
                     + DbContract.PlaylistEntry._ID + INTEGER + PRIMARY_KEY + COMMA
                     + DbContract.PlaylistEntry.COL_NAME + TEXT
+                    + CLOSING_BRACKET;
+
+
+    private static final String SQL_CREATE_ARTISTS_TABLE =
+            CREATE_TABLE_IF_NOT_EXISTS
+                    + DbContract.ArtistsEntry.TABLE_NAME
+                    + OPENING_BRACKET
+                    + DbContract.ArtistsEntry._ID + INTEGER + PRIMARY_KEY + COMMA
+                    + DbContract.ArtistsEntry.COL_NAME + TEXT
+                    + CLOSING_BRACKET;
+
+    private static final String SQL_CREATE_ALBUMS_TABLE =
+            CREATE_TABLE_IF_NOT_EXISTS
+                    + DbContract.AlbumsEntry.TABLE_NAME
+                    + OPENING_BRACKET
+                    + DbContract.AlbumsEntry._ID + INTEGER + PRIMARY_KEY + COMMA
+                    + DbContract.AlbumsEntry.COL_NAME + TEXT
                     + CLOSING_BRACKET;
 
 
@@ -72,6 +88,8 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_SONGS_TABLE);
         db.execSQL(SQL_CREATE_PLAYLIST_TABLE);
         db.execSQL(SQL_CREATE_PLAYLIST_ITEMS_TABLE);
+        db.execSQL(SQL_CREATE_ARTISTS_TABLE);
+        db.execSQL(SQL_CREATE_ALBUMS_TABLE);
     }
 
 

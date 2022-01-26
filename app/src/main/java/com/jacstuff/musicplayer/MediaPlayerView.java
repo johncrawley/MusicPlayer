@@ -16,7 +16,7 @@ public interface MediaPlayerView {
     void displayPlaylistRefreshedMessage();
     void enableControls();
     void setCoverImage(Bitmap bitmap);
-    void refreshTrackList(List<TrackDetails> trackDetailsList);
+    void refreshTrackList(List<Track> trackDetailsList);
     void scrollToListPosition(int index);
     void notifyCurrentlySelectedTrack(int item);
 

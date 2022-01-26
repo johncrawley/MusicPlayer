@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.jacstuff.musicplayer.MediaPlayerView;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.TrackDetails;
+import com.jacstuff.musicplayer.Track;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,10 +50,10 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     }
 
 
-    public TrackListAdapter(List<TrackDetails> trackDetailsList, MediaPlayerView view){
+    public TrackListAdapter(List<Track> trackDetailsList, MediaPlayerView view){
         this.trackNames = new ArrayList<>();
         this.mediaPlayerView = view;
-        for(TrackDetails trackDetails : trackDetailsList){
+        for(Track trackDetails : trackDetailsList){
             this.trackNames.add(getStrOf(trackDetails));
         }
     }
@@ -67,7 +67,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     }
 
 
-    private String getStrOf(TrackDetails trackDetails){
+    private String getStrOf(Track trackDetails){
         return trackDetails.getArtist() + " : " +  trackDetails.getName();
     }
 

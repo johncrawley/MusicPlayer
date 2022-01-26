@@ -137,12 +137,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void refreshTrackList(List<TrackDetails> trackDetailsList){
+    public void refreshTrackList(List<Track> trackDetailsList){
         setupRecyclerView(trackDetailsList);
     }
 
 
-    private void setupRecyclerView(List<TrackDetails> trackDetailsList){
+    private void setupRecyclerView(List<Track> trackDetailsList){
         recyclerView = findViewById(R.id.recyclerView);
         trackListAdapter = new TrackListAdapter(trackDetailsList, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);

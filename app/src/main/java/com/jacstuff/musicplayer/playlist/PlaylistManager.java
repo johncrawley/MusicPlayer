@@ -1,6 +1,6 @@
 package com.jacstuff.musicplayer.playlist;
 
-import com.jacstuff.musicplayer.TrackDetails;
+import com.jacstuff.musicplayer.Track;
 
 import java.util.List;
 
@@ -9,11 +9,11 @@ public interface PlaylistManager {
 
     void savePlaylist();
     String getNext();
-    TrackDetails getNextRandomTrack();
-    TrackDetails getNextRandomUnplayedTrack();
-    TrackDetails getTrackDetails(int index);
+    Track getNextRandomTrack();
+    Track getNextRandomUnplayedTrack();
+    Track getTrackDetails(int index);
     void refreshPlaylist();
-    List<TrackDetails> getTracks();
+    List<Track> getTracks();
     void init();
     int getCurrentTrackIndex();
     int getNumberOfTracks();

@@ -3,22 +3,16 @@ package com.jacstuff.musicplayer;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
-import java.io.File;
-import java.net.URI;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AudioInfoLoader {
 
     private Context context;
-    private List <TrackDetails> trackDetailsList;
+    private List <Track> trackDetailsList;
 
     public AudioInfoLoader(Context context){
         this.context  = context;
@@ -26,7 +20,7 @@ public class AudioInfoLoader {
     }
 
 
-    public List<TrackDetails> listAudioFiles(){
+    public List<Track> listAudioFiles(){
 
         String[] projection2 = new String[] {
                 MediaStore.Audio.Media.DISPLAY_NAME,
@@ -53,7 +47,7 @@ public class AudioInfoLoader {
             String title = getCol(cursor, MediaStore.Audio.Media.TITLE);
             String data = getCol(cursor, MediaStore.Audio.Media.DATA);
 
-            TrackDetails trackDetails = new TrackDetails.Builder().createTrackWithPathname(data)
+            Track trackDetails = new Track.Builder().createTrackWithPathname(data)
                     .withAlbum(album)
                     .withArtist(artist)
                     .withName(title)

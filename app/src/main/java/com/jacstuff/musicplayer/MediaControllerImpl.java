@@ -27,7 +27,7 @@ public class MediaControllerImpl implements MediaController {
     private PlaylistManager playlistManager;
     private MediaPlayer mediaPlayer;
     private MediaPlayerView view;
-    private TrackDetails currentTrackDetails;
+    private Track currentTrackDetails;
     private static Handler handler;
     private ScheduledExecutorService scheduledExecutor;
 
@@ -61,7 +61,7 @@ public class MediaControllerImpl implements MediaController {
     }
 
 
-    public List<TrackDetails> getTrackDetailsList(){
+    public List<Track> getTrackDetailsList(){
         return playlistManager.getTracks();
     }
 
@@ -217,7 +217,7 @@ public class MediaControllerImpl implements MediaController {
     }
 
 
-    private void assignNextTrack(TrackDetails trackDetails){
+    private void assignNextTrack(Track trackDetails){
         currentTrackDetails = trackDetails;
         if(currentTrackDetails == null){
             return;

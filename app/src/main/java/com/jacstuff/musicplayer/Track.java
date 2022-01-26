@@ -1,10 +1,10 @@
 package com.jacstuff.musicplayer;
 
-public class TrackDetails {
+public class Track {
 
-    private String pathname, name, artist, album, trackNumber, disc, directory;
+    private final String pathname, name, artist, album, trackNumber, disc, directory;
 
-    private  TrackDetails(String pathname, String name, String artist, String album, String trackNumber, String disc, String directory){
+    private Track(String pathname, String name, String artist, String album, String trackNumber, String disc, String directory){
 
         this.pathname = pathname;
         this.name = name;
@@ -34,22 +34,25 @@ public class TrackDetails {
         private String pathname, name, artist, album, trackNumber,disc, directory;
 
 
-        public TrackDetails build(){
-            return new TrackDetails(pathname, name, artist, album, trackNumber,disc, directory);
+        public Track build(){
+            return new Track(pathname, name, artist, album, trackNumber,disc, directory);
         }
 
         public Builder createTrackWithPathname(String pathname){
             this.pathname = pathname;
             return this;
         }
+
         public Builder withName(String name){
             this.name = name;
             return this;
         }
+
         public Builder withAlbum(String album){
             this.album = album;
             return this;
         }
+
         public Builder withArtist(String artist){
             this.artist = artist;
             return this;
