@@ -12,6 +12,7 @@ public final class DbContract {
         static final String COL_NAME = "name";
         static final String COL_ALBUM = "album";
         static final String COL_ARTIST = "artist";
+        static final String COL_TRACK_NUMBER = "track_number";
         //static final String COL_LENGTH = "length";
     }
 

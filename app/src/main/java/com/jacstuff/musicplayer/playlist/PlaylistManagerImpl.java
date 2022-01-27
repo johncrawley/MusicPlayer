@@ -5,6 +5,9 @@ import android.util.Log;
 
 import com.jacstuff.musicplayer.AudioInfoLoader;
 import com.jacstuff.musicplayer.Track;
+import com.jacstuff.musicplayer.db.TrackRepository;
+import com.jacstuff.musicplayer.db.TrackRepositoryImpl;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,21 +17,24 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private List<Integer> unplayedPathnameIndexes;
     private int currentIndex = 0;
-    private AudioInfoLoader sdCardReader;
+    private final AudioInfoLoader sdCardReader;
     private List<Track> tracks;
-    private Random random;
+    private final Random random;
+    private final TrackRepository trackRepository;
 
 
     public PlaylistManagerImpl(Context context){
+        trackRepository = new TrackRepositoryImpl(context);
         random = new Random(System.currentTimeMillis());
         unplayedPathnameIndexes = new ArrayList<>();
-        sdCardReader = new AudioInfoLoader(context);
+        sdCardReader = new AudioInfoLoader(context, trackRepository);
         initTrackDetailsList();
     }
 
 
     private void initTrackDetailsList(){
-        tracks = sdCardReader.listAudioFiles();
+        sdCardReader.loadAudioFiles();
+        tracks = trackRepository.getAllTracks();
     }
 
 

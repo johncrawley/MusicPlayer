@@ -2,10 +2,12 @@ package com.jacstuff.musicplayer;
 
 public class Track {
 
-    private final String pathname, name, artist, album, trackNumber, disc, directory;
+    private final String pathname, name, artist, album, disc, directory, genre;
+    private final long id, trackNumber;
 
-    private Track(String pathname, String name, String artist, String album, String trackNumber, String disc, String directory){
+    private Track(long id, String pathname, String name, String artist, String album, long trackNumber, String disc, String directory, String genre){
 
+        this.id = id;
         this.pathname = pathname;
         this.name = name;
         this.artist = artist;
@@ -13,6 +15,7 @@ public class Track {
         this.trackNumber = trackNumber;
         this.disc = disc;
         this.directory = directory;
+        this.genre = genre;
     }
 
     public String getAlbum() {
@@ -23,19 +26,21 @@ public class Track {
         return artist;
     }
     public String getName(){return name;}
-    public String getTrackNumber(){return trackNumber;}
+    public long getTrackNumber(){return trackNumber;}
     public String getPathname(){return pathname;}
     public String getDisc(){return disc;}
     public String getDirectory(){return directory;}
+    public long getId(){return id;}
 
     public static class Builder{
 
 
-        private String pathname, name, artist, album, trackNumber,disc, directory;
-
+        private String pathname, name, artist, album, disc, directory, genre;
+        private long id = -1;
+        private long trackNumber;
 
         public Track build(){
-            return new Track(pathname, name, artist, album, trackNumber,disc, directory);
+            return new Track(id, pathname, name, artist, album, trackNumber,disc, directory, genre);
         }
 
         public Builder createTrackWithPathname(String pathname){
@@ -45,6 +50,16 @@ public class Track {
 
         public Builder withName(String name){
             this.name = name;
+            return this;
+        }
+
+        public Builder withGenre(String genre){
+            this.genre = genre;
+            return this;
+        }
+
+        public Builder withId(long id){
+            this.id = id;
             return this;
         }
 
@@ -68,7 +83,7 @@ public class Track {
             return this;
         }
 
-        public Builder withTrackNumber(String trackNumber){
+        public Builder withTrackNumber(long trackNumber){
             this.trackNumber = trackNumber;
             return this;
         }

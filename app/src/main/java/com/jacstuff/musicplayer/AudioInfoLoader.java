@@ -5,22 +5,27 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
+import com.jacstuff.musicplayer.db.TrackRepository;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class AudioInfoLoader {
 
-    private Context context;
-    private List <Track> trackDetailsList;
+    private final Context context;
+    private final List <Track> trackList;
+    private final TrackRepository trackRepository;
 
-    public AudioInfoLoader(Context context){
+    public AudioInfoLoader(Context context, TrackRepository trackRepository){
         this.context  = context;
-        trackDetailsList = new ArrayList<>();
+        trackList = new ArrayList<>();
+        this.trackRepository = trackRepository;
     }
 
 
-    public List<Track> listAudioFiles(){
+
+    public List<Track> loadAudioFiles(){
 
         String[] projection2 = new String[] {
                 MediaStore.Audio.Media.DISPLAY_NAME,
@@ -28,6 +33,8 @@ public class AudioInfoLoader {
                 MediaStore.Audio.Media.ARTIST,
                 MediaStore.Audio.Media.ALBUM,
                 MediaStore.Audio.Media.DATA
+                //MediaStore.Audio.Media.CD_TRACK_NUMBER,
+                //MediaStore.Audio.Media.GENRE
                 };
 
         String selection = null;
@@ -47,15 +54,20 @@ public class AudioInfoLoader {
             String title = getCol(cursor, MediaStore.Audio.Media.TITLE);
             String data = getCol(cursor, MediaStore.Audio.Media.DATA);
 
-            Track trackDetails = new Track.Builder().createTrackWithPathname(data)
+           // String trackNumber = getCol(cursor, MediaStore.Audio.Media.CD_TRACK_NUMBER);
+            //String genre = getCol(cursor, MediaStore.Audio.Media.GENRE);
+
+            Track track = new Track.Builder().createTrackWithPathname(data)
                     .withAlbum(album)
                     .withArtist(artist)
                     .withName(title)
+                    //.withGenre(genre)
                     .build();
-            trackDetailsList.add(trackDetails);
+            trackList.add(track);
+            trackRepository.addTrack(track);
         }
         cursor.close();
-        return trackDetailsList;
+        return trackList;
     }
 
 
