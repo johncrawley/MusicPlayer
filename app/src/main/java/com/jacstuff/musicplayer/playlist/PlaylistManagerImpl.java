@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.jacstuff.musicplayer.AudioInfoLoader;
+import com.jacstuff.musicplayer.MediaPlayerView;
 import com.jacstuff.musicplayer.Track;
 import com.jacstuff.musicplayer.db.TrackRepository;
 import com.jacstuff.musicplayer.db.TrackRepositoryImpl;
@@ -21,20 +22,39 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private List<Track> tracks;
     private final Random random;
     private final TrackRepository trackRepository;
+    private int previousNumberOfTracks;
+    private MediaPlayerView mediaPlayerView;
 
 
-    public PlaylistManagerImpl(Context context){
+    public PlaylistManagerImpl(Context context, MediaPlayerView mediaPlayerView){
         trackRepository = new TrackRepositoryImpl(context);
         random = new Random(System.currentTimeMillis());
         unplayedPathnameIndexes = new ArrayList<>();
         sdCardReader = new AudioInfoLoader(context, trackRepository);
         initTrackDetailsList();
+        previousNumberOfTracks = tracks.size();
+    }
+
+
+    @Override
+    public void addTracksFromStorage(){
+        sdCardReader.loadAudioFiles();
+        initTrackDetailsList();
+        calculateAndPostNewTracksStats();
     }
 
 
     private void initTrackDetailsList(){
-        sdCardReader.loadAudioFiles();
         tracks = trackRepository.getAllTracks();
+    }
+
+
+    private void calculateAndPostNewTracksStats(){
+        int numberOfNewTracks = tracks.size() - previousNumberOfTracks;
+        if(numberOfNewTracks > 0){
+            mediaPlayerView.displayPlaylistRefreshedMessage(numberOfNewTracks);
+        }
+        previousNumberOfTracks = numberOfNewTracks;
     }
 
 
@@ -49,12 +69,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     public void init(){
         initTrackDetailsList();
-    }
-
-
-    public void refreshPlaylist(){
-       savePlaylist();
-       initTrackDetailsList();
     }
 
 

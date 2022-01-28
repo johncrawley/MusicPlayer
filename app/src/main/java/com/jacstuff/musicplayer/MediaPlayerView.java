@@ -14,6 +14,7 @@ public interface MediaPlayerView {
     void setElapsedTime(String currentTime);
     void setTotalTrackTime(String totalTrackTime);
     void displayPlaylistRefreshedMessage();
+    void displayPlaylistRefreshedMessage(int newTrackCount);
     void enableControls();
     void setCoverImage(Bitmap bitmap);
     void refreshTrackList(List<Track> trackDetailsList);

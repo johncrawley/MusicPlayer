@@ -16,7 +16,7 @@ public interface MediaController {
 
     void finish();
 
-    void refreshPlaylist();
+    void scanForTracks();
 
     String getTrackNameAt(int position);
 

@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if(id == R.id.refresh_button) {
-            mediaController.refreshPlaylist();
+            mediaController.scanForTracks();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -111,6 +111,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void displayPlaylistRefreshedMessage(){
         String msg = getResources().getString(R.string.playlist_refreshed_message);
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void displayPlaylistRefreshedMessage(int newTrackCount){
+        if(newTrackCount == 0){
+            displayPlaylistRefreshedMessage();
+            return;
+        }
+        String msg = newTrackCount > 1 ?
+                getResources().getString(R.string.playlist_refreshed_message_new_tracks_count, newTrackCount)
+                : getResources().getString(R.string.playlist_refreshed_one_new_track);
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
@@ -194,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.refreshButton:
-                mediaController.refreshPlaylist();
+                mediaController.scanForTracks();
         }
     }
 

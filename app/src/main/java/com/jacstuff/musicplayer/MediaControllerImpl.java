@@ -24,22 +24,22 @@ import static com.jacstuff.musicplayer.HandlerCode.UPDATE_TIME;
 public class MediaControllerImpl implements MediaController {
 
 
-    private PlaylistManager playlistManager;
+    private final PlaylistManager playlistManager;
     private MediaPlayer mediaPlayer;
-    private MediaPlayerView view;
+    private final MediaPlayerView view;
     private Track currentTrackDetails;
     private static Handler handler;
     private ScheduledExecutorService scheduledExecutor;
 
-    private ExecutorService executorService;
-    private TrackTimeUpdater trackTimeUpdater;
+    private final ExecutorService executorService;
+    private final TrackTimeUpdater trackTimeUpdater;
     private enum State { PLAYING, PAUSED, STOPPED}
     private State state;
     private boolean isRefreshing = false;
 
 
     MediaControllerImpl(Context context, final MediaPlayerView view){
-        playlistManager = new PlaylistManagerImpl(context);
+        playlistManager = new PlaylistManagerImpl(context, view);
         mediaPlayer = new MediaPlayer();
         executorService = Executors.newSingleThreadExecutor();
         this.state = State.STOPPED;
@@ -110,7 +110,7 @@ public class MediaControllerImpl implements MediaController {
 
 
     @Override
-    public void refreshPlaylist() {
+    public void scanForTracks() {
         if(isRefreshing){
             return;
         }
@@ -119,7 +119,7 @@ public class MediaControllerImpl implements MediaController {
                 new Runnable() {
                     @Override
                     public void run() {
-                        playlistManager.refreshPlaylist();
+                        playlistManager.addTracksFromStorage();
                         Message msg = handler.obtainMessage(PLAYLIST_REFRESHED, null);
                         msg.sendToTarget();
                         isRefreshing = false;

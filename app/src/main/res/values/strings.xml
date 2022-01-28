@@ -2,6 +2,8 @@
     <string name="app_name">Music Player</string>
     <string name="menu_button_refresh">Refresh</string>
     <string name="playlist_refreshed_message">Playlist Refreshed</string>
+    <string name="playlist_refreshed_message_new_tracks_count">Playlist Refreshed (%1$d New)</string>
+    <string name="playlist_refreshed_one_new_track">Playlist Refreshed (1 New)</string>
     <string name="no_tracks_found">No tracks found!</string>
     <string name="playlist_item_offset">3</string>
 

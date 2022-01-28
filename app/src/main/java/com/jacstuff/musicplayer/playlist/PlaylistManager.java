@@ -12,7 +12,7 @@ public interface PlaylistManager {
     Track getNextRandomTrack();
     Track getNextRandomUnplayedTrack();
     Track getTrackDetails(int index);
-    void refreshPlaylist();
+    void addTracksFromStorage();
     List<Track> getTracks();
     void init();
     int getCurrentTrackIndex();
