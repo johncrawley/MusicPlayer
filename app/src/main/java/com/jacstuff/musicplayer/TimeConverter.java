@@ -1,10 +1,13 @@
 package com.jacstuff.musicplayer;
 
+import android.annotation.SuppressLint;
+
 import java.util.concurrent.TimeUnit;
 
 public class TimeConverter {
 
 
+    @SuppressLint("DefaultLocale")
     public static String convert(long millis) {
 
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);

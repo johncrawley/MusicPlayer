@@ -51,12 +51,9 @@ public class MediaControllerImpl implements MediaController {
 
 
     private void setupMediaPlayerListeners(){
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                assignNextTrack();
-                play();
-            }
+        mediaPlayer.setOnCompletionListener(mediaPlayer -> {
+            assignNextTrack();
+            play();
         });
     }
 
@@ -68,7 +65,7 @@ public class MediaControllerImpl implements MediaController {
 
     private void setupHandler(){
         handler = new Handler(Looper.getMainLooper()){
-            public void handleMessage(Message inputMessage){
+            public void handleMessage(@androidx.annotation.NonNull Message inputMessage){
                 switch(inputMessage.what){
                     case UPDATE_TIME:
                         String time = (String)inputMessage.obj;
@@ -116,25 +113,20 @@ public class MediaControllerImpl implements MediaController {
         }
         isRefreshing = true;
         executorService.execute(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        playlistManager.addTracksFromStorage();
-                        Message msg = handler.obtainMessage(PLAYLIST_REFRESHED, null);
-                        msg.sendToTarget();
-                        isRefreshing = false;
-                    }
+                () -> {
+                    playlistManager.addTracksFromStorage();
+                    Message msg = handler.obtainMessage(PLAYLIST_REFRESHED, null);
+                    msg.sendToTarget();
+                    isRefreshing = false;
                 });
     }
 
 
     private void initPlaylist(){
-        executorService.execute(new Runnable(){
-            public void run(){
-                playlistManager.init();
-                Message msg = handler.obtainMessage(ASSIGN_NEXT_TRACK, null);
-                msg.sendToTarget();
-            }
+        executorService.execute(() -> {
+            playlistManager.init();
+            Message msg = handler.obtainMessage(ASSIGN_NEXT_TRACK, null);
+            msg.sendToTarget();
         });
     }
 

@@ -204,17 +204,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onClick(View view){
         int id = view.getId();
-        switch(id){
-            case R.id.playButton:
-                mediaController.togglePlay();
-                break;
-
-            case R.id.nextTrackButton:
-                mediaController.next();
-                break;
-
-            case R.id.refreshButton:
-                mediaController.scanForTracks();
+        if(id == R.id.playButton){
+            mediaController.togglePlay();
+        }
+        else if(id == R.id.nextTrackButton) {
+            mediaController.next();
+        }
+        else if(id == R.id.refreshButton){
+            mediaController.scanForTracks();
         }
     }
 

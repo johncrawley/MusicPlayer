@@ -7,25 +7,20 @@ import android.provider.MediaStore;
 
 import com.jacstuff.musicplayer.db.TrackRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class AudioInfoLoader {
 
     private final Context context;
-    private final List <Track> trackList;
     private final TrackRepository trackRepository;
 
     public AudioInfoLoader(Context context, TrackRepository trackRepository){
         this.context  = context;
-        trackList = new ArrayList<>();
         this.trackRepository = trackRepository;
     }
 
 
 
-    public List<Track> loadAudioFiles(){
+    public void loadAudioFiles(){
 
         String[] projection2 = new String[] {
                 MediaStore.Audio.Media.DISPLAY_NAME,
@@ -43,19 +38,17 @@ public class AudioInfoLoader {
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection2, selection, selectionArgs, sortOrder);
 
         if(cursor == null){
-            return Collections.emptyList();
+            return;
         }
 
         while(cursor.moveToNext()){
 
-            String displayName = getCol(cursor, MediaStore.Audio.Media.DISPLAY_NAME);
+            // NB Genre and TrackNumber require Android Version N
+            String data = getCol(cursor, MediaStore.Audio.Media.DATA);
             String artist  = getCol(cursor, MediaStore.Audio.Media.ARTIST);
             String album  = getCol(cursor, MediaStore.Audio.Media.ALBUM);
             String title = getCol(cursor, MediaStore.Audio.Media.TITLE);
-            String data = getCol(cursor, MediaStore.Audio.Media.DATA);
 
-           // String trackNumber = getCol(cursor, MediaStore.Audio.Media.CD_TRACK_NUMBER);
-            //String genre = getCol(cursor, MediaStore.Audio.Media.GENRE);
 
             Track track = new Track.Builder().createTrackWithPathname(data)
                     .withAlbum(album)
@@ -63,11 +56,9 @@ public class AudioInfoLoader {
                     .withName(title)
                     //.withGenre(genre)
                     .build();
-            trackList.add(track);
             trackRepository.addTrack(track);
         }
         cursor.close();
-        return trackList;
     }
 
 
