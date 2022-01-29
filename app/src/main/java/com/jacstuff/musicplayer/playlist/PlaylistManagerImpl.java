@@ -23,14 +23,16 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private final Random random;
     private final TrackRepository trackRepository;
     private int previousNumberOfTracks;
-    private MediaPlayerView mediaPlayerView;
+    private final MediaPlayerView mediaPlayerView;
 
 
     public PlaylistManagerImpl(Context context, MediaPlayerView mediaPlayerView){
         trackRepository = new TrackRepositoryImpl(context);
+        this.mediaPlayerView = mediaPlayerView;
         random = new Random(System.currentTimeMillis());
         unplayedPathnameIndexes = new ArrayList<>();
         sdCardReader = new AudioInfoLoader(context, trackRepository);
+
         initTrackDetailsList();
         previousNumberOfTracks = tracks.size();
     }
@@ -54,7 +56,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(numberOfNewTracks > 0){
             mediaPlayerView.displayPlaylistRefreshedMessage(numberOfNewTracks);
         }
-        previousNumberOfTracks = numberOfNewTracks;
+        previousNumberOfTracks = tracks.size();
     }
 
 

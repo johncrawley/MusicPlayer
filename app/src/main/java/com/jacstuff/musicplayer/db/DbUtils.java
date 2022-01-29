@@ -13,7 +13,10 @@ public class DbUtils {
         try {
             id = db.insertOrThrow(tableName, null, contentValues);
             db.setTransactionSuccessful();
-        }catch(SQLException e){
+        }catch (android.database.sqlite.SQLiteConstraintException e){
+            //do nothing
+        }
+        catch(SQLException e){
             e.printStackTrace();
         }
         db.endTransaction();

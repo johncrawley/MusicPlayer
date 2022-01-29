@@ -10,6 +10,9 @@ import android.os.Bundle;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -115,7 +118,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void displayPlaylistRefreshedMessage(int newTrackCount){
+    public void displayPlaylistRefreshedMessage(int newTrackCount) {
+        new Handler(Looper.getMainLooper()).post(() -> displayPlaylistMessage(newTrackCount));
+    }
+
+
+    public void displayPlaylistMessage(int newTrackCount) {
         if(newTrackCount == 0){
             displayPlaylistRefreshedMessage();
             return;
