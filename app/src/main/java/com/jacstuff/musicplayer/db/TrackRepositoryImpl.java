@@ -52,12 +52,10 @@ public class TrackRepositoryImpl implements TrackRepository{
     public List<Track> getAllTracks() {
         List<Track> tracks = new ArrayList<>();
         String query = "SELECT * FROM " + TracksEntry.TABLE_NAME + ";";
-        int cursorLength = 0;
         try {
             cursor = db.rawQuery(query, null);
 
             while(cursor.moveToNext()){
-                cursorLength++;
                 tracks.add(new Track.Builder()
                         .createTrackWithPathname(getString(TracksEntry.COL_PATH))
                         .withId(getLong(TracksEntry._ID))
@@ -75,6 +73,39 @@ public class TrackRepositoryImpl implements TrackRepository{
         cursor.close();
         return  tracks;
     }
+
+
+    public List<Track> searchForTracks(String searchTerms){
+        String query = "SELECT * FROM " + TracksEntry.TABLE_NAME + " WHERE " +
+                TracksEntry.COL_ARTIST + " LIKE ?;";
+        String[] selectionArgs = new String[] { "searchTerms"};
+        return getTracks(query, selectionArgs);
+    }
+
+    private List<Track> getTracks(String query, String[] selectionArgs){
+        List<Track> tracks = new ArrayList<>();
+        try {
+            cursor = db.rawQuery(query, selectionArgs);
+
+            while(cursor.moveToNext()){
+                tracks.add(new Track.Builder()
+                        .createTrackWithPathname(getString(TracksEntry.COL_PATH))
+                        .withId(getLong(TracksEntry._ID))
+                        .withName(getString(TracksEntry.COL_NAME))
+                        .withTrackNumber(-1)
+                        .withArtist(getString(TracksEntry.COL_ARTIST))
+                        .withAlbum(getString(TracksEntry.COL_ALBUM))
+                        .build());
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+            return tracks;
+        }
+        cursor.close();
+        return  tracks;
+    }
+
 
 
     private ContentValues createContentValuesFor(Track track){
