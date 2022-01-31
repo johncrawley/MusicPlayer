@@ -5,6 +5,15 @@
     <string name="playlist_refreshed_message_new_tracks_count">Playlist Refreshed (%1$d New)</string>
     <string name="playlist_refreshed_one_new_track">Playlist Refreshed (1 New)</string>
     <string name="no_tracks_found">No tracks found!</string>
+    <string name="elapsed_time_label">Elapsed Time</string>
+    <string name="artist_label">Artist</string>
+    <string name="album_label">Album</string>
+    <string name="track_name">track name</string>
+    <string name="track_title_default_text">No Tracks Found</string>
     <string name="playlist_item_offset">3</string>
+
+    <string name="play_button_content_description">Play Pause</string>
+    <string name="next_track_button_content_description">Next Track</string>
+    <string name="thumbnail_content_description">Next Track</string>
 
 </resources>

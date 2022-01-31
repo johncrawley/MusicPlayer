@@ -19,7 +19,6 @@ public class AudioInfoLoader {
     }
 
 
-
     public void loadAudioFiles(){
 
         String[] projection2 = new String[] {
