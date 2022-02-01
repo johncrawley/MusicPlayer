@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jacstuff.musicplayer.list.TrackListAdapter;
+import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
 import java.util.List;
 
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerView recyclerView;
     private TrackListAdapter trackListAdapter;
     private int previousIndex = 0;
+    private MainViewModel viewModel;
 
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -45,11 +49,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = MainActivity.this;
+        setupViewModel();
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
-        mediaController = new MediaControllerImpl(context, this);
+        mediaController = new MediaControllerImpl(context, this, viewModel);
         setupViews();
         mediaController.initPlaylistAndRefreshView();
         //listAudioFiles();
+    }
+
+
+
+    private void setupViewModel(){
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
     }
 
 

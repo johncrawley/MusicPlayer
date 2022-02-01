@@ -8,6 +8,7 @@ import android.os.Message;
 
 import com.jacstuff.musicplayer.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
+import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,14 +37,16 @@ public class MediaControllerImpl implements MediaController {
     private enum State { PLAYING, PAUSED, STOPPED}
     private State state;
     private boolean isRefreshing = false;
+    private final MainViewModel viewModel;
 
 
-    MediaControllerImpl(Context context, final MediaPlayerView view){
-        playlistManager = new PlaylistManagerImpl(context, view);
+    MediaControllerImpl(Context context, final MediaPlayerView view, MainViewModel viewModel){
         mediaPlayer = new MediaPlayer();
         executorService = Executors.newSingleThreadExecutor();
         this.state = State.STOPPED;
         this.view = view;
+        this.viewModel = viewModel;
+        playlistManager = new PlaylistManagerImpl(context, view, viewModel);
         setupMediaPlayerListeners();
         setupHandler();
         trackTimeUpdater = new TrackTimeUpdater(mediaPlayer, handler);

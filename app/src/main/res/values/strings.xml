@@ -15,5 +15,6 @@
     <string name="play_button_content_description">Play Pause</string>
     <string name="next_track_button_content_description">Next Track</string>
     <string name="thumbnail_content_description">Next Track</string>
+    <string name="default_path">Music/</string>
 
 </resources>

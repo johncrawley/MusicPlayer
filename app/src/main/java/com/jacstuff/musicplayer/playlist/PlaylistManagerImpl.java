@@ -8,6 +8,7 @@ import com.jacstuff.musicplayer.MediaPlayerView;
 import com.jacstuff.musicplayer.Track;
 import com.jacstuff.musicplayer.db.TrackRepository;
 import com.jacstuff.musicplayer.db.TrackRepositoryImpl;
+import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,22 +20,23 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private List<Integer> unplayedPathnameIndexes;
     private int currentIndex = 0;
     private final AudioInfoLoader sdCardReader;
-    private List<Track> tracks;
     private final Random random;
     private final TrackRepository trackRepository;
     private int previousNumberOfTracks;
     private final MediaPlayerView mediaPlayerView;
+    private final MainViewModel viewModel;
 
 
-    public PlaylistManagerImpl(Context context, MediaPlayerView mediaPlayerView){
+    public PlaylistManagerImpl(Context context, MediaPlayerView mediaPlayerView, MainViewModel viewModel){
         trackRepository = new TrackRepositoryImpl(context);
         this.mediaPlayerView = mediaPlayerView;
+        this.viewModel = viewModel;
         random = new Random(System.currentTimeMillis());
         unplayedPathnameIndexes = new ArrayList<>();
-        sdCardReader = new AudioInfoLoader(context, trackRepository);
+        sdCardReader = new AudioInfoLoader(context, trackRepository, viewModel);
 
         initTrackDetailsList();
-        previousNumberOfTracks = tracks.size();
+        previousNumberOfTracks = viewModel.tracks.size();
     }
 
 
@@ -47,23 +49,23 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void initTrackDetailsList(){
-        tracks = trackRepository.getAllTracks();
+        viewModel.tracks = trackRepository.getAllTracks();
     }
 
 
     private void calculateAndPostNewTracksStats(){
-        int numberOfNewTracks = tracks.size() - previousNumberOfTracks;
+        int numberOfNewTracks = viewModel.tracks.size() - previousNumberOfTracks;
         if(numberOfNewTracks > 0){
             mediaPlayerView.displayPlaylistRefreshedMessage(numberOfNewTracks);
         }
-        previousNumberOfTracks = tracks.size();
+        previousNumberOfTracks = viewModel.tracks.size();
     }
 
 
     private void setupUnplayedIndexes(){
         final int INITIAL_LIST_CAPACITY = 10_000;
         unplayedPathnameIndexes = new ArrayList<>(INITIAL_LIST_CAPACITY);
-        for(int i = 0; i< tracks.size(); i++){
+        for(int i = 0; i< viewModel.tracks.size(); i++){
             unplayedPathnameIndexes.add(i);
         }
     }
@@ -75,21 +77,21 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public String getNext(){
-        if(currentIndex == tracks.size() -1){
+        if(currentIndex == viewModel.tracks.size() -1){
             currentIndex = 0;
         }
-        return tracks.get(++currentIndex).getName();
+        return viewModel.tracks.get(++currentIndex).getName();
     }
 
     @Override
     public Track getNextRandomTrack(){
-        return tracks.isEmpty() ? null : tracks.get(getNextRandomIndex(tracks.size()));
+        return viewModel.tracks.isEmpty() ? null : viewModel.tracks.get(getNextRandomIndex(viewModel.tracks.size()));
     }
 
 
     private boolean attemptSetupOfIndexesIfEmpty(){
         if(unplayedPathnameIndexes.isEmpty()){
-            if(tracks.isEmpty()){
+            if(viewModel.tracks.isEmpty()){
                 return false;
             }
             setupUnplayedIndexes();
@@ -99,12 +101,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public String getTrackNameAt(int position){
-        return position >= tracks.size() ? "" : tracks.get(position).getName();
+        return position >= viewModel.tracks.size() ? "" : viewModel.tracks.get(position).getName();
     }
 
 
     public int getNumberOfTracks(){
-        return tracks.size();
+        return viewModel.tracks.size();
     }
 
 
@@ -123,7 +125,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
             currentIndex = unplayedPathnameIndexes.get(randomIndex);
             unplayedPathnameIndexes.remove(randomIndex);
         }
-        return tracks.get(currentIndex);
+        return viewModel.tracks.get(currentIndex);
     }
 
 
@@ -133,10 +135,10 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public Track getTrackDetails(int index){
-        if(index > tracks.size()){
+        if(index > viewModel.tracks.size()){
             return null;
         }
-        return tracks.get(index);
+        return viewModel.tracks.get(index);
     }
 
     private int getNextRandomIndex(int listSize){
@@ -145,7 +147,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public List<Track> getTracks(){
-        return this.tracks;
+        return viewModel.tracks;
     }
 
 
