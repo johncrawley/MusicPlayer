@@ -29,11 +29,11 @@ public final class DbContract {
     }
 
 
-
     static class PlaylistEntry implements BaseColumns {
         static final String TABLE_NAME = "Playlist";
         static final String COL_NAME = "name";
     }
+
 
     static class PlaylistItemsEntry implements BaseColumns {
         static final String TABLE_NAME = "Playlist_items";
