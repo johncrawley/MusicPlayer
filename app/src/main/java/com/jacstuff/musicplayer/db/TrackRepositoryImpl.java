@@ -107,7 +107,6 @@ public class TrackRepositoryImpl implements TrackRepository{
     }
 
 
-
     private ContentValues createContentValuesFor(Track track){
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbContract.TracksEntry.COL_NAME, track.getName());

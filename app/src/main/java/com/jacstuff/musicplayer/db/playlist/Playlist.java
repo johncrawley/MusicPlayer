@@ -6,18 +6,17 @@ import java.util.List;
 
 public class Playlist {
 
-    private final Integer id;
+    private final Long id;
     private final String name;
     private List<Track> tracks;
 
-    public Playlist(Integer id, String name, List<Track> tracks){
+    public Playlist(Long id, String name){
         this.id = id;
         this.name = name;
-        this.tracks = tracks;
     }
 
 
-    public Integer getId(){
+    public Long getId(){
         return id;
     }
 

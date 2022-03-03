@@ -68,7 +68,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     + OPENING_BRACKET
                     + DbContract.PlaylistItemsEntry._ID + INTEGER + PRIMARY_KEY + COMMA
                     + DbContract.PlaylistItemsEntry.COL_PLAYLIST_ID + INTEGER + COMMA
-                    + DbContract.PlaylistItemsEntry.COL_SONG_ID + INTEGER
+                    + DbContract.PlaylistItemsEntry.COL_TRACK_ID + INTEGER
                     + CLOSING_BRACKET;
 
 

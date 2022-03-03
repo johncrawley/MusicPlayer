@@ -9,6 +9,6 @@ public interface PlaylistRepository {
     void addTrackToPlaylist(Integer playlistId, Integer trackId);
     void removeTrackFromPlaylist(Integer playlistId, Integer trackId);
     void renamePlaylist(Integer playlistId, String updatedName);
-    List<Playlist> getAllRepositories();
+    List<Playlist> getAllPlaylists();
 
 }

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class DbUtils {
 
 
-    static long addValuesToTable(SQLiteDatabase db, String tableName, ContentValues contentValues){
+    public static long addValuesToTable(SQLiteDatabase db, String tableName, ContentValues contentValues){
         long id = -1;
         db.beginTransaction();
         try {

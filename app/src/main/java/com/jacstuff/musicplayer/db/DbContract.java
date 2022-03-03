@@ -6,7 +6,7 @@ public final class DbContract {
 
     private DbContract(){}
 
-    static class TracksEntry implements BaseColumns {
+    public static class TracksEntry implements BaseColumns {
         static final String TABLE_NAME = "Tracks";
         static final String COL_PATH = "path";
         static final String COL_NAME = "name";
@@ -17,28 +17,28 @@ public final class DbContract {
     }
 
 
-    static class AlbumsEntry implements BaseColumns {
+    public static class AlbumsEntry implements BaseColumns {
         static final String TABLE_NAME = "Albums";
         static final String COL_NAME = "name";
     }
 
 
-    static class ArtistsEntry implements BaseColumns {
+    public static class ArtistsEntry implements BaseColumns {
         static final String TABLE_NAME = "Artists";
         static final String COL_NAME = "name";
     }
 
 
-    static class PlaylistEntry implements BaseColumns {
-        static final String TABLE_NAME = "Playlist";
-        static final String COL_NAME = "name";
+    public static class PlaylistEntry implements BaseColumns {
+        public static final String TABLE_NAME = "Playlist";
+        public static final String COL_NAME = "name";
     }
 
 
-    static class PlaylistItemsEntry implements BaseColumns {
-        static final String TABLE_NAME = "Playlist_items";
-        static final String COL_PLAYLIST_ID = "playlistId";
-        static final String COL_SONG_ID = "songId";
+    public static class PlaylistItemsEntry implements BaseColumns {
+       public static final String TABLE_NAME = "Playlist_items";
+       public static final String COL_PLAYLIST_ID = "playlistId";
+       public static final String COL_TRACK_ID = "songId";
     }
 
 }
