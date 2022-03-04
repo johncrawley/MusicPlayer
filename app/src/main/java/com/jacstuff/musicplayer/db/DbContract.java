@@ -7,12 +7,12 @@ public final class DbContract {
     private DbContract(){}
 
     public static class TracksEntry implements BaseColumns {
-        static final String TABLE_NAME = "Tracks";
-        static final String COL_PATH = "path";
-        static final String COL_NAME = "name";
-        static final String COL_ALBUM = "album";
-        static final String COL_ARTIST = "artist";
-        static final String COL_TRACK_NUMBER = "track_number";
+        public static final String TABLE_NAME = "Tracks";
+        public static final String COL_PATH = "path";
+        public static final String COL_NAME = "name";
+        public static final String COL_ALBUM = "album";
+        public static final String COL_ARTIST = "artist";
+        public static final String COL_TRACK_NUMBER = "track_number";
         //static final String COL_LENGTH = "length";
     }
 

@@ -1,14 +1,17 @@
 package com.jacstuff.musicplayer.db.playlist;
 
+import com.jacstuff.musicplayer.Track;
+
 import java.util.List;
 
 public interface PlaylistRepository {
 
     void createPlaylist(String name);
-    void deletePlaylist(Integer playlistId);
-    void addTrackToPlaylist(Integer playlistId, Integer trackId);
-    void removeTrackFromPlaylist(Integer playlistId, Integer trackId);
-    void renamePlaylist(Integer playlistId, String updatedName);
+    void deletePlaylist(Long playlistId);
+    void addTrackToPlaylist(Long playlistId, Long trackId);
+    void removeTrackFromPlaylist(Long playlistId, Long trackId);
+    void renamePlaylist(Long playlistId, String updatedName);
     List<Playlist> getAllPlaylists();
+    List<Track> getAllTracksFromPlaylist(Long playlistId);
 
 }

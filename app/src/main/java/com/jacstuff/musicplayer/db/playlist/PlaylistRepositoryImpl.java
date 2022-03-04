@@ -31,19 +31,54 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
 
     @Override
     public void createPlaylist(String name) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PlaylistEntry.COL_NAME, name);
+        DbUtils.addValuesToTable(db,
+                PlaylistEntry.TABLE_NAME,
+                contentValues);
+    }
+
+
+    @Override
+    public List<Track> getAllTracksFromPlaylist(Long playlistId){
+      List<Track> tracks = new ArrayList<>();
+      String query = "SELECT * FROM " + DbContract.TracksEntry.TABLE_NAME
+
+              + ";";
+      return tracks;
+    }
+
+
+    private void gatherData(String query, Runnable runnable){
+        try {
+            cursor = db.rawQuery(query, null);
+            while(cursor.moveToNext()){
+                runnable.run();
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        finally {
+            cursor.close();
+        }
 
     }
 
 
     @Override
-    public void deletePlaylist(Integer playlistId) {
-
+    public void deletePlaylist(Long playlistId) {
+        String query = "DELETE FROM "
+                + PlaylistEntry.TABLE_NAME
+                + " WHERE "
+                + PlaylistEntry._ID + " = "  + playlistId
+                + ";";
+        execSql(query);
     }
 
 
     @Override
-    public void addTrackToPlaylist(Integer playlistId, Integer trackId) {
-
+    public void addTrackToPlaylist(Long playlistId, Long trackId) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(PlaylistItemsEntry.COL_TRACK_ID, trackId);
         contentValues.put(PlaylistItemsEntry.COL_PLAYLIST_ID, playlistId);
@@ -55,23 +90,31 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
 
 
     @Override
-    public void removeTrackFromPlaylist(Integer playlistId, Integer trackId) {
+    public void removeTrackFromPlaylist(Long playlistId, Long trackId) {
         String query = "DELETE FROM "
                 + PlaylistItemsEntry.TABLE_NAME
-                + " WHERE " + PlaylistItemsEntry.COL_TRACK_ID
-                + " = "  + trackId
+                + " WHERE "
+                + PlaylistItemsEntry.COL_TRACK_ID + " = "  + trackId
+                + " AND"
+                + PlaylistItemsEntry.COL_PLAYLIST_ID + " = "  + playlistId
                 + ";";
+       execSql(query);
+    }
+
+
+    private void execSql(String query){
         try {
             db.execSQL(query);
         }
         catch(SQLException e){
             e.printStackTrace();
         }
+
     }
 
 
     @Override
-    public void renamePlaylist(Integer playlistId, String updatedName) {
+    public void renamePlaylist(Long playlistId, String updatedName) {
 
     }
 
