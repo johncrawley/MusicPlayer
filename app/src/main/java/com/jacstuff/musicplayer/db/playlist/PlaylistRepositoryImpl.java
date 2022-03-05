@@ -7,11 +7,11 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.jacstuff.musicplayer.Track;
-import com.jacstuff.musicplayer.db.DbContract;
 import com.jacstuff.musicplayer.db.DbHelper;
 import com.jacstuff.musicplayer.db.DbUtils;
 import static com.jacstuff.musicplayer.db.DbContract.PlaylistItemsEntry;
 import static com.jacstuff.musicplayer.db.DbContract.PlaylistEntry;
+import static com.jacstuff.musicplayer.db.DbContract.TracksEntry;
 
 
 import java.util.ArrayList;
@@ -42,10 +42,15 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
     @Override
     public List<Track> getAllTracksFromPlaylist(Long playlistId){
       List<Track> tracks = new ArrayList<>();
-      String query = "SELECT * FROM " + DbContract.TracksEntry.TABLE_NAME
 
-              + ";";
-      return tracks;
+      String query3 = "SELECT * FROM " + TracksEntry.TABLE_NAME
+              + " INNER JOIN " + PlaylistItemsEntry.TABLE_NAME
+              + " ON " + TracksEntry._ID + " = " + PlaylistItemsEntry.COL_TRACK_ID
+                + " WHERE "  + PlaylistItemsEntry.COL_PLAYLIST_ID + " = " + playlistId + ";";
+
+        gatherData(query3, ()-> DbUtils.addTrackTo(tracks, cursor));
+
+        return tracks;
     }
 
 
@@ -62,7 +67,6 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
         finally {
             cursor.close();
         }
-
     }
 
 
