@@ -8,10 +8,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -24,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.list.TrackListAdapter;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
@@ -62,6 +65,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setupViewModel(){
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
     }
+
+
+    private void setupTabLayout(){
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        FragmentManager fm = getSupportFragmentManager();
+        ViewStateAdapter sa = new ViewStateAdapter(fm, getLifecycle());
+        final ViewPager2 pa = findViewById(R.id.pager);
+        pa.setAdapter(sa);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                pa.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+    }
+
 
 
     public void onDestroy(){

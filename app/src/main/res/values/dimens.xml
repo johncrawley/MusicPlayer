@@ -9,4 +9,5 @@
     <dimen name="horizontal_divider_side_margin">12dp</dimen>
     <dimen name="playlist_list_view_horizontal_margin">2dp</dimen>
     <dimen name="track_name_text_size">36sp</dimen>
+    <dimen name="pager_top_margin">18dp</dimen>
 </resources>
