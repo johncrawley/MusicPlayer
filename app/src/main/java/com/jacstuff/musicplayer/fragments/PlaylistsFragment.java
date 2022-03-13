@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer;
+package com.jacstuff.musicplayer.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,17 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-public class PlayerFragment extends Fragment {
+public class PlaylistsFragment extends Fragment {
 
     private Context context;
     private MainViewModel viewModel;
 
-    public PlayerFragment() {
+    public PlaylistsFragment() {
         // Required empty public constructor
     }
 

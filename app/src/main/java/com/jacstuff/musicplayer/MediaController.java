@@ -1,5 +1,7 @@
 package com.jacstuff.musicplayer;
 
+import com.jacstuff.musicplayer.db.track.Track;
+
 import java.util.List;
 
 public interface MediaController {

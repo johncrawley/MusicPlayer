@@ -1,11 +1,13 @@
-package com.jacstuff.musicplayer;
+package com.jacstuff.musicplayer.playlist;
 
 
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
-import com.jacstuff.musicplayer.db.TrackRepository;
+import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.db.track.TrackRepository;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
 

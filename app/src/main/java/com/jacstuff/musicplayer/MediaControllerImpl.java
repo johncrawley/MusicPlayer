@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
@@ -217,22 +218,14 @@ public class MediaControllerImpl implements MediaController {
         if(currentTrackDetails == null){
             return;
         }
-        String currentTrackPath = currentTrackDetails.getPathname();
+
         mediaPlayer.reset();
-        if(currentTrackPath == null){
-            view.setTrackInfo("");
-            state = State.STOPPED;
+
+        if(currentTrackDetails.getPathname() == null) {
+            handleNullPathname();
             return;
         }
-        try {
-            setTrackInfoOnView();
-            mediaPlayer.setDataSource(currentTrackPath);
-            mediaPlayer.prepare();
-            view.setTotalTrackTime(TimeConverter.convert(mediaPlayer.getDuration()));
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+        initTrack();
     }
 
 
@@ -240,6 +233,26 @@ public class MediaControllerImpl implements MediaController {
         return playlistManager.getTrackNameAt(position);
     }
 
+
+    private void handleNullPathname(){
+        if(currentTrackDetails.getPathname() == null){
+            view.setTrackInfo("");
+            state = State.STOPPED;
+        }
+    }
+
+
+    private void initTrack(){
+        try {
+            setTrackInfoOnView();
+            mediaPlayer.setDataSource(currentTrackDetails.getPathname());
+            mediaPlayer.prepare();
+            view.setTotalTrackTime(TimeConverter.convert(mediaPlayer.getDuration()));
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void next() {

@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer;
+package com.jacstuff.musicplayer.fragments;
 
 import java.util.ArrayList;
 import java.util.List;

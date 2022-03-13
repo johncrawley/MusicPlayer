@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.db;
+package com.jacstuff.musicplayer.db.track;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,7 +7,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import static com.jacstuff.musicplayer.db.DbContract.TracksEntry;
 
-import com.jacstuff.musicplayer.Track;
+import com.jacstuff.musicplayer.db.DbContract;
+import com.jacstuff.musicplayer.db.DbHelper;
+import com.jacstuff.musicplayer.db.DbUtils;
 
 import java.util.ArrayList;
 import java.util.List;

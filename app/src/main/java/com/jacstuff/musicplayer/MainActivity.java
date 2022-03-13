@@ -27,6 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
+import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
 import com.jacstuff.musicplayer.list.TrackListAdapter;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 

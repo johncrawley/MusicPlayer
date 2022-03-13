@@ -2,11 +2,10 @@ package com.jacstuff.musicplayer.playlist;
 
 import android.content.Context;
 
-import com.jacstuff.musicplayer.AudioInfoLoader;
 import com.jacstuff.musicplayer.MediaPlayerView;
-import com.jacstuff.musicplayer.Track;
-import com.jacstuff.musicplayer.db.TrackRepository;
-import com.jacstuff.musicplayer.db.TrackRepositoryImpl;
+import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.db.track.TrackRepository;
+import com.jacstuff.musicplayer.db.track.TrackRepositoryImpl;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
 import java.util.ArrayList;

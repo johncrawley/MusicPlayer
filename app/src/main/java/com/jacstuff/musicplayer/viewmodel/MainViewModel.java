@@ -1,6 +1,6 @@
 package com.jacstuff.musicplayer.viewmodel;
 
-import com.jacstuff.musicplayer.Track;
+import com.jacstuff.musicplayer.db.track.Track;
 
 import java.util.List;
 

@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.jacstuff.musicplayer.Track;
+import com.jacstuff.musicplayer.db.track.Track;
 
 import java.util.List;
 

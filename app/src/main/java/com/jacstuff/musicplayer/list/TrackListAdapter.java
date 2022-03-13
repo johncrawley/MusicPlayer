@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.jacstuff.musicplayer.MediaPlayerView;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.Track;
+import com.jacstuff.musicplayer.db.track.Track;
 import java.util.ArrayList;
 import java.util.List;
 
