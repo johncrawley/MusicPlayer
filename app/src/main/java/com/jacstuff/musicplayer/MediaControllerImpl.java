@@ -41,7 +41,7 @@ public class MediaControllerImpl implements MediaController {
     private final MainViewModel viewModel;
 
 
-    MediaControllerImpl(Context context, final MediaPlayerView view, MainViewModel viewModel){
+    public MediaControllerImpl(Context context, final MediaPlayerView view, MainViewModel viewModel){
         mediaPlayer = new MediaPlayer();
         executorService = Executors.newSingleThreadExecutor();
         this.state = State.STOPPED;
