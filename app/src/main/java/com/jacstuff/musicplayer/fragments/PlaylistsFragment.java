@@ -25,7 +25,7 @@ public class PlaylistsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = getContext();
-        View view = inflater.inflate(R.layout.fragment_player, container, false);
+        View view = inflater.inflate(R.layout.fragment_playlists, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         // setupKeyAction(view.findViewById(R.id.wholeWordCheckEditText));
         return view;

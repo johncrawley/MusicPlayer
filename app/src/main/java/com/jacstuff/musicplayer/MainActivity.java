@@ -1,8 +1,6 @@
 package com.jacstuff.musicplayer;
 
 import android.Manifest;
-import android.annotation.TargetApi;
-import android.os.Build;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,8 +12,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
@@ -23,17 +19,12 @@ import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
 public class MainActivity extends AppCompatActivity{
 
-    private Context context;
 
-    private MainViewModel viewModel;
-
-
-    @TargetApi(Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context = MainActivity.this;
+        Context context = MainActivity.this;
         setupViewModel();
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         setupTabLayout();
@@ -43,20 +34,20 @@ public class MainActivity extends AppCompatActivity{
 
 
     private void setupViewModel(){
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
     }
 
 
     private void setupTabLayout(){
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         FragmentManager fm = getSupportFragmentManager();
-        ViewStateAdapter sa = new ViewStateAdapter(fm, getLifecycle());
-        final ViewPager2 pa = findViewById(R.id.pager);
-        pa.setAdapter(sa);
+        ViewStateAdapter viewStateAdapter = new ViewStateAdapter(fm, getLifecycle());
+        final ViewPager2 pager = findViewById(R.id.pager);
+        pager.setAdapter(viewStateAdapter);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                pa.setCurrentItem(tab.getPosition());
+                pager.setCurrentItem(tab.getPosition());
             }
 
             @Override

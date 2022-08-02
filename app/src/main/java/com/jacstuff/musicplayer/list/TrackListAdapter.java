@@ -16,8 +16,8 @@ import java.util.List;
 
 public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.TrackViewHolder> {
 
-    private List<String> trackNames;
-    private MediaPlayerView mediaPlayerView;
+    private final List<String> trackNames;
+    private final MediaPlayerView mediaPlayerView;
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
@@ -31,20 +31,16 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
             super(view);
             trackNameTextView = view.findViewById(R.id.trackName);
 
-            view.setOnClickListener(new View.OnClickListener()
-                {
-                @Override
-                public void onClick (View v){
-                    if(currentlySelectedView != null){
-                        currentlySelectedView.setSelected(false);
-                    }
-                    currentlySelectedView = v;
-                    currentlySelectedView.setSelected(true);
-                    mediaPlayerView.notifyCurrentlySelectedTrack(getLayoutPosition());
-                     mediaPlayerView.scrollToListPosition(getLayoutPosition());
-                    setIndexToScrollTo(getLayoutPosition());
-                    currentlySelectedView.setSelected(true);
+            view.setOnClickListener(v -> {
+                if(currentlySelectedView != null){
+                    currentlySelectedView.setSelected(false);
                 }
+                currentlySelectedView = v;
+                currentlySelectedView.setSelected(true);
+                mediaPlayerView.notifyCurrentlySelectedTrack(getLayoutPosition());
+                 mediaPlayerView.scrollToListPosition(getLayoutPosition());
+                setIndexToScrollTo(getLayoutPosition());
+                currentlySelectedView.setSelected(true);
             });
         }
     }
@@ -87,7 +83,6 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
         holder.itemView.setSelected(selectedPosition == position);
 
         if(position == indexToScrollTo){
-            System.out.println("TrackListAdapter.onBindViewHolder() - about to deselect current item");
             deselectCurrentlySelectedItem();
             currentlySelectedView = holder.itemView;
             currentlySelectedView.setSelected(true);
