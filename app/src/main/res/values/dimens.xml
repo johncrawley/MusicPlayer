@@ -10,4 +10,6 @@
     <dimen name="playlist_list_view_horizontal_margin">2dp</dimen>
     <dimen name="track_name_text_size">36sp</dimen>
     <dimen name="pager_top_margin">18dp</dimen>
+    <dimen name="dialog_layout_padding_horizontal">8dp</dimen>
+    <dimen name="input_text_padding_top">12dp</dimen>
 </resources>

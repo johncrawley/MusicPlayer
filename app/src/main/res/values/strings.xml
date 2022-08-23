@@ -20,4 +20,8 @@
     <string name="player_tab">Player</string>
     <string name="playlists_tab">Playlists</string>
 
+    <string name="button_add_playlist">Add</string>
+    <string name="add_playlist_input_text_hint">Playlist Name</string>
+    <string name="create_playlist_button_text">Create</string>
+
 </resources>
