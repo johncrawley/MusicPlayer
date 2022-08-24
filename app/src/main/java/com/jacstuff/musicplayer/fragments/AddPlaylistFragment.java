@@ -14,6 +14,8 @@ import android.widget.EditText;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
+import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +28,7 @@ public class AddPlaylistFragment extends DialogFragment {
     public long stationId;
     private Button createPlaylistButton;
     private AlertDialog.Builder deleteConfirmationDialog;
+    private PlaylistRepository playlistRepository;
 
 
     public static AddPlaylistFragment newInstance() {
@@ -36,6 +39,7 @@ public class AddPlaylistFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_playlist, container, false);
+        playlistRepository = new PlaylistRepositoryImpl(getContext());
         return rootView;
     }
 
@@ -76,14 +80,13 @@ public class AddPlaylistFragment extends DialogFragment {
 
        // disableButtonWhenAnyEmptyInputs(updateButton, stationNameEditText, stationUrlEditText);
         setupCreateButton();
-        setupCancelButton(rootView);
     }
 
 
     private void setupCreateButton(){
         disableButtonIfInputsAreEmpty();
         createPlaylistButton.setOnClickListener((View v) -> {
-           //TODO: add repository save here
+            playlistRepository.createPlaylist(getEditText());
             dismiss();
         });
     }
@@ -94,13 +97,12 @@ public class AddPlaylistFragment extends DialogFragment {
     }
 
     private boolean isNameValid(){
-        return addPlaylistNameEditText.getText().toString().trim().isEmpty();
+        return !getEditText().isEmpty();
     }
 
-
-    private void setupCancelButton(View parentView){
-        Button cancelButton = parentView.findViewById(R.id.cancel_button);
-        cancelButton.setOnClickListener((View v)-> dismiss());
+    private String getEditText(){
+        return addPlaylistNameEditText.getText().toString().trim();
     }
+
 
 }
