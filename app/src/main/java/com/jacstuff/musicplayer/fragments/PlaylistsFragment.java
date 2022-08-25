@@ -7,22 +7,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.db.playlist.Playlist;
+import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
+import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
+import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.list.PlaylistRecyclerAdapter;
+import com.jacstuff.musicplayer.list.TrackListAdapter;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
+
+import java.util.List;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class PlaylistsFragment extends Fragment {
 
     private Context context;
     private MainViewModel viewModel;
     private Button addPlaylistButton;
+    private boolean hasClicked;
+    private RecyclerView recyclerView;
+    private PlaylistRecyclerAdapter playlistRecyclerAdapter;
 
     public PlaylistsFragment() {
         // Required empty public constructor
@@ -37,6 +52,7 @@ public class PlaylistsFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         // setupKeyAction(view.findViewById(R.id.wholeWordCheckEditText));
         setupButtons(view);
+        setupPlaylistRecyclerView(view);
         hasClicked = false;
         return view;
     }
@@ -45,7 +61,6 @@ public class PlaylistsFragment extends Fragment {
         setupAddPlaylistButton(parentView);
     }
 
-
     private void setupAddPlaylistButton(View parentView){
         addPlaylistButton = parentView.findViewById(R.id.addPlaylistButton);
         addPlaylistButton.setOnClickListener((View v)->{
@@ -53,7 +68,20 @@ public class PlaylistsFragment extends Fragment {
         });
     }
 
-    private boolean hasClicked;
+
+
+    private void setupPlaylistRecyclerView(View parentView){
+        recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
+        PlaylistRepository playlistRepository = new PlaylistRepositoryImpl(getContext());
+        List<Playlist> playlists = playlistRepository.getAllPlaylists();
+        playlists.forEach(x -> System.out.println(x.getName()));
+        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(playlists);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(playlistRecyclerAdapter);
+    }
+
 
     @Override
     public void onResume(){
@@ -76,7 +104,9 @@ public class PlaylistsFragment extends Fragment {
         removePreviousFragmentTransaction(fragmentManager,tag, fragmentTransaction);
         AddPlaylistFragment addPlaylistFragment = AddPlaylistFragment.newInstance();
         addPlaylistFragment.show(fragmentTransaction, tag);
+
     }
+
 
     private FragmentManager getSupportFragmentManager(){
         FragmentActivity activity = getActivity();
