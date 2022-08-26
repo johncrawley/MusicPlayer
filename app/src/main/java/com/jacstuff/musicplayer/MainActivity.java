@@ -40,8 +40,7 @@ public class MainActivity extends AppCompatActivity{
 
     private void setupTabLayout(){
         TabLayout tabLayout = findViewById(R.id.tabLayout);
-        FragmentManager fm = getSupportFragmentManager();
-        ViewStateAdapter viewStateAdapter = new ViewStateAdapter(fm, getLifecycle());
+        ViewStateAdapter viewStateAdapter = new ViewStateAdapter(getSupportFragmentManager(), getLifecycle());
         final ViewPager2 pager = findViewById(R.id.pager);
         pager.setAdapter(viewStateAdapter);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

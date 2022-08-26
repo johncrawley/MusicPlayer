@@ -1,8 +1,6 @@
 package com.jacstuff.musicplayer.fragments;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,16 +18,14 @@ import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 public class AddPlaylistFragment extends DialogFragment {
 
     private MainActivity activity;
     private EditText addPlaylistNameEditText;
-    public long stationId;
     private Button createPlaylistButton;
-    private AlertDialog.Builder deleteConfirmationDialog;
     private PlaylistRepository playlistRepository;
-
 
     public static AddPlaylistFragment newInstance() {
         return new AddPlaylistFragment();
@@ -78,7 +74,6 @@ public class AddPlaylistFragment extends DialogFragment {
             public void afterTextChanged(Editable editable) { }
         });
 
-       // disableButtonWhenAnyEmptyInputs(updateButton, stationNameEditText, stationUrlEditText);
         setupCreateButton();
     }
 
@@ -87,8 +82,20 @@ public class AddPlaylistFragment extends DialogFragment {
         disableButtonIfInputsAreEmpty();
         createPlaylistButton.setOnClickListener((View v) -> {
             playlistRepository.createPlaylist(getEditText());
+            updatePlaylistsOnParentFragment();
             dismiss();
         });
+    }
+
+
+    private void updatePlaylistsOnParentFragment(){
+        Fragment fragment = getParentFragmentManager().findFragmentByTag("f1");
+        if(fragment == null || !fragment.getClass().equals(PlaylistsFragment.class)){
+            return;
+        }
+        PlaylistsFragment playlistsFragment = (PlaylistsFragment) fragment;
+        playlistsFragment.onAddNewPlaylist();
+
     }
 
 
@@ -96,9 +103,11 @@ public class AddPlaylistFragment extends DialogFragment {
         createPlaylistButton.setEnabled(isNameValid());
     }
 
+
     private boolean isNameValid(){
         return !getEditText().isEmpty();
     }
+
 
     private String getEditText(){
         return addPlaylistNameEditText.getText().toString().trim();

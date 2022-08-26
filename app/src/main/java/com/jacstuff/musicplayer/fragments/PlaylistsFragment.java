@@ -1,22 +1,17 @@
 package com.jacstuff.musicplayer.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 
-import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
-import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.list.PlaylistRecyclerAdapter;
-import com.jacstuff.musicplayer.list.TrackListAdapter;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
 import java.util.List;
@@ -38,6 +33,7 @@ public class PlaylistsFragment extends Fragment {
     private boolean hasClicked;
     private RecyclerView recyclerView;
     private PlaylistRecyclerAdapter playlistRecyclerAdapter;
+    private PlaylistRepository playlistRepository;
 
     public PlaylistsFragment() {
         // Required empty public constructor
@@ -50,7 +46,7 @@ public class PlaylistsFragment extends Fragment {
         context = getContext();
         View view = inflater.inflate(R.layout.fragment_playlists, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-        // setupKeyAction(view.findViewById(R.id.wholeWordCheckEditText));
+        playlistRepository = new PlaylistRepositoryImpl(getContext());
         setupButtons(view);
         setupPlaylistRecyclerView(view);
         hasClicked = false;
@@ -72,7 +68,6 @@ public class PlaylistsFragment extends Fragment {
 
     private void setupPlaylistRecyclerView(View parentView){
         recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
-        PlaylistRepository playlistRepository = new PlaylistRepositoryImpl(getContext());
         List<Playlist> playlists = playlistRepository.getAllPlaylists();
         playlists.forEach(x -> System.out.println(x.getName()));
         playlistRecyclerAdapter = new PlaylistRecyclerAdapter(playlists);
@@ -83,12 +78,11 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        System.out.println("Entered onResume()");
+    public void onAddNewPlaylist(){
         hasClicked = false;
+        playlistRecyclerAdapter.refresh(playlistRepository.getAllPlaylists());
     }
+
 
     private void startAddPlaylistFragment(){
         if(hasClicked){
@@ -104,7 +98,6 @@ public class PlaylistsFragment extends Fragment {
         removePreviousFragmentTransaction(fragmentManager,tag, fragmentTransaction);
         AddPlaylistFragment addPlaylistFragment = AddPlaylistFragment.newInstance();
         addPlaylistFragment.show(fragmentTransaction, tag);
-
     }
 
 

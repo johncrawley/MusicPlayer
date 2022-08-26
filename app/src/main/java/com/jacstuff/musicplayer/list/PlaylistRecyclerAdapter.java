@@ -56,6 +56,11 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
         */
     }
 
+    public void refresh(List<Playlist> playlists){
+        this.playlists.clear();
+        this.playlists.addAll(playlists);
+    }
+
 
     @Override
     @NonNull
