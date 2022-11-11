@@ -52,21 +52,23 @@ public class TrackRepositoryImpl implements TrackRepository{
 
     @Override
     public List<Track> getAllTracks() {
+        return  getTracksUsingQuery("SELECT * FROM " + TracksEntry.TABLE_NAME + ";");
+    }
+
+
+    public List<Track> getAllTracksStartingWith(String prefix){
+        String query = "SELECT * FROM " + TracksEntry.TABLE_NAME
+                + " WHERE " + TracksEntry.COL_NAME + " GLOB '" + prefix + " *';";
+        return getTracksUsingQuery( query);
+
+    }
+
+
+    private List<Track> getTracksUsingQuery(String query){
         List<Track> tracks = new ArrayList<>();
-        String query = "SELECT * FROM " + TracksEntry.TABLE_NAME + ";";
         try {
             cursor = db.rawQuery(query, null);
-
-            while(cursor.moveToNext()){
-                tracks.add(new Track.Builder()
-                        .createTrackWithPathname(getString(TracksEntry.COL_PATH))
-                        .withId(getLong(TracksEntry._ID))
-                        .withName(getString(TracksEntry.COL_NAME))
-                        .withTrackNumber(-1)
-                        .withArtist(getString(TracksEntry.COL_ARTIST))
-                        .withAlbum(getString(TracksEntry.COL_ALBUM))
-                        .build());
-            }
+            tracks = getTracksFromCursor(cursor);
         }
         catch(SQLException e){
             e.printStackTrace();
@@ -75,6 +77,23 @@ public class TrackRepositoryImpl implements TrackRepository{
         cursor.close();
         return  tracks;
     }
+
+
+    private List<Track> getTracksFromCursor(Cursor cursor){
+        List<Track> tracks = new ArrayList<>();
+        while(cursor.moveToNext()){
+            tracks.add(new Track.Builder()
+                    .createTrackWithPathname(getString(TracksEntry.COL_PATH))
+                    .withId(getLong(TracksEntry._ID))
+                    .withName(getString(TracksEntry.COL_NAME))
+                    .withTrackNumber(-1)
+                    .withArtist(getString(TracksEntry.COL_ARTIST))
+                    .withAlbum(getString(TracksEntry.COL_ALBUM))
+                    .build());
+        }
+        return tracks;
+    }
+
 
 
     public List<Track> searchForTracks(String searchTerms){
