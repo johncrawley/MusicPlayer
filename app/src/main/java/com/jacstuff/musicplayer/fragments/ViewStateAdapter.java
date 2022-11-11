@@ -12,14 +12,20 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 public class ViewStateAdapter extends FragmentStateAdapter {
 
     private final List<Fragment> fragments;
+    private final PlaylistsFragment playlistsFragment;
 
     public ViewStateAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
         fragments = new ArrayList<>();
+        playlistsFragment = new PlaylistsFragment();
         fragments.add(new PlayerFragment());    // auto-assigned tag: 'f0'
-        fragments.add(new PlaylistsFragment()); // auto-assigned tag: 'f1'
+        fragments.add(playlistsFragment); // auto-assigned tag: 'f1'
     }
 
+
+    public PlaylistsFragment getPlaylistsFragment(){
+        return playlistsFragment;
+    }
 
 
 

@@ -20,6 +20,8 @@ import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 public class MainActivity extends AppCompatActivity{
 
 
+    private ViewStateAdapter viewStateAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity{
 
     private void setupTabLayout(){
         TabLayout tabLayout = findViewById(R.id.tabLayout);
-        ViewStateAdapter viewStateAdapter = new ViewStateAdapter(getSupportFragmentManager(), getLifecycle());
+        viewStateAdapter = new ViewStateAdapter(getSupportFragmentManager(), getLifecycle());
         final ViewPager2 pager = findViewById(R.id.pager);
         pager.setAdapter(viewStateAdapter);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -59,6 +61,10 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
+    }
+
+    public void updatePlaylistList(){
+        viewStateAdapter.getPlaylistsFragment().onAddNewPlaylist();
     }
 
 

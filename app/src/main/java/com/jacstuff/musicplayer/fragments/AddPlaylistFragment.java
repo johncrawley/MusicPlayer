@@ -98,6 +98,12 @@ public class AddPlaylistFragment extends DialogFragment {
 
     }
 
+    @Override
+    public void dismiss(){
+        activity.updatePlaylistList();
+        super.dismiss();
+    }
+
 
     private void disableButtonIfInputsAreEmpty(){
         createPlaylistButton.setEnabled(isNameValid());
