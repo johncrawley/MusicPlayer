@@ -1,6 +1,11 @@
 package com.jacstuff.musicplayer.service;
 
 
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_PLAY_CURRENT;
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_NEXT_STATION;
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_PREVIOUS_STATION;
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_STOP_PLAYER;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,6 +18,7 @@ import android.os.Looper;
 import androidx.core.app.NotificationCompat;
 
 import com.jacstuff.musicplayer.MainActivity;
+import com.jacstuff.musicplayer.R;
 
 
 public class MediaNotificationManager {

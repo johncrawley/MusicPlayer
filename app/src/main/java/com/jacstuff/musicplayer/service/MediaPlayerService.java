@@ -1,6 +1,7 @@
 package com.jacstuff.musicplayer.service;
 
-import static com.jcrawley.webradio.service.MediaNotificationManager.NOTIFICATION_ID;
+
+import static com.jacstuff.musicplayer.service.MediaNotificationManager.NOTIFICATION_ID;
 
 import android.Manifest;
 import android.app.Notification;
@@ -17,7 +18,8 @@ import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 
-import com.jcrawley.webradio.R;
+
+import com.jacstuff.musicplayer.R;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -28,19 +30,19 @@ import java.util.concurrent.TimeUnit;
 
 public class MediaPlayerService extends Service {
 
-    public static final String ACTION_START_PLAYER = "com.jcrawley.webradio.startPlayer";
-    public static final String ACTION_STOP_PLAYER = "com.jcrawley.webradio.stopPlayer";
-    public static final String ACTION_CHANGE_STATION = "com.jcrawley.webradio.changeStation";
-    public static final String ACTION_REQUEST_STATUS = "com.jcrawley.webradio.requestStatus";
-    public static final String ACTION_UPDATE_STATION_COUNT = "com.jcrawley.webradio.updateStationCount";
-    public static final String ACTION_PLAY_CURRENT = "com.jcrawley.webradio.playCurrent";
+    public static final String ACTION_START_PLAYER = "com.j.crawley.music_player.startPlayer";
+    public static final String ACTION_STOP_PLAYER = "com.j.crawley.music_player.stopPlayer";
+    public static final String ACTION_CHANGE_STATION = "com.j.crawley.music_player.changeStation";
+    public static final String ACTION_REQUEST_STATUS = "com.j.crawley.music_player.requestStatus";
+    public static final String ACTION_UPDATE_STATION_COUNT = "com.j.crawley.music_player.updateStationCount";
+    public static final String ACTION_PLAY_CURRENT = "com.j.crawley.music_player.playCurrent";
 
-    public static final String ACTION_SELECT_PREVIOUS_STATION = "com.jcrawley.webradio.selectPreviousStation";
-    public static final String ACTION_SELECT_NEXT_STATION = "com.jcrawley.webradio.selectNextStation";
-    public static final String ACTION_NOTIFY_VIEW_OF_STOP = "com.jcrawley.webradio.notifyViewOfStop";
-    public static final String ACTION_NOTIFY_VIEW_OF_CONNECTING = "com.jcrawley.webradio.notifyViewOfPlay";
-    public static final String ACTION_NOTIFY_VIEW_OF_PLAYING = "com.jcrawley.webradio.notifyViewOfPlayInfo";
-    public static final String ACTION_NOTIFY_VIEW_OF_ERROR = "com.jcrawley.webradio.notifyViewOfError";
+    public static final String ACTION_SELECT_PREVIOUS_STATION = "com.j.crawley.music_player.selectPreviousStation";
+    public static final String ACTION_SELECT_NEXT_STATION = "com.j.crawley.music_player.selectNextStation";
+    public static final String ACTION_NOTIFY_VIEW_OF_STOP = "com.j.crawley.music_player.notifyViewOfStop";
+    public static final String ACTION_NOTIFY_VIEW_OF_CONNECTING = "com.j.crawley.music_player.notifyViewOfPlay";
+    public static final String ACTION_NOTIFY_VIEW_OF_PLAYING = "com.j.crawley.music_player.notifyViewOfPlayInfo";
+    public static final String ACTION_NOTIFY_VIEW_OF_ERROR = "com.j.crawley.music_player.notifyViewOfError";
 
     public static final String TAG_STATION_URL = "station_url";
     public static final String TAG_STATION_NAME = "station_name";
@@ -309,7 +311,6 @@ public class MediaPlayerService extends Service {
     private void prepareAndPlay(){
         try {
             assert mediaPlayer != null;
-            metadataHandler.initMetaDataRetriever(currentUrl);
             mediaPlayer.setDataSource(this, Uri.parse(currentUrl));
             mediaPlayer.prepareAsync();
             setupOnInfoListener();
@@ -325,7 +326,6 @@ public class MediaPlayerService extends Service {
     private void setupOnInfoListener(){
         mediaPlayer.setOnInfoListener((mediaPlayer, i, i1) -> {
             updateStatusFromConnectingToPlaying();
-            executorService.schedule(()-> metadataHandler.updateMetadata(), 2000, TimeUnit.MILLISECONDS);
             return false;
         });
     }

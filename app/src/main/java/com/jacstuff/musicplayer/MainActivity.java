@@ -1,8 +1,18 @@
 package com.jacstuff.musicplayer;
 
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_CONNECTING;
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_ERROR;
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_PLAYING;
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_STOP;
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_NEXT_STATION;
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_PREVIOUS_STATION;
+
 import android.Manifest;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
@@ -22,6 +32,49 @@ public class MainActivity extends AppCompatActivity{
 
     private ViewStateAdapter viewStateAdapter;
 
+    private final BroadcastReceiver serviceReceiverForPreviousTrack = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            selectPreviousTrack();
+        }
+    };
+
+    private final BroadcastReceiver serviceReceiverForNextTrack = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            selectNextTrack();
+        }
+    };
+
+    private final BroadcastReceiver serviceReceiverForNotifyStop = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            notifyPlayerStopped();
+        }
+    };
+
+    private final BroadcastReceiver serviceReceiverForNotifyConnecting = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            notifyPlayerConnecting();
+        }
+    };
+
+    private final BroadcastReceiver serviceReceiverForNotifyPlaying = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            notifyPlayerPlaying();
+        }
+    };
+
+    private final BroadcastReceiver serviceReceiverForNotifyError = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            notifyPlayError();
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +86,50 @@ public class MainActivity extends AppCompatActivity{
         //listAudioFiles();
     }
 
+
+    private void notifyPlayerStopped(){
+
+    }
+
+
+    private void notifyPlayerConnecting(){
+
+    }
+
+
+    private void notifyPlayerPlaying(){
+
+    }
+
+
+
+    private void notifyPlayError(){
+
+    }
+
+    private void selectNextTrack(){
+
+    }
+
+    private void selectPreviousTrack(){
+
+    }
+
+
+    private void setupBroadcastReceivers(){
+        register(serviceReceiverForPreviousTrack, ACTION_SELECT_PREVIOUS_STATION);
+        register(serviceReceiverForNextTrack, ACTION_SELECT_NEXT_STATION);
+        register(serviceReceiverForNotifyStop, ACTION_NOTIFY_VIEW_OF_STOP);
+        register(serviceReceiverForNotifyConnecting, ACTION_NOTIFY_VIEW_OF_CONNECTING);
+        register(serviceReceiverForNotifyPlaying, ACTION_NOTIFY_VIEW_OF_PLAYING);
+        register(serviceReceiverForNotifyError, ACTION_NOTIFY_VIEW_OF_ERROR);
+    }
+
+
+    private void register(BroadcastReceiver serviceReceiverForNotifyStop, String actionNotifyViewOfStop) {
+
+
+    }
 
 
     private void setupViewModel(){
