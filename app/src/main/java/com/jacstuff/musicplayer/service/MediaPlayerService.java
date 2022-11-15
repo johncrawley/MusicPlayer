@@ -37,8 +37,8 @@ public class MediaPlayerService extends Service {
     public static final String ACTION_UPDATE_STATION_COUNT = "com.j.crawley.music_player.updateStationCount";
     public static final String ACTION_PLAY_CURRENT = "com.j.crawley.music_player.playCurrent";
 
-    public static final String ACTION_SELECT_PREVIOUS_STATION = "com.j.crawley.music_player.selectPreviousStation";
-    public static final String ACTION_SELECT_NEXT_STATION = "com.j.crawley.music_player.selectNextStation";
+    public static final String ACTION_SELECT_PREVIOUS_TRACK = "com.j.crawley.music_player.selectPreviousTrack";
+    public static final String ACTION_SELECT_NEXT_TRACK = "com.j.crawley.music_player.selectNextTrack";
     public static final String ACTION_NOTIFY_VIEW_OF_STOP = "com.j.crawley.music_player.notifyViewOfStop";
     public static final String ACTION_NOTIFY_VIEW_OF_CONNECTING = "com.j.crawley.music_player.notifyViewOfPlay";
     public static final String ACTION_NOTIFY_VIEW_OF_PLAYING = "com.j.crawley.music_player.notifyViewOfPlayInfo";

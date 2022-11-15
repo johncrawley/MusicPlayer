@@ -2,8 +2,8 @@ package com.jacstuff.musicplayer.service;
 
 
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_PLAY_CURRENT;
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_NEXT_STATION;
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_PREVIOUS_STATION;
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_NEXT_TRACK;
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_PREVIOUS_TRACK;
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_STOP_PLAYER;
 
 import android.app.Notification;
@@ -113,7 +113,7 @@ public class MediaNotificationManager {
         }
         notification.addAction(android.R.drawable.ic_media_previous,
                 context.getString(R.string.notification_button_title_previous),
-                createPendingIntentFor(ACTION_SELECT_PREVIOUS_STATION));
+                createPendingIntentFor(ACTION_SELECT_PREVIOUS_TRACK));
     }
 
 
@@ -123,7 +123,7 @@ public class MediaNotificationManager {
         }
         notification.addAction(android.R.drawable.ic_media_next,
                 context.getString(R.string.notification_button_title_next),
-                createPendingIntentFor(ACTION_SELECT_NEXT_STATION));
+                createPendingIntentFor(ACTION_SELECT_NEXT_TRACK));
     }
 
 
