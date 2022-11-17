@@ -14,7 +14,6 @@ import android.content.pm.PackageManager;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 
@@ -57,7 +56,6 @@ public class MediaPlayerService extends Service {
     boolean wasInfoFound = false;
     private MediaNotificationManager mediaNotificationManager;
     private final ScheduledExecutorService executorService;
-    private WifiManager.WifiLock wifiLock;
     Map<BroadcastReceiver, String> broadcastReceiverMap;
 
     public MediaPlayerService() {
@@ -141,7 +139,6 @@ public class MediaPlayerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        initWifiLock();
         setupBroadcastReceivers();
         mediaNotificationManager = new MediaNotificationManager(getApplicationContext(), this);
         moveToForeground();
@@ -167,12 +164,6 @@ public class MediaPlayerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
         return Service.START_NOT_STICKY; // service is not restarted when terminated
-    }
-
-
-    private void initWifiLock(){
-        wifiLock = ((WifiManager) getSystemService(Context.WIFI_SERVICE))
-                .createWifiLock(WifiManager.WIFI_MODE_FULL, "jcrawley.webRadio.wifiWakeLock");
     }
 
 
@@ -211,9 +202,6 @@ public class MediaPlayerService extends Service {
     private void releaseMediaPlayerAndLocks(){
         if (mediaPlayer != null) {
             mediaPlayer.release();
-        }
-        if (wifiLock.isHeld()) {
-            wifiLock.release();
         }
     }
 
@@ -254,7 +242,6 @@ public class MediaPlayerService extends Service {
 
     public void play() {
         updateViewsForConnecting();
-        wifiLock.acquire();
         stopRunningMediaPlayer();
         executorService.schedule(this::connectWithMediaPlayer, 1, TimeUnit.MILLISECONDS);
     }
@@ -378,7 +365,6 @@ public class MediaPlayerService extends Service {
             mediaPlayer.reset();
             mediaPlayer.release();
             mediaPlayer = null;
-            wifiLock.release();
         }
     }
 
