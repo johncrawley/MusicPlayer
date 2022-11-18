@@ -1,13 +1,11 @@
 package com.jacstuff.musicplayer.fragments;
 
-import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -36,11 +34,13 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
 
     private Context context;
     private MainViewModel viewModel;
+    private MainActivity mainActivity;
     private MediaController mediaController;
     private TextView trackTime;
     private TextView trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton;
     private ImageButton nextTrackButton;
+    private ImageButton refreshPlaylistButton;
     private String totalTrackTime = "0:00";
     private RecyclerView recyclerView;
     private TrackListAdapter trackListAdapter;
@@ -58,11 +58,12 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
         View view = inflater.inflate(R.layout.fragment_player, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         // setupKeyAction(view.findViewById(R.id.wholeWordCheckEditText));
-
         mediaController = new MediaControllerImpl(context, this, viewModel);
         trackTime = view.findViewById(R.id.trackTime);
+        mainActivity = (MainActivity)getActivity();
         setupViews(view);
         mediaController.initPlaylistAndRefreshView();
+
         return view;
     }
 
@@ -77,6 +78,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
         coverArt.setImageBitmap(bitmap);
     }
 
+
     @Override
     public void refreshTrackList(List<Track> trackDetailsList) {
 
@@ -88,9 +90,13 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     }
 
 
+    private void resetElapsedTime(){
+        setElapsedTime("0:00");
+    }
+
     public void setTotalTrackTime(String totalTrackTime){
         this.totalTrackTime = totalTrackTime;
-        setTrackTime("0:00");
+        resetElapsedTime();
     }
 
 
@@ -128,25 +134,32 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
 
 
     private void setupViews(View parentView){
+        assignViews(parentView);
+        setupRecyclerView(mediaController.getTrackDetailsList(), parentView);
+        assignClickListeners();
+        resetElapsedTime();
+        playButton.setEnabled(false);
+        nextTrackButton.setEnabled(false);
+    }
+
+
+    private void assignViews(View parentView){
         trackTitle = parentView.findViewById(R.id.trackTitle);
         trackAlbum = parentView.findViewById(R.id.albumTextView);
         trackArtist = parentView.findViewById(R.id.artistTextView);
         playButton = parentView.findViewById(R.id.playButton);
         nextTrackButton = parentView.findViewById(R.id.nextTrackButton);
-        ImageButton refreshPlaylistButton = parentView.findViewById(R.id.refreshButton);
-        setupRecyclerView(mediaController.getTrackDetailsList(), parentView);
+        refreshPlaylistButton = parentView.findViewById(R.id.refreshButton);
+    }
 
+
+    private void assignClickListeners(){
         trackTitle.setOnClickListener(this);
         playButton.setOnClickListener(this);
         nextTrackButton.setOnClickListener(this);
         refreshPlaylistButton.setOnClickListener(this);
-
-        String elapsedTime = "0:00";
-        setElapsedTime(elapsedTime);
-
-        playButton.setEnabled(false);
-        nextTrackButton.setEnabled(false);
     }
+
 
 
     public void refreshTrackList(List<Track> trackDetailsList, View parentView){
