@@ -63,10 +63,25 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
         mainActivity = (MainActivity)getActivity();
         setupViews(view);
         mediaController.initPlaylistAndRefreshView();
-
         return view;
     }
 
+
+    @Override
+    public void onClick(View view){
+        int id = view.getId();
+        if(id == R.id.playButton){
+            mediaController.togglePlay();
+        }
+        else if(id == R.id.nextTrackButton) {
+            mediaController.next();
+        }
+    }
+
+
+    public void scanForTracks(){
+        mediaController.scanForTracks();
+    }
 
 
     public void notifyCurrentlySelectedTrack(int position){
@@ -94,6 +109,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
         setElapsedTime("0:00");
     }
 
+
     public void setTotalTrackTime(String totalTrackTime){
         this.totalTrackTime = totalTrackTime;
         resetElapsedTime();
@@ -101,12 +117,10 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
 
 
     private void setTrackTime(String elapsedTime){
-
-        if(trackTime == null){
-            return;
+        if(trackTime != null){
+            String time = elapsedTime + " / " + this.totalTrackTime;
+            trackTime.setText(time);
         }
-        String time = elapsedTime + " / " + this.totalTrackTime;
-        trackTime.setText(time);
     }
 
 
@@ -161,7 +175,6 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     }
 
 
-
     public void refreshTrackList(List<Track> trackDetailsList, View parentView){
         setupRecyclerView(trackDetailsList, parentView);
     }
@@ -204,20 +217,6 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     public void enableControls(){
         playButton.setEnabled(true);
         nextTrackButton.setEnabled(true);
-    }
-
-
-    public void onClick(View view){
-        int id = view.getId();
-        if(id == R.id.playButton){
-            mediaController.togglePlay();
-        }
-        else if(id == R.id.nextTrackButton) {
-            mediaController.next();
-        }
-        else if(id == R.id.refreshButton){
-            mediaController.scanForTracks();
-        }
     }
 
 

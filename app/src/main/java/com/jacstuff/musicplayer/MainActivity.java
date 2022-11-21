@@ -25,6 +25,8 @@ import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
@@ -133,7 +135,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
     private void bindService() {
         bindService(mediaPlayerServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
@@ -230,7 +231,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity{
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if(id == R.id.refresh_button) {
-          //  mediaController.scanForTracks();
+          viewStateAdapter.getPlayerFragment().scanForTracks();
         }
         return super.onOptionsItemSelected(item);
     }

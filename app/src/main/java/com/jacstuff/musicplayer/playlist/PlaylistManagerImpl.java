@@ -37,7 +37,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void initUnPlayedList(){
-
        if(viewModel.unplayedPathnameIndexes == null){
            viewModel.unplayedPathnameIndexes = new ArrayList<>();
        }
@@ -58,10 +57,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    private void initTrackDetailsList(){
-        viewModel.tracks = trackRepository.getAllTracks();
-    }
-
 
     private void calculateAndPostNewTracksStats(){
         int numberOfNewTracks = viewModel.tracks.size() - previousNumberOfTracks;
@@ -74,6 +69,11 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     public void init(){
         initTrackDetailsList();
+    }
+
+
+    private void initTrackDetailsList(){
+        viewModel.tracks = trackRepository.getAllTracks();
     }
 
 

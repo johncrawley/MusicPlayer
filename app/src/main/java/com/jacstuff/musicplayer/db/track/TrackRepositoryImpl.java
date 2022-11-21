@@ -60,7 +60,6 @@ public class TrackRepositoryImpl implements TrackRepository{
         String query = "SELECT * FROM " + TracksEntry.TABLE_NAME
                 + " WHERE " + TracksEntry.COL_NAME + " GLOB '" + prefix + " *';";
         return getTracksUsingQuery( query);
-
     }
 
 

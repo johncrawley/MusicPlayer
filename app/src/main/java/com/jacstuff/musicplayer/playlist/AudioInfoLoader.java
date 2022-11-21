@@ -25,8 +25,18 @@ public class AudioInfoLoader {
 
 
     public void loadAudioFiles(){
+        Cursor cursor = createCursorForFilesystemTracks();
+        if(cursor != null){
+            while(cursor.moveToNext()){
+                addTrack(cursor);
+            }
+            cursor.close();
+        }
+    }
 
-        String[] projection2 = new String[] {
+
+    private Cursor createCursorForFilesystemTracks(){
+        String[] projection = new String[] {
                 MediaStore.Audio.Media.DISPLAY_NAME,
                 MediaStore.Audio.Media.TITLE,
                 MediaStore.Audio.Media.ARTIST,
@@ -34,20 +44,11 @@ public class AudioInfoLoader {
                 MediaStore.Audio.Media.DATA
                 //MediaStore.Audio.Media.CD_TRACK_NUMBER,
                 //MediaStore.Audio.Media.GENRE
-                };
-
+        };
         String selection = null;
         String[] selectionArgs = null;
         String sortOrder = MediaStore.Audio.Media.DEFAULT_SORT_ORDER + " ASC";
-        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection2, selection, selectionArgs, sortOrder);
-
-        if(cursor != null){
-            while(cursor.moveToNext()){
-                addTrack(cursor);
-            }
-            cursor.close();
-        }
-
+        return context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection, selectionArgs, sortOrder);
     }
 
 

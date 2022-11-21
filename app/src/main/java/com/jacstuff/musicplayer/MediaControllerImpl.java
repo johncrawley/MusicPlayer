@@ -116,13 +116,12 @@ public class MediaControllerImpl implements MediaController {
             return;
         }
         isRefreshing = true;
-        executorService.execute(
-                () -> {
-                    playlistManager.addTracksFromStorage();
-                    Message msg = handler.obtainMessage(PLAYLIST_REFRESHED, null);
-                    msg.sendToTarget();
-                    isRefreshing = false;
-                });
+        executorService.execute(() -> {
+            playlistManager.addTracksFromStorage();
+            Message msg = handler.obtainMessage(PLAYLIST_REFRESHED, null);
+            msg.sendToTarget();
+            isRefreshing = false;
+        });
     }
 
 

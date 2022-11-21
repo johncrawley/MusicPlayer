@@ -13,12 +13,14 @@ public class ViewStateAdapter extends FragmentStateAdapter {
 
     private final List<Fragment> fragments;
     private final PlaylistsFragment playlistsFragment;
+    private final PlayerFragment playerFragment;
 
     public ViewStateAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
         fragments = new ArrayList<>();
         playlistsFragment = new PlaylistsFragment();
-        fragments.add(new PlayerFragment());    // auto-assigned tag: 'f0'
+        playerFragment = new PlayerFragment();
+        fragments.add(playerFragment);    // auto-assigned tag: 'f0'
         fragments.add(playlistsFragment); // auto-assigned tag: 'f1'
     }
 
@@ -27,6 +29,8 @@ public class ViewStateAdapter extends FragmentStateAdapter {
         return playlistsFragment;
     }
 
+
+    public PlayerFragment getPlayerFragment(){ return playerFragment; }
 
 
     @NonNull
