@@ -74,6 +74,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private void initTrackDetailsList(){
         viewModel.tracks = trackRepository.getAllTracks();
+        mediaPlayerView.updateTrackDetails();
     }
 
 
