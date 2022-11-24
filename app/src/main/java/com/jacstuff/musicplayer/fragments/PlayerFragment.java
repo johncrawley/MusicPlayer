@@ -79,6 +79,34 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     }
 
 
+    @Override
+    public void updateTrackDetails(){
+        if(viewModel.tracks.isEmpty()){
+            setVisibilityOnDetailsAndNavViews(View.INVISIBLE);
+            return;
+        }
+        setVisibilityOnDetailsAndNavViews(View.VISIBLE);
+        hideNextButtonIfOnlyOneTrack();
+    }
+
+
+    private void hideNextButtonIfOnlyOneTrack(){
+        if(viewModel.tracks.size() == 1){
+            nextTrackButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+
+    private void setVisibilityOnDetailsAndNavViews(int visibility){
+        trackTitle.setVisibility(visibility);
+        trackAlbum.setVisibility(visibility);
+        trackArtist.setVisibility(visibility);
+        trackTime.setVisibility(visibility);
+        playButton.setVisibility(visibility);
+        nextTrackButton.setVisibility(visibility);
+    }
+
+
     public void scanForTracks(){
         mediaController.scanForTracks();
     }

@@ -136,6 +136,9 @@ public class MediaControllerImpl implements MediaController {
 
     @Override
     public void togglePlay(){
+        if(currentTrackDetails == null){
+            return;
+        }
         switch(state){
             case PAUSED:
                 resume();
@@ -252,6 +255,7 @@ public class MediaControllerImpl implements MediaController {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public void next() {

@@ -22,6 +22,7 @@ public interface MediaPlayerView {
     void refreshTrackList(List<Track> trackDetailsList);
     void scrollToListPosition(int index);
     void notifyCurrentlySelectedTrack(int item);
+    void updateTrackDetails();
 
    // void notifyOfScrollReady(int index);
 }
