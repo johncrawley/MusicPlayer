@@ -43,8 +43,9 @@ public class MediaPlayerService extends Service {
     public static final String ACTION_NOTIFY_VIEW_OF_PLAYING = "com.j.crawley.music_player.notifyViewOfPlayInfo";
     public static final String ACTION_NOTIFY_VIEW_OF_ERROR = "com.j.crawley.music_player.notifyViewOfError";
 
-    public static final String TAG_STATION_URL = "station_url";
-    public static final String TAG_STATION_NAME = "station_name";
+    public static final String TAG_TRACK_URL = "track_url";
+    public static final String TAG_TRACK_NAME = "track_name";
+    public static final String TAG_ARTIST_NAME = "artist_name";
     public static final String TAG_STATION_COUNT = "station_count";
 
     private MediaPlayer mediaPlayer;
@@ -74,8 +75,8 @@ public class MediaPlayerService extends Service {
     private final BroadcastReceiver serviceReceiverForStartPlayer = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            currentUrl = intent.getStringExtra(TAG_STATION_URL);
-            currentStationName = intent.getStringExtra(TAG_STATION_NAME);
+            currentUrl = intent.getStringExtra(TAG_TRACK_URL);
+            currentStationName = intent.getStringExtra(TAG_TRACK_NAME);
             play();
         }
     };
@@ -113,8 +114,8 @@ public class MediaPlayerService extends Service {
     private final BroadcastReceiver serviceReceiverForChangeStation = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            currentStationName = intent.getStringExtra(TAG_STATION_NAME);
-            currentUrl = intent.getStringExtra(TAG_STATION_URL);
+            currentStationName = intent.getStringExtra(TAG_TRACK_NAME);
+            currentUrl = intent.getStringExtra(TAG_TRACK_URL);
             if(isPlaying){
                 stopPlayer(false);
                 play();

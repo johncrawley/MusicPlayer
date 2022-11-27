@@ -72,6 +72,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
         int id = view.getId();
         if(id == R.id.playButton){
             mediaController.togglePlay();
+            mainActivity.sendPlayBroadcast(null, null);
         }
         else if(id == R.id.nextTrackButton) {
             mediaController.next();

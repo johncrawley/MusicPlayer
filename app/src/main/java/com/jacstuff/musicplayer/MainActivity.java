@@ -25,7 +25,6 @@ import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
@@ -119,6 +118,13 @@ public class MainActivity extends AppCompatActivity{
         //mediaController.finish();
     }
 
+
+    public void sendPlayBroadcast(String trackUrl, String trackName) {
+        Intent intent = new Intent(MediaPlayerService.ACTION_START_PLAYER);
+        intent.putExtra(MediaPlayerService.TAG_TRACK_URL, trackUrl);
+        intent.putExtra(MediaPlayerService.TAG_TRACK_NAME, trackName);
+        sendBroadcast(intent);
+    }
 
 
     @Override
