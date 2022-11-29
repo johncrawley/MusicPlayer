@@ -38,7 +38,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     private MediaController mediaController;
     private TextView trackTime;
     private TextView trackTitle, trackAlbum, trackArtist;
-    private ImageButton playButton;
+    private ImageButton playButton, pauseButton;
     private ImageButton nextTrackButton;
     private ImageButton refreshPlaylistButton;
     private String totalTrackTime = "0:00";
@@ -71,12 +71,28 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     public void onClick(View view){
         int id = view.getId();
         if(id == R.id.playButton){
-            mediaController.togglePlay();
+            //mediaController.togglePlay();
             mainActivity.sendPlayBroadcast(null, null);
+        }
+        else if(id == R.id.pauseButton){
+            mainActivity.sendPauseBroadcast();
         }
         else if(id == R.id.nextTrackButton) {
             mediaController.next();
         }
+    }
+
+
+    public void notifyTrackPlaying(){
+        playButton.setVisibility(View.GONE);
+        pauseButton.setVisibility(View.VISIBLE);
+    }
+
+
+
+    public void notifyTrackPaused(){
+        playButton.setVisibility(View.VISIBLE);
+        pauseButton.setVisibility(View.GONE);
     }
 
 
@@ -191,6 +207,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
         trackAlbum = parentView.findViewById(R.id.albumTextView);
         trackArtist = parentView.findViewById(R.id.artistTextView);
         playButton = parentView.findViewById(R.id.playButton);
+        playButton = parentView.findViewById(R.id.pauseButton);
         nextTrackButton = parentView.findViewById(R.id.nextTrackButton);
         refreshPlaylistButton = parentView.findViewById(R.id.refreshButton);
     }
@@ -199,6 +216,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     private void assignClickListeners(){
         trackTitle.setOnClickListener(this);
         playButton.setOnClickListener(this);
+        pauseButton.setOnClickListener(this);
         nextTrackButton.setOnClickListener(this);
         refreshPlaylistButton.setOnClickListener(this);
     }

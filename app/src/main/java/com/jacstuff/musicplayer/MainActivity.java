@@ -127,6 +127,12 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
+    public void sendPauseBroadcast() {
+        Intent intent = new Intent(MediaPlayerService.ACTION_PAUSE_PLAYER);
+        sendBroadcast(intent);
+    }
+
+
     @Override
     protected void onStart(){
         super.onStart();

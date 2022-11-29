@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class MediaPlayerService extends Service {
 
     public static final String ACTION_START_PLAYER = "com.j.crawley.music_player.startPlayer";
+    public static final String ACTION_PAUSE_PLAYER = "com.j.crawley.music_player.startPlayer";
     public static final String ACTION_STOP_PLAYER = "com.j.crawley.music_player.stopPlayer";
     public static final String ACTION_CHANGE_STATION = "com.j.crawley.music_player.changeStation";
     public static final String ACTION_REQUEST_STATUS = "com.j.crawley.music_player.requestStatus";
