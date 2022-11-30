@@ -55,17 +55,25 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = getContext();
+        log("entered onCreateView()");
         View view = inflater.inflate(R.layout.fragment_player, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         // setupKeyAction(view.findViewById(R.id.wholeWordCheckEditText));
-        mediaController = new MediaControllerImpl(context, this, viewModel);
-        trackTime = view.findViewById(R.id.trackTime);
-        mainActivity = (MainActivity)getActivity();
+
+        log("onCreateView() About to run setupViews()");
         setupViews(view);
+        log("onCreateView() about to init mediaController");
+        mediaController = new MediaControllerImpl(context, this, viewModel);
+
+        setupRecyclerView(mediaController.getTrackDetailsList(), view);
+        mainActivity = (MainActivity)getActivity();
         mediaController.initPlaylistAndRefreshView();
         return view;
     }
 
+    private void log(String msg){
+        System.out.println("^^^ PlayerFragment: " +  msg);
+    }
 
     @Override
     public void onClick(View view){
@@ -194,7 +202,6 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
 
     private void setupViews(View parentView){
         assignViews(parentView);
-        setupRecyclerView(mediaController.getTrackDetailsList(), parentView);
         assignClickListeners();
         resetElapsedTime();
         playButton.setEnabled(false);
@@ -203,13 +210,16 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
 
 
     private void assignViews(View parentView){
+        trackTime = parentView.findViewById(R.id.trackTime);
         trackTitle = parentView.findViewById(R.id.trackTitle);
         trackAlbum = parentView.findViewById(R.id.albumTextView);
         trackArtist = parentView.findViewById(R.id.artistTextView);
         playButton = parentView.findViewById(R.id.playButton);
-        playButton = parentView.findViewById(R.id.pauseButton);
+        pauseButton = parentView.findViewById(R.id.pauseButton);
         nextTrackButton = parentView.findViewById(R.id.nextTrackButton);
         refreshPlaylistButton = parentView.findViewById(R.id.refreshButton);
+        boolean isTrackTitleNull = trackTitle == null;
+        System.out.println("PlayerFragment.assignViews() is Track Title View null? : " + isTrackTitleNull);
     }
 
 
