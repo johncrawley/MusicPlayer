@@ -57,7 +57,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-
     private void calculateAndPostNewTracksStats(){
         int numberOfNewTracks = viewModel.tracks.size() - previousNumberOfTracks;
         if(numberOfNewTracks > 0){

@@ -106,6 +106,11 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
 
     @Override
     public void updateTrackDetails(){
+        getActivity().runOnUiThread(this::updateTrackViews);
+    }
+
+
+    private void updateTrackViews(){
         if(viewModel.tracks.isEmpty()){
             setVisibilityOnDetailsAndNavViews(View.INVISIBLE);
             return;
