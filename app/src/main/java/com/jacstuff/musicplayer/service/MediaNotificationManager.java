@@ -41,7 +41,7 @@ public class MediaNotificationManager {
                 .setContentTitle(heading)
                 .setContentText(channelName)
                 .setSilent(true)
-                //.setSmallIcon(R.drawable.notification_icon)
+                .setSmallIcon(R.drawable.recycler_bg_selector)
                 .setBadgeIconType(NotificationCompat.BADGE_ICON_NONE)
                 .setNumber(-1)
                 .setOnlyAlertOnce(true)
@@ -90,7 +90,11 @@ public class MediaNotificationManager {
 
 
     private void addPlayButtonTo(NotificationCompat.Builder notification){
-        if(!mediaPlayerService.isPlaying() && !mediaPlayerService.getCurrentUrl().isEmpty()){
+        String currentUrl = mediaPlayerService.getCurrentUrl();
+        if(currentUrl == null){
+            return;
+        }
+        if(!mediaPlayerService.isPlaying() && !currentUrl.isEmpty()){
             notification.addAction(android.R.drawable.ic_media_play,
                     context.getString(R.string.notification_button_title_play),
                     createPendingIntentFor(ACTION_PLAY_CURRENT));

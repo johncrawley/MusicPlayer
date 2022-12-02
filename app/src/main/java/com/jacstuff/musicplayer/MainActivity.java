@@ -162,9 +162,13 @@ public class MainActivity extends AppCompatActivity{
 
     private void startMediaPlayerService(){
         mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
+        log("entered startMediaPlayerService(), about to start foreground media player service");
         getApplicationContext().startForegroundService(mediaPlayerServiceIntent);
     }
 
+    private void log(String msg){
+        System.out.println("^^^ MainActivity: " + msg);
+    }
 
     private void notifyPlayerStopped(){
 

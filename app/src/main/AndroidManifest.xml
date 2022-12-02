@@ -24,6 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".service.MediaPlayerService"
+            android:label="MediaPlayerService"
+            android:stopWithTask="true"/>
     </application>
 
 </manifest>

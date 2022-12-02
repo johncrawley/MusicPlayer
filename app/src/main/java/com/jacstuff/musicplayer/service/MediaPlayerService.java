@@ -61,6 +61,8 @@ public class MediaPlayerService extends Service {
     Map<BroadcastReceiver, String> broadcastReceiverMap;
 
     public MediaPlayerService() {
+
+        log("Entered MediaPlayerService()");
         executorService = Executors.newScheduledThreadPool(3);
     }
 
@@ -77,10 +79,16 @@ public class MediaPlayerService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             currentUrl = intent.getStringExtra(TAG_TRACK_URL);
+            log("entered serviceReceiverForStartPlayer.onReceive() track url: " + currentUrl);
             currentStationName = intent.getStringExtra(TAG_TRACK_NAME);
             play();
         }
     };
+
+
+    private void log(String msg){
+        System.out.println("^^^ MediaPlayerService: " +  msg);
+    }
 
 
     private final BroadcastReceiver serviceReceiverForPlayCurrent = new BroadcastReceiver() {
@@ -141,8 +149,10 @@ public class MediaPlayerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        log("Entered onCreate()");
         setupBroadcastReceivers();
         mediaNotificationManager = new MediaNotificationManager(getApplicationContext(), this);
+        log("Entered service created, already setupBroadcastReceivers and notification manager");
         moveToForeground();
     }
 
