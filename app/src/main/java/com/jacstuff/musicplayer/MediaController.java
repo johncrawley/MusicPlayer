@@ -8,6 +8,8 @@ public interface MediaController {
 
     void play();
 
+    Track getCurrentTrack();
+
     void stop();
 
     void next();

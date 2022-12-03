@@ -173,6 +173,12 @@ public class MediaControllerImpl implements MediaController {
 
 
     @Override
+    public Track getCurrentTrack(){
+        return currentTrackDetails;
+    }
+
+
+    @Override
     public void stop() {
         if(scheduledExecutor == null){
             return;
