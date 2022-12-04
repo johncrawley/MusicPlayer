@@ -170,8 +170,10 @@ public class MainActivity extends AppCompatActivity{
         System.out.println("^^^ MainActivity: " + msg);
     }
 
-    private void notifyPlayerStopped(){
 
+    private void notifyPlayerStopped(){
+        log("Entered notifyPlayerStopped()");
+        viewStateAdapter.getPlayerFragment().notifyTrackPaused();
     }
 
 
@@ -181,7 +183,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     private void notifyPlayerPlaying(){
-
+        viewStateAdapter.getPlayerFragment().notifyTrackPlaying();
     }
 
 

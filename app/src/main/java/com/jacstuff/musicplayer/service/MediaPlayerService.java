@@ -357,15 +357,19 @@ public class MediaPlayerService extends Service {
 
 
     private void stopPlayer(){
+        log("Entered stopPlayer()");
         stopPlayer(true);
     }
 
 
     private void stopPlayer(boolean notifyView){
+        log("stopPlayer(" + notifyView + " )");
         releaseAndResetMediaPlayerAndWifiLock();
         isPlaying = false;
         wasInfoFound = false;
+        log("stopPlayer(" + notifyView + " ) about to updateNotification");
         mediaNotificationManager.updateNotification();
+        log("stopPlayer(" + notifyView + " ) Sending Broadcast to notify view of stop");
         if(notifyView) {
             sendBroadcast(ACTION_NOTIFY_VIEW_OF_STOP);
         }
