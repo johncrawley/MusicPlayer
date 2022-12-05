@@ -2,6 +2,7 @@ package com.jacstuff.musicplayer;
 
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_CONNECTING;
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_ERROR;
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_PAUSE;
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_PLAYING;
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_STOP;
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_NEXT_TRACK;
@@ -82,6 +83,15 @@ public class MainActivity extends AppCompatActivity{
             notifyPlayerPlaying();
         }
     };
+
+
+    private final BroadcastReceiver serviceReceiverForNotifyPause = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            notifyPlayerPaused();
+        }
+    };
+
 
     private final BroadcastReceiver serviceReceiverForNotifyError = new BroadcastReceiver() {
         @Override
@@ -177,6 +187,12 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
+    private void notifyPlayerPaused(){
+        log("Entered notifyPlayerPaused()");
+        viewStateAdapter.getPlayerFragment().notifyTrackPaused();
+    }
+
+
     private void notifyPlayerConnecting(){
 
     }
@@ -208,6 +224,7 @@ public class MainActivity extends AppCompatActivity{
         register(serviceReceiverForNotifyConnecting, ACTION_NOTIFY_VIEW_OF_CONNECTING);
         register(serviceReceiverForNotifyPlaying, ACTION_NOTIFY_VIEW_OF_PLAYING);
         register(serviceReceiverForNotifyError, ACTION_NOTIFY_VIEW_OF_ERROR);
+        register(serviceReceiverForNotifyPause, ACTION_NOTIFY_VIEW_OF_PAUSE);
     }
 
 

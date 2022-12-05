@@ -132,7 +132,7 @@ public class MediaNotificationManager {
 
 
     private boolean isThereLessThanTwoStations(){
-        return mediaPlayerService.getStationCount() < 2;
+        return mediaPlayerService.getTrackCount() < 2;
     }
 
 

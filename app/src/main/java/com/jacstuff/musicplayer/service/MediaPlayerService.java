@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.IBinder;
@@ -32,7 +31,7 @@ public class MediaPlayerService extends Service {
     public static final String ACTION_START_PLAYER = "com.j.crawley.music_player.startPlayer";
     public static final String ACTION_PAUSE_PLAYER = "com.j.crawley.music_player.startPlayer";
     public static final String ACTION_STOP_PLAYER = "com.j.crawley.music_player.stopPlayer";
-    public static final String ACTION_CHANGE_STATION = "com.j.crawley.music_player.changeStation";
+    public static final String ACTION_CHANGE_TRACK = "com.j.crawley.music_player.changeTrack";
     public static final String ACTION_REQUEST_STATUS = "com.j.crawley.music_player.requestStatus";
     public static final String ACTION_UPDATE_STATION_COUNT = "com.j.crawley.music_player.updateStationCount";
     public static final String ACTION_PLAY_CURRENT = "com.j.crawley.music_player.playCurrent";
@@ -40,6 +39,7 @@ public class MediaPlayerService extends Service {
     public static final String ACTION_SELECT_PREVIOUS_TRACK = "com.j.crawley.music_player.selectPreviousTrack";
     public static final String ACTION_SELECT_NEXT_TRACK = "com.j.crawley.music_player.selectNextTrack";
     public static final String ACTION_NOTIFY_VIEW_OF_STOP = "com.j.crawley.music_player.notifyViewOfStop";
+    public static final String ACTION_NOTIFY_VIEW_OF_PAUSE = "com.j.crawley.music_player.notifyViewOfPause";
     public static final String ACTION_NOTIFY_VIEW_OF_CONNECTING = "com.j.crawley.music_player.notifyViewOfPlay";
     public static final String ACTION_NOTIFY_VIEW_OF_PLAYING = "com.j.crawley.music_player.notifyViewOfPlayInfo";
     public static final String ACTION_NOTIFY_VIEW_OF_ERROR = "com.j.crawley.music_player.notifyViewOfError";
@@ -54,11 +54,14 @@ public class MediaPlayerService extends Service {
     private boolean isPlaying;
     private String currentStationName  = "";
     private String currentUrl = "";
-    private int stationCount;
+    private int trackCount;
     boolean wasInfoFound = false;
     private MediaNotificationManager mediaNotificationManager;
     private final ScheduledExecutorService executorService;
     Map<BroadcastReceiver, String> broadcastReceiverMap;
+    private enum MediaPlayerState { PAUSED, PLAYING, STOPPED}
+    private MediaPlayerState currentState = MediaPlayerState.STOPPED;
+
 
     public MediaPlayerService() {
 
@@ -75,20 +78,31 @@ public class MediaPlayerService extends Service {
     };
 
 
+    private final BroadcastReceiver serviceReceiverForPausePlayer = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(currentState != MediaPlayerState.PLAYING){
+                return;
+            }
+            pausePlayer();
+        }
+    };
+
+
     private final BroadcastReceiver serviceReceiverForStartPlayer = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             currentUrl = intent.getStringExtra(TAG_TRACK_URL);
             log("entered serviceReceiverForStartPlayer.onReceive() track url: " + currentUrl);
             currentStationName = intent.getStringExtra(TAG_TRACK_NAME);
+            if (currentState == MediaPlayerState.PAUSED){
+                resume();
+                return;
+            }
             play();
         }
     };
 
-
-    private void log(String msg){
-        System.out.println("^^^ MediaPlayerService: " +  msg);
-    }
 
 
     private final BroadcastReceiver serviceReceiverForPlayCurrent = new BroadcastReceiver() {
@@ -108,19 +122,19 @@ public class MediaPlayerService extends Service {
     };
 
 
-    private final BroadcastReceiver serviceReceiverForUpdateStationCount = new BroadcastReceiver() {
+    private final BroadcastReceiver serviceReceiverForUpdateTrackCount = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int oldStationCount = stationCount;
-            stationCount = intent.getIntExtra(TAG_STATION_COUNT, 0);
-            if(stationCount != oldStationCount){
+            int oldTrackCount = trackCount;
+            trackCount = intent.getIntExtra(TAG_STATION_COUNT, 0);
+            if(trackCount != oldTrackCount){
                 mediaNotificationManager.updateNotification();
             }
         }
     };
 
 
-    private final BroadcastReceiver serviceReceiverForChangeStation = new BroadcastReceiver() {
+    private final BroadcastReceiver serviceReceiverForChangeTrack = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             currentStationName = intent.getStringExtra(TAG_TRACK_NAME);
@@ -150,6 +164,7 @@ public class MediaPlayerService extends Service {
     public void onCreate() {
         super.onCreate();
         log("Entered onCreate()");
+        mediaPlayer = new MediaPlayer();
         setupBroadcastReceivers();
         mediaNotificationManager = new MediaNotificationManager(getApplicationContext(), this);
         log("Entered service created, already setupBroadcastReceivers and notification manager");
@@ -189,9 +204,10 @@ public class MediaPlayerService extends Service {
         broadcastReceiverMap = new HashMap<>();
         broadcastReceiverMap.put(serviceReceiverForStopPlayer,          ACTION_STOP_PLAYER);
         broadcastReceiverMap.put(serviceReceiverForStartPlayer,         ACTION_START_PLAYER);
-        broadcastReceiverMap.put(serviceReceiverForChangeStation,       ACTION_CHANGE_STATION);
+        broadcastReceiverMap.put(serviceReceiverForPausePlayer,         ACTION_PAUSE_PLAYER);
+        broadcastReceiverMap.put(serviceReceiverForChangeTrack, ACTION_CHANGE_TRACK);
         broadcastReceiverMap.put(serviceReceiverForPlayCurrent,         ACTION_PLAY_CURRENT);
-        broadcastReceiverMap.put(serviceReceiverForUpdateStationCount,  ACTION_UPDATE_STATION_COUNT);
+        broadcastReceiverMap.put(serviceReceiverForUpdateTrackCount,  ACTION_UPDATE_STATION_COUNT);
         broadcastReceiverMap.put(serviceReceiverForRequestStatus,       ACTION_REQUEST_STATUS);
     }
 
@@ -247,23 +263,32 @@ public class MediaPlayerService extends Service {
     }
 
 
-    int getStationCount(){
-        return stationCount;
+    int getTrackCount(){
+        return trackCount;
     }
 
 
     public void play() {
         updateViewsForConnecting();
         stopRunningMediaPlayer();
-        executorService.schedule(this::connectWithMediaPlayer, 1, TimeUnit.MILLISECONDS);
+        executorService.schedule(this::startTrack, 1, TimeUnit.MILLISECONDS);
+    }
+
+
+    public void resume(){
+            currentState = MediaPlayerState.PLAYING;
+            mediaPlayer.start();
     }
 
 
     private void stopRunningMediaPlayer(){
+        currentState = MediaPlayerState.STOPPED;
         if(mediaPlayer != null){
+            if(mediaPlayer.isPlaying()){
             mediaPlayer.stop();
             mediaPlayer.release();
-        }
+            mediaPlayer.reset();
+        }}
     }
 
 
@@ -284,19 +309,25 @@ public class MediaPlayerService extends Service {
             hasEncounteredError = true;
             return;
         }
-        createNewMediaPlayer();
+        setCpuWakeLock();
         prepareAndPlay();
         mediaNotificationManager.updateNotification();
     }
 
 
-    private void createNewMediaPlayer() {
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_MEDIA)
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .build());
-        setCpuWakeLock();
+    private void startTrack(){
+        isPlaying = true;
+        hasEncounteredError = false;
+        try {
+            setCpuWakeLock();
+            mediaPlayer.setDataSource(currentUrl);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            currentState = MediaPlayerState.PLAYING;
+        }catch (IOException e){
+            e.printStackTrace();
+            currentState = MediaPlayerState.STOPPED;
+        }
     }
 
 
@@ -309,14 +340,16 @@ public class MediaPlayerService extends Service {
 
     private void prepareAndPlay(){
         try {
-            assert mediaPlayer != null;
-            mediaPlayer.setDataSource(this, Uri.parse(currentUrl));
+            //assert mediaPlayer != null;
+            //mediaPlayer.setDataSource(this, Uri.parse(currentUrl));
+            mediaPlayer = MediaPlayer.create(this, Uri.parse(currentUrl));
             mediaPlayer.prepareAsync();
             setupOnInfoListener();
             setupOnErrorListener();
             mediaPlayer.setOnPreparedListener(mp -> mediaPlayer.start());
-        } catch (IOException | RuntimeException e) {
+        } catch (RuntimeException e) {
             stopPlayer();
+            e.printStackTrace();
             hasEncounteredError = true;
         }
     }
@@ -363,25 +396,48 @@ public class MediaPlayerService extends Service {
 
 
     private void stopPlayer(boolean notifyView){
-        log("stopPlayer(" + notifyView + " )");
-        releaseAndResetMediaPlayerAndWifiLock();
-        isPlaying = false;
+        log("stopPlayer(" + notifyView + ")");
+        releaseAndResetMediaPlayer();
         wasInfoFound = false;
-        log("stopPlayer(" + notifyView + " ) about to updateNotification");
+        log("stopPlayer(" + notifyView + ") about to updateNotification");
         mediaNotificationManager.updateNotification();
-        log("stopPlayer(" + notifyView + " ) Sending Broadcast to notify view of stop");
+        log("stopPlayer(" + notifyView + ") Sending Broadcast to notify view of stop");
         if(notifyView) {
             sendBroadcast(ACTION_NOTIFY_VIEW_OF_STOP);
         }
     }
 
 
-    private void releaseAndResetMediaPlayerAndWifiLock(){
-        if (mediaPlayer != null) {
-            mediaPlayer.reset();
-            mediaPlayer.release();
-            mediaPlayer = null;
+    private void pausePlayer(){
+        pauseMediaPlayer();
+        wasInfoFound = false;
+        mediaNotificationManager.updateNotification();
+        sendBroadcast(ACTION_NOTIFY_VIEW_OF_PAUSE);
+    }
+
+
+    private void pauseMediaPlayer(){
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+            isPlaying = false;
+            currentState = MediaPlayerState.PAUSED;
         }
+    }
+
+
+    private void releaseAndResetMediaPlayer(){
+        try {
+            if (mediaPlayer != null) {
+                mediaPlayer.reset();
+                mediaPlayer.release();
+                isPlaying = false;
+                mediaPlayer = null;
+            }
+        }catch (RuntimeException e){
+            log("releaseAndResetMediaPlayerAndWifiLock() exception:  " + e.getMessage());
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -389,4 +445,8 @@ public class MediaPlayerService extends Service {
         sendBroadcast(new Intent(action));
     }
 
+
+    private void log(String msg){
+        System.out.println("^^^ MediaPlayerService: " +  msg);
+    }
 }

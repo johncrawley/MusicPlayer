@@ -29,7 +29,7 @@ public class MediaControllerImpl implements MediaController {
     private final PlaylistManager playlistManager;
     private MediaPlayer mediaPlayer;
     private final MediaPlayerView view;
-    private Track currentTrackDetails;
+    private Track currentTrack;
     private static Handler handler;
     private ScheduledExecutorService scheduledExecutor;
 
@@ -136,7 +136,7 @@ public class MediaControllerImpl implements MediaController {
 
     @Override
     public void togglePlay(){
-        if(currentTrackDetails == null){
+        if(currentTrack == null){
             return;
         }
         switch(state){
@@ -174,7 +174,7 @@ public class MediaControllerImpl implements MediaController {
 
     @Override
     public Track getCurrentTrack(){
-        return currentTrackDetails;
+        return currentTrack;
     }
 
 
@@ -221,15 +221,13 @@ public class MediaControllerImpl implements MediaController {
     }
 
 
-    private void assignNextTrack(Track trackDetails){
-        currentTrackDetails = trackDetails;
-        if(currentTrackDetails == null){
+    private void assignNextTrack(Track track){
+        currentTrack = track;
+        if(currentTrack == null){
             return;
         }
-
         mediaPlayer.reset();
-
-        if(currentTrackDetails.getPathname() == null) {
+        if(currentTrack.getPathname() == null) {
             handleNullPathname();
             return;
         }
@@ -243,7 +241,7 @@ public class MediaControllerImpl implements MediaController {
 
 
     private void handleNullPathname(){
-        if(currentTrackDetails.getPathname() == null){
+        if(currentTrack.getPathname() == null){
             view.setTrackInfo("");
             state = State.STOPPED;
         }
@@ -253,7 +251,7 @@ public class MediaControllerImpl implements MediaController {
     private void initTrack(){
         try {
             setTrackInfoOnView();
-            mediaPlayer.setDataSource(currentTrackDetails.getPathname());
+            mediaPlayer.setDataSource(currentTrack.getPathname());
             mediaPlayer.prepare();
             view.setTotalTrackTime(TimeConverter.convert(mediaPlayer.getDuration()));
 
@@ -275,12 +273,12 @@ public class MediaControllerImpl implements MediaController {
 
 
     private void setTrackInfoOnView(){
-        if(currentTrackDetails == null){
+        if(currentTrack == null){
             return;
         }
-        view.setTrackInfo(currentTrackDetails.getName());
-        view.setAlbumInfo(currentTrackDetails.getAlbum());
-        view.setArtistInfo(currentTrackDetails.getArtist());
+        view.setTrackInfo(currentTrack.getName());
+        view.setAlbumInfo(currentTrack.getAlbum());
+        view.setArtistInfo(currentTrack.getArtist());
     }
 
 }
