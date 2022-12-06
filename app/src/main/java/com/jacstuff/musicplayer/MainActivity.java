@@ -1,21 +1,11 @@
 package com.jacstuff.musicplayer;
 
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_CONNECTING;
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_ERROR;
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_PAUSE;
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_PLAYING;
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_NOTIFY_VIEW_OF_STOP;
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_NEXT_TRACK;
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_PREVIOUS_TRACK;
-
 import android.Manifest;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 
@@ -39,64 +29,23 @@ public class MainActivity extends AppCompatActivity{
     private ViewStateAdapter viewStateAdapter;
     private boolean isServiceBound;
     private Intent mediaPlayerServiceIntent;
+    private MediaPlayerService mediaPlayerService;
 
 
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override public void onServiceConnected(ComponentName className, IBinder service) { isServiceBound = true; }
-        @Override public void onServiceDisconnected(ComponentName arg0) {
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
+            mediaPlayerService = binder.getService();
+            mediaPlayerService.setActivity(MainActivity.this);
+            isServiceBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
             isServiceBound = false;
-        }
-    };
-
-
-    private final BroadcastReceiver serviceReceiverForPreviousTrack = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            selectPreviousTrack();
-        }
-    };
-
-    private final BroadcastReceiver serviceReceiverForNextTrack = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            selectNextTrack();
-        }
-    };
-
-    private final BroadcastReceiver serviceReceiverForNotifyStop = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            notifyPlayerStopped();
-        }
-    };
-
-    private final BroadcastReceiver serviceReceiverForNotifyConnecting = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            notifyPlayerConnecting();
-        }
-    };
-
-    private final BroadcastReceiver serviceReceiverForNotifyPlaying = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            notifyPlayerPlaying();
-        }
-    };
-
-
-    private final BroadcastReceiver serviceReceiverForNotifyPause = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            notifyPlayerPaused();
-        }
-    };
-
-
-    private final BroadcastReceiver serviceReceiverForNotifyError = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            notifyPlayError();
         }
     };
 
@@ -110,54 +59,36 @@ public class MainActivity extends AppCompatActivity{
         startMediaPlayerService();
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         setupTabLayout();
-        setupBroadcastReceivers();
         //listAudioFiles();
     }
 
 
-    @Override
-    protected  void onDestroy(){
-        super.onDestroy();
-        unregisterReceiver(serviceReceiverForPreviousTrack);
-        unregisterReceiver(serviceReceiverForNextTrack);
-        unregisterReceiver(serviceReceiverForNotifyStop);
-        unregisterReceiver(serviceReceiverForNotifyConnecting);
-        unregisterReceiver(serviceReceiverForNotifyPlaying);
-        unregisterReceiver(serviceReceiverForNotifyError);
-
-        //mediaController.finish();
+    public void playTrack(String trackUrl, String trackName) {
+        mediaPlayerService.playTrack(trackUrl, trackName);
     }
 
 
-    public void sendPlayBroadcast(String trackUrl, String trackName) {
-        Intent intent = new Intent(MediaPlayerService.ACTION_START_PLAYER);
-        intent.putExtra(MediaPlayerService.TAG_TRACK_URL, trackUrl);
-        intent.putExtra(MediaPlayerService.TAG_TRACK_NAME, trackName);
-        sendBroadcast(intent);
-    }
-
-
-    public void sendPauseBroadcast() {
-        Intent intent = new Intent(MediaPlayerService.ACTION_PAUSE_PLAYER);
-        sendBroadcast(intent);
+    public void pauseMediaPlayer() {
+        mediaPlayerService.pause();
     }
 
 
     @Override
     protected void onStart(){
         super.onStart();
-        bindService();
+        //bindService();
     }
 
 
     @Override
     protected void onStop() {
         super.onStop();
-        unbindService();
+       // unbindService();
     }
 
 
     private void bindService() {
+        mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
         bindService(mediaPlayerServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -174,6 +105,7 @@ public class MainActivity extends AppCompatActivity{
         mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
         log("entered startMediaPlayerService(), about to start foreground media player service");
         getApplicationContext().startForegroundService(mediaPlayerServiceIntent);
+        getApplicationContext().bindService(mediaPlayerServiceIntent, serviceConnection, 0);
     }
 
     private void log(String msg){
@@ -187,7 +119,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    private void notifyPlayerPaused(){
+    public void notifyMediaPlayerPaused(){
         log("Entered notifyPlayerPaused()");
         viewStateAdapter.getPlayerFragment().notifyTrackPaused();
     }
@@ -198,7 +130,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    private void notifyPlayerPlaying(){
+    public void notifyPlayerPlaying(){
         viewStateAdapter.getPlayerFragment().notifyTrackPlaying();
     }
 
@@ -214,22 +146,6 @@ public class MainActivity extends AppCompatActivity{
 
     private void selectPreviousTrack(){
 
-    }
-
-
-    private void setupBroadcastReceivers(){
-        register(serviceReceiverForPreviousTrack, ACTION_SELECT_PREVIOUS_TRACK);
-        register(serviceReceiverForNextTrack, ACTION_SELECT_NEXT_TRACK);
-        register(serviceReceiverForNotifyStop, ACTION_NOTIFY_VIEW_OF_STOP);
-        register(serviceReceiverForNotifyConnecting, ACTION_NOTIFY_VIEW_OF_CONNECTING);
-        register(serviceReceiverForNotifyPlaying, ACTION_NOTIFY_VIEW_OF_PLAYING);
-        register(serviceReceiverForNotifyError, ACTION_NOTIFY_VIEW_OF_ERROR);
-        register(serviceReceiverForNotifyPause, ACTION_NOTIFY_VIEW_OF_PAUSE);
-    }
-
-
-    private void register(BroadcastReceiver receiver, String action) {
-        registerReceiver(receiver, new IntentFilter(action));
     }
 
 

@@ -13,10 +13,12 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 
 
+import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 
 import java.io.IOException;
@@ -52,7 +54,7 @@ public class MediaPlayerService extends Service {
     private MediaPlayer mediaPlayer;
     public boolean hasEncounteredError;
     private boolean isPlaying;
-    private String currentStationName  = "";
+    private String currentTrackName = "";
     private String currentUrl = "";
     private int trackCount;
     boolean wasInfoFound = false;
@@ -61,6 +63,9 @@ public class MediaPlayerService extends Service {
     Map<BroadcastReceiver, String> broadcastReceiverMap;
     private enum MediaPlayerState { PAUSED, PLAYING, STOPPED}
     private MediaPlayerState currentState = MediaPlayerState.STOPPED;
+    private MainActivity mainActivity;
+
+    private final IBinder binder = new LocalBinder();
 
 
     public MediaPlayerService() {
@@ -70,39 +75,22 @@ public class MediaPlayerService extends Service {
     }
 
 
-    private final BroadcastReceiver serviceReceiverForStopPlayer = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            stopPlayer();
+    public class LocalBinder extends Binder {
+        public MediaPlayerService getService() {
+            return MediaPlayerService.this;
         }
-    };
+    }
 
 
-    private final BroadcastReceiver serviceReceiverForPausePlayer = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(currentState != MediaPlayerState.PLAYING){
-                return;
-            }
-            pausePlayer();
-        }
-    };
+    @Override
+    public IBinder onBind(Intent intent) {
+        return binder;
+    }
 
 
-    private final BroadcastReceiver serviceReceiverForStartPlayer = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            currentUrl = intent.getStringExtra(TAG_TRACK_URL);
-            log("entered serviceReceiverForStartPlayer.onReceive() track url: " + currentUrl);
-            currentStationName = intent.getStringExtra(TAG_TRACK_NAME);
-            if (currentState == MediaPlayerState.PAUSED){
-                resume();
-                return;
-            }
-            play();
-        }
-    };
-
+    public void setActivity(MainActivity mainActivity){
+        this.mainActivity = mainActivity;
+    }
 
 
     private final BroadcastReceiver serviceReceiverForPlayCurrent = new BroadcastReceiver() {
@@ -137,7 +125,7 @@ public class MediaPlayerService extends Service {
     private final BroadcastReceiver serviceReceiverForChangeTrack = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            currentStationName = intent.getStringExtra(TAG_TRACK_NAME);
+            currentTrackName = intent.getStringExtra(TAG_TRACK_NAME);
             currentUrl = intent.getStringExtra(TAG_TRACK_URL);
             if(isPlaying){
                 stopPlayer(false);
@@ -147,12 +135,6 @@ public class MediaPlayerService extends Service {
             mediaNotificationManager.updateNotification();
         }
     };
-
-
-    @Override
-    public IBinder onBind(Intent arg0) {
-        return null;
-    }
 
 
     boolean isPlaying(){
@@ -175,6 +157,7 @@ public class MediaPlayerService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        log("Entered onDestroy()");
         unregisterBroadcastReceivers();
         releaseMediaPlayerAndLocks();
     }
@@ -202,15 +185,23 @@ public class MediaPlayerService extends Service {
 
     private void setupBroadcastReceiversMap(){
         broadcastReceiverMap = new HashMap<>();
-        broadcastReceiverMap.put(serviceReceiverForStopPlayer,          ACTION_STOP_PLAYER);
-        broadcastReceiverMap.put(serviceReceiverForStartPlayer,         ACTION_START_PLAYER);
-        broadcastReceiverMap.put(serviceReceiverForPausePlayer,         ACTION_PAUSE_PLAYER);
         broadcastReceiverMap.put(serviceReceiverForChangeTrack, ACTION_CHANGE_TRACK);
         broadcastReceiverMap.put(serviceReceiverForPlayCurrent,         ACTION_PLAY_CURRENT);
         broadcastReceiverMap.put(serviceReceiverForUpdateTrackCount,  ACTION_UPDATE_STATION_COUNT);
         broadcastReceiverMap.put(serviceReceiverForRequestStatus,       ACTION_REQUEST_STATUS);
     }
 
+
+    public void playTrack(String url, String name){
+        this.currentUrl = url;
+        this.currentTrackName = name;
+        if(currentState == MediaPlayerState.STOPPED){
+            play();
+        }
+        else if(currentState == MediaPlayerState.PAUSED){
+            resume();
+        }
+    }
 
     private void registerBroadcastReceivers(){
         for(BroadcastReceiver bcr : broadcastReceiverMap.keySet()){
@@ -253,8 +244,8 @@ public class MediaPlayerService extends Service {
     }
 
 
-    String getCurrentStationName(){
-        return currentStationName;
+    String getCurrentTrackName(){
+        return currentTrackName;
     }
 
 
@@ -272,12 +263,14 @@ public class MediaPlayerService extends Service {
         updateViewsForConnecting();
         stopRunningMediaPlayer();
         executorService.schedule(this::startTrack, 1, TimeUnit.MILLISECONDS);
+        mainActivity.notifyPlayerPlaying();
     }
 
 
     public void resume(){
             currentState = MediaPlayerState.PLAYING;
             mediaPlayer.start();
+            mainActivity.notifyPlayerPlaying();
     }
 
 
@@ -298,7 +291,6 @@ public class MediaPlayerService extends Service {
         wasInfoFound = false;
         mediaNotificationManager.updateNotification();
     }
-
 
 
     private void connectWithMediaPlayer(){
@@ -408,19 +400,24 @@ public class MediaPlayerService extends Service {
     }
 
 
-    private void pausePlayer(){
+    public void pause(){
         pauseMediaPlayer();
         wasInfoFound = false;
         mediaNotificationManager.updateNotification();
-        sendBroadcast(ACTION_NOTIFY_VIEW_OF_PAUSE);
+        mainActivity.notifyMediaPlayerPaused();
     }
 
 
     private void pauseMediaPlayer(){
+        log("Entered pauseMediaPlayer");
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            log("pauseMediaPlayer() - media player is not null and is currently playing");
             mediaPlayer.pause();
             isPlaying = false;
             currentState = MediaPlayerState.PAUSED;
+        }
+        else{
+            log("Media player was either null or not playing");
         }
     }
 

@@ -82,11 +82,11 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
             //mediaController.togglePlay();
             log("onClick() play Button clicked!");
             Track currentTrack = mediaController.getCurrentTrack();
-            mainActivity.sendPlayBroadcast(currentTrack.getPathname(), currentTrack.getName());
+            mainActivity.playTrack(currentTrack.getPathname(), currentTrack.getName());
         }
         else if(id == R.id.pauseButton){
             log("Pause button pressed!");
-            mainActivity.sendPauseBroadcast();
+            mainActivity.pauseMediaPlayer();
         }
         else if(id == R.id.nextTrackButton) {
             mediaController.next();

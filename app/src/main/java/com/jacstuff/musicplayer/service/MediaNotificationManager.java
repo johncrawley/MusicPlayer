@@ -70,7 +70,7 @@ public class MediaNotificationManager {
 
     void updateNotification() {
         new Handler(Looper.getMainLooper()).post(() -> {
-            Notification notification = createNotification(mediaPlayerService.getCurrentStatus(), mediaPlayerService.getCurrentStationName());
+            Notification notification = createNotification(mediaPlayerService.getCurrentStatus(), mediaPlayerService.getCurrentTrackName());
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(NOTIFICATION_ID, notification);
         });
