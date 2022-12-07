@@ -46,6 +46,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     private TrackListAdapter trackListAdapter;
     private int previousIndex = 0;
     ImageView coverArt;
+    private Track currentTrack;
 
     public PlayerFragment() {
         // Required empty public constructor
@@ -119,6 +120,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
             return;
         }
         setVisibilityOnDetailsAndNavViews(View.VISIBLE);
+        mainActivity.updateTracksOnMediaPlayer(viewModel.tracks);
         hideNextButtonIfOnlyOneTrack();
     }
 
@@ -147,6 +149,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
 
     public void notifyCurrentlySelectedTrack(int position){
         mediaController.selectTrack(position);
+
     }
 
 
@@ -158,6 +161,10 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     @Override
     public void refreshTrackList(List<Track> trackDetailsList) {
 
+    }
+
+    public void setTrack(Track track){
+        this.currentTrack = track;
     }
 
 

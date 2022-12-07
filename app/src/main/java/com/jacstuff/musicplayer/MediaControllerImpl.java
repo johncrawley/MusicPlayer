@@ -204,9 +204,7 @@ public class MediaControllerImpl implements MediaController {
     public void selectTrack(int index){
         assignNextTrack(playlistManager.getTrackDetails(index));
         boolean previousTrackWasPlaying = state == State.PLAYING;
-        if(previousTrackWasPlaying){
-            play();
-        }
+        view.setTrack(currentTrack);
     }
 
 

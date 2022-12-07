@@ -20,9 +20,12 @@ import android.os.PowerManager;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.db.track.Track;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -64,6 +67,7 @@ public class MediaPlayerService extends Service {
     private enum MediaPlayerState { PAUSED, PLAYING, STOPPED}
     private MediaPlayerState currentState = MediaPlayerState.STOPPED;
     private MainActivity mainActivity;
+    private List<Track> tracks;
 
     private final IBinder binder = new LocalBinder();
 
@@ -72,6 +76,7 @@ public class MediaPlayerService extends Service {
 
         log("Entered MediaPlayerService()");
         executorService = Executors.newScheduledThreadPool(3);
+        tracks = new ArrayList<>();
     }
 
 
@@ -85,6 +90,32 @@ public class MediaPlayerService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return binder;
+    }
+
+
+    public void updateTracks(List<Track> tracks){
+        this.tracks = new ArrayList(tracks);
+    }
+
+
+    public void stop(){
+        if(mediaPlayer.isPlaying()){
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+        }
+    }
+
+
+    public void selectTrack(String trackUrl, String trackName){
+        MediaPlayerState oldState = currentState;
+        if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
+            stop();
+        }
+        currentUrl = trackUrl;
+        currentTrackName = trackName;
+        if(oldState == MediaPlayerState.PLAYING){
+            play();
+        }
     }
 
 

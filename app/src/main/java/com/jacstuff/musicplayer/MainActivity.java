@@ -18,9 +18,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.android.material.tabs.TabLayout;
+import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -68,36 +71,18 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
+    public void selectTrack(String trackUrl, String trackName) {
+        mediaPlayerService.selectTrack(trackUrl, trackName);
+    }
+
+
     public void pauseMediaPlayer() {
         mediaPlayerService.pause();
     }
 
 
-    @Override
-    protected void onStart(){
-        super.onStart();
-        //bindService();
-    }
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-       // unbindService();
-    }
-
-
-    private void bindService() {
-        mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
-        bindService(mediaPlayerServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-
-    private void unbindService(){
-        if (isServiceBound) {
-            unbindService(serviceConnection);
-            isServiceBound = false;
-        }
+    public void updateTracksOnMediaPlayer(List<Track> tracks){
+        mediaPlayerService.updateTracks(tracks);
     }
 
 

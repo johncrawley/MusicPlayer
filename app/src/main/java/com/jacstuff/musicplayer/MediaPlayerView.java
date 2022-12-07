@@ -23,6 +23,7 @@ public interface MediaPlayerView {
     void scrollToListPosition(int index);
     void notifyCurrentlySelectedTrack(int item);
     void updateTrackDetails();
+    void setTrack(Track track);
 
    // void notifyOfScrollReady(int index);
 }
