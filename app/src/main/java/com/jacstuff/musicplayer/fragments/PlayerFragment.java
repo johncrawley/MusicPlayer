@@ -56,6 +56,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = getContext();
+        mainActivity = (MainActivity)getActivity();
         log("entered onCreateView()");
         View view = inflater.inflate(R.layout.fragment_player, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
@@ -67,7 +68,6 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
         mediaController = new MediaControllerImpl(context, this, viewModel);
 
         setupRecyclerView(mediaController.getTrackDetailsList(), view);
-        mainActivity = (MainActivity)getActivity();
         mediaController.initPlaylistAndRefreshView();
         return view;
     }
@@ -79,13 +79,8 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     @Override
     public void onClick(View view){
         int id = view.getId();
-        if(id == R.id.playButton){
-            //mediaController.togglePlay();
-            log("onClick() play Button clicked!");
-            Track currentTrack = mediaController.getCurrentTrack();
-            mainActivity.playTrack(currentTrack.getPathname(), currentTrack.getName());
-        }
-        else if(id == R.id.pauseButton){
+
+        if(id == R.id.pauseButton){
             log("Pause button pressed!");
             mainActivity.pauseMediaPlayer();
         }
@@ -149,7 +144,6 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
 
     public void notifyCurrentlySelectedTrack(int position){
         mediaController.selectTrack(position);
-
     }
 
 
@@ -165,6 +159,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
 
     public void setTrack(Track track){
         this.currentTrack = track;
+        mainActivity.selectTrack(track.getPathname(), track.getName());
     }
 
 
@@ -240,7 +235,11 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
 
     private void assignClickListeners(){
         trackTitle.setOnClickListener(this);
-        playButton.setOnClickListener(this);
+        playButton.setOnClickListener((View v) -> {
+            Track currentTrack = mediaController.getCurrentTrack();
+            log("current track: "+  currentTrack);
+            mainActivity.playTrack(currentTrack.getPathname(), currentTrack.getName());});
+
         pauseButton.setOnClickListener(this);
         nextTrackButton.setOnClickListener(this);
         refreshPlaylistButton.setOnClickListener(this);

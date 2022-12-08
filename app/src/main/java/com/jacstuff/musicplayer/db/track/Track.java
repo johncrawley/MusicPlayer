@@ -32,6 +32,15 @@ public class Track {
     public String getDirectory(){return directory;}
     public long getId(){return id;}
 
+    @Override
+    public String toString(){
+       return "::: Track name: " +  getName()
+               + " artist: " + getArtist()
+               + " album: " + getAlbum()
+               + " trackNumber: " + getTrackNumber()
+               + " pathname: " + getPathname();
+    }
+
     public static class Builder{
 
 

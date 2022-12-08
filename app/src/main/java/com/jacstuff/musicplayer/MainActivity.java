@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity{
     private boolean isServiceBound;
     private Intent mediaPlayerServiceIntent;
     private MediaPlayerService mediaPlayerService;
+    private MainViewModel viewModel;
 
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity{
             MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
             mediaPlayerService = binder.getService();
             mediaPlayerService.setActivity(MainActivity.this);
+            mediaPlayerService.updateTracks(viewModel.tracks);
             isServiceBound = true;
         }
 
@@ -57,7 +59,6 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Context context = MainActivity.this;
         setupViewModel();
         startMediaPlayerService();
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
@@ -82,7 +83,14 @@ public class MainActivity extends AppCompatActivity{
 
 
     public void updateTracksOnMediaPlayer(List<Track> tracks){
-        mediaPlayerService.updateTracks(tracks);
+        if(mediaPlayerService != null) {
+            mediaPlayerService.updateTracks(tracks);
+        }
+    }
+
+
+    public List<Track> getCurrentTracks(){
+        return viewModel.tracks;
     }
 
 
@@ -135,7 +143,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     private void setupViewModel(){
-        MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel  = new ViewModelProvider(this).get(MainViewModel.class);
     }
 
 

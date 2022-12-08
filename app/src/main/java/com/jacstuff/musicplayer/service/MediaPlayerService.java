@@ -99,16 +99,33 @@ public class MediaPlayerService extends Service {
 
 
     public void stop(){
-        if(mediaPlayer.isPlaying()){
-            mediaPlayer.stop();
-            mediaPlayer.reset();
+        currentState = MediaPlayerState.STOPPED;
+        mediaPlayer.stop();
+        mediaPlayer.reset();
+//            mediaPlayer.release();
+    }
+
+
+    private void stopRunningMediaPlayer(){
+        log("Entered stopRunningMediaPlayer, current state: " + currentState);
+        currentState = MediaPlayerState.STOPPED;
+        if(mediaPlayer != null){
+            log("mediaPlayer is not null");
+            if(mediaPlayer.isPlaying()){
+                log("mediaPlayer isPlaying()");
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+            }
         }
     }
 
 
     public void selectTrack(String trackUrl, String trackName){
         MediaPlayerState oldState = currentState;
+        log("selectTrack() Current state: " + currentState);
+
         if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
+            log("current state is playing or paused, so stopping");
             stop();
         }
         currentUrl = trackUrl;
@@ -123,49 +140,6 @@ public class MediaPlayerService extends Service {
         this.mainActivity = mainActivity;
     }
 
-
-    private final BroadcastReceiver serviceReceiverForPlayCurrent = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            play();
-        }
-    };
-
-
-    private final BroadcastReceiver serviceReceiverForRequestStatus = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String broadcast = isPlaying ? ACTION_NOTIFY_VIEW_OF_PLAYING : ACTION_NOTIFY_VIEW_OF_STOP;
-            sendBroadcast(broadcast);
-        }
-    };
-
-
-    private final BroadcastReceiver serviceReceiverForUpdateTrackCount = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int oldTrackCount = trackCount;
-            trackCount = intent.getIntExtra(TAG_STATION_COUNT, 0);
-            if(trackCount != oldTrackCount){
-                mediaNotificationManager.updateNotification();
-            }
-        }
-    };
-
-
-    private final BroadcastReceiver serviceReceiverForChangeTrack = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            currentTrackName = intent.getStringExtra(TAG_TRACK_NAME);
-            currentUrl = intent.getStringExtra(TAG_TRACK_URL);
-            if(isPlaying){
-                stopPlayer(false);
-                play();
-            }
-            hasEncounteredError = false;
-            mediaNotificationManager.updateNotification();
-        }
-    };
 
 
     boolean isPlaying(){
@@ -191,6 +165,8 @@ public class MediaPlayerService extends Service {
         log("Entered onDestroy()");
         unregisterBroadcastReceivers();
         releaseMediaPlayerAndLocks();
+        stop();
+        mediaPlayer.release();
     }
 
 
@@ -227,6 +203,7 @@ public class MediaPlayerService extends Service {
         this.currentUrl = url;
         this.currentTrackName = name;
         if(currentState == MediaPlayerState.STOPPED){
+            log("Entered playTrack, player was stopped, so calling play()");
             play();
         }
         else if(currentState == MediaPlayerState.PAUSED){
@@ -234,19 +211,7 @@ public class MediaPlayerService extends Service {
         }
     }
 
-    private void registerBroadcastReceivers(){
-        for(BroadcastReceiver bcr : broadcastReceiverMap.keySet()){
-            IntentFilter intentFilter = new IntentFilter(broadcastReceiverMap.get(bcr));
-            registerReceiver(bcr, intentFilter);
-        }
-    }
 
-
-    private void unregisterBroadcastReceivers(){
-        for(BroadcastReceiver bcr : broadcastReceiverMap.keySet()){
-            unregisterReceiver(bcr);
-        }
-    }
 
 
     private void releaseMediaPlayerAndLocks(){
@@ -298,22 +263,29 @@ public class MediaPlayerService extends Service {
     }
 
 
+    private void startTrack(){
+        isPlaying = true;
+        hasEncounteredError = false;
+        try {
+            setCpuWakeLock();
+            log("Entered startTrack, setting data source for url: "+  currentUrl);
+            mediaPlayer.setDataSource(currentUrl);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            currentState = MediaPlayerState.PLAYING;
+        }catch (IOException e){
+            e.printStackTrace();
+            currentState = MediaPlayerState.STOPPED;
+        }
+    }
+
+
     public void resume(){
             currentState = MediaPlayerState.PLAYING;
             mediaPlayer.start();
             mainActivity.notifyPlayerPlaying();
     }
 
-
-    private void stopRunningMediaPlayer(){
-        currentState = MediaPlayerState.STOPPED;
-        if(mediaPlayer != null){
-            if(mediaPlayer.isPlaying()){
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer.reset();
-        }}
-    }
 
 
     private void updateViewsForConnecting(){
@@ -335,22 +307,6 @@ public class MediaPlayerService extends Service {
         setCpuWakeLock();
         prepareAndPlay();
         mediaNotificationManager.updateNotification();
-    }
-
-
-    private void startTrack(){
-        isPlaying = true;
-        hasEncounteredError = false;
-        try {
-            setCpuWakeLock();
-            mediaPlayer.setDataSource(currentUrl);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-            currentState = MediaPlayerState.PLAYING;
-        }catch (IOException e){
-            e.printStackTrace();
-            currentState = MediaPlayerState.STOPPED;
-        }
     }
 
 
@@ -477,4 +433,66 @@ public class MediaPlayerService extends Service {
     private void log(String msg){
         System.out.println("^^^ MediaPlayerService: " +  msg);
     }
+
+
+
+
+
+    private void registerBroadcastReceivers(){
+        for(BroadcastReceiver bcr : broadcastReceiverMap.keySet()){
+            IntentFilter intentFilter = new IntentFilter(broadcastReceiverMap.get(bcr));
+            registerReceiver(bcr, intentFilter);
+        }
+    }
+
+
+    private void unregisterBroadcastReceivers(){
+        for(BroadcastReceiver bcr : broadcastReceiverMap.keySet()){
+            unregisterReceiver(bcr);
+        }
+    }
+
+
+    private final BroadcastReceiver serviceReceiverForPlayCurrent = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            play();
+        }
+    };
+
+
+    private final BroadcastReceiver serviceReceiverForRequestStatus = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String broadcast = isPlaying ? ACTION_NOTIFY_VIEW_OF_PLAYING : ACTION_NOTIFY_VIEW_OF_STOP;
+            sendBroadcast(broadcast);
+        }
+    };
+
+
+    private final BroadcastReceiver serviceReceiverForUpdateTrackCount = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int oldTrackCount = trackCount;
+            trackCount = intent.getIntExtra(TAG_STATION_COUNT, 0);
+            if(trackCount != oldTrackCount){
+                mediaNotificationManager.updateNotification();
+            }
+        }
+    };
+
+
+    private final BroadcastReceiver serviceReceiverForChangeTrack = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            currentTrackName = intent.getStringExtra(TAG_TRACK_NAME);
+            currentUrl = intent.getStringExtra(TAG_TRACK_URL);
+            if(isPlaying){
+                stopPlayer(false);
+                play();
+            }
+            hasEncounteredError = false;
+            mediaNotificationManager.updateNotification();
+        }
+    };
 }
