@@ -39,7 +39,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
                 currentlySelectedView.setSelected(true);
                // mediaPlayerView.notifyCurrentlySelectedTrack(getLayoutPosition());
                // mediaPlayerView.scrollToListPosition(getLayoutPosition());
-                setIndexToScrollTo(getLayoutPosition());
+               // setIndexToScrollTo(getLayoutPosition());
                 currentlySelectedView.setSelected(true);
             });
         }

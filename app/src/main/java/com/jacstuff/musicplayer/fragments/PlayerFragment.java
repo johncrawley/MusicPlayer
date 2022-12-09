@@ -30,7 +30,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PlayerFragment extends Fragment implements MediaPlayerView, View.OnClickListener {
+public class PlayerFragment extends Fragment implements MediaPlayerView {
 
     private Context context;
     private MainViewModel viewModel;
@@ -40,7 +40,6 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     private TextView trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton, pauseButton;
     private ImageButton nextTrackButton;
-    private ImageButton refreshPlaylistButton;
     private String totalTrackTime = "0:00";
     private RecyclerView recyclerView;
     private TrackListAdapter trackListAdapter;
@@ -76,30 +75,22 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
         System.out.println("^^^ PlayerFragment: " +  msg);
     }
 
-    @Override
-    public void onClick(View view){
-        int id = view.getId();
-
-        if(id == R.id.pauseButton){
-            log("Pause button pressed!");
-            mainActivity.pauseMediaPlayer();
-        }
-        else if(id == R.id.nextTrackButton) {
-            mediaController.next();
-        }
-    }
-
 
     public void notifyTrackPlaying(){
+        log("Entered notifyTrackPlaying()");
         playButton.setVisibility(View.GONE);
         pauseButton.setVisibility(View.VISIBLE);
+        log("notifyTrackPlaying() play button visibility: " + playButton.getVisibility());
+        log("notifyTrackPlaying() pause button visibility: " + pauseButton.getVisibility());
     }
-
 
 
     public void notifyTrackPaused(){
+        log("entered notifyTrackPaused()");
         playButton.setVisibility(View.VISIBLE);
         pauseButton.setVisibility(View.GONE);
+        log("notifyTrackPaused() play button visibility: " + playButton.getVisibility());
+        log("notifyTrackPaused() pause button visibility: " + pauseButton.getVisibility());
     }
 
 
@@ -227,22 +218,22 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
         playButton = parentView.findViewById(R.id.playButton);
         pauseButton = parentView.findViewById(R.id.pauseButton);
         nextTrackButton = parentView.findViewById(R.id.nextTrackButton);
-        refreshPlaylistButton = parentView.findViewById(R.id.refreshButton);
         boolean isTrackTitleNull = trackTitle == null;
         System.out.println("PlayerFragment.assignViews() is Track Title View null? : " + isTrackTitleNull);
     }
 
 
     private void assignClickListeners(){
-        trackTitle.setOnClickListener(this);
         playButton.setOnClickListener((View v) -> {
             Track currentTrack = mediaController.getCurrentTrack();
             log("current track: "+  currentTrack);
             mainActivity.playTrack(currentTrack.getPathname(), currentTrack.getName());});
 
-        pauseButton.setOnClickListener(this);
-        nextTrackButton.setOnClickListener(this);
-        refreshPlaylistButton.setOnClickListener(this);
+        pauseButton.setOnClickListener((View v) -> mainActivity.pauseMediaPlayer());
+        nextTrackButton.setOnClickListener((View v) -> {
+            mediaController.next();
+            setTrack(mediaController.getCurrentTrack());
+        });
     }
 
 
@@ -262,6 +253,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
 
 
     public void scrollToListPosition(int index){
+        log("Entered scrollToListPosition()");
         trackListAdapter.deselectCurrentlySelectedItem();
         trackListAdapter.setIndexToScrollTo(index);
         recyclerView.scrollToPosition(calculateIndexWithOffset(index));
@@ -288,16 +280,6 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, View.On
     public void enableControls(){
         playButton.setEnabled(true);
         nextTrackButton.setEnabled(true);
-    }
-
-
-    public void showPauseIcon(){
-        playButton.setImageResource(android.R.drawable.ic_media_pause);
-    }
-
-
-    public void showPlayIcon(){
-        playButton.setImageResource(android.R.drawable.ic_media_play);
     }
 
 

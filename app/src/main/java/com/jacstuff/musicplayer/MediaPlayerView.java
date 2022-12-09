@@ -9,8 +9,6 @@ import java.util.List;
 public interface MediaPlayerView {
 
     void setTrackInfo(String title);
-    void showPauseIcon();
-    void showPlayIcon();
     void setAlbumInfo(String albumInfo);
     void setArtistInfo(String artistInfo);
     void setElapsedTime(String currentTime);

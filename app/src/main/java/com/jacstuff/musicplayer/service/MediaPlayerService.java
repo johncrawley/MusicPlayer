@@ -165,6 +165,7 @@ public class MediaPlayerService extends Service {
         releaseMediaPlayerAndLocks();
         stop();
         mediaPlayer.release();
+        mediaPlayer = null;
     }
 
 
@@ -210,7 +211,7 @@ public class MediaPlayerService extends Service {
         }
     }
 
-    
+
     private void releaseMediaPlayerAndLocks(){
         if (mediaPlayer != null) {
             mediaPlayer.release();

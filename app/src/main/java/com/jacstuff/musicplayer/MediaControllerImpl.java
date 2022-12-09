@@ -27,14 +27,13 @@ public class MediaControllerImpl implements MediaController {
 
 
     private final PlaylistManager playlistManager;
-    private MediaPlayer mediaPlayer;
     private final MediaPlayerView view;
     private Track currentTrack;
     private static Handler handler;
     private ScheduledExecutorService scheduledExecutor;
 
     private final ExecutorService executorService;
-    private final TrackTimeUpdater trackTimeUpdater;
+   // private final TrackTimeUpdater trackTimeUpdater;
     private enum State { PLAYING, PAUSED, STOPPED}
     private State state;
     private boolean isRefreshing = false;
@@ -42,24 +41,26 @@ public class MediaControllerImpl implements MediaController {
 
 
     public MediaControllerImpl(Context context, final MediaPlayerView view, MainViewModel viewModel){
-        mediaPlayer = new MediaPlayer();
         executorService = Executors.newSingleThreadExecutor();
         this.state = State.STOPPED;
         this.view = view;
         this.viewModel = viewModel;
         playlistManager = new PlaylistManagerImpl(context, view, viewModel);
-        setupMediaPlayerListeners();
+        //setupMediaPlayerListeners();
         setupHandler();
-        trackTimeUpdater = new TrackTimeUpdater(mediaPlayer, handler);
+      //  trackTimeUpdater = new TrackTimeUpdater(mediaPlayer, handler);
     }
 
-
+/*
     private void setupMediaPlayerListeners(){
         mediaPlayer.setOnCompletionListener(mediaPlayer -> {
             assignNextTrack();
             play();
         });
     }
+
+
+ */
 
 
     public List<Track> getTrackDetailsList(){
@@ -88,8 +89,12 @@ public class MediaControllerImpl implements MediaController {
         };
     }
 
+    private void log(String msg){
+        System.out.println("^^^ MediaControllerImpl: " + msg);
+    }
 
     private void updateViewTrackList(){
+        log("Entered updateViewTrackList");
         view.refreshTrackList(playlistManager.getTracks());
         view.scrollToListPosition(playlistManager.getCurrentTrackIndex());
     }
@@ -98,15 +103,10 @@ public class MediaControllerImpl implements MediaController {
     @Override
     public void initPlaylistAndRefreshView(){
         initPlaylist();
-
     }
 
 
     public void finish(){
-        mediaPlayer.stop();
-        mediaPlayer.reset();
-        mediaPlayer.release();
-        mediaPlayer = null;
     }
 
 
@@ -154,20 +154,15 @@ public class MediaControllerImpl implements MediaController {
 
     private  void resume(){
         scheduledExecutor = new ScheduledThreadPoolExecutor(1);
-        scheduledExecutor.scheduleAtFixedRate(trackTimeUpdater, 0, 1 ,TimeUnit.SECONDS);
-        view.showPauseIcon();
+        //scheduledExecutor.scheduleAtFixedRate(trackTimeUpdater, 0, 1 ,TimeUnit.SECONDS);
         state = State.PLAYING;
-        mediaPlayer.start();
     }
 
 
     @Override
     public void play() {
         scheduledExecutor = new ScheduledThreadPoolExecutor(1);
-        scheduledExecutor.scheduleAtFixedRate(trackTimeUpdater, 0, 1 ,TimeUnit.SECONDS);
-        view.showPauseIcon();
-        state = State.PLAYING;
-        mediaPlayer.start();
+       // scheduledExecutor.scheduleAtFixedRate(trackTimeUpdater, 0, 1 ,TimeUnit.SECONDS);
       //  mediaPlayer.setVolume();
     }
 
@@ -184,11 +179,6 @@ public class MediaControllerImpl implements MediaController {
             return;
         }
         scheduledExecutor.shutdownNow();
-        if(mediaPlayer == null){
-            return;
-        }
-        this.state = State.STOPPED;
-        mediaPlayer.stop();
     }
 
 
@@ -196,15 +186,23 @@ public class MediaControllerImpl implements MediaController {
     public void pause(){
         scheduledExecutor.shutdownNow();
         state = State.PAUSED;
-        view.showPlayIcon();
-        mediaPlayer.pause();
     }
 
 
     public void selectTrack(int index){
         assignNextTrack(playlistManager.getTrackDetails(index));
-        boolean previousTrackWasPlaying = state == State.PLAYING;
         view.setTrack(currentTrack);
+    }
+
+
+    public int getNumberOfTracks(){
+        return playlistManager.getNumberOfTracks();
+    }
+
+
+    @Override
+    public void next() {
+        assignNextTrack();
     }
 
 
@@ -214,22 +212,17 @@ public class MediaControllerImpl implements MediaController {
     }
 
 
-    public int getNumberOfTracks(){
-        return playlistManager.getNumberOfTracks();
-    }
-
-
     private void assignNextTrack(Track track){
         currentTrack = track;
         if(currentTrack == null){
             return;
         }
-        mediaPlayer.reset();
         if(currentTrack.getPathname() == null) {
             handleNullPathname();
             return;
         }
-        initTrack();
+        setTrackInfoOnView();
+        //view.setTotalTrackTime(TimeConverter.convert(mediaPlayer.getDuration()));
     }
 
 
@@ -242,30 +235,6 @@ public class MediaControllerImpl implements MediaController {
         if(currentTrack.getPathname() == null){
             view.setTrackInfo("");
             state = State.STOPPED;
-        }
-    }
-
-
-    private void initTrack(){
-        try {
-            setTrackInfoOnView();
-            mediaPlayer.setDataSource(currentTrack.getPathname());
-            mediaPlayer.prepare();
-            view.setTotalTrackTime(TimeConverter.convert(mediaPlayer.getDuration()));
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
-
-    @Override
-    public void next() {
-        boolean previousTrackWasPlaying = state == State.PLAYING;
-        this.stop();
-        assignNextTrack();
-        if(previousTrackWasPlaying) {
-            this.play();
         }
     }
 
