@@ -124,7 +124,9 @@ public class MainActivity extends AppCompatActivity{
 
 
     public void notifyPlayerPlaying(){
-        viewStateAdapter.getPlayerFragment().notifyTrackPlaying();
+        runOnUiThread(()->{
+            viewStateAdapter.getPlayerFragment().notifyTrackPlaying();
+        });
     }
 
 

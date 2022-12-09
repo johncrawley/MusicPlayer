@@ -1,7 +1,8 @@
 package com.jacstuff.musicplayer.service;
 
 
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_PLAY_CURRENT;
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_PAUSE_PLAYER;
+import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_PLAY;
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_NEXT_TRACK;
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_PREVIOUS_TRACK;
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_STOP_PLAYER;
@@ -50,7 +51,8 @@ public class MediaNotificationManager {
                 .setOngoing(true);
         addPreviousButtonTo(notification);
         addPlayButtonTo(notification);
-        addStopButtonTo(notification);
+        //addStopButtonTo(notification);
+        addPauseButtonTo(notification);
         addNextButtonTo(notification);
         return notification.build();
     }
@@ -78,15 +80,13 @@ public class MediaNotificationManager {
 
 
     private void setupNotificationChannel(){
+        String channelName = "music_player-notification-channel";
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
-                "webradio-notification-channel",
-                NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName,  NotificationManager.IMPORTANCE_DEFAULT);
         channel.setSound(null, null);
         channel.setShowBadge(false);
         notificationManager.createNotificationChannel(channel);
     }
-
 
 
     private void addPlayButtonTo(NotificationCompat.Builder notification){
@@ -97,16 +97,30 @@ public class MediaNotificationManager {
         if(!mediaPlayerService.isPlaying() && !currentUrl.isEmpty()){
             notification.addAction(android.R.drawable.ic_media_play,
                     context.getString(R.string.notification_button_title_play),
-                    createPendingIntentFor(ACTION_PLAY_CURRENT));
+                    createPendingIntentFor(ACTION_PLAY));
         }
     }
 
 
     private void addStopButtonTo(NotificationCompat.Builder notification){
         if(mediaPlayerService.isPlaying()){
-            notification.addAction(android.R.drawable.ic_media_pause,
+            notification.addAction(android.R.drawable.ic_media_previous,
                     context.getString(R.string.notification_button_title_stop),
                     createPendingIntentFor(ACTION_STOP_PLAYER));
+        }
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ MediaNotificationManager : "+  msg);
+    }
+
+
+    private void addPauseButtonTo(NotificationCompat.Builder notification){
+        log("Entered addPauseButtonTo(), mediaService is playing: " + mediaPlayerService.isPlaying());
+        if(mediaPlayerService.isPlaying()){
+            notification.addAction(android.R.drawable.ic_media_pause,
+                    context.getString(R.string.notification_button_title_pause),
+                    createPendingIntentFor(ACTION_PAUSE_PLAYER));
         }
     }
 

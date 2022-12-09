@@ -34,12 +34,12 @@ import java.util.concurrent.TimeUnit;
 public class MediaPlayerService extends Service {
 
     public static final String ACTION_START_PLAYER = "com.j.crawley.music_player.startPlayer";
-    public static final String ACTION_PAUSE_PLAYER = "com.j.crawley.music_player.startPlayer";
+    public static final String ACTION_PLAY = "com.j.crawley.music_player.play";
+    public static final String ACTION_PAUSE_PLAYER = "com.j.crawley.music_player.pausePlayer";
     public static final String ACTION_STOP_PLAYER = "com.j.crawley.music_player.stopPlayer";
     public static final String ACTION_CHANGE_TRACK = "com.j.crawley.music_player.changeTrack";
     public static final String ACTION_REQUEST_STATUS = "com.j.crawley.music_player.requestStatus";
     public static final String ACTION_UPDATE_STATION_COUNT = "com.j.crawley.music_player.updateStationCount";
-    public static final String ACTION_PLAY_CURRENT = "com.j.crawley.music_player.playCurrent";
 
     public static final String ACTION_SELECT_PREVIOUS_TRACK = "com.j.crawley.music_player.selectPreviousTrack";
     public static final String ACTION_SELECT_NEXT_TRACK = "com.j.crawley.music_player.selectNextTrack";
@@ -56,7 +56,6 @@ public class MediaPlayerService extends Service {
 
     private MediaPlayer mediaPlayer;
     public boolean hasEncounteredError;
-    private boolean isPlaying;
     private String currentTrackName = "";
     private String currentUrl = "";
     private int trackCount;
@@ -141,9 +140,8 @@ public class MediaPlayerService extends Service {
     }
 
 
-
     boolean isPlaying(){
-        return isPlaying;
+        return currentState == MediaPlayerState.PLAYING;
     }
 
 
@@ -193,9 +191,10 @@ public class MediaPlayerService extends Service {
     private void setupBroadcastReceiversMap(){
         broadcastReceiverMap = new HashMap<>();
         broadcastReceiverMap.put(serviceReceiverForChangeTrack, ACTION_CHANGE_TRACK);
-        broadcastReceiverMap.put(serviceReceiverForPlayCurrent,         ACTION_PLAY_CURRENT);
+        broadcastReceiverMap.put(serviceReceiverForPlay, ACTION_PLAY);
         broadcastReceiverMap.put(serviceReceiverForUpdateTrackCount,  ACTION_UPDATE_STATION_COUNT);
         broadcastReceiverMap.put(serviceReceiverForRequestStatus,       ACTION_REQUEST_STATUS);
+        broadcastReceiverMap.put(serviceReceiverForPause, ACTION_PAUSE_PLAYER);
     }
 
 
@@ -211,9 +210,7 @@ public class MediaPlayerService extends Service {
         }
     }
 
-
-
-
+    
     private void releaseMediaPlayerAndLocks(){
         if (mediaPlayer != null) {
             mediaPlayer.release();
@@ -233,8 +230,11 @@ public class MediaPlayerService extends Service {
         if(hasEncounteredError){
             resId = R.string.status_error;
         }
-        else if(isPlaying){
-            resId = wasInfoFound ? R.string.status_playing : R.string.status_connecting;
+        else if(currentState == MediaPlayerState.PLAYING){
+            resId = R.string.status_playing;
+        }
+        else if(currentState == MediaPlayerState.PAUSED){
+            resId = R.string.status_paused;
         }
         return getApplicationContext().getString(resId);
     }
@@ -259,12 +259,11 @@ public class MediaPlayerService extends Service {
         updateViewsForConnecting();
         stopRunningMediaPlayer();
         executorService.schedule(this::startTrack, 1, TimeUnit.MILLISECONDS);
-        mainActivity.notifyPlayerPlaying();
+
     }
 
 
     private void startTrack(){
-        isPlaying = true;
         hasEncounteredError = false;
         try {
             setCpuWakeLock();
@@ -273,6 +272,8 @@ public class MediaPlayerService extends Service {
             mediaPlayer.prepare();
             mediaPlayer.start();
             currentState = MediaPlayerState.PLAYING;
+            mainActivity.notifyPlayerPlaying();
+            mediaNotificationManager.updateNotification();
         }catch (IOException e){
             e.printStackTrace();
             currentState = MediaPlayerState.STOPPED;
@@ -284,20 +285,19 @@ public class MediaPlayerService extends Service {
             currentState = MediaPlayerState.PLAYING;
             mediaPlayer.start();
             mainActivity.notifyPlayerPlaying();
+            mediaNotificationManager.updateNotification();
     }
 
 
 
     private void updateViewsForConnecting(){
         sendBroadcast(ACTION_NOTIFY_VIEW_OF_CONNECTING);
-        isPlaying = true;
         wasInfoFound = false;
         mediaNotificationManager.updateNotification();
     }
 
 
     private void connectWithMediaPlayer(){
-        isPlaying = true;
         hasEncounteredError = false;
         if(currentUrl == null) {
             stopPlayer();
@@ -319,8 +319,6 @@ public class MediaPlayerService extends Service {
 
     private void prepareAndPlay(){
         try {
-            //assert mediaPlayer != null;
-            //mediaPlayer.setDataSource(this, Uri.parse(currentUrl));
             mediaPlayer = MediaPlayer.create(this, Uri.parse(currentUrl));
             mediaPlayer.prepareAsync();
             setupOnInfoListener();
@@ -362,7 +360,6 @@ public class MediaPlayerService extends Service {
 
     private void handleConnectionError(){
         hasEncounteredError = true;
-        isPlaying = false;
         mediaNotificationManager.updateNotification();
         sendBroadcast(ACTION_NOTIFY_VIEW_OF_ERROR);
     }
@@ -400,7 +397,6 @@ public class MediaPlayerService extends Service {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             log("pauseMediaPlayer() - media player is not null and is currently playing");
             mediaPlayer.pause();
-            isPlaying = false;
             currentState = MediaPlayerState.PAUSED;
         }
         else{
@@ -414,7 +410,6 @@ public class MediaPlayerService extends Service {
             if (mediaPlayer != null) {
                 mediaPlayer.reset();
                 mediaPlayer.release();
-                isPlaying = false;
                 mediaPlayer = null;
             }
         }catch (RuntimeException e){
@@ -453,10 +448,15 @@ public class MediaPlayerService extends Service {
     }
 
 
-    private final BroadcastReceiver serviceReceiverForPlayCurrent = new BroadcastReceiver() {
+    private final BroadcastReceiver serviceReceiverForPlay = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            play();
+            if(currentState == MediaPlayerState.PAUSED){
+                resume();
+            }
+            else if(currentState == MediaPlayerState.STOPPED) {
+                play();
+            }
         }
     };
 
@@ -464,8 +464,15 @@ public class MediaPlayerService extends Service {
     private final BroadcastReceiver serviceReceiverForRequestStatus = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String broadcast = isPlaying ? ACTION_NOTIFY_VIEW_OF_PLAYING : ACTION_NOTIFY_VIEW_OF_STOP;
+            String broadcast = currentState == MediaPlayerState.PLAYING ? ACTION_NOTIFY_VIEW_OF_PLAYING : ACTION_NOTIFY_VIEW_OF_STOP;
             sendBroadcast(broadcast);
+        }
+    };
+
+    private final BroadcastReceiver serviceReceiverForPause = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            pause();
         }
     };
 
@@ -487,7 +494,7 @@ public class MediaPlayerService extends Service {
         public void onReceive(Context context, Intent intent) {
             currentTrackName = intent.getStringExtra(TAG_TRACK_NAME);
             currentUrl = intent.getStringExtra(TAG_TRACK_URL);
-            if(isPlaying){
+            if(currentState == MediaPlayerState.PLAYING){
                 stopPlayer(false);
                 play();
             }
