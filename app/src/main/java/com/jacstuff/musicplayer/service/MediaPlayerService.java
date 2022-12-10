@@ -1,6 +1,7 @@
 package com.jacstuff.musicplayer.service;
 
 
+import static com.jacstuff.musicplayer.HandlerCode.ASSIGN_NEXT_TRACK;
 import static com.jacstuff.musicplayer.service.MediaNotificationManager.NOTIFICATION_ID;
 
 import android.Manifest;
@@ -15,18 +16,23 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.PowerManager;
 
 
 import com.jacstuff.musicplayer.MainActivity;
+import com.jacstuff.musicplayer.MediaControllerImpl;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.playlist.PlaylistManager;
+import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -56,8 +62,6 @@ public class MediaPlayerService extends Service {
 
     private MediaPlayer mediaPlayer;
     public boolean hasEncounteredError;
-    private String currentTrackName = "";
-    private String currentUrl = "";
     private int trackCount;
     boolean wasInfoFound = false;
     private MediaNotificationManager mediaNotificationManager;
@@ -67,8 +71,10 @@ public class MediaPlayerService extends Service {
     private MediaPlayerState currentState = MediaPlayerState.STOPPED;
     private MainActivity mainActivity;
     private List<Track> tracks;
-
+    private final PlaylistManager playlistManager;
+    private boolean isScanningForTracks;
     private final IBinder binder = new LocalBinder();
+    private Track currentTrack;
 
 
     public MediaPlayerService() {
@@ -76,6 +82,7 @@ public class MediaPlayerService extends Service {
         log("Entered MediaPlayerService()");
         executorService = Executors.newScheduledThreadPool(3);
         tracks = new ArrayList<>();
+        playlistManager = new PlaylistManagerImpl(getApplicationContext());
     }
 
 
@@ -92,8 +99,46 @@ public class MediaPlayerService extends Service {
     }
 
 
+    public void scanForTracks(){
+        if(isScanningForTracks){
+            return;
+        }
+        executorService.execute(()->{
+            isScanningForTracks = true;
+            playlistManager.addTracksFromStorage();
+            updateViewTrackList();
+            isScanningForTracks = false;
+        });
+    }
+
+
     public void updateTracks(List<Track> tracks){
         this.tracks = new ArrayList(tracks);
+    }
+
+    private void updateViewTrackList(){
+        mainActivity.updateTracksList(playlistManager.getTracks(), playlistManager.getCurrentTrackIndex());
+    }
+
+
+    private void assignNextTrack(Track track){
+        currentTrack = track;
+        if(currentTrack == null){
+            return;
+        }
+        if(currentTrack.getPathname() == null) {
+            handleNullPathname();
+            return;
+        }
+        mainActivity.setTrackInfoOnView(currentTrack);
+    }
+
+
+    private void handleNullPathname(){
+        if(currentTrack.getPathname() == null){
+            mainActivity.setBlankTrackInfo();
+            currentState = MediaPlayerState.STOPPED;
+        }
     }
 
 
@@ -104,6 +149,21 @@ public class MediaPlayerService extends Service {
 //            mediaPlayer.release();
     }
 
+    public void initPlaylistAndRefresh(){
+        executorService.execute(() -> {
+            playlistManager.init();
+            assignNextTrack();
+            mainActivity.enableControls();
+            updateViewTrackList();
+        });
+
+    }
+
+
+    private void assignNextTrack(){
+        assignNextTrack(playlistManager.getNextRandomUnplayedTrack());
+        mainActivity.scrollToPosition(playlistManager.getCurrentTrackIndex());
+    }
 
     private void stopRunningMediaPlayer(){
         log("Entered stopRunningMediaPlayer, current state: " + currentState);
@@ -119,7 +179,7 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void selectTrack(String trackUrl, String trackName){
+    public void selectTrack(Track track){
         MediaPlayerState oldState = currentState;
         log("selectTrack() Current state: " + currentState);
 
@@ -127,11 +187,22 @@ public class MediaPlayerService extends Service {
             log("current state is playing or paused, so stopping");
             stop();
         }
-        currentUrl = trackUrl;
-        currentTrackName = trackName;
+        currentTrack = track;
         if(oldState == MediaPlayerState.PLAYING){
             play();
         }
+    }
+
+
+
+    public List<Track> getTrackList(){
+        return playlistManager.getTracks();
+    }
+
+
+
+    public void selectTrack(int index){
+        assignNextTrack(playlistManager.getTrackDetails(index));
     }
 
 
@@ -191,7 +262,6 @@ public class MediaPlayerService extends Service {
 
     private void setupBroadcastReceiversMap(){
         broadcastReceiverMap = new HashMap<>();
-        broadcastReceiverMap.put(serviceReceiverForChangeTrack, ACTION_CHANGE_TRACK);
         broadcastReceiverMap.put(serviceReceiverForPlay, ACTION_PLAY);
         broadcastReceiverMap.put(serviceReceiverForUpdateTrackCount,  ACTION_UPDATE_STATION_COUNT);
         broadcastReceiverMap.put(serviceReceiverForRequestStatus,       ACTION_REQUEST_STATUS);
@@ -199,9 +269,7 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void playTrack(String url, String name){
-        this.currentUrl = url;
-        this.currentTrackName = name;
+    public void playTrack(){
         if(currentState == MediaPlayerState.STOPPED){
             log("Entered playTrack, player was stopped, so calling play()");
             play();
@@ -209,6 +277,16 @@ public class MediaPlayerService extends Service {
         else if(currentState == MediaPlayerState.PAUSED){
             resume();
         }
+    }
+
+
+    public int getNumberOfTracks(){
+        return playlistManager.getNumberOfTracks();
+    }
+
+
+    public void nextTrack(){
+        assignNextTrack();
     }
 
 
@@ -242,12 +320,12 @@ public class MediaPlayerService extends Service {
 
 
     String getCurrentTrackName(){
-        return currentTrackName;
+        return currentTrack.getName();
     }
 
 
     String getCurrentUrl(){
-        return currentUrl;
+        return currentTrack.getPathname();
     }
 
 
@@ -268,8 +346,8 @@ public class MediaPlayerService extends Service {
         hasEncounteredError = false;
         try {
             setCpuWakeLock();
-            log("Entered startTrack, setting data source for url: "+  currentUrl);
-            mediaPlayer.setDataSource(currentUrl);
+            log("Entered startTrack, setting data source for pathname: "+  currentTrack.getPathname());
+            mediaPlayer.setDataSource(currentTrack.getPathname());
             mediaPlayer.prepare();
             mediaPlayer.start();
             currentState = MediaPlayerState.PLAYING;
@@ -300,7 +378,7 @@ public class MediaPlayerService extends Service {
 
     private void connectWithMediaPlayer(){
         hasEncounteredError = false;
-        if(currentUrl == null) {
+        if(currentTrack.getPathname() == null) {
             stopPlayer();
             hasEncounteredError = true;
             return;
@@ -320,7 +398,7 @@ public class MediaPlayerService extends Service {
 
     private void prepareAndPlay(){
         try {
-            mediaPlayer = MediaPlayer.create(this, Uri.parse(currentUrl));
+            mediaPlayer = MediaPlayer.create(this, Uri.parse(currentTrack.getPathname()));
             mediaPlayer.prepareAsync();
             setupOnInfoListener();
             setupOnErrorListener();
@@ -489,18 +567,4 @@ public class MediaPlayerService extends Service {
         }
     };
 
-
-    private final BroadcastReceiver serviceReceiverForChangeTrack = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            currentTrackName = intent.getStringExtra(TAG_TRACK_NAME);
-            currentUrl = intent.getStringExtra(TAG_TRACK_URL);
-            if(currentState == MediaPlayerState.PLAYING){
-                stopPlayer(false);
-                play();
-            }
-            hasEncounteredError = false;
-            mediaNotificationManager.updateNotification();
-        }
-    };
 }

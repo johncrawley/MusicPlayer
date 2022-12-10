@@ -26,11 +26,11 @@ import static com.jacstuff.musicplayer.HandlerCode.UPDATE_TIME;
 public class MediaControllerImpl implements MediaController {
 
 
-    private final PlaylistManager playlistManager;
     private final MediaPlayerView view;
     private Track currentTrack;
     private static Handler handler;
     private ScheduledExecutorService scheduledExecutor;
+    private PlaylistManager playlistManager;
 
     private final ExecutorService executorService;
    // private final TrackTimeUpdater trackTimeUpdater;
@@ -45,7 +45,7 @@ public class MediaControllerImpl implements MediaController {
         this.state = State.STOPPED;
         this.view = view;
         this.viewModel = viewModel;
-        playlistManager = new PlaylistManagerImpl(context, view, viewModel);
+
         //setupMediaPlayerListeners();
         setupHandler();
       //  trackTimeUpdater = new TrackTimeUpdater(mediaPlayer, handler);
@@ -110,21 +110,6 @@ public class MediaControllerImpl implements MediaController {
     }
 
 
-    @Override
-    public void scanForTracks() {
-        if(isRefreshing){
-            return;
-        }
-        isRefreshing = true;
-        executorService.execute(() -> {
-            playlistManager.addTracksFromStorage();
-            Message msg = handler.obtainMessage(PLAYLIST_REFRESHED, null);
-            msg.sendToTarget();
-            isRefreshing = false;
-        });
-    }
-
-
     private void initPlaylist(){
         executorService.execute(() -> {
             playlistManager.init();
@@ -134,14 +119,14 @@ public class MediaControllerImpl implements MediaController {
     }
 
 
-    @Override
+
     public void togglePlay(){
         if(currentTrack == null){
             return;
         }
         switch(state){
             case PAUSED:
-                resume();
+                //resume();
                 return;
             case PLAYING:
                 pause();
@@ -152,20 +137,10 @@ public class MediaControllerImpl implements MediaController {
     }
 
 
-    private  void resume(){
-        scheduledExecutor = new ScheduledThreadPoolExecutor(1);
-        //scheduledExecutor.scheduleAtFixedRate(trackTimeUpdater, 0, 1 ,TimeUnit.SECONDS);
-        state = State.PLAYING;
-    }
-
-
     @Override
     public void play() {
-        scheduledExecutor = new ScheduledThreadPoolExecutor(1);
-       // scheduledExecutor.scheduleAtFixedRate(trackTimeUpdater, 0, 1 ,TimeUnit.SECONDS);
-      //  mediaPlayer.setVolume();
-    }
 
+    }
 
     @Override
     public Track getCurrentTrack(){
@@ -174,24 +149,13 @@ public class MediaControllerImpl implements MediaController {
 
 
     @Override
-    public void stop() {
-        if(scheduledExecutor == null){
-            return;
-        }
-        scheduledExecutor.shutdownNow();
-    }
-
-
-    @Override
     public void pause(){
-        scheduledExecutor.shutdownNow();
         state = State.PAUSED;
     }
 
 
     public void selectTrack(int index){
         assignNextTrack(playlistManager.getTrackDetails(index));
-        view.setTrack(currentTrack);
     }
 
 

@@ -19,6 +19,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.fragments.PlayerFragment;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
@@ -67,13 +68,39 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    public void playTrack(String trackUrl, String trackName) {
-        mediaPlayerService.playTrack(trackUrl, trackName);
+    public void playTrack() {
+        mediaPlayerService.playTrack();
+    }
+
+    public void nextTrack(){
+        mediaPlayerService.nextTrack();
+    }
+
+    public int getNumberOfTracks(){
+        return mediaPlayerService.getNumberOfTracks();
     }
 
 
-    public void selectTrack(String trackUrl, String trackName) {
-        mediaPlayerService.selectTrack(trackUrl, trackName);
+    public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
+        runOnUiThread(()->{
+            getPlayerFragment().displayPlaylistRefreshedMessage();
+            getPlayerFragment().refreshTrackList(updatedTracks);
+            getPlayerFragment().scrollToListPosition(currentTrackIndex);
+        });
+    }
+
+
+    public void selectTrack(Track track) {
+        mediaPlayerService.selectTrack(track);
+    }
+
+
+    public void selectTrack(int index) {
+        mediaPlayerService.selectTrack(index);
+    }
+
+    public List<Track> getTrackList(){
+       return mediaPlayerService.getTrackList();
     }
 
 
@@ -108,15 +135,18 @@ public class MainActivity extends AppCompatActivity{
 
     private void notifyPlayerStopped(){
         log("Entered notifyPlayerStopped()");
-        viewStateAdapter.getPlayerFragment().notifyTrackPaused();
+        getPlayerFragment().notifyTrackPaused();
     }
 
 
     public void notifyMediaPlayerPaused(){
         log("Entered notifyPlayerPaused()");
-        viewStateAdapter.getPlayerFragment().notifyTrackPaused();
+        getPlayerFragment().notifyTrackPaused();
     }
 
+    private PlayerFragment getPlayerFragment(){
+        return viewStateAdapter.getPlayerFragment();
+    }
 
     private void notifyPlayerConnecting(){
 
@@ -125,7 +155,35 @@ public class MainActivity extends AppCompatActivity{
 
     public void notifyPlayerPlaying(){
         runOnUiThread(()->{
-            viewStateAdapter.getPlayerFragment().notifyTrackPlaying();
+           getPlayerFragment().notifyTrackPlaying();
+        });
+    }
+
+
+    public void setBlankTrackInfo(){
+        runOnUiThread(()->{
+            getPlayerFragment().setTrackInfo("");
+        });
+    }
+
+
+    public void setTrackInfoOnView(final Track track){
+        runOnUiThread(()->{
+            getPlayerFragment().setTrackInfo(track);
+        });
+    }
+
+
+    public void enableControls(){
+        runOnUiThread(()->{
+            getPlayerFragment().enableControls();
+        });
+    }
+
+
+    public void scrollToPosition(int index){
+        runOnUiThread(()->{
+            getPlayerFragment().scrollToListPosition(index);
         });
     }
 
@@ -184,6 +242,9 @@ public class MainActivity extends AppCompatActivity{
         return true;
     }
 
+    public void initPlaylistAndRefresh(){
+        mediaPlayerService.initPlaylistAndRefresh();
+    }
 
 
     @Override
@@ -193,7 +254,7 @@ public class MainActivity extends AppCompatActivity{
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if(id == R.id.refresh_button) {
-          viewStateAdapter.getPlayerFragment().scanForTracks();
+          mediaPlayerService.scanForTracks();
         }
         return super.onOptionsItemSelected(item);
     }

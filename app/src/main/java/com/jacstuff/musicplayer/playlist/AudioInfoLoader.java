@@ -15,12 +15,10 @@ public class AudioInfoLoader {
 
     private final Context context;
     private final TrackRepository trackRepository;
-    private final MainViewModel viewModel;
 
-    public AudioInfoLoader(Context context, TrackRepository trackRepository, MainViewModel viewModel){
+    public AudioInfoLoader(Context context, TrackRepository trackRepository){
         this.context  = context;
         this.trackRepository = trackRepository;
-        this.viewModel = viewModel;
     }
 
 

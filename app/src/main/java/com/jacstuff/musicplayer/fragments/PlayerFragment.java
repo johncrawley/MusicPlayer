@@ -35,7 +35,6 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
     private Context context;
     private MainViewModel viewModel;
     private MainActivity mainActivity;
-    private MediaController mediaController;
     private TextView trackTime;
     private TextView trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton, pauseButton;
@@ -64,10 +63,9 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
         log("onCreateView() About to run setupViews()");
         setupViews(view);
         log("onCreateView() about to init mediaController");
-        mediaController = new MediaControllerImpl(context, this, viewModel);
 
-        setupRecyclerView(mediaController.getTrackDetailsList(), view);
-        mediaController.initPlaylistAndRefreshView();
+        setupRecyclerView(mainActivity.getTrackList(), view);
+        mainActivity.initPlaylistAndRefresh();
         return view;
     }
 
@@ -128,13 +126,8 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
     }
 
 
-    public void scanForTracks(){
-        mediaController.scanForTracks();
-    }
-
-
     public void notifyCurrentlySelectedTrack(int position){
-        mediaController.selectTrack(position);
+        mainActivity.selectTrack(position);
     }
 
 
@@ -146,11 +139,6 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
     @Override
     public void refreshTrackList(List<Track> trackDetailsList) {
 
-    }
-
-    public void setTrack(Track track){
-        this.currentTrack = track;
-        mainActivity.selectTrack(track.getPathname(), track.getName());
     }
 
 
@@ -225,16 +213,22 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
 
     private void assignClickListeners(){
         playButton.setOnClickListener((View v) -> {
-            Track currentTrack = mediaController.getCurrentTrack();
             log("current track: "+  currentTrack);
-            mainActivity.playTrack(currentTrack.getPathname(), currentTrack.getName());});
+            mainActivity.playTrack();});
 
         pauseButton.setOnClickListener((View v) -> mainActivity.pauseMediaPlayer());
+
         nextTrackButton.setOnClickListener((View v) -> {
-            mediaController.next();
-            setTrack(mediaController.getCurrentTrack());
+            mainActivity.nextTrack();
         });
     }
+
+
+    public void setTrack(Track track){
+        this.currentTrack = track;
+        //mainActivity.selectTrack(track);
+    }
+
 
 
     public void refreshTrackList(List<Track> trackDetailsList, View parentView){
@@ -262,7 +256,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
 
     private int calculateIndexWithOffset(int index){
         int indexWithOffset = getPlaylistItemOffset(index);
-        if ( indexWithOffset > mediaController.getNumberOfTracks() || indexWithOffset < 0) {
+        if ( indexWithOffset > mainActivity.getNumberOfTracks() || indexWithOffset < 0) {
             indexWithOffset = index;
         }
         previousIndex = index;
@@ -288,6 +282,13 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
             trackInfo = getResources().getString(R.string.no_tracks_found);
         }
         this.trackTitle.setText(trackInfo);
+    }
+
+
+    public void setTrackInfo(Track track){
+        setTrackInfo(track.getName());
+        setAlbumInfo(track.getAlbum());
+        setArtistInfo(track.getArtist());
     }
 
 
