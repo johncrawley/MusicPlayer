@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity{
             MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
             mediaPlayerService = binder.getService();
             mediaPlayerService.setActivity(MainActivity.this);
-            mediaPlayerService.updateTracks(viewModel.tracks);
             isServiceBound = true;
         }
 
@@ -54,6 +53,10 @@ public class MainActivity extends AppCompatActivity{
             isServiceBound = false;
         }
     };
+
+    public void onServiceReady(){
+        getPlayerFragment().onServiceReady();
+    }
 
 
     @Override

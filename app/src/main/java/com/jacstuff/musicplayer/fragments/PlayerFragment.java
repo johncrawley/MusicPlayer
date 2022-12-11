@@ -1,5 +1,6 @@
 package com.jacstuff.musicplayer.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
     private int previousIndex = 0;
     ImageView coverArt;
     private Track currentTrack;
+    private List<Track> tracks;
 
     public PlayerFragment() {
         // Required empty public constructor
@@ -64,13 +66,21 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
         setupViews(view);
         log("onCreateView() about to init mediaController");
 
-        setupRecyclerView(mainActivity.getTrackList(), view);
-        mainActivity.initPlaylistAndRefresh();
         return view;
     }
 
     private void log(String msg){
         System.out.println("^^^ PlayerFragment: " +  msg);
+    }
+
+
+    public void onServiceReady(){
+        View parentView = getView();
+        if(parentView == null){
+            return;
+        }
+        setupRecyclerView(mainActivity.getTrackList(), parentView);
+        mainActivity.initPlaylistAndRefresh();
     }
 
 
@@ -92,19 +102,21 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
     }
 
 
-    @Override
-    public void updateTrackDetails(){
+    public void updateTrackDetails(List<Track> updatedTracks){
+        tracks.clear();
+        tracks.addAll(updatedTracks);
         getActivity().runOnUiThread(this::updateTrackViews);
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private void updateTrackViews(){
-        if(viewModel.tracks.isEmpty()){
+        trackListAdapter.notifyDataSetChanged();
+        if(tracks.isEmpty()){
             setVisibilityOnDetailsAndNavViews(View.INVISIBLE);
             return;
         }
         setVisibilityOnDetailsAndNavViews(View.VISIBLE);
-        mainActivity.updateTracksOnMediaPlayer(viewModel.tracks);
         hideNextButtonIfOnlyOneTrack();
     }
 
@@ -128,6 +140,11 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
 
     public void notifyCurrentlySelectedTrack(int position){
         mainActivity.selectTrack(position);
+    }
+
+    @Override
+    public void updateTrackDetails() {
+
     }
 
 
@@ -239,6 +256,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
     private void setupRecyclerView(List<Track> trackDetailsList, View parentView){
         recyclerView = parentView.findViewById(R.id.recyclerView);
         trackListAdapter = new TrackListAdapter(trackDetailsList, this);
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

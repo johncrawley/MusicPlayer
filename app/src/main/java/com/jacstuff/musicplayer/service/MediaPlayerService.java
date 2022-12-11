@@ -71,7 +71,7 @@ public class MediaPlayerService extends Service {
     private MediaPlayerState currentState = MediaPlayerState.STOPPED;
     private MainActivity mainActivity;
     private List<Track> tracks;
-    private final PlaylistManager playlistManager;
+    private PlaylistManager playlistManager;
     private boolean isScanningForTracks;
     private final IBinder binder = new LocalBinder();
     private Track currentTrack;
@@ -82,7 +82,7 @@ public class MediaPlayerService extends Service {
         log("Entered MediaPlayerService()");
         executorService = Executors.newScheduledThreadPool(3);
         tracks = new ArrayList<>();
-        playlistManager = new PlaylistManagerImpl(getApplicationContext());
+        //playlistManager = new PlaylistManagerImpl(getApplicationContext());
     }
 
 
@@ -208,6 +208,9 @@ public class MediaPlayerService extends Service {
 
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
+        playlistManager = new PlaylistManagerImpl(mainActivity.getApplicationContext());
+        tracks = playlistManager.getTracks();
+        mainActivity.onServiceReady();
     }
 
 
@@ -320,17 +323,21 @@ public class MediaPlayerService extends Service {
 
 
     String getCurrentTrackName(){
-        return currentTrack.getName();
+        return currentTrack == null ? "" : currentTrack.getName();
     }
 
 
     String getCurrentUrl(){
-        return currentTrack.getPathname();
+        return currentTrack == null ? "" : currentTrack.getPathname();
     }
 
 
     int getTrackCount(){
         return trackCount;
+    }
+
+    public void onServiceReady(){
+        mainActivity.onServiceReady();
     }
 
 
