@@ -32,6 +32,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         sdCardReader = new AudioInfoLoader(context, trackRepository);
         initTrackDetailsList();
         previousNumberOfTracks = tracks.size();
+        trackHistory = new ArrayList<>();
     }
 
 
@@ -100,19 +101,47 @@ public class PlaylistManagerImpl implements PlaylistManager {
         return tracks.size();
     }
 
+    @Override
+    public Track getNextTrack(){
+        return getNextRandomUnPlayedTrack();
+    }
 
-    public Track getNextRandomUnplayedTrack(){
+    private int currentHistoryIndex;
+    private List<Track> trackHistory;
+
+
+    @Override
+    public Track getPreviousTrack(){
+        printTrackHistory();
+        currentHistoryIndex = Math.max(0, currentHistoryIndex-1);
+        return trackHistory.get(currentHistoryIndex);
+    }
+
+    private void printTrackHistory(){
+        StringBuilder str = new StringBuilder("Track History ==> ");
+        for(Track track : trackHistory){
+            str.append(" :: ");
+            str.append(track.getName());
+        }
+        System.out.println(str);
+    }
+
+    public Track getNextRandomUnPlayedTrack(){
+        if(isHistoryIndexOld()){
+            currentHistoryIndex++;
+            return trackHistory.get(currentHistoryIndex);
+        }
         if(!attemptSetupOfIndexesIfEmpty()){
             return null;
         }
         int freshSongsCount = unPlayedPathnameIndexes.size();
-
-
         int randomIndex = getNextRandomIndex(freshSongsCount);
         currentIndex = getAndRemoveSongIndex(randomIndex);
         attemptSetupOfIndexesIfEmpty();
-
-        return tracks.get(currentIndex);
+        Track currentTrack = tracks.get(currentIndex);
+        trackHistory.add(currentTrack);
+        currentHistoryIndex++;
+        return currentTrack;
     }
 
 
@@ -139,13 +168,27 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    public Track getTrackDetails(int index){
+    public Track selectTrack(int index){
         if(index > tracks.size()){
             return null;
         }
+        if(isHistoryIndexOld()){
+            removeAllHistoryAfterCurrentIndex();
+        }
+        Track track = tracks.get(index);
+        trackHistory.add(track);
+        currentHistoryIndex++;
         return tracks.get(index);
     }
 
+    private boolean isHistoryIndexOld(){
+        return currentHistoryIndex < trackHistory.size() -1;
+    }
+
+    private void removeAllHistoryAfterCurrentIndex(){
+        trackHistory = trackHistory.subList(0, currentHistoryIndex);
+
+    }
 
     private int getNextRandomIndex(int listSize){
         return listSize < 2 ? 0 : random.nextInt(listSize);

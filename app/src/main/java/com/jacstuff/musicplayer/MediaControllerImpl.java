@@ -1,23 +1,18 @@
 package com.jacstuff.musicplayer;
 
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.playlist.PlaylistManager;
-import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import static com.jacstuff.musicplayer.HandlerCode.ASSIGN_NEXT_TRACK;
 import static com.jacstuff.musicplayer.HandlerCode.PLAYLIST_REFRESHED;
@@ -155,7 +150,7 @@ public class MediaControllerImpl implements MediaController {
 
 
     public void selectTrack(int index){
-        assignNextTrack(playlistManager.getTrackDetails(index));
+        assignNextTrack(playlistManager.selectTrack(index));
     }
 
 
@@ -171,7 +166,7 @@ public class MediaControllerImpl implements MediaController {
 
 
     private void assignNextTrack(){
-        assignNextTrack(playlistManager.getNextRandomUnplayedTrack());
+        assignNextTrack(playlistManager.getNextRandomUnPlayedTrack());
         view.scrollToListPosition(playlistManager.getCurrentTrackIndex());
     }
 

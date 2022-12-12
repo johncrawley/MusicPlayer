@@ -1,7 +1,6 @@
 package com.jacstuff.musicplayer.service;
 
 
-import static com.jacstuff.musicplayer.HandlerCode.ASSIGN_NEXT_TRACK;
 import static com.jacstuff.musicplayer.service.MediaNotificationManager.NOTIFICATION_ID;
 
 import android.Manifest;
@@ -16,12 +15,10 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.Message;
 import android.os.PowerManager;
 
 
 import com.jacstuff.musicplayer.MainActivity;
-import com.jacstuff.musicplayer.MediaControllerImpl;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.playlist.PlaylistManager;
@@ -32,7 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +58,6 @@ public class MediaPlayerService extends Service {
 
     private MediaPlayer mediaPlayer;
     public boolean hasEncounteredError;
-    private int trackCount;
     boolean wasInfoFound = false;
     private MediaNotificationManager mediaNotificationManager;
     private final ScheduledExecutorService executorService;
@@ -112,25 +107,14 @@ public class MediaPlayerService extends Service {
     }
 
 
+
+
     public void updateTracks(List<Track> tracks){
         this.tracks = new ArrayList(tracks);
     }
 
     private void updateViewTrackList(){
         mainActivity.updateTracksList(playlistManager.getTracks(), playlistManager.getCurrentTrackIndex());
-    }
-
-
-    private void assignNextTrack(Track track){
-        currentTrack = track;
-        if(currentTrack == null){
-            return;
-        }
-        if(currentTrack.getPathname() == null) {
-            handleNullPathname();
-            return;
-        }
-        mainActivity.setTrackInfoOnView(currentTrack);
     }
 
 
@@ -160,10 +144,46 @@ public class MediaPlayerService extends Service {
     }
 
 
-    private void assignNextTrack(){
-        assignNextTrack(playlistManager.getNextRandomUnplayedTrack());
+    public List<Track> getTrackList(){
+        return playlistManager.getTracks();
+    }
+
+
+    public void selectTrack(int index){
+        assignTrack(playlistManager.selectTrack(index));
+    }
+
+
+    public void nextTrack(){
+        assignNextTrack();
+    }
+
+
+    public void previousTrack(){
+        assignTrack(playlistManager.getPreviousTrack());
         mainActivity.scrollToPosition(playlistManager.getCurrentTrackIndex());
     }
+
+
+    private void assignNextTrack(){
+        assignTrack(playlistManager.getNextRandomUnPlayedTrack());
+        mainActivity.scrollToPosition(playlistManager.getCurrentTrackIndex());
+    }
+
+
+    private void assignTrack(Track track){
+        currentTrack = track;
+        if(currentTrack == null){
+            return;
+        }
+        if(currentTrack.getPathname() == null) {
+            handleNullPathname();
+            return;
+        }
+        mainActivity.setTrackInfoOnView(currentTrack);
+        selectTrack(currentTrack);
+    }
+
 
     private void stopRunningMediaPlayer(){
         log("Entered stopRunningMediaPlayer, current state: " + currentState);
@@ -181,28 +201,13 @@ public class MediaPlayerService extends Service {
 
     public void selectTrack(Track track){
         MediaPlayerState oldState = currentState;
-        log("selectTrack() Current state: " + currentState);
-
         if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
-            log("current state is playing or paused, so stopping");
             stop();
         }
         currentTrack = track;
         if(oldState == MediaPlayerState.PLAYING){
             play();
         }
-    }
-
-
-
-    public List<Track> getTrackList(){
-        return playlistManager.getTracks();
-    }
-
-
-
-    public void selectTrack(int index){
-        assignNextTrack(playlistManager.getTrackDetails(index));
     }
 
 
@@ -266,9 +271,10 @@ public class MediaPlayerService extends Service {
     private void setupBroadcastReceiversMap(){
         broadcastReceiverMap = new HashMap<>();
         broadcastReceiverMap.put(serviceReceiverForPlay, ACTION_PLAY);
-        broadcastReceiverMap.put(serviceReceiverForUpdateTrackCount,  ACTION_UPDATE_STATION_COUNT);
         broadcastReceiverMap.put(serviceReceiverForRequestStatus,       ACTION_REQUEST_STATUS);
         broadcastReceiverMap.put(serviceReceiverForPause, ACTION_PAUSE_PLAYER);
+        broadcastReceiverMap.put(serviceReceiverForNext, ACTION_SELECT_NEXT_TRACK);
+        broadcastReceiverMap.put(serviceReceiverForPrevious, ACTION_SELECT_PREVIOUS_TRACK);
     }
 
 
@@ -285,11 +291,6 @@ public class MediaPlayerService extends Service {
 
     public int getNumberOfTracks(){
         return playlistManager.getNumberOfTracks();
-    }
-
-
-    public void nextTrack(){
-        assignNextTrack();
     }
 
 
@@ -333,8 +334,9 @@ public class MediaPlayerService extends Service {
 
 
     int getTrackCount(){
-        return trackCount;
+        return tracks.size();
     }
+
 
     public void onServiceReady(){
         mainActivity.onServiceReady();
@@ -516,9 +518,6 @@ public class MediaPlayerService extends Service {
     }
 
 
-
-
-
     private void registerBroadcastReceivers(){
         for(BroadcastReceiver bcr : broadcastReceiverMap.keySet()){
             IntentFilter intentFilter = new IntentFilter(broadcastReceiverMap.get(bcr));
@@ -547,6 +546,22 @@ public class MediaPlayerService extends Service {
     };
 
 
+    private final BroadcastReceiver serviceReceiverForNext = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            nextTrack();
+        }
+    };
+
+
+    private final BroadcastReceiver serviceReceiverForPrevious = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            previousTrack();
+        }
+    };
+
+
     private final BroadcastReceiver serviceReceiverForRequestStatus = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -555,22 +570,11 @@ public class MediaPlayerService extends Service {
         }
     };
 
+
     private final BroadcastReceiver serviceReceiverForPause = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             pause();
-        }
-    };
-
-
-    private final BroadcastReceiver serviceReceiverForUpdateTrackCount = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int oldTrackCount = trackCount;
-            trackCount = intent.getIntExtra(TAG_STATION_COUNT, 0);
-            if(trackCount != oldTrackCount){
-                mediaNotificationManager.updateNotification();
-            }
         }
     };
 

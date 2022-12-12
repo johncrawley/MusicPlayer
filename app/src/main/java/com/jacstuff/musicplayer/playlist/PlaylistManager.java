@@ -10,8 +10,10 @@ public interface PlaylistManager {
     void savePlaylist();
     String getNext();
     Track getNextRandomTrack();
-    Track getNextRandomUnplayedTrack();
-    Track getTrackDetails(int index);
+    Track getNextTrack();
+    Track getPreviousTrack();
+    Track getNextRandomUnPlayedTrack();
+    Track selectTrack(int index);
     void addTracksFromStorage();
     List<Track> getTracks();
     void init();

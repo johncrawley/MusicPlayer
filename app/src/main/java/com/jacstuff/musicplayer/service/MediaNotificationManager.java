@@ -126,7 +126,7 @@ public class MediaNotificationManager {
 
 
     private void addPreviousButtonTo(NotificationCompat.Builder notification){
-        if(isThereLessThanTwoStations()) {
+        if(isThereLessThanTwoTracks()) {
             return;
         }
         notification.addAction(android.R.drawable.ic_media_previous,
@@ -136,7 +136,7 @@ public class MediaNotificationManager {
 
 
     private void addNextButtonTo(NotificationCompat.Builder notification){
-        if(isThereLessThanTwoStations()) {
+        if(isThereLessThanTwoTracks()) {
             return;
         }
         notification.addAction(android.R.drawable.ic_media_next,
@@ -145,7 +145,7 @@ public class MediaNotificationManager {
     }
 
 
-    private boolean isThereLessThanTwoStations(){
+    private boolean isThereLessThanTwoTracks(){
         return mediaPlayerService.getTrackCount() < 2;
     }
 
