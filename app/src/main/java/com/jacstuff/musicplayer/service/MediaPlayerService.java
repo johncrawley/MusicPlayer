@@ -126,7 +126,7 @@ public class MediaPlayerService extends Service {
     public void initPlaylistAndRefresh(){
         executorService.execute(() -> {
             playlistManager.init();
-            nextTrack();
+            loadNextTrack();
             mainActivity.enableControls();
             updateViewTrackList();
         });
@@ -143,14 +143,14 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void nextTrack(){
+    public void loadNextTrack(){
         assignTrack(playlistManager.getNextTrack());
         mainActivity.scrollToPosition(playlistManager.getCurrentTrackIndex());
         mediaNotificationManager.updateNotification();
     }
 
 
-    public void previousTrack(){
+    public void loadPreviousTrack(){
         assignTrack(playlistManager.getPreviousTrack());
         mainActivity.scrollToPosition(playlistManager.getCurrentTrackIndex());
         mediaNotificationManager.updateNotification();
@@ -513,7 +513,7 @@ public class MediaPlayerService extends Service {
     private final BroadcastReceiver serviceReceiverForNext = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            nextTrack();
+            loadNextTrack();
         }
     };
 
@@ -521,7 +521,7 @@ public class MediaPlayerService extends Service {
     private final BroadcastReceiver serviceReceiverForPrevious = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            previousTrack();
+            loadPreviousTrack();
         }
     };
 

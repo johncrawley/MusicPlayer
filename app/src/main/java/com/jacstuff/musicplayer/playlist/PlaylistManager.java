@@ -8,8 +8,6 @@ public interface PlaylistManager {
 
 
     void savePlaylist();
-    String getNext();
-    Track getNextRandomTrack();
     Track getNextTrack();
     Track getPreviousTrack();
     Track getNextRandomUnPlayedTrack();

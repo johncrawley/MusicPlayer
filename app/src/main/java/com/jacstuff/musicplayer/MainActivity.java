@@ -4,7 +4,6 @@ import android.Manifest;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void nextTrack(){
-        mediaPlayerService.nextTrack();
+        mediaPlayerService.loadNextTrack();
     }
 
     public int getNumberOfTracks(){

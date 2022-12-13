@@ -3,6 +3,7 @@ package com.jacstuff.musicplayer.playlist;
 import android.content.Context;
 
 import com.jacstuff.musicplayer.MediaPlayerView;
+import com.jacstuff.musicplayer.db.playlist.TrackHistory;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.db.track.TrackRepository;
 import com.jacstuff.musicplayer.db.track.TrackRepositoryImpl;
@@ -22,6 +23,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private MediaPlayerView mediaPlayerView;
     private List<Track> tracks;
     private List<Integer> unPlayedPathnameIndexes;
+    private TrackHistory trackHistory;
 
 
     public PlaylistManagerImpl(Context context){
@@ -32,7 +34,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         sdCardReader = new AudioInfoLoader(context, trackRepository);
         initTrackDetailsList();
         previousNumberOfTracks = tracks.size();
-        trackHistory = new ArrayList<>();
+        trackHistory = new TrackHistory();
     }
 
 
@@ -41,22 +43,15 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-
     @Override
     public void addTracksFromStorage(){
         sdCardReader.loadAudioFiles();
         initTrackDetailsList();
-        calculateAndPostNewTracksStats();
+        calculateAndDisplayNewTracksStats();
     }
 
 
-    @Override
-    public Track getNextRandomTrack(){
-        return  tracks.isEmpty() ? null : tracks.get(getNextRandomIndex(tracks.size()));
-    }
-
-
-    private void calculateAndPostNewTracksStats(){
+    private void calculateAndDisplayNewTracksStats(){
         int numberOfNewTracks = tracks.size() - previousNumberOfTracks;
         if(numberOfNewTracks > 0){
             mediaPlayerView.displayPlaylistRefreshedMessage(numberOfNewTracks);
@@ -72,14 +67,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private void initTrackDetailsList(){
         tracks = trackRepository.getAllTracks();
-    }
-
-
-    public String getNext(){
-        if(currentIndex == tracks.size() -1){
-            currentIndex = 0;
-        }
-        return tracks.get(++currentIndex).getName();
     }
 
 
@@ -101,35 +88,22 @@ public class PlaylistManagerImpl implements PlaylistManager {
         return tracks.size();
     }
 
+
     @Override
     public Track getNextTrack(){
         return getNextRandomUnPlayedTrack();
     }
 
-    private int currentHistoryIndex;
-    private List<Track> trackHistory;
-
 
     @Override
     public Track getPreviousTrack(){
-        printTrackHistory();
-        currentHistoryIndex = Math.max(0, currentHistoryIndex-1);
-        return trackHistory.get(currentHistoryIndex);
+        return trackHistory.getPreviousTrack();
     }
 
-    private void printTrackHistory(){
-        StringBuilder str = new StringBuilder("Track History ==> ");
-        for(Track track : trackHistory){
-            str.append(" :: ");
-            str.append(track.getName());
-        }
-        System.out.println(str);
-    }
 
     public Track getNextRandomUnPlayedTrack(){
-        if(isHistoryIndexOld()){
-            currentHistoryIndex++;
-            return trackHistory.get(currentHistoryIndex);
+        if(trackHistory.isHistoryIndexOld()){
+            return trackHistory.getNextTrack();
         }
         if(!attemptSetupOfIndexesIfEmpty()){
             return null;
@@ -140,7 +114,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         attemptSetupOfIndexesIfEmpty();
         Track currentTrack = tracks.get(currentIndex);
         trackHistory.add(currentTrack);
-        currentHistoryIndex++;
         return currentTrack;
     }
 
@@ -172,23 +145,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(index > tracks.size()){
             return null;
         }
-        if(isHistoryIndexOld()){
-            removeAllHistoryAfterCurrentIndex();
-        }
+        trackHistory.removeHistoriesAfterCurrent();
         Track track = tracks.get(index);
         trackHistory.add(track);
-        currentHistoryIndex++;
         return tracks.get(index);
     }
 
-    private boolean isHistoryIndexOld(){
-        return currentHistoryIndex < trackHistory.size() -1;
-    }
-
-    private void removeAllHistoryAfterCurrentIndex(){
-        trackHistory = trackHistory.subList(0, currentHistoryIndex);
-
-    }
 
     private int getNextRandomIndex(int listSize){
         return listSize < 2 ? 0 : random.nextInt(listSize);
