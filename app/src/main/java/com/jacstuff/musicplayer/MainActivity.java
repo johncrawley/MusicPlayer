@@ -93,11 +93,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    public void selectTrack(Track track) {
-        mediaPlayerService.selectTrack(track);
-    }
-
-
     public void selectTrack(int index) {
         mediaPlayerService.selectTrack(index);
     }
