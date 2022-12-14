@@ -74,9 +74,16 @@ public class MainActivity extends AppCompatActivity{
         mediaPlayerService.playTrack();
     }
 
+
     public void nextTrack(){
         mediaPlayerService.loadNextTrack();
     }
+
+
+    public void previousTrack(){
+        mediaPlayerService.loadPreviousTrack();
+    }
+
 
     public int getNumberOfTracks(){
         return mediaPlayerService.getNumberOfTracks();

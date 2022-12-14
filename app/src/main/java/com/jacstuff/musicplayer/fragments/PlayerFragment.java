@@ -39,7 +39,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
     private TextView trackTime;
     private TextView trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton, pauseButton;
-    private ImageButton nextTrackButton;
+    private ImageButton nextTrackButton, previousTrackButton;
     private String totalTrackTime = "0:00";
     private RecyclerView recyclerView;
     private TrackListAdapter trackListAdapter;
@@ -135,6 +135,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
         trackTime.setVisibility(visibility);
         playButton.setVisibility(visibility);
         nextTrackButton.setVisibility(visibility);
+        previousTrackButton.setVisibility(visibility);
     }
 
 
@@ -223,6 +224,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
         playButton = parentView.findViewById(R.id.playButton);
         pauseButton = parentView.findViewById(R.id.pauseButton);
         nextTrackButton = parentView.findViewById(R.id.nextTrackButton);
+        previousTrackButton = parentView.findViewById(R.id.previousTrackButton);
         boolean isTrackTitleNull = trackTitle == null;
         System.out.println("PlayerFragment.assignViews() is Track Title View null? : " + isTrackTitleNull);
     }
@@ -238,6 +240,13 @@ public class PlayerFragment extends Fragment implements MediaPlayerView {
         nextTrackButton.setOnClickListener((View v) -> {
             mainActivity.nextTrack();
         });
+
+
+        previousTrackButton.setOnClickListener((View v) -> {
+            mainActivity.previousTrack();
+
+        });
+
     }
 
 
