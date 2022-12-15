@@ -11,10 +11,16 @@ import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.db.track.Track;
@@ -30,13 +36,17 @@ public class MainActivity extends AppCompatActivity{
 
 
     private ViewStateAdapter viewStateAdapter;
-    private boolean isServiceBound;
-    private Intent mediaPlayerServiceIntent;
     private MediaPlayerService mediaPlayerService;
-    private MainViewModel viewModel;
 
 
-    private ServiceConnection serviceConnection = new ServiceConnection() {
+    private TextView trackTime;
+    private TextView trackTitle, trackAlbum, trackArtist;
+    private ImageButton playButton, pauseButton;
+    private ImageButton nextTrackButton, previousTrackButton;
+    private String totalTrackTime = "0:00";
+
+
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className,
@@ -44,14 +54,13 @@ public class MainActivity extends AppCompatActivity{
             MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
             mediaPlayerService = binder.getService();
             mediaPlayerService.setActivity(MainActivity.this);
-            isServiceBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            isServiceBound = false;
         }
     };
+
 
     public void onServiceReady(){
         getPlayerFragment().onServiceReady();
@@ -62,6 +71,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupViews();
         setupViewModel();
         startMediaPlayerService();
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
@@ -90,18 +100,10 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
-        runOnUiThread(()->{
-            getPlayerFragment().displayPlaylistRefreshedMessage();
-            getPlayerFragment().refreshTrackList(updatedTracks);
-            getPlayerFragment().scrollToListPosition(currentTrackIndex);
-        });
-    }
-
-
     public void selectTrack(int index) {
         mediaPlayerService.selectTrack(index);
     }
+
 
     public List<Track> getTrackList(){
        return mediaPlayerService.getTrackList();
@@ -113,24 +115,13 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    public void updateTracksOnMediaPlayer(List<Track> tracks){
-        if(mediaPlayerService != null) {
-            mediaPlayerService.updateTracks(tracks);
-        }
-    }
-
-
-    public List<Track> getCurrentTracks(){
-        return viewModel.tracks;
-    }
-
-
     private void startMediaPlayerService(){
-        mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
+        Intent mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
         log("entered startMediaPlayerService(), about to start foreground media player service");
         getApplicationContext().startForegroundService(mediaPlayerServiceIntent);
         getApplicationContext().bindService(mediaPlayerServiceIntent, serviceConnection, 0);
     }
+
 
     private void log(String msg){
         System.out.println("^^^ MainActivity: " + msg);
@@ -139,75 +130,150 @@ public class MainActivity extends AppCompatActivity{
 
     private void notifyPlayerStopped(){
         log("Entered notifyPlayerStopped()");
-        getPlayerFragment().notifyTrackPaused();
     }
 
 
     public void notifyMediaPlayerPaused(){
-        log("Entered notifyPlayerPaused()");
-        getPlayerFragment().notifyTrackPaused();
+        playButton.setVisibility(View.VISIBLE);
+        pauseButton.setVisibility(View.GONE);
     }
+
 
     private PlayerFragment getPlayerFragment(){
         return viewStateAdapter.getPlayerFragment();
     }
 
-    private void notifyPlayerConnecting(){
+
+    private void setupViews(){
+        assignViews();
+        assignClickListeners();
+        resetElapsedTime();
+        playButton.setEnabled(false);
+        nextTrackButton.setEnabled(false);
+    }
+
+
+    private void resetElapsedTime(){
+        setElapsedTime("0:00");
+    }
+
+
+    private void setTrackTime(String elapsedTime){
+        if(trackTime != null){
+            String time = elapsedTime + " / " + this.totalTrackTime;
+            trackTime.setText(time);
+        }
+    }
+
+
+    public void setVisibilityOnDetailsAndNavViews(int visibility){
+        trackTitle.setVisibility(visibility);
+        trackAlbum.setVisibility(visibility);
+        trackArtist.setVisibility(visibility);
+        trackTime.setVisibility(visibility);
+        playButton.setVisibility(visibility);
+        nextTrackButton.setVisibility(visibility);
+        previousTrackButton.setVisibility(visibility);
+    }
+
+
+    public void setElapsedTime(String elapsedTime){
+        this.setTrackTime(elapsedTime);
+    }
+
+
+    public void setTotalTrackTime(String totalTrackTime){
+        this.totalTrackTime = totalTrackTime;
+        resetElapsedTime();
+    }
+
+
+    private void assignViews(){
+        trackTime = findViewById(R.id.trackTime);
+        trackTitle = findViewById(R.id.trackTitle);
+        trackAlbum = findViewById(R.id.albumTextView);
+        trackArtist = findViewById(R.id.artistTextView);
+        playButton = findViewById(R.id.playButton);
+        pauseButton = findViewById(R.id.pauseButton);
+        nextTrackButton = findViewById(R.id.nextTrackButton);
+        previousTrackButton = findViewById(R.id.previousTrackButton);
+    }
+
+
+    private void assignClickListeners(){
+        playButton.setOnClickListener((View v) -> playTrack());
+        pauseButton.setOnClickListener((View v) -> pauseMediaPlayer());
+        nextTrackButton.setOnClickListener((View v) -> nextTrack());
+        previousTrackButton.setOnClickListener((View v) -> previousTrack());
 
     }
 
 
     public void notifyPlayerPlaying(){
         runOnUiThread(()->{
-           getPlayerFragment().notifyTrackPlaying();
+            log("Entered notifyTrackPlaying()");
+            playButton.setVisibility(View.GONE);
+            pauseButton.setVisibility(View.VISIBLE);
+            log("notifyTrackPlaying() play button visibility: " + playButton.getVisibility());
+            log("notifyTrackPlaying() pause button visibility: " + pauseButton.getVisibility());
         });
     }
 
 
     public void setBlankTrackInfo(){
-        runOnUiThread(()->{
-            getPlayerFragment().setTrackInfo("");
-        });
+        runOnUiThread(()-> setTrackInfo(""));
     }
 
 
     public void setTrackInfoOnView(final Track track){
-        runOnUiThread(()->{
-            getPlayerFragment().setTrackInfo(track);
+        runOnUiThread(()-> {
+                setTrackInfo(track.getName());
+                setAlbumInfo(track.getAlbum());
+                setArtistInfo(track.getArtist());
         });
     }
 
 
     public void enableControls(){
         runOnUiThread(()->{
-            getPlayerFragment().enableControls();
+            playButton.setEnabled(true);
+            nextTrackButton.setEnabled(true);
         });
+    }
+
+
+    public void hideNextButtonIfOnlyOneTrack(int numberOfTracks){
+        if(numberOfTracks == 1){
+            nextTrackButton.setVisibility(View.INVISIBLE);
+        }
     }
 
 
     public void scrollToPosition(int index){
-        runOnUiThread(()->{
-            getPlayerFragment().scrollToListPosition(index);
-        });
+        runOnUiThread(()-> getPlayerFragment().scrollToListPosition(index));
     }
 
 
-
-    private void notifyPlayError(){
-
+    public void setTrackInfo(String trackInfo){
+        if(trackInfo.isEmpty()){
+            trackInfo = getResources().getString(R.string.no_tracks_found);
+        }
+        this.trackTitle.setText(trackInfo);
     }
 
-    private void selectNextTrack(){
 
+    public void setAlbumInfo(String albumInfo){
+        this.trackAlbum.setText(albumInfo);
     }
 
-    private void selectPreviousTrack(){
 
+    public void setArtistInfo(String artistInfo){
+        this.trackArtist.setText(artistInfo);
     }
 
 
     private void setupViewModel(){
-        viewModel  = new ViewModelProvider(this).get(MainViewModel.class);
+        MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
     }
 
 
@@ -221,21 +287,55 @@ public class MainActivity extends AppCompatActivity{
             public void onTabSelected(TabLayout.Tab tab) {
                 pager.setCurrentItem(tab.getPosition());
             }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            @Override public void onTabUnselected(TabLayout.Tab tab) {}
+            @Override public void onTabReselected(TabLayout.Tab tab) {}
         });
     }
 
+
     public void updatePlaylistList(){
         viewStateAdapter.getPlaylistsFragment().onAddNewPlaylist();
+    }
+
+
+    public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
+        runOnUiThread(()-> {
+            getPlayerFragment().updateTracksList(updatedTracks, currentTrackIndex);
+            updateViewsOnTracksUpdated(updatedTracks);
+        });
+    }
+
+
+    private void updateViewsOnTracksUpdated(List<Track> updatedTracks){
+        if(updatedTracks.isEmpty()){
+            setVisibilityOnDetailsAndNavViews(View.INVISIBLE);
+            return;
+        }
+        setVisibilityOnDetailsAndNavViews(View.VISIBLE);
+        hideNextButtonIfOnlyOneTrack(updatedTracks.size());
+    }
+
+
+    public void displayPlaylistRefreshedMessage(){
+        String msg = getResources().getString(R.string.playlist_refreshed_message);
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void displayPlaylistRefreshedMessage(int newTrackCount) {
+        new Handler(Looper.getMainLooper()).post(() -> displayPlaylistMessage(newTrackCount));
+    }
+
+
+    public void displayPlaylistMessage(int newTrackCount) {
+        if(newTrackCount == 0){
+            displayPlaylistRefreshedMessage();
+            return;
+        }
+        String msg = newTrackCount > 1 ?
+                getResources().getString(R.string.playlist_refreshed_message_new_tracks_count, newTrackCount)
+                : getResources().getString(R.string.playlist_refreshed_one_new_track);
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
 

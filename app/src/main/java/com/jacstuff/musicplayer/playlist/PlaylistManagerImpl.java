@@ -7,6 +7,7 @@ import com.jacstuff.musicplayer.db.playlist.TrackHistory;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.db.track.TrackRepository;
 import com.jacstuff.musicplayer.db.track.TrackRepositoryImpl;
+import com.jacstuff.musicplayer.service.MediaPlayerService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private List<Track> tracks;
     private List<Integer> unPlayedPathnameIndexes;
     private TrackHistory trackHistory;
+    private MediaPlayerService mediaPlayerService;
 
 
     public PlaylistManagerImpl(Context context){
@@ -38,8 +40,13 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    public void setMediaPlayerView(MediaPlayerView mediaPlayerView){
-        this.mediaPlayerView = mediaPlayerView;
+    public void setMediaPlayerService(MediaPlayerService mediaPlayerService){
+        this.mediaPlayerService = mediaPlayerService;
+    }
+
+    @Override
+    public void onDestroy(){
+        mediaPlayerService = null;
     }
 
 
@@ -54,7 +61,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private void calculateAndDisplayNewTracksStats(){
         int numberOfNewTracks = tracks.size() - previousNumberOfTracks;
         if(numberOfNewTracks > 0){
-            mediaPlayerView.displayPlaylistRefreshedMessage(numberOfNewTracks);
+            mediaPlayerService.displayPlaylistRefreshedMessage(numberOfNewTracks);
         }
         previousNumberOfTracks = tracks.size();
     }

@@ -6,9 +6,12 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="row_pad_v">6dp</dimen>
     <dimen name="button_padding">12dp</dimen>
+    <dimen name="button_panel_margin_bottom">8dp</dimen>
     <dimen name="horizontal_divider_side_margin">12dp</dimen>
     <dimen name="playlist_list_view_horizontal_margin">2dp</dimen>
-    <dimen name="track_name_text_size">36sp</dimen>
+    <dimen name="track_name_text_size">24sp</dimen>
+    <dimen name="artist_text_size">20sp</dimen>
+    <dimen name="album_text_size">20sp</dimen>
     <dimen name="pager_top_margin">18dp</dimen>
     <dimen name="dialog_layout_padding_horizontal">8dp</dimen>
     <dimen name="input_text_padding_top">12dp</dimen>

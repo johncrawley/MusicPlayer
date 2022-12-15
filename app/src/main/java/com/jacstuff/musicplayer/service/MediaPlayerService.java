@@ -114,6 +114,10 @@ public class MediaPlayerService extends Service {
         }
     }
 
+    public void displayPlaylistRefreshedMessage(int numberOfNewTracks){
+        mainActivity.displayPlaylistRefreshedMessage(numberOfNewTracks);
+    }
+
 
     public void stop(){
         currentState = MediaPlayerState.STOPPED;

@@ -17,6 +17,7 @@ public interface PlaylistManager {
     void init();
     int getCurrentTrackIndex();
     int getNumberOfTracks();
+    void onDestroy();
 
     String getTrackNameAt(int position);
 }
