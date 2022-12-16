@@ -2,7 +2,6 @@ package com.jacstuff.musicplayer.playlist;
 
 import android.content.Context;
 
-import com.jacstuff.musicplayer.MediaPlayerView;
 import com.jacstuff.musicplayer.db.playlist.TrackHistory;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.db.track.TrackRepository;
@@ -21,7 +20,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private final Random random;
     private final TrackRepository trackRepository;
     private int previousNumberOfTracks;
-    private MediaPlayerView mediaPlayerView;
     private List<Track> tracks;
     private List<Integer> unPlayedPathnameIndexes;
     private TrackHistory trackHistory;
@@ -39,10 +37,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         trackHistory = new TrackHistory();
     }
 
-
-    public void setMediaPlayerService(MediaPlayerService mediaPlayerService){
-        this.mediaPlayerService = mediaPlayerService;
-    }
 
     @Override
     public void onDestroy(){
@@ -74,6 +68,14 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private void initTrackDetailsList(){
         tracks = trackRepository.getAllTracks();
+        assignIndexesToTracks();
+    }
+
+
+    private void assignIndexesToTracks(){
+        for(int i=0; i< tracks.size(); i++){
+            tracks.get(i).setIndex(i);
+        }
     }
 
 
@@ -105,6 +107,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
     @Override
     public Track getPreviousTrack(){
         return trackHistory.getPreviousTrack();
+    }
+
+
+    @Override
+    public int getCurrentTrackIndex(){
+        return this.currentIndex;
     }
 
 
@@ -140,11 +148,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
             setupUnplayedIndexes();
         }
         return true;
-    }
-
-
-    public int getCurrentTrackIndex(){
-        return this.currentIndex;
     }
 
 

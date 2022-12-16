@@ -238,13 +238,15 @@ public class MainActivity extends AppCompatActivity{
         runOnUiThread(()->{
             playButton.setEnabled(true);
             nextTrackButton.setEnabled(true);
+            previousTrackButton.setEnabled(true);
         });
     }
 
 
-    public void hideNextButtonIfOnlyOneTrack(int numberOfTracks){
+    public void hideSeekButtonsIfOnlyOneTrack(int numberOfTracks){
         if(numberOfTracks == 1){
             nextTrackButton.setVisibility(View.INVISIBLE);
+            previousTrackButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -312,7 +314,7 @@ public class MainActivity extends AppCompatActivity{
             return;
         }
         setVisibilityOnDetailsAndNavViews(View.VISIBLE);
-        hideNextButtonIfOnlyOneTrack(updatedTracks.size());
+        hideSeekButtonsIfOnlyOneTrack(updatedTracks.size());
     }
 
 

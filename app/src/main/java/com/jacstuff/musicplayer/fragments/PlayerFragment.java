@@ -93,6 +93,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView{
     public void scrollToListPosition(int index){
         trackListAdapter.deselectCurrentlySelectedItem();
         trackListAdapter.setIndexToScrollTo(index);
+        trackListAdapter.changePositionTo(index);
         recyclerView.scrollToPosition(calculateIndexWithOffset(index));
     }
 

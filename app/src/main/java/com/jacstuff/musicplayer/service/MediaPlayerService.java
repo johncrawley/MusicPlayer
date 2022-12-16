@@ -148,15 +148,18 @@ public class MediaPlayerService extends Service {
 
 
     public void loadNextTrack(){
-        assignTrack(playlistManager.getNextTrack());
-        mainActivity.scrollToPosition(playlistManager.getCurrentTrackIndex());
-        mediaNotificationManager.updateNotification();
+        loadTrack(playlistManager.getNextTrack());
     }
 
 
     public void loadPreviousTrack(){
-        assignTrack(playlistManager.getPreviousTrack());
-        mainActivity.scrollToPosition(playlistManager.getCurrentTrackIndex());
+        loadTrack(playlistManager.getPreviousTrack());
+    }
+
+
+    public void loadTrack(Track track){
+        assignTrack(track);
+        mainActivity.scrollToPosition(track.getIndex());
         mediaNotificationManager.updateNotification();
     }
 

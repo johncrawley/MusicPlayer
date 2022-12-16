@@ -4,6 +4,7 @@ public class Track {
 
     private final String pathname, name, artist, album, disc, directory, genre;
     private final long id, trackNumber;
+    private int index;
 
     private Track(long id, String pathname, String name, String artist, String album, long trackNumber, String disc, String directory, String genre){
 
@@ -25,12 +26,33 @@ public class Track {
     public String getArtist() {
         return artist;
     }
+
+
     public String getName(){return name;}
+
+
     public long getTrackNumber(){return trackNumber;}
+
+
     public String getPathname(){return pathname;}
+
+
     public String getDisc(){return disc;}
+
+
     public String getDirectory(){return directory;}
+
+
     public long getId(){return id;}
+
+
+    public void setIndex(int index){
+        this.index = index;
+    }
+
+    public int getIndex(){
+        return index;
+    }
 
     @Override
     public String toString(){
