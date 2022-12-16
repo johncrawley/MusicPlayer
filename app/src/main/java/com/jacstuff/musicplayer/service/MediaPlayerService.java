@@ -18,6 +18,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 
 
+import com.jacstuff.musicplayer.ListNotifier;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.track.Track;
@@ -97,16 +98,6 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void updateTracks(List<Track> tracks){
-        this.tracks = new ArrayList<>(tracks);
-    }
-
-
-    private void updateViewTrackList(){
-        mainActivity.updateTracksList(playlistManager.getTracks(), playlistManager.getCurrentTrackIndex());
-    }
-
-
     private void handleNullPathname(){
         if(currentTrack.getPathname() == null){
             mainActivity.setBlankTrackInfo();
@@ -128,6 +119,7 @@ public class MediaPlayerService extends Service {
 
 
     public void initPlaylistAndRefresh(){
+        log("Entered initPlaylistAndRefresh()");
         executorService.execute(() -> {
             playlistManager.init();
             loadNextTrack();
@@ -137,17 +129,24 @@ public class MediaPlayerService extends Service {
     }
 
 
+    private void updateViewTrackList(){
+        mainActivity.updateTracksList(playlistManager.getTracks(), playlistManager.getCurrentTrackIndex());
+    }
+
+
     public List<Track> getTrackList(){
         return playlistManager.getTracks();
     }
 
 
     public void selectTrack(int index){
+        log("Entered selectTrack()");
         assignTrack(playlistManager.selectTrack(index));
     }
 
 
     public void loadNextTrack(){
+        log("Entered loadNextTrack()");
         loadTrack(playlistManager.getNextTrack());
     }
 
@@ -205,7 +204,7 @@ public class MediaPlayerService extends Service {
         this.mainActivity = mainActivity;
         playlistManager = new PlaylistManagerImpl(mainActivity.getApplicationContext());
         tracks = playlistManager.getTracks();
-        mainActivity.onServiceReady();
+        mainActivity.onServiceReady(tracks);
     }
 
 
@@ -324,11 +323,6 @@ public class MediaPlayerService extends Service {
 
     int getTrackCount(){
         return tracks.size();
-    }
-
-
-    public void onServiceReady(){
-        mainActivity.onServiceReady();
     }
 
 

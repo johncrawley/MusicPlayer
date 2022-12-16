@@ -11,38 +11,40 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class ViewStateAdapter extends FragmentStateAdapter {
 
-    private final List<Fragment> fragments;
-    private final PlaylistsFragment playlistsFragment;
-    private final PlayerFragment playerFragment;
+//    private List<Fragment> fragments;
 
     public ViewStateAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
-        fragments = new ArrayList<>();
-        playlistsFragment = new PlaylistsFragment();
-        playerFragment = new PlayerFragment();
-        fragments.add(playerFragment);    // auto-assigned tag: 'f0'
-        fragments.add(playlistsFragment); // auto-assigned tag: 'f1'
+        log("Entered ViewStateAdapter");
+        //fragments = new ArrayList<>();
+        //fragments.add(new PlaylistsFragment());    // auto-assigned tag: 'f0'
+        //fragments.add(new PlayerFragment()); // auto-assigned tag: 'f1'
     }
 
 
-    public PlaylistsFragment getPlaylistsFragment(){
-        return playlistsFragment;
+    private void log(String msg){
+        System.out.println("^^^ View State Adapter: " + msg);
     }
 
 
-    public PlayerFragment getPlayerFragment(){ return playerFragment; }
+    public void onDestroy(){
+      //  fragments = null;
+    }
 
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        int index = Math.min(fragments.size()-1, position);
-        return fragments.get(index);
+        if(position == 0){
+            return new PlayerFragment();
+        }
+        return new PlaylistsFragment();
     }
 
 
     @Override
     public int getItemCount() {
-        return fragments.size();
+        return 2;
     }
+
 }

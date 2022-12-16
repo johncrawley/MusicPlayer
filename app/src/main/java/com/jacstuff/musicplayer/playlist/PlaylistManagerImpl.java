@@ -32,7 +32,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         unPlayedPathnameIndexes = new ArrayList<>();
         random = new Random(System.currentTimeMillis());
         sdCardReader = new AudioInfoLoader(context, trackRepository);
-        initTrackDetailsList();
+        initTrackList();
         previousNumberOfTracks = tracks.size();
         trackHistory = new TrackHistory();
     }
@@ -47,7 +47,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     @Override
     public void addTracksFromStorage(){
         sdCardReader.loadAudioFiles();
-        initTrackDetailsList();
+        initTrackList();
         calculateAndDisplayNewTracksStats();
     }
 
@@ -62,11 +62,11 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public void init(){
-        initTrackDetailsList();
+        initTrackList();
     }
 
 
-    private void initTrackDetailsList(){
+    private void initTrackList(){
         tracks = trackRepository.getAllTracks();
         assignIndexesToTracks();
     }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.fragments.PlayerFragment;
+import com.jacstuff.musicplayer.fragments.PlaylistsFragment;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity{
     private ImageButton playButton, pauseButton;
     private ImageButton nextTrackButton, previousTrackButton;
     private String totalTrackTime = "0:00";
+    private ListNotifier listNotifier;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity{
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
+            log("Entered onServiceConnected!!");
             MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
             mediaPlayerService = binder.getService();
             mediaPlayerService.setActivity(MainActivity.this);
@@ -62,21 +66,30 @@ public class MainActivity extends AppCompatActivity{
     };
 
 
-    public void onServiceReady(){
-        getPlayerFragment().onServiceReady();
+    public void onServiceReady(List<Track> tracks){
+        log("Entered onServiceReady(), about to initPlaylist and refresh on mediPlayerService");
+        //getPlayerFragment().onServiceReady(tracks);
+        mediaPlayerService.initPlaylistAndRefresh();
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        log("Entered onCreate() *********************************");
         setContentView(R.layout.activity_main);
+        listNotifier = new ListNotifier();
         setupViews();
-        setupViewModel();
-        startMediaPlayerService();
-        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         setupTabLayout();
+        setupViewModel();
+        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         //listAudioFiles();
+        startMediaPlayerService();
+    }
+
+
+    public ListNotifier getListNotifier(){
+        return listNotifier;
     }
 
 
@@ -92,11 +105,6 @@ public class MainActivity extends AppCompatActivity{
 
     public void previousTrack(){
         mediaPlayerService.loadPreviousTrack();
-    }
-
-
-    public int getNumberOfTracks(){
-        return mediaPlayerService.getNumberOfTracks();
     }
 
 
@@ -140,7 +148,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     private PlayerFragment getPlayerFragment(){
-        return viewStateAdapter.getPlayerFragment();
+        return (PlayerFragment) getSupportFragmentManager().findFragmentByTag("f1");
     }
 
 
@@ -163,6 +171,14 @@ public class MainActivity extends AppCompatActivity{
             String time = elapsedTime + " / " + this.totalTrackTime;
             trackTime.setText(time);
         }
+    }
+
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        viewStateAdapter.onDestroy();
+        viewStateAdapter = null;
     }
 
 
@@ -211,11 +227,8 @@ public class MainActivity extends AppCompatActivity{
 
     public void notifyPlayerPlaying(){
         runOnUiThread(()->{
-            log("Entered notifyTrackPlaying()");
             playButton.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
-            log("notifyTrackPlaying() play button visibility: " + playButton.getVisibility());
-            log("notifyTrackPlaying() pause button visibility: " + pauseButton.getVisibility());
         });
     }
 
@@ -252,7 +265,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     public void scrollToPosition(int index){
-        runOnUiThread(()-> getPlayerFragment().scrollToListPosition(index));
+       // runOnUiThread(()-> getPlayerFragment().scrollToListPosition(index));
     }
 
 
@@ -280,9 +293,12 @@ public class MainActivity extends AppCompatActivity{
 
 
     private void setupTabLayout(){
+        log("Entered setupTabLayout");
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         viewStateAdapter = new ViewStateAdapter(getSupportFragmentManager(), getLifecycle());
+
         final ViewPager2 pager = findViewById(R.id.pager);
+        log("About to set viewStateAdapter to pager");
         pager.setAdapter(viewStateAdapter);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -292,23 +308,35 @@ public class MainActivity extends AppCompatActivity{
             @Override public void onTabUnselected(TabLayout.Tab tab) {}
             @Override public void onTabReselected(TabLayout.Tab tab) {}
         });
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        log("setupTabLayout() fragments list size: " + fragments.size());
+        log("Exiting setupTabLayout");
     }
 
 
     public void updatePlaylistList(){
-        viewStateAdapter.getPlaylistsFragment().onAddNewPlaylist();
+        PlaylistsFragment fragment = (PlaylistsFragment)getSupportFragmentManager().findFragmentByTag("f0");
+        fragment.onAddNewPlaylist();
     }
 
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
         runOnUiThread(()-> {
-            getPlayerFragment().updateTracksList(updatedTracks, currentTrackIndex);
-            updateViewsOnTracksUpdated(updatedTracks);
+            log("Entered updateTracksList() number of tracks: " + updatedTracks.size());
+          //  getPlayerFragment().updateTracksList(updatedTracks, currentTrackIndex);
+            listNotifier.setTracks(updatedTracks);
+            updateViews(updatedTracks);
+            displayPlaylistRefreshedMessage();
         });
     }
 
 
-    private void updateViewsOnTracksUpdated(List<Track> updatedTracks){
+    public void onFragmentsReady(){
+        startMediaPlayerService();
+    }
+
+
+    private void updateViews(List<Track> updatedTracks){
         if(updatedTracks.isEmpty()){
             setVisibilityOnDetailsAndNavViews(View.INVISIBLE);
             return;
@@ -346,10 +374,6 @@ public class MainActivity extends AppCompatActivity{
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.refresh_button, menu);
         return true;
-    }
-
-    public void initPlaylistAndRefresh(){
-        mediaPlayerService.initPlaylistAndRefresh();
     }
 
 
