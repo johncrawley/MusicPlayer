@@ -4,7 +4,14 @@
     <color name="colorPrimaryDark">#1b5e20</color>
     <color name="colorAccent">#ffeb3b</color>
     <color name="pressed_color">#66bb6a</color>
-    <color name="selected_color">#e0f7e6</color>
-    <color name="focused_color">#cfd8dc</color>
-    <color name="unfocused_color">#f2f7f9</color>
+    <!-- custom colors below -->
+    <color name="color_accent">#2B712E</color>
+    <color name="primary_color">#114914</color>
+    <color name="primary_color_dark">#0B300D</color>
+    <color name="list_item_selected">#0F3E1C</color>
+    <color name="list_item_focused">#333539</color>
+    <color name="list_item_unfocused">#f2f7f9</color>
+    <color name="background">#030404</color>
+    <color name="text">#1CAE23</color>
+    <color name="customButtonText">#BEBFC1</color>
 </resources>
