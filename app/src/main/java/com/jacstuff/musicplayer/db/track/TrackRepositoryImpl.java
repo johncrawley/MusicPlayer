@@ -85,7 +85,7 @@ public class TrackRepositoryImpl implements TrackRepository{
                     .createTrackWithPathname(getString(TracksEntry.COL_PATH))
                     .withId(getLong(TracksEntry._ID))
                     .withName(getString(TracksEntry.COL_NAME))
-                    .withTrackNumber(-1)
+                    .withTrackNumber(getLong(TracksEntry.COL_TRACK_NUMBER))
                     .withArtist(getString(TracksEntry.COL_ARTIST))
                     .withAlbum(getString(TracksEntry.COL_ALBUM))
                     .build());
@@ -102,20 +102,13 @@ public class TrackRepositoryImpl implements TrackRepository{
         return getTracks(query, selectionArgs);
     }
 
+
     private List<Track> getTracks(String query, String[] selectionArgs){
         List<Track> tracks = new ArrayList<>();
         try {
             cursor = db.rawQuery(query, selectionArgs);
-
             while(cursor.moveToNext()){
-                tracks.add(new Track.Builder()
-                        .createTrackWithPathname(getString(TracksEntry.COL_PATH))
-                        .withId(getLong(TracksEntry._ID))
-                        .withName(getString(TracksEntry.COL_NAME))
-                        .withTrackNumber(-1)
-                        .withArtist(getString(TracksEntry.COL_ARTIST))
-                        .withAlbum(getString(TracksEntry.COL_ALBUM))
-                        .build());
+                tracks.add(createTrackFromCursor());
             }
         }
         catch(SQLException e){
@@ -127,6 +120,18 @@ public class TrackRepositoryImpl implements TrackRepository{
     }
 
 
+    private Track createTrackFromCursor(){
+        return new Track.Builder()
+                .createTrackWithPathname(getString(TracksEntry.COL_PATH))
+                .withId(getLong(TracksEntry._ID))
+                .withName(getString(TracksEntry.COL_NAME))
+                .withTrackNumber(-1)
+                .withArtist(getString(TracksEntry.COL_ARTIST))
+                .withAlbum(getString(TracksEntry.COL_ALBUM))
+                .build();
+    }
+
+
     private ContentValues createContentValuesFor(Track track){
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbContract.TracksEntry.COL_NAME, track.getName());
@@ -134,6 +139,7 @@ public class TrackRepositoryImpl implements TrackRepository{
         contentValues.put(DbContract.TracksEntry.COL_ALBUM, track.getAlbum());
         contentValues.put(DbContract.TracksEntry.COL_PATH, track.getPathname());
         contentValues.put(DbContract.TracksEntry.COL_ALBUM, track.getAlbum());
+        contentValues.put(TracksEntry.COL_TRACK_NUMBER, track.getTrackNumber());
         return contentValues;
     }
 

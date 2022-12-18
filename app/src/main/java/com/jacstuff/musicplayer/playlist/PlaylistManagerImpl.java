@@ -9,8 +9,11 @@ import com.jacstuff.musicplayer.db.track.TrackRepositoryImpl;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 
 public class PlaylistManagerImpl implements PlaylistManager {
@@ -67,7 +70,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void initTrackList(){
-        tracks = trackRepository.getAllTracks();
+        tracks = trackRepository.getAllTracks().stream().sorted(Comparator.comparing(Track::getOrderedString)).collect(Collectors.toList());
         assignIndexesToTracks();
     }
 

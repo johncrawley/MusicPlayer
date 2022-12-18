@@ -3,12 +3,13 @@ package com.jacstuff.musicplayer.playlist;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.provider.MediaStore;
+
 
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.db.track.TrackRepository;
-import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
 
 public class AudioInfoLoader {
@@ -40,9 +41,21 @@ public class AudioInfoLoader {
                 MediaStore.Audio.Media.ARTIST,
                 MediaStore.Audio.Media.ALBUM,
                 MediaStore.Audio.Media.DATA
-                //MediaStore.Audio.Media.CD_TRACK_NUMBER,
-                //MediaStore.Audio.Media.GENRE
         };
+
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            projection = new String[] {
+                    MediaStore.Audio.Media.DISPLAY_NAME,
+                    MediaStore.Audio.Media.TITLE,
+                    MediaStore.Audio.Media.ARTIST,
+                    MediaStore.Audio.Media.ALBUM,
+                    MediaStore.Audio.Media.DATA,
+                    MediaStore.Audio.Media.CD_TRACK_NUMBER
+                    //MediaStore.Audio.Media.GENRE
+            };
+        }
+
+
         String selection = null;
         String[] selectionArgs = null;
         String sortOrder = MediaStore.Audio.Media.DEFAULT_SORT_ORDER + " ASC";
@@ -59,11 +72,17 @@ public class AudioInfoLoader {
         String artist  = getCol(cursor, MediaStore.Audio.Media.ARTIST);
         String album  = getCol(cursor, MediaStore.Audio.Media.ALBUM);
         String title = getCol(cursor, MediaStore.Audio.Media.TITLE);
+        long trackNumber = 0L;
+
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            trackNumber = getLong(cursor, MediaStore.Audio.Media.CD_TRACK_NUMBER);
+        }
 
         Track track = new Track.Builder().createTrackWithPathname(data)
                 .withAlbum(album)
                 .withArtist(artist)
                 .withName(title)
+                .withTrackNumber(trackNumber)
                 //.withGenre(genre)
                 .build();
         trackRepository.addTrack(track);
@@ -79,6 +98,12 @@ public class AudioInfoLoader {
     private String getCol(Cursor cursor, String colName){
         int col = cursor.getColumnIndexOrThrow(colName);
         return cursor.getString(col);
+    }
+
+
+    private Long getLong(Cursor cursor, String colName){
+        int col = cursor.getColumnIndexOrThrow(colName);
+        return cursor.getLong(col);
     }
 
 }

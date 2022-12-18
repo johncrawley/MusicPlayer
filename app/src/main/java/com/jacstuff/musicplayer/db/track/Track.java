@@ -3,6 +3,7 @@ package com.jacstuff.musicplayer.db.track;
 public class Track {
 
     private final String pathname, name, artist, album, disc, directory, genre;
+    private String orderedStr;
     private final long id, trackNumber;
     private int index;
 
@@ -17,7 +18,21 @@ public class Track {
         this.disc = disc;
         this.directory = directory;
         this.genre = genre;
+       createOrderedStr();
     }
+
+
+    private void createOrderedStr(){
+        String trackNumberPrefix = trackNumber < 10 ? "0" : "";
+        String trackStr = trackNumberPrefix + trackNumber;
+        this.orderedStr = artist + "-" + album + "-" + trackStr;
+    }
+
+
+    public String getOrderedString(){
+        return orderedStr;
+    }
+
 
     public String getAlbum() {
         return album;
