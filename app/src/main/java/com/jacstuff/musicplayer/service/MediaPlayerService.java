@@ -12,13 +12,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 
 
-import com.jacstuff.musicplayer.ListNotifier;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.track.Track;
@@ -44,7 +42,6 @@ public class MediaPlayerService extends Service {
     public static final String ACTION_SELECT_PREVIOUS_TRACK = "com.j.crawley.music_player.selectPreviousTrack";
     public static final String ACTION_SELECT_NEXT_TRACK = "com.j.crawley.music_player.selectNextTrack";
     public static final String ACTION_NOTIFY_VIEW_OF_STOP = "com.j.crawley.music_player.notifyViewOfStop";
-    public static final String ACTION_NOTIFY_VIEW_OF_PAUSE = "com.j.crawley.music_player.notifyViewOfPause";
     public static final String ACTION_NOTIFY_VIEW_OF_CONNECTING = "com.j.crawley.music_player.notifyViewOfPlay";
     public static final String ACTION_NOTIFY_VIEW_OF_PLAYING = "com.j.crawley.music_player.notifyViewOfPlayInfo";
     public static final String ACTION_NOTIFY_VIEW_OF_ERROR = "com.j.crawley.music_player.notifyViewOfError";
@@ -56,7 +53,7 @@ public class MediaPlayerService extends Service {
     private MediaNotificationManager mediaNotificationManager;
     private final ScheduledExecutorService executorService;
     Map<BroadcastReceiver, String> broadcastReceiverMap;
-    private enum MediaPlayerState { PAUSED, PLAYING, STOPPED}
+    private enum MediaPlayerState { PAUSED, PLAYING, STOPPED, FINISHED}
     private MediaPlayerState currentState = MediaPlayerState.STOPPED;
     private MainActivity mainActivity;
     private List<Track> tracks;
@@ -64,6 +61,7 @@ public class MediaPlayerService extends Service {
     private boolean isScanningForTracks;
     private final IBinder binder = new LocalBinder();
     private Track currentTrack;
+    private boolean shouldNextTrackPlayAfterCurrentTrackEnds = true;
 
 
     public MediaPlayerService() {
@@ -114,12 +112,12 @@ public class MediaPlayerService extends Service {
         currentState = MediaPlayerState.STOPPED;
         mediaPlayer.stop();
         mediaPlayer.reset();
+        mainActivity.notifyPlayerStopped();
 //            mediaPlayer.release();
     }
 
 
     public void initPlaylistAndRefresh(){
-        log("Entered initPlaylistAndRefresh()");
         executorService.execute(() -> {
             playlistManager.init();
             loadNextTrack();
@@ -160,6 +158,13 @@ public class MediaPlayerService extends Service {
         assignTrack(track);
         mainActivity.scrollToPosition(track.getIndex());
         mediaNotificationManager.updateNotification();
+    }
+
+
+    public void stopAfterTrackFinishes(){
+        if(currentState == MediaPlayerState.PLAYING) {
+            shouldNextTrackPlayAfterCurrentTrackEnds = false;
+        }
     }
 
 
@@ -216,19 +221,31 @@ public class MediaPlayerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        log("Entered onCreate()");
-        mediaPlayer = new MediaPlayer();
+        createMediaPlayer();
         setupBroadcastReceivers();
         mediaNotificationManager = new MediaNotificationManager(getApplicationContext(), this);
-        log("Entered service created, already setupBroadcastReceivers and notification manager");
         moveToForeground();
+    }
+
+
+    private void createMediaPlayer(){
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnCompletionListener(mediaPlayer -> {
+            currentState = MediaPlayerState.FINISHED;
+            mediaPlayer.reset();
+            loadNextTrack();
+            if(shouldNextTrackPlayAfterCurrentTrackEnds) {
+                play();
+            }else{
+                stop();
+            }
+        });
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        log("Entered onDestroy()");
         unregisterBroadcastReceivers();
         releaseMediaPlayerAndLocks();
         stop();
@@ -329,6 +346,7 @@ public class MediaPlayerService extends Service {
     public void play() {
         updateViewsForConnecting();
         stopRunningMediaPlayer();
+        shouldNextTrackPlayAfterCurrentTrackEnds = true;
         executorService.schedule(this::startTrack, 1, TimeUnit.MILLISECONDS);
     }
 
@@ -365,37 +383,9 @@ public class MediaPlayerService extends Service {
     }
 
 
-    private void connectWithMediaPlayer(){
-        hasEncounteredError = false;
-        if(currentTrack.getPathname() == null) {
-            stopPlayer();
-            hasEncounteredError = true;
-            return;
-        }
-        setCpuWakeLock();
-        prepareAndPlay();
-        mediaNotificationManager.updateNotification();
-    }
-
-
     private void setCpuWakeLock(){
         if (checkSelfPermission(Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
             mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-        }
-    }
-
-
-    private void prepareAndPlay(){
-        try {
-            mediaPlayer = MediaPlayer.create(this, Uri.parse(currentTrack.getPathname()));
-            mediaPlayer.prepareAsync();
-            setupOnInfoListener();
-            setupOnErrorListener();
-            mediaPlayer.setOnPreparedListener(mp -> mediaPlayer.start());
-        } catch (RuntimeException e) {
-            stopPlayer();
-            e.printStackTrace();
-            hasEncounteredError = true;
         }
     }
 

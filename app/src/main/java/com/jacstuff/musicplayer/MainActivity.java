@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity{
 
     private void startMediaPlayerService(){
         Intent mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
-        log("entered startMediaPlayerService(), about to start foreground media player service");
         getApplicationContext().startForegroundService(mediaPlayerServiceIntent);
         getApplicationContext().bindService(mediaPlayerServiceIntent, serviceConnection, 0);
     }
@@ -136,8 +135,9 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    private void notifyPlayerStopped(){
-        log("Entered notifyPlayerStopped()");
+    public void notifyPlayerStopped(){
+        playButton.setVisibility(View.VISIBLE);
+        pauseButton.setVisibility(View.GONE);
     }
 
 
@@ -293,12 +293,10 @@ public class MainActivity extends AppCompatActivity{
 
 
     private void setupTabLayout(){
-        log("Entered setupTabLayout");
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         viewStateAdapter = new ViewStateAdapter(getSupportFragmentManager(), getLifecycle());
 
         final ViewPager2 pager = findViewById(R.id.pager);
-        log("About to set viewStateAdapter to pager");
         pager.setAdapter(viewStateAdapter);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -308,9 +306,6 @@ public class MainActivity extends AppCompatActivity{
             @Override public void onTabUnselected(TabLayout.Tab tab) {}
             @Override public void onTabReselected(TabLayout.Tab tab) {}
         });
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        log("setupTabLayout() fragments list size: " + fragments.size());
-        log("Exiting setupTabLayout");
     }
 
 
@@ -322,8 +317,6 @@ public class MainActivity extends AppCompatActivity{
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
         runOnUiThread(()-> {
-            log("Entered updateTracksList() number of tracks: " + updatedTracks.size());
-          //  getPlayerFragment().updateTracksList(updatedTracks, currentTrackIndex);
             listNotifier.setTracks(updatedTracks);
             updateViews(updatedTracks);
             displayPlaylistRefreshedMessage();
@@ -385,6 +378,9 @@ public class MainActivity extends AppCompatActivity{
         int id = item.getItemId();
         if(id == R.id.refresh_button) {
           mediaPlayerService.scanForTracks();
+        }
+        else if(id == R.id.test_stop_after_current){
+            mediaPlayerService.stopAfterTrackFinishes();
         }
         return super.onOptionsItemSelected(item);
     }

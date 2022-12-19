@@ -9,5 +9,10 @@
         android:icon="@android:drawable/ic_popup_sync"
         android:title="@string/menu_button_refresh"/>
 
+    <item android:id="@+id/test_stop_after_current" android:name="test1"
+        android:orderInCategory="100" app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_lock_idle_low_battery"
+        android:title="@string/menu_button_refresh"/>
+
 
 </menu>
