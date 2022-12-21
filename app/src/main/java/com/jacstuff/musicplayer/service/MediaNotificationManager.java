@@ -43,7 +43,8 @@ public class MediaNotificationManager {
                 .setContentText(channelName)
                 .setSilent(true)
                 .setSmallIcon(R.drawable.recycler_bg_selector)
-                .setBadgeIconType(NotificationCompat.BADGE_ICON_NONE)
+                .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
+                .setSmallIcon(R.drawable.ic_baseline_music_note_24)
                 .setNumber(-1)
                 .setOnlyAlertOnce(true)
                 .setContentIntent(pendingIntent)
@@ -110,13 +111,8 @@ public class MediaNotificationManager {
         }
     }
 
-    private void log(String msg){
-        System.out.println("^^^ MediaNotificationManager : "+  msg);
-    }
-
 
     private void addPauseButtonTo(NotificationCompat.Builder notification){
-        log("Entered addPauseButtonTo(), mediaService is playing: " + mediaPlayerService.isPlaying());
         if(mediaPlayerService.isPlaying()){
             notification.addAction(android.R.drawable.ic_media_pause,
                     context.getString(R.string.notification_button_title_pause),

@@ -19,6 +19,7 @@ import android.os.PowerManager;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.TimeConverter;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class MediaPlayerService extends Service {
@@ -62,6 +64,7 @@ public class MediaPlayerService extends Service {
     private final IBinder binder = new LocalBinder();
     private Track currentTrack;
     private boolean shouldNextTrackPlayAfterCurrentTrackEnds = true;
+    private ScheduledFuture<?> updateElapsedTimeFuture;
 
 
     public MediaPlayerService() {
@@ -103,17 +106,27 @@ public class MediaPlayerService extends Service {
         }
     }
 
+
     public void displayPlaylistRefreshedMessage(int numberOfNewTracks){
         mainActivity.displayPlaylistRefreshedMessage(numberOfNewTracks);
     }
 
 
     public void stop(){
-        currentState = MediaPlayerState.STOPPED;
-        mediaPlayer.stop();
-        mediaPlayer.reset();
-        mainActivity.notifyPlayerStopped();
-//            mediaPlayer.release();
+        stop(true);
+    }
+
+
+    public void stop(boolean shouldUpdateMainView){
+        if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED) {
+            mediaPlayer.stop();
+            currentState = MediaPlayerState.STOPPED;
+            mediaPlayer.reset();
+        }
+        stopUpdatingElapsedTimeOnView();
+        if(shouldUpdateMainView) {
+            mainActivity.notifyPlayerStopped();
+        }
     }
 
 
@@ -138,13 +151,11 @@ public class MediaPlayerService extends Service {
 
 
     public void selectTrack(int index){
-        log("Entered selectTrack()");
         assignTrack(playlistManager.selectTrack(index));
     }
 
 
     public void loadNextTrack(){
-        log("Entered loadNextTrack()");
         loadTrack(playlistManager.getNextTrack());
     }
 
@@ -196,7 +207,7 @@ public class MediaPlayerService extends Service {
     public void selectTrack(Track track){
         MediaPlayerState oldState = currentState;
         if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
-            stop();
+            stop(false);
         }
         currentTrack = track;
         if(oldState == MediaPlayerState.PLAYING){
@@ -230,16 +241,21 @@ public class MediaPlayerService extends Service {
 
     private void createMediaPlayer(){
         mediaPlayer = new MediaPlayer();
-        mediaPlayer.setOnCompletionListener(mediaPlayer -> {
-            currentState = MediaPlayerState.FINISHED;
-            mediaPlayer.reset();
-            loadNextTrack();
-            if(shouldNextTrackPlayAfterCurrentTrackEnds) {
-                play();
-            }else{
-                stop();
-            }
-        });
+        log("Entered createMediaPlayer()");
+        mediaPlayer.setOnCompletionListener(this::onTrackFinished);
+    }
+
+
+    private void onTrackFinished(MediaPlayer mediaPlayer){
+        currentState = MediaPlayerState.FINISHED;
+        stopUpdatingElapsedTimeOnView();
+        mediaPlayer.reset();
+        loadNextTrack();
+        if(shouldNextTrackPlayAfterCurrentTrackEnds) {
+            play();
+        }else{
+            stop();
+        }
     }
 
 
@@ -291,6 +307,24 @@ public class MediaPlayerService extends Service {
         else if(currentState == MediaPlayerState.PAUSED){
             resume();
         }
+    }
+
+
+    public void startUpdatingElapsedTimeOnView(){
+        updateElapsedTimeFuture = executorService.scheduleAtFixedRate(this::updateElapsedTimeOnView, 0L, 200L, TimeUnit.MILLISECONDS);
+    }
+
+
+    private void stopUpdatingElapsedTimeOnView(){
+        if(updateElapsedTimeFuture == null){
+            return;
+        }
+        updateElapsedTimeFuture.cancel(false);
+    }
+
+
+    private void updateElapsedTimeOnView(){
+        mainActivity.setElapsedTime(TimeConverter.convert(mediaPlayer.getCurrentPosition()));
     }
 
 
@@ -358,6 +392,7 @@ public class MediaPlayerService extends Service {
             mediaPlayer.setDataSource(currentTrack.getPathname());
             mediaPlayer.prepare();
             mediaPlayer.start();
+            startUpdatingElapsedTimeOnView();
             currentState = MediaPlayerState.PLAYING;
             mainActivity.notifyPlayerPlaying();
             mediaNotificationManager.updateNotification();
@@ -371,6 +406,7 @@ public class MediaPlayerService extends Service {
     public void resume(){
             currentState = MediaPlayerState.PLAYING;
             mediaPlayer.start();
+            startUpdatingElapsedTimeOnView();
             mainActivity.notifyPlayerPlaying();
             mediaNotificationManager.updateNotification();
     }
@@ -441,6 +477,7 @@ public class MediaPlayerService extends Service {
     private void pauseMediaPlayer(){
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
+            stopUpdatingElapsedTimeOnView();
             currentState = MediaPlayerState.PAUSED;
         }
         else{

@@ -6,19 +6,21 @@ public class Track {
     private String orderedStr;
     private final long id, trackNumber;
     private int index;
+    private long duration;
 
-    private Track(long id, String pathname, String name, String artist, String album, long trackNumber, String disc, String directory, String genre){
 
-        this.id = id;
-        this.pathname = pathname;
-        this.name = name;
-        this.artist = artist;
-        this.album = album;
-        this.trackNumber = trackNumber;
-        this.disc = disc;
-        this.directory = directory;
-        this.genre = genre;
-       createOrderedStr();
+    private Track(Builder builder){
+        this.id = builder.id;
+        this.pathname = builder.pathname;
+        this.duration = builder.duration;
+        this.name = builder. name;
+        this.artist = builder.artist;
+        this.album = builder.album;
+        this.trackNumber = builder.trackNumber;
+        this.disc = builder.disc;
+        this.directory = builder.directory;
+        this.genre = builder.genre;
+        createOrderedStr();
     }
 
 
@@ -33,6 +35,10 @@ public class Track {
         return orderedStr;
     }
 
+    public long getDuration(){
+        return duration;
+    }
+
 
     public String getAlbum() {
         return album;
@@ -40,6 +46,11 @@ public class Track {
 
     public String getArtist() {
         return artist;
+    }
+
+
+    public String getGenre() {
+        return genre;
     }
 
 
@@ -84,35 +95,48 @@ public class Track {
         private String pathname, name, artist, album, disc, directory, genre;
         private long id = -1;
         private long trackNumber;
+        private long duration;
 
         public Track build(){
-            return new Track(id, pathname, name, artist, album, trackNumber,disc, directory, genre);
+            return new Track(this);
         }
+
 
         public Builder createTrackWithPathname(String pathname){
             this.pathname = pathname;
             return this;
         }
 
+
         public Builder withName(String name){
             this.name = name;
             return this;
         }
+
 
         public Builder withGenre(String genre){
             this.genre = genre;
             return this;
         }
 
+
         public Builder withId(long id){
             this.id = id;
             return this;
         }
 
+
+        public Builder duration(long duration){
+            this.duration = duration;
+            return this;
+        }
+
+
         public Builder withAlbum(String album){
             this.album = album;
             return this;
         }
+
 
         public Builder withArtist(String artist){
             this.artist = artist;
@@ -124,10 +148,12 @@ public class Track {
             return this;
         }
 
+
         public Builder withDirectory(String dir){
             this.directory = dir;
             return this;
         }
+
 
         public Builder withTrackNumber(long trackNumber){
             this.trackNumber = trackNumber;

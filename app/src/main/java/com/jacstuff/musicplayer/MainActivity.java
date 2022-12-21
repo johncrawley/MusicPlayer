@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -39,11 +38,9 @@ public class MainActivity extends AppCompatActivity{
 
     private ViewStateAdapter viewStateAdapter;
     private MediaPlayerService mediaPlayerService;
-
-
     private TextView trackTime;
     private TextView trackTitle, trackAlbum, trackArtist;
-    private ImageButton playButton, pauseButton;
+    private ImageButton playButton, pauseButton, stopButton;
     private ImageButton nextTrackButton, previousTrackButton;
     private String totalTrackTime = "0:00";
     private ListNotifier listNotifier;
@@ -95,6 +92,12 @@ public class MainActivity extends AppCompatActivity{
 
     public void playTrack() {
         mediaPlayerService.playTrack();
+    }
+
+
+    public void stopTrack(){
+        mediaPlayerService.stop();
+        resetElapsedTime();
     }
 
 
@@ -161,16 +164,23 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    private void resetElapsedTime(){
+    public void resetElapsedTime(){
         setElapsedTime("0:00");
     }
 
 
+    public void setElapsedTime(String elapsedTime){
+        this.setTrackTime(elapsedTime);
+    }
+
+
     private void setTrackTime(String elapsedTime){
-        if(trackTime != null){
-            String time = elapsedTime + " / " + this.totalTrackTime;
-            trackTime.setText(time);
-        }
+        runOnUiThread(()->{
+            if(trackTime != null){
+                String time = elapsedTime + " / " + this.totalTrackTime;
+                trackTime.setText(time);
+            }
+        });
     }
 
 
@@ -193,12 +203,8 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    public void setElapsedTime(String elapsedTime){
-        this.setTrackTime(elapsedTime);
-    }
 
-
-    public void setTotalTrackTime(String totalTrackTime){
+    private void setTotalTrackTimeAndResetElapsedTime(String totalTrackTime){
         this.totalTrackTime = totalTrackTime;
         resetElapsedTime();
     }
@@ -211,6 +217,7 @@ public class MainActivity extends AppCompatActivity{
         trackArtist = findViewById(R.id.artistTextView);
         playButton = findViewById(R.id.playButton);
         pauseButton = findViewById(R.id.pauseButton);
+        stopButton = findViewById(R.id.stopButton);
         nextTrackButton = findViewById(R.id.nextTrackButton);
         previousTrackButton = findViewById(R.id.previousTrackButton);
     }
@@ -221,7 +228,7 @@ public class MainActivity extends AppCompatActivity{
         pauseButton.setOnClickListener((View v) -> pauseMediaPlayer());
         nextTrackButton.setOnClickListener((View v) -> nextTrack());
         previousTrackButton.setOnClickListener((View v) -> previousTrack());
-
+        stopButton.setOnClickListener((View v) -> stopTrack());
     }
 
 
@@ -231,6 +238,8 @@ public class MainActivity extends AppCompatActivity{
             pauseButton.setVisibility(View.VISIBLE);
         });
     }
+
+
 
 
     public void setBlankTrackInfo(){
@@ -243,6 +252,7 @@ public class MainActivity extends AppCompatActivity{
                 setTrackInfo(track.getName());
                 setAlbumInfo(track.getAlbum());
                 setArtistInfo(track.getArtist());
+                setTotalTrackTimeAndResetElapsedTime(TimeConverter.convert(track.getDuration()));
         });
     }
 
@@ -317,6 +327,7 @@ public class MainActivity extends AppCompatActivity{
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
         runOnUiThread(()-> {
+            log("Entered updateTracksList, number of tracks: " + updatedTracks.size());
             listNotifier.setTracks(updatedTracks);
             updateViews(updatedTracks);
             displayPlaylistRefreshedMessage();

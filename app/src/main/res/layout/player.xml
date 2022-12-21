@@ -36,39 +36,12 @@
         android:text="@string/track_title_default_text"
         android:textSize="@dimen/track_name_text_size"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/trackTime"
+        app:layout_constraintBottom_toTopOf="@+id/albumTextView"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.741" />
-
-
-    <TextView
-        android:id="@+id/trackTime"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/elapsed_time_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trackTitle" />
-
-    <TextView
-        android:id="@+id/artistTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/artist_label"
-        android:textSize="@dimen/artist_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trackTime"
-        app:layout_constraintBottom_toTopOf="@+id/albumTextView" />
 
     <TextView
         android:id="@+id/albumTextView"
@@ -81,8 +54,37 @@
         android:textSize="@dimen/album_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trackTitle"
+        app:layout_constraintBottom_toTopOf="@+id/artistTextView" />
+
+    <TextView
+        android:id="@+id/artistTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/artist_label"
+        android:textSize="@dimen/artist_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/albumTextView"
+        app:layout_constraintBottom_toTopOf="@+id/trackTime" />
+
+
+    <TextView
+        android:id="@+id/trackTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="@dimen/track_time_margin_bottom"
+        android:text="@string/elapsed_time_label"
+        android:textSize="@dimen/track_time_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/artistTextView"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLayout" />
+        app:layout_constraintBottom_toTopOf="@id/buttonLayout" />
 
     <View
         android:id="@+id/divider1"
@@ -111,9 +113,17 @@
             android:id="@+id/previousTrackButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/next_track_button_content_description"
+            android:contentDescription="@string/previous_track_button_content_description"
             android:paddingBottom="@dimen/button_padding"
-            app:srcCompat="@android:drawable/ic_media_previous" />
+            app:srcCompat="@mipmap/ic_action_previous" />
+
+        <ImageButton
+            android:id="@+id/stopButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/stop_button_content_description"
+            android:paddingBottom="@dimen/button_padding"
+            app:srcCompat="@mipmap/ic_action_stop" />
 
 
         <ImageButton
@@ -122,16 +132,16 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/play_button_content_description"
             android:paddingBottom="@dimen/button_padding"
-            app:srcCompat="@android:drawable/ic_media_play" />
+            app:srcCompat="@mipmap/ic_action_play" />
 
         <ImageButton
             android:id="@+id/pauseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/play_button_content_description"
+            android:contentDescription="@string/pause_button_content_description"
             android:paddingBottom="@dimen/button_padding"
             android:visibility="gone"
-            app:srcCompat="@android:drawable/ic_media_pause" />
+            app:srcCompat="@mipmap/ic_action_pause" />
 
         <ImageButton
             android:id="@+id/nextTrackButton"
@@ -139,8 +149,15 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/next_track_button_content_description"
             android:paddingBottom="@dimen/button_padding"
-            app:srcCompat="@android:drawable/ic_media_next" />
+            app:srcCompat="@mipmap/ic_action_next" />
 
+        <ImageButton
+            android:id="@+id/turnShuffleOffButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/shuffle_off_button_content_description"
+            android:paddingBottom="@dimen/button_padding"
+            app:srcCompat="@mipmap/ic_action_shuffle" />
 
     </LinearLayout>
 

@@ -19,7 +19,6 @@ import com.jacstuff.musicplayer.list.TrackListAdapter;
 
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -49,7 +48,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, ListSub
         createTimestamp();
         log("Entered onCreateView()");
         listNotifier = getMainActivity().getListNotifier();
-        View view = inflater.inflate(R.layout.fragment_player, container, false);
+        View view = inflater.inflate(R.layout.fragment_queue, container, false);
         return view;
     }
 

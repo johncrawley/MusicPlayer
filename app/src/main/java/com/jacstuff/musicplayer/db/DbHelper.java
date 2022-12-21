@@ -24,7 +24,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_IF_NOT_EXISTS = "CREATE TABLE IF NOT EXISTS ";
 
 
-    private static final String SQL_CREATE_SONGS_TABLE =
+    private static final String SQL_CREATE_TRACKS_TABLE =
             CREATE_TABLE_IF_NOT_EXISTS
                     + DbContract.TracksEntry.TABLE_NAME
                     + OPENING_BRACKET
@@ -33,7 +33,9 @@ public class DbHelper extends SQLiteOpenHelper {
                     + DbContract.TracksEntry.COL_PATH + TEXT + UNIQUE + COMMA
                     + DbContract.TracksEntry.COL_ALBUM + TEXT + COMMA
                     + DbContract.TracksEntry.COL_ARTIST + TEXT + COMMA
-                    + DbContract.TracksEntry.COL_TRACK_NUMBER + INTEGER
+                    + DbContract.TracksEntry.COL_TRACK_NUMBER + INTEGER + COMMA
+                    + DbContract.TracksEntry.COL_DURATION + INTEGER + COMMA
+                    + DbContract.TracksEntry.COL_GENRE + TEXT
                     + CLOSING_BRACKET;
 
 
@@ -86,7 +88,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_SONGS_TABLE);
+        db.execSQL(SQL_CREATE_TRACKS_TABLE);
         db.execSQL(SQL_CREATE_PLAYLIST_TABLE);
         db.execSQL(SQL_CREATE_PLAYLIST_ITEMS_TABLE);
         db.execSQL(SQL_CREATE_ARTISTS_TABLE);
