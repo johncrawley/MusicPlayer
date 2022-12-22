@@ -22,7 +22,7 @@
     <string name="thumbnail_content_description">Next Track</string>
     <string name="default_path">Music/</string>
 
-    <string name="player_tab">Player</string>
+    <string name="Queue_tab">Queue</string>
     <string name="playlists_tab">Playlists</string>
 
     <string name="button_add_playlist">Add</string>

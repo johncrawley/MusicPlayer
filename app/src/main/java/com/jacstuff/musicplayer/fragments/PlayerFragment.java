@@ -2,6 +2,7 @@ package com.jacstuff.musicplayer.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,16 +27,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class PlayerFragment extends Fragment implements MediaPlayerView, ListSubscriber {
 
-    private Context context;
-//    private MainActivity mainActivity;
     private RecyclerView recyclerView;
     private TrackListAdapter trackListAdapter;
     private int previousIndex = 0;
     ImageView coverArt;
-    private List<Track> tracks;
     private View parentView;
-    private String address;
-    private ListNotifier listNotifier;
+    //private ListNotifier listNotifier;
 
     public PlayerFragment() {
         // Required empty public constructor
@@ -44,10 +41,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, ListSub
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        context = getContext();
-        createTimestamp();
         log("Entered onCreateView()");
-        listNotifier = getMainActivity().getListNotifier();
         View view = inflater.inflate(R.layout.fragment_queue, container, false);
         return view;
     }
@@ -56,43 +50,20 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, ListSub
     @Override
     public void onViewCreated(View view,  Bundle savedInstanceState){
         log("Entered onViewCreated()");
-       // setupRecyclerView(tracks, view);
-        getMainActivity().onFragmentsReady();
-        boolean isViewNull = view == null;
-        log("onViewCreated is view null: " + isViewNull);
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.recyclerView);
-        listNotifier.registerSubscriber(this);
-        boolean isRecyclerViewNull = recyclerView == null;
-        log("Is recyclerView null? " + isRecyclerViewNull);
+        getMainActivity().setPlayerFragment(this);
     }
 
+    private boolean isLandscape(){
+        int currentOrientation = getResources().getConfiguration().orientation;
+        return currentOrientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
 
 
     private void log(String msg){
-        System.out.println("^^^ PlayerFragment: " + timestamp + " : " + address + " : " + msg);
+        System.out.println("^^^ PlayerFragment: " + msg);
     }
-
-    private long timestamp;
-
-    private void createTimestamp(){
-        timestamp = System.currentTimeMillis();
-    }
-
-    public void onServiceReady(List<Track> tracks){
-        log("Entered onServiceReady()");
-        this.tracks = tracks;
-        View parentView = getView();
-        if(parentView == null){
-            log("parentView is null, returning from onServiceReady()");
-            boolean isParentViewFieldNull = this.parentView == null;
-            log(" is parentView field null : " + isParentViewFieldNull);
-            return;
-        }
-        log("onServiceReady() about to setup recyclerView");
-    }
-
-
 
 
     public void notifyCurrentlySelectedTrack(int position){
@@ -111,31 +82,24 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, ListSub
 
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
-        refreshTrackList(updatedTracks, parentView);
+        refreshTrackList(updatedTracks);
         scrollToListPosition(currentTrackIndex);
     }
 
 
-    public void refreshTrackList(List<Track> trackDetailsList, View parentView){
-        log("Entered refreshTrackList()");
-        setupRecyclerView(trackDetailsList, parentView);
+    public void refreshTrackList(List<Track> trackDetailsList){
+        setupRecyclerView(trackDetailsList);
     }
 
 
-    private void setupRecyclerView(List<Track> tracks, View parentView){
+    private void setupRecyclerView(List<Track> tracks){
         log("Entered setupRecyclerView()");
-        if(this.parentView == null){
-            boolean isTracksNull = tracks == null;
-            log("parent view is null, carrying on");
-        }
-        if(tracks == null){
-            log("tracks are null, returning");
+        if(this.parentView == null ||tracks == null){
+            log("tracks or parentView are null, returning");
             return;
         }
-        //recyclerView = this.parentView.findViewById(R.id.recyclerView);
         trackListAdapter = new TrackListAdapter(tracks, this);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(trackListAdapter);
     }
@@ -145,10 +109,10 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, ListSub
         if(trackListAdapter == null){
             return;
         }
-        trackListAdapter.deselectCurrentlySelectedItem();
-        trackListAdapter.setIndexToScrollTo(index);
-        trackListAdapter.changePositionTo(index);
-        recyclerView.scrollToPosition(calculateIndexWithOffset(index));
+        trackListAdapter.selectItemAt(index);
+        int calculatedScrollIndex = calculateIndexWithOffset(index);
+        log("ScrollToListPosition() calculatedIndex: " + calculatedScrollIndex);
+        recyclerView.smoothScrollToPosition(calculatedScrollIndex);
     }
 
 
@@ -163,6 +127,9 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, ListSub
 
 
     private int getPlaylistItemOffset(int index){
+        if(previousIndex == 0){
+            return index;
+        }
         int direction = index > previousIndex ? 1 : -1;
         int offset =  getResources().getInteger(R.integer.playlist_item_offset) * direction ;
         return index + offset;
@@ -181,6 +148,6 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, ListSub
             log("notifyListUpdated() getView() is null!");
             return;
         }
-        setupRecyclerView(listNotifier.getList(), getView());
+       // setupRecyclerView(listNotifier.getList(), getView());
     }
 }

@@ -11,13 +11,12 @@ import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +42,9 @@ public class MainActivity extends AppCompatActivity{
     private ImageButton playButton, pauseButton, stopButton;
     private ImageButton nextTrackButton, previousTrackButton;
     private String totalTrackTime = "0:00";
-    private ListNotifier listNotifier;
+  //  private ListNotifier listNotifier;
+    private PlayerFragment playerFragment;
+    private ViewGroup playerButtonPanel;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -64,9 +65,9 @@ public class MainActivity extends AppCompatActivity{
 
 
     public void onServiceReady(List<Track> tracks){
-        log("Entered onServiceReady(), about to initPlaylist and refresh on mediPlayerService");
+        log("Entered onServiceReady(), about to initPlaylist and refresh on mediaPlayerService");
         //getPlayerFragment().onServiceReady(tracks);
-        mediaPlayerService.initPlaylistAndRefresh();
+        mediaPlayerService.initPlaylist();
     }
 
 
@@ -75,23 +76,22 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         log("Entered onCreate() *********************************");
         setContentView(R.layout.activity_main);
-        listNotifier = new ListNotifier();
         setupViews();
         setupTabLayout();
         setupViewModel();
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
-        //listAudioFiles();
         startMediaPlayerService();
-    }
-
-
-    public ListNotifier getListNotifier(){
-        return listNotifier;
     }
 
 
     public void playTrack() {
         mediaPlayerService.playTrack();
+    }
+
+
+    public void setPlayerFragment(PlayerFragment playerFragment){
+        this.playerFragment = playerFragment;
+        onQueueFragmentReady();
     }
 
 
@@ -138,18 +138,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    public void notifyPlayerStopped(){
-        playButton.setVisibility(View.VISIBLE);
-        pauseButton.setVisibility(View.GONE);
-    }
-
-
-    public void notifyMediaPlayerPaused(){
-        playButton.setVisibility(View.VISIBLE);
-        pauseButton.setVisibility(View.GONE);
-    }
-
-
     private PlayerFragment getPlayerFragment(){
         return (PlayerFragment) getSupportFragmentManager().findFragmentByTag("f1");
     }
@@ -187,8 +175,10 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public void onDestroy(){
         super.onDestroy();
-        viewStateAdapter.onDestroy();
-        viewStateAdapter = null;
+        if(viewStateAdapter != null) {
+            viewStateAdapter.onDestroy();
+            viewStateAdapter = null;
+        }
     }
 
 
@@ -197,16 +187,13 @@ public class MainActivity extends AppCompatActivity{
         trackAlbum.setVisibility(visibility);
         trackArtist.setVisibility(visibility);
         trackTime.setVisibility(visibility);
-        playButton.setVisibility(visibility);
-        nextTrackButton.setVisibility(visibility);
-        previousTrackButton.setVisibility(visibility);
+        playerButtonPanel.setVisibility(visibility);
     }
 
 
-
-    private void setTotalTrackTimeAndResetElapsedTime(String totalTrackTime){
-        this.totalTrackTime = totalTrackTime;
-        resetElapsedTime();
+    private void setTrackTimeInfo(int elapsedTime, long trackDuration){
+        this.totalTrackTime = TimeConverter.convert(trackDuration);
+        setElapsedTime(TimeConverter.convert(elapsedTime));
     }
 
 
@@ -215,6 +202,7 @@ public class MainActivity extends AppCompatActivity{
         trackTitle = findViewById(R.id.trackTitle);
         trackAlbum = findViewById(R.id.albumTextView);
         trackArtist = findViewById(R.id.artistTextView);
+        playerButtonPanel = findViewById(R.id.buttonLayout);
         playButton = findViewById(R.id.playButton);
         pauseButton = findViewById(R.id.pauseButton);
         stopButton = findViewById(R.id.stopButton);
@@ -232,27 +220,38 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    public void notifyPlayerPlaying(){
+    public void setBlankTrackInfo(){
+        runOnUiThread(()-> setTrackInfo(""));
+    }
+
+
+    public void notifyMediaPlayerStopped(){
+        playButton.setVisibility(View.VISIBLE);
+        pauseButton.setVisibility(View.GONE);
+    }
+
+
+    public void notifyMediaPlayerPaused(){
+        playButton.setVisibility(View.VISIBLE);
+        pauseButton.setVisibility(View.GONE);
+    }
+
+
+    public void notifyMediaPlayerPlaying(){
         runOnUiThread(()->{
+            log("entered notifyMediaPlayerPlaying, setting play Button to Gone, pause button to visible");
             playButton.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
         });
     }
 
 
-
-
-    public void setBlankTrackInfo(){
-        runOnUiThread(()-> setTrackInfo(""));
-    }
-
-
-    public void setTrackInfoOnView(final Track track){
+    public void setTrackInfoOnView(final Track track, int elapsedTime){
         runOnUiThread(()-> {
                 setTrackInfo(track.getName());
                 setAlbumInfo(track.getAlbum());
                 setArtistInfo(track.getArtist());
-                setTotalTrackTimeAndResetElapsedTime(TimeConverter.convert(track.getDuration()));
+                setTrackTimeInfo(elapsedTime, track.getDuration());
         });
     }
 
@@ -275,7 +274,11 @@ public class MainActivity extends AppCompatActivity{
 
 
     public void scrollToPosition(int index){
-       // runOnUiThread(()-> getPlayerFragment().scrollToListPosition(index));
+       runOnUiThread(()-> {
+           if(playerFragment!= null){
+               playerFragment.scrollToListPosition(index);
+           }
+       });
     }
 
 
@@ -304,6 +307,9 @@ public class MainActivity extends AppCompatActivity{
 
     private void setupTabLayout(){
         TabLayout tabLayout = findViewById(R.id.tabLayout);
+        if(tabLayout == null){
+            return;
+        }
         viewStateAdapter = new ViewStateAdapter(getSupportFragmentManager(), getLifecycle());
 
         final ViewPager2 pager = findViewById(R.id.pager);
@@ -328,14 +334,17 @@ public class MainActivity extends AppCompatActivity{
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
         runOnUiThread(()-> {
             log("Entered updateTracksList, number of tracks: " + updatedTracks.size());
-            listNotifier.setTracks(updatedTracks);
+           // listNotifier.setTracks(updatedTracks);
+            if(playerFragment!= null){
+                log("updateTracksList() playerFragment is not null, so updating tracks list to it, current index: " + currentTrackIndex);
+                playerFragment.updateTracksList(updatedTracks, currentTrackIndex);
+            }
             updateViews(updatedTracks);
-            displayPlaylistRefreshedMessage();
         });
     }
 
 
-    public void onFragmentsReady(){
+    public void onQueueFragmentReady(){
         startMediaPlayerService();
     }
 
@@ -357,7 +366,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     public void displayPlaylistRefreshedMessage(int newTrackCount) {
-        new Handler(Looper.getMainLooper()).post(() -> displayPlaylistMessage(newTrackCount));
+        runOnUiThread(() -> displayPlaylistMessage(newTrackCount));
     }
 
 
@@ -391,7 +400,7 @@ public class MainActivity extends AppCompatActivity{
           mediaPlayerService.scanForTracks();
         }
         else if(id == R.id.test_stop_after_current){
-            mediaPlayerService.stopAfterTrackFinishes();
+            mediaPlayerService.enableStopAfterTrackFinishes();
         }
         return super.onOptionsItemSelected(item);
     }

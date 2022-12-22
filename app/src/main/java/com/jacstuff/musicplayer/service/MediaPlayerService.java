@@ -65,6 +65,8 @@ public class MediaPlayerService extends Service {
     private Track currentTrack;
     private boolean shouldNextTrackPlayAfterCurrentTrackEnds = true;
     private ScheduledFuture<?> updateElapsedTimeFuture;
+    private boolean isPlaylistInitialized;
+    private int elapsedTime;
 
 
     public MediaPlayerService() {
@@ -124,24 +126,46 @@ public class MediaPlayerService extends Service {
             mediaPlayer.reset();
         }
         stopUpdatingElapsedTimeOnView();
+        mediaNotificationManager.updateNotification();
         if(shouldUpdateMainView) {
-            mainActivity.notifyPlayerStopped();
+            mainActivity.notifyMediaPlayerStopped();
         }
     }
 
 
-    public void initPlaylistAndRefresh(){
+    public void initPlaylist(){
         executorService.execute(() -> {
-            playlistManager.init();
-            loadNextTrack();
+            reloadPlaylistIfNotInitialized();
             mainActivity.enableControls();
+            updatePlayPauseOnView();
             updateViewTrackList();
+            mainActivity.setTrackInfoOnView(currentTrack, elapsedTime);
         });
     }
 
 
+    private void reloadPlaylistIfNotInitialized(){
+        if(!isPlaylistInitialized) {
+            playlistManager.init();
+            loadNextTrack();
+            isPlaylistInitialized = true;
+            mainActivity.displayPlaylistRefreshedMessage(tracks.size());
+        }
+    }
+
+
+    private void updatePlayPauseOnView(){
+        if(isPlaying()){
+            mainActivity.notifyMediaPlayerPlaying();
+        }
+        else if(currentState == MediaPlayerState.PAUSED){
+            mainActivity.notifyMediaPlayerPaused();
+        }
+    }
+
+
     private void updateViewTrackList(){
-        mainActivity.updateTracksList(playlistManager.getTracks(), playlistManager.getCurrentTrackIndex());
+        mainActivity.updateTracksList(playlistManager.getTracks(), currentTrack.getIndex());
     }
 
 
@@ -172,7 +196,7 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void stopAfterTrackFinishes(){
+    public void enableStopAfterTrackFinishes(){
         if(currentState == MediaPlayerState.PLAYING) {
             shouldNextTrackPlayAfterCurrentTrackEnds = false;
         }
@@ -181,6 +205,7 @@ public class MediaPlayerService extends Service {
 
     private void assignTrack(Track track){
         currentTrack = track;
+        elapsedTime = 0;
         if(currentTrack == null){
             return;
         }
@@ -188,7 +213,7 @@ public class MediaPlayerService extends Service {
             handleNullPathname();
             return;
         }
-        mainActivity.setTrackInfoOnView(currentTrack);
+        mainActivity.setTrackInfoOnView(currentTrack, 0);
         selectTrack(currentTrack);
     }
 
@@ -324,7 +349,8 @@ public class MediaPlayerService extends Service {
 
 
     private void updateElapsedTimeOnView(){
-        mainActivity.setElapsedTime(TimeConverter.convert(mediaPlayer.getCurrentPosition()));
+        elapsedTime = mediaPlayer.getCurrentPosition();
+        mainActivity.setElapsedTime(TimeConverter.convert(elapsedTime));
     }
 
 
@@ -394,7 +420,7 @@ public class MediaPlayerService extends Service {
             mediaPlayer.start();
             startUpdatingElapsedTimeOnView();
             currentState = MediaPlayerState.PLAYING;
-            mainActivity.notifyPlayerPlaying();
+            mainActivity.notifyMediaPlayerPlaying();
             mediaNotificationManager.updateNotification();
         }catch (IOException e){
             e.printStackTrace();
@@ -407,7 +433,7 @@ public class MediaPlayerService extends Service {
             currentState = MediaPlayerState.PLAYING;
             mediaPlayer.start();
             startUpdatingElapsedTimeOnView();
-            mainActivity.notifyPlayerPlaying();
+            mainActivity.notifyMediaPlayerPlaying();
             mediaNotificationManager.updateNotification();
     }
 
