@@ -16,7 +16,7 @@
     <string name="stop_button_content_description">Stop</string>
     <string name="pause_button_content_description">Pause</string>
     <string name="next_track_button_content_description">Next Track</string>
-    <string name="previous_track_button_content_description">Next Track</string>
+    <string name="previous_track_button_content_description">Previous Track</string>
     <string name="shuffle_on_button_content_description">Turn Shuffle On</string>
     <string name="shuffle_off_button_content_description">Turn Shuffle Off</string>
     <string name="thumbnail_content_description">Next Track</string>
