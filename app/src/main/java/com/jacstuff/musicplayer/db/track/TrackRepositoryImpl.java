@@ -2,34 +2,41 @@ package com.jacstuff.musicplayer.db.track;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 
-import com.jacstuff.musicplayer.db.DbHelper;
+import com.jacstuff.musicplayer.db.AbstractRepository;
+import com.jacstuff.musicplayer.db.DbContract;
 import com.jacstuff.musicplayer.db.DbUtils;
+import com.jacstuff.musicplayer.db.artist.ArtistRepository;
+
 import static com.jacstuff.musicplayer.db.DbContract.TracksEntry.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrackRepositoryImpl implements TrackRepository{
+public class TrackRepositoryImpl extends AbstractRepository implements TrackRepository {
 
-    private final SQLiteDatabase db;
-    private Cursor cursor;
-
+    private ArtistRepository artistRepository;
 
     public TrackRepositoryImpl(Context context){
-        DbHelper dbHelper = DbHelper.getInstance(context);
-        db = dbHelper.getWritableDatabase();
+        super(context);
+        artistRepository = new ArtistRepository(context);
     }
 
 
     @Override
     public void addTrack(Track track) {
+        log("Entered addTrack()");
+        long artistId = artistRepository.addOrGetArtist(track.getArtist());
+        log("Entered addTrack, artist: " + track.getArtist() + " artist_id: " + artistId);
         DbUtils.addValuesToTable(db,
-                TABLE_NAME,
-                createContentValuesFor(track));
+                DbContract.TracksEntry.TABLE_NAME,
+                createTrackContentValuesFor(track, artistId));
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ TrackRepositoryImpl: " + msg);
     }
 
 
@@ -51,7 +58,12 @@ public class TrackRepositoryImpl implements TrackRepository{
 
     @Override
     public List<Track> getAllTracks() {
-        return  getTracksUsingQuery("SELECT * FROM " + TABLE_NAME + ";");
+        return  getTracksUsingQuery("SELECT * FROM " + TABLE_NAME
+                + " INNER JOIN " + DbContract.ArtistsEntry.TABLE_NAME
+                + " ON " + TABLE_NAME+ "." + COL_ARTIST_ID
+                + " = "
+                + DbContract.ArtistsEntry.TABLE_NAME + "." + DbContract.ArtistsEntry._ID
+                + ";");
     }
 
 
@@ -112,7 +124,6 @@ public class TrackRepositoryImpl implements TrackRepository{
 
 
     private Track createTrackFromCursor(){
-        long duration = getLong(COL_DURATION);
         return new Track.Builder()
                 .createTrackWithPathname(getString(COL_PATH))
                 .withId(getLong(_ID))
@@ -120,18 +131,19 @@ public class TrackRepositoryImpl implements TrackRepository{
                 .withTrackNumber(getLong(COL_TRACK_NUMBER))
                 .withArtist(getString(COL_ARTIST))
                 .withAlbum(getString(COL_ALBUM))
-                .duration(duration)
+                .duration(getLong(COL_DURATION))
                 .withGenre(COL_GENRE)
                 .build();
     }
 
 
-    private ContentValues createContentValuesFor(Track track){
+    private ContentValues createTrackContentValuesFor(Track track, long artistId){
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_NAME, track.getName());
         contentValues.put(COL_ARTIST, track.getArtist());
         contentValues.put(COL_ALBUM, track.getAlbum());
         contentValues.put(COL_PATH, track.getPathname());
+        contentValues.put(COL_ARTIST_ID, artistId);
         contentValues.put(COL_ALBUM, track.getAlbum());
         contentValues.put(COL_DURATION, track.getDuration());
         contentValues.put(COL_GENRE, track.getGenre());
@@ -139,14 +151,5 @@ public class TrackRepositoryImpl implements TrackRepository{
         return contentValues;
     }
 
-
-    private String getString(String name){
-        return cursor.getString(cursor.getColumnIndexOrThrow(name));
-    }
-
-
-    private long getLong(String name){
-        return cursor.getLong(cursor.getColumnIndexOrThrow(name));
-    }
 
 }

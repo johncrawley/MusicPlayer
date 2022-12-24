@@ -12,6 +12,7 @@ public final class DbContract {
         public static final String COL_NAME = "name";
         public static final String COL_ALBUM = "album";
         public static final String COL_ARTIST = "artist";
+        public static final String COL_ARTIST_ID = "artist_id";
         public static final String COL_TRACK_NUMBER = "track_number";
         public static final String COL_GENRE = "genre";
         public static final String COL_DURATION = "duration";
@@ -26,8 +27,8 @@ public final class DbContract {
 
 
     public static class ArtistsEntry implements BaseColumns {
-        static final String TABLE_NAME = "Artists";
-        static final String COL_NAME = "name";
+        public static final String TABLE_NAME = "Artists";
+        public static final String COL_NAME = "name";
     }
 
 

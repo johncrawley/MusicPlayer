@@ -33,6 +33,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     + DbContract.TracksEntry.COL_PATH + TEXT + UNIQUE + COMMA
                     + DbContract.TracksEntry.COL_ALBUM + TEXT + COMMA
                     + DbContract.TracksEntry.COL_ARTIST + TEXT + COMMA
+                    + DbContract.TracksEntry.COL_ARTIST_ID + INTEGER + COMMA
                     + DbContract.TracksEntry.COL_TRACK_NUMBER + INTEGER + COMMA
                     + DbContract.TracksEntry.COL_DURATION + INTEGER + COMMA
                     + DbContract.TracksEntry.COL_GENRE + TEXT

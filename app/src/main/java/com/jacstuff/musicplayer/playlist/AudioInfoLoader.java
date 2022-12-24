@@ -11,9 +11,6 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.db.track.TrackRepository;
 
-import java.util.Arrays;
-import java.util.List;
-
 
 public class AudioInfoLoader {
 
@@ -28,6 +25,7 @@ public class AudioInfoLoader {
 
     public void loadAudioFiles(){
         Cursor cursor = createCursorForFilesystemTracks();
+        log("Entered loadAudioFiles, cursor size: " + cursor.getCount());
         if(cursor != null){
             while(cursor.moveToNext()){
                 addTrack(cursor);
@@ -38,8 +36,7 @@ public class AudioInfoLoader {
 
 
     private Cursor createCursorForFilesystemTracks(){
-        String[] projection = createProjection0();
-        System.out.flush();
+        String[] projection = createProjection();
         String selection = null;
         String[] selectionArgs = null;
         String sortOrder = MediaStore.Audio.Media.DEFAULT_SORT_ORDER + " ASC";
@@ -47,28 +44,7 @@ public class AudioInfoLoader {
     }
 
 
-    private String[] createProjection(){
-        List<String> projectionFields = Arrays.asList(
-                MediaStore.Audio.Media.DISPLAY_NAME,
-                MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.ARTIST,
-                MediaStore.Audio.Media.ALBUM,
-                MediaStore.Audio.Media.DURATION,
-                MediaStore.Audio.Media.DATA
-        );
-
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            projectionFields.add(MediaStore.Audio.Media.CD_TRACK_NUMBER);
-        }
-        String[] projection = new String[projectionFields.size()];
-        for(int i=0;i< projectionFields.size();i++){
-            projection[i] = projectionFields.get(i);
-        }
-        return projection;
-    }
-
-
-    private String[] createProjection0() {
+    private String[] createProjection() {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return new String[]{
                     MediaStore.Audio.Media.DISPLAY_NAME,
@@ -91,9 +67,16 @@ public class AudioInfoLoader {
     }
 
 
+    private void log(String msg){
+        System.out.println("^^^ AudioInfoLoader: " + msg);
+    }
+
+
     private void addTrack(Cursor cursor){
+        log("Entered add track()");
         String data = getCol(cursor, MediaStore.Audio.Media.DATA);
         if(!isContainingCorrectPath(data)){
+            log("data doesn't contain correct path, returning");
             return;
         }
         String artist  = getCol(cursor, MediaStore.Audio.Media.ARTIST);

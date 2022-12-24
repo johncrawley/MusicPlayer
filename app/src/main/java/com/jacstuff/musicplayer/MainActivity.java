@@ -326,7 +326,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     public void updatePlaylistList(){
-        PlaylistsFragment fragment = (PlaylistsFragment)getSupportFragmentManager().findFragmentByTag("f0");
+        PlaylistsFragment fragment = (PlaylistsFragment)getSupportFragmentManager().findFragmentByTag("f1");
         fragment.onAddNewPlaylist();
     }
 
