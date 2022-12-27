@@ -73,12 +73,13 @@ public class AudioInfoLoader {
 
 
     private void addTrack(Cursor cursor){
-        log("Entered add track()");
         String data = getCol(cursor, MediaStore.Audio.Media.DATA);
         if(!isContainingCorrectPath(data)){
-            log("data doesn't contain correct path, returning");
+           // log("data doesn't contain correct path, returning");
             return;
         }
+
+        log("Entered add track(), track has correct path, about to save to repository");
         String artist  = getCol(cursor, MediaStore.Audio.Media.ARTIST);
         String album  = getCol(cursor, MediaStore.Audio.Media.ALBUM);
         String title = getCol(cursor, MediaStore.Audio.Media.TITLE);

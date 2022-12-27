@@ -26,7 +26,6 @@ public class ArtistRepository extends AbstractRepository {
             log("addOrGetArtist() about to add Artist");
             return addArtist(artist);
         }
-        String[] colNames = cursor.getColumnNames();
         cursor.moveToNext();
         long id = -1;
         try{

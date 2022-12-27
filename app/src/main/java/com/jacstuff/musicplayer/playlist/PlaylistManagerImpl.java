@@ -71,6 +71,10 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private void initTrackList(){
         tracks = trackRepository.getAllTracks().stream().sorted(Comparator.comparing(Track::getOrderedString)).collect(Collectors.toList());
+        log("initTrackList() got tracks: " + tracks.size());
+        for(Track track : tracks){
+            log("Got track : " + track.getArtist() + " : " + track.getName());
+        }
         assignIndexesToTracks();
     }
 
@@ -79,6 +83,10 @@ public class PlaylistManagerImpl implements PlaylistManager {
         for(int i=0; i< tracks.size(); i++){
             tracks.get(i).setIndex(i);
         }
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ PlaylistManagerImpl: " + msg);
     }
 
 

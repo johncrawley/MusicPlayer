@@ -29,7 +29,7 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
         log("Entered addTrack()");
         long artistId = artistRepository.addOrGetArtist(track.getArtist());
         log("Entered addTrack, artist: " + track.getArtist() + " artist_id: " + artistId);
-        DbUtils.addValuesToTable(db,
+        addValuesToTable(db,
                 DbContract.TracksEntry.TABLE_NAME,
                 createTrackContentValuesFor(track, artistId));
     }
@@ -60,7 +60,7 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
     public List<Track> getAllTracks() {
         return  getTracksUsingQuery("SELECT * FROM " + TABLE_NAME
                 + " INNER JOIN " + DbContract.ArtistsEntry.TABLE_NAME
-                + " ON " + TABLE_NAME+ "." + COL_ARTIST_ID
+                + " ON " + TABLE_NAME + "." + COL_ARTIST_ID
                 + " = "
                 + DbContract.ArtistsEntry.TABLE_NAME + "." + DbContract.ArtistsEntry._ID
                 + ";");
@@ -124,6 +124,7 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
 
 
     private Track createTrackFromCursor(){
+
         return new Track.Builder()
                 .createTrackWithPathname(getString(COL_PATH))
                 .withId(getLong(_ID))
