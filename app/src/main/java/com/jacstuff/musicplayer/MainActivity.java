@@ -138,11 +138,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    private PlayerFragment getPlayerFragment(){
-        return (PlayerFragment) getSupportFragmentManager().findFragmentByTag("f1");
-    }
-
-
     private void setupViews(){
         assignViews();
         assignClickListeners();
@@ -239,7 +234,6 @@ public class MainActivity extends AppCompatActivity{
 
     public void notifyMediaPlayerPlaying(){
         runOnUiThread(()->{
-            log("entered notifyMediaPlayerPlaying, setting play Button to Gone, pause button to visible");
             playButton.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
         });
@@ -333,10 +327,7 @@ public class MainActivity extends AppCompatActivity{
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
         runOnUiThread(()-> {
-            log("Entered updateTracksList, number of tracks: " + updatedTracks.size());
-           // listNotifier.setTracks(updatedTracks);
             if(playerFragment!= null){
-                log("updateTracksList() playerFragment is not null, so updating tracks list to it, current index: " + currentTrackIndex);
                 playerFragment.updateTracksList(updatedTracks, currentTrackIndex);
             }
             updateViews(updatedTracks);

@@ -9,7 +9,6 @@ import com.jacstuff.musicplayer.db.track.TrackRepositoryImpl;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -25,7 +24,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private int previousNumberOfTracks;
     private List<Track> tracks;
     private List<Integer> unPlayedPathnameIndexes;
-    private TrackHistory trackHistory;
+    private final TrackHistory trackHistory;
     private MediaPlayerService mediaPlayerService;
 
 
@@ -71,10 +70,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private void initTrackList(){
         tracks = trackRepository.getAllTracks().stream().sorted(Comparator.comparing(Track::getOrderedString)).collect(Collectors.toList());
-        log("initTrackList() got tracks: " + tracks.size());
-        for(Track track : tracks){
-            log("Got track : " + track.getArtist() + " : " + track.getName());
-        }
         assignIndexesToTracks();
     }
 
@@ -83,10 +78,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         for(int i=0; i< tracks.size(); i++){
             tracks.get(i).setIndex(i);
         }
-    }
-
-    private void log(String msg){
-        System.out.println("^^^ PlaylistManagerImpl: " + msg);
     }
 
 

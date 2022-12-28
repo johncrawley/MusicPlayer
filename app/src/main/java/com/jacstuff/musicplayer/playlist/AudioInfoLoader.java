@@ -25,7 +25,6 @@ public class AudioInfoLoader {
 
     public void loadAudioFiles(){
         Cursor cursor = createCursorForFilesystemTracks();
-        log("Entered loadAudioFiles, cursor size: " + cursor.getCount());
         if(cursor != null){
             while(cursor.moveToNext()){
                 addTrack(cursor);
@@ -67,19 +66,12 @@ public class AudioInfoLoader {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ AudioInfoLoader: " + msg);
-    }
-
-
     private void addTrack(Cursor cursor){
         String data = getCol(cursor, MediaStore.Audio.Media.DATA);
         if(!isContainingCorrectPath(data)){
            // log("data doesn't contain correct path, returning");
             return;
         }
-
-        log("Entered add track(), track has correct path, about to save to repository");
         String artist  = getCol(cursor, MediaStore.Audio.Media.ARTIST);
         String album  = getCol(cursor, MediaStore.Audio.Media.ALBUM);
         String title = getCol(cursor, MediaStore.Audio.Media.TITLE);

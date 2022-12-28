@@ -8,40 +8,40 @@ public final class DbContract {
 
     public static class TracksEntry implements BaseColumns {
         public static final String TABLE_NAME = "Tracks";
-        public static final String COL_PATH = "path";
-        public static final String COL_NAME = "name";
-        public static final String COL_ALBUM = "album";
-        public static final String COL_ARTIST = "artist";
-        public static final String COL_ARTIST_ID = "artist_id";
+        public static final String COL_PATH = "track_path";
+        public static final String COL_TITLE = "track_title";
+        public static final String COL_ALBUM = "track_album";
+        public static final String COL_ARTIST = "track_artist";
+        public static final String COL_ARTIST_ID = "track_artist_id";
         public static final String COL_TRACK_NUMBER = "track_number";
-        public static final String COL_GENRE = "genre";
-        public static final String COL_DURATION = "duration";
+        public static final String COL_GENRE = "track_genre";
+        public static final String COL_DURATION = "track_duration";
         //static final String COL_LENGTH = "length";
     }
 
 
     public static class AlbumsEntry implements BaseColumns {
         static final String TABLE_NAME = "Albums";
-        static final String COL_NAME = "name";
+        static final String COL_NAME = "album_name";
     }
 
 
     public static class ArtistsEntry implements BaseColumns {
         public static final String TABLE_NAME = "Artists";
-        public static final String COL_NAME = "name";
+        public static final String COL_NAME = "artist_name";
     }
 
 
     public static class PlaylistEntry implements BaseColumns {
         public static final String TABLE_NAME = "Playlist";
-        public static final String COL_NAME = "name";
+        public static final String COL_NAME = "playlist_name";
     }
 
 
     public static class PlaylistItemsEntry implements BaseColumns {
        public static final String TABLE_NAME = "Playlist_items";
-       public static final String COL_PLAYLIST_ID = "playlistId";
-       public static final String COL_TRACK_ID = "songId";
+       public static final String COL_PLAYLIST_ID = "pl_item_playlistId";
+       public static final String COL_TRACK_ID = "pl_item_song_id";
     }
 
 }

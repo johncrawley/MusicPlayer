@@ -6,7 +6,6 @@ import android.database.SQLException;
 
 import com.jacstuff.musicplayer.db.AbstractRepository;
 import com.jacstuff.musicplayer.db.DbContract;
-import com.jacstuff.musicplayer.db.DbUtils;
 import com.jacstuff.musicplayer.db.artist.ArtistRepository;
 
 import static com.jacstuff.musicplayer.db.DbContract.TracksEntry.*;
@@ -26,17 +25,10 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
 
     @Override
     public void addTrack(Track track) {
-        log("Entered addTrack()");
         long artistId = artistRepository.addOrGetArtist(track.getArtist());
-        log("Entered addTrack, artist: " + track.getArtist() + " artist_id: " + artistId);
         addValuesToTable(db,
                 DbContract.TracksEntry.TABLE_NAME,
                 createTrackContentValuesFor(track, artistId));
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ TrackRepositoryImpl: " + msg);
     }
 
 
@@ -69,7 +61,7 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
 
     public List<Track> getAllTracksStartingWith(String prefix){
         String query = "SELECT * FROM " + TABLE_NAME
-                + " WHERE " + COL_NAME + " GLOB '" + prefix + " *';";
+                + " WHERE " + COL_TITLE + " GLOB '" + prefix + " *';";
         return getTracksUsingQuery( query);
     }
 
@@ -123,12 +115,12 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
     }
 
 
-    private Track createTrackFromCursor(){
 
+    private Track createTrackFromCursor(){
         return new Track.Builder()
                 .createTrackWithPathname(getString(COL_PATH))
                 .withId(getLong(_ID))
-                .withName(getString(COL_NAME))
+                .withName(getString(COL_TITLE))
                 .withTrackNumber(getLong(COL_TRACK_NUMBER))
                 .withArtist(getString(COL_ARTIST))
                 .withAlbum(getString(COL_ALBUM))
@@ -140,7 +132,7 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
 
     private ContentValues createTrackContentValuesFor(Track track, long artistId){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_NAME, track.getName());
+        contentValues.put(COL_TITLE, track.getName());
         contentValues.put(COL_ARTIST, track.getArtist());
         contentValues.put(COL_ALBUM, track.getAlbum());
         contentValues.put(COL_PATH, track.getPathname());

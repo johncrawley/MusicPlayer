@@ -2,23 +2,22 @@ package com.jacstuff.musicplayer.db.track;
 
 public class Track {
 
-    private final String pathname, name, artist, album, disc, directory, genre;
+    private final String pathname, name, artist, album, disc, genre;
     private String orderedStr;
     private final long id, trackNumber;
     private int index;
-    private long duration;
+    private final long duration;
 
 
     private Track(Builder builder){
         this.id = builder.id;
         this.pathname = builder.pathname;
         this.duration = builder.duration;
-        this.name = builder. name;
+        this.name = builder.name;
         this.artist = builder.artist;
         this.album = builder.album;
         this.trackNumber = builder.trackNumber;
         this.disc = builder.disc;
-        this.directory = builder.directory;
         this.genre = builder.genre;
         createOrderedStr();
     }
@@ -34,6 +33,7 @@ public class Track {
     public String getOrderedString(){
         return orderedStr;
     }
+
 
     public long getDuration(){
         return duration;
@@ -66,9 +66,6 @@ public class Track {
     public String getDisc(){return disc;}
 
 
-    public String getDirectory(){return directory;}
-
-
     public long getId(){return id;}
 
 
@@ -92,7 +89,7 @@ public class Track {
     public static class Builder{
 
 
-        private String pathname, name, artist, album, disc, directory, genre;
+        private String pathname, name, artist, album, disc, genre;
         private long id = -1;
         private long trackNumber;
         private long duration;
@@ -145,12 +142,6 @@ public class Track {
 
         public Builder withDisc(String disc){
             this.disc = disc;
-            return this;
-        }
-
-
-        public Builder withDirectory(String dir){
-            this.directory = dir;
             return this;
         }
 

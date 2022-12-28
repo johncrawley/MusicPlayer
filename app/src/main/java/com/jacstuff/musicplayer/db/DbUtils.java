@@ -33,7 +33,7 @@ public class DbUtils {
         tracks.add(new Track.Builder()
                 .createTrackWithPathname(getString(cursor, DbContract.TracksEntry.COL_PATH))
                 .withId(getLong(cursor, DbContract.TracksEntry._ID))
-                .withName(getString(cursor, DbContract.TracksEntry.COL_NAME))
+                .withName(getString(cursor, DbContract.TracksEntry.COL_TITLE))
                 .withTrackNumber(-1)
                 .withArtist(getString(cursor, DbContract.TracksEntry.COL_ARTIST))
                 .withAlbum(getString(cursor, DbContract.TracksEntry.COL_ALBUM))
