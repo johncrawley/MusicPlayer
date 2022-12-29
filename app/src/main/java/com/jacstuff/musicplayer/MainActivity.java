@@ -27,10 +27,10 @@ import com.jacstuff.musicplayer.fragments.PlayerFragment;
 import com.jacstuff.musicplayer.fragments.PlaylistsFragment;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
+import com.jacstuff.musicplayer.view.tab.TabHelper;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
 import java.util.List;
-
 
 public class MainActivity extends AppCompatActivity{
 
@@ -301,22 +301,15 @@ public class MainActivity extends AppCompatActivity{
 
     private void setupTabLayout(){
         TabLayout tabLayout = findViewById(R.id.tabLayout);
+        final ViewPager2 pager = findViewById(R.id.pager);
         if(tabLayout == null){
             return;
         }
         viewStateAdapter = new ViewStateAdapter(getSupportFragmentManager(), getLifecycle());
-
-        final ViewPager2 pager = findViewById(R.id.pager);
         pager.setAdapter(viewStateAdapter);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                pager.setCurrentItem(tab.getPosition());
-            }
-            @Override public void onTabUnselected(TabLayout.Tab tab) {}
-            @Override public void onTabReselected(TabLayout.Tab tab) {}
-        });
+        new TabHelper().setupTabLayout(tabLayout, pager);
     }
+
 
 
     public void updatePlaylistList(){
