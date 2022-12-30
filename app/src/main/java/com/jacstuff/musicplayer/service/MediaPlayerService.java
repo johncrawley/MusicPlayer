@@ -309,6 +309,18 @@ public class MediaPlayerService extends Service {
     }
 
 
+    public void enableShuffle(){
+        playlistManager.enableShuffle();
+        mainActivity.notifyShuffleEnabled();
+    }
+
+
+    public void disableShuffle(){
+        playlistManager.disableShuffle();
+        mainActivity.notifyShuffleDisabled();
+    }
+
+
     private void setupBroadcastReceivers(){
         setupBroadcastReceiversMap();
         registerBroadcastReceivers();

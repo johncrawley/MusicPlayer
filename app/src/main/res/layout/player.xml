@@ -162,6 +162,16 @@
             android:paddingBottom="@dimen/button_padding"
             app:srcCompat="@mipmap/ic_action_shuffle" />
 
+
+        <ImageButton
+            android:id="@+id/turnShuffleOnButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:contentDescription="@string/shuffle_on_button_content_description"
+            android:paddingBottom="@dimen/button_padding"
+            app:srcCompat="@mipmap/ic_action_enable_shuffle" />
+
     </LinearLayout>
 
     <View

@@ -17,6 +17,8 @@ public interface PlaylistManager {
     void init();
     int getCurrentTrackIndex();
     int getNumberOfTracks();
+    void enableShuffle();
+    void disableShuffle();
     void onDestroy();
 
     String getTrackNameAt(int position);

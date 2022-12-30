@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity{
     private TextView trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton, pauseButton, stopButton;
     private ImageButton nextTrackButton, previousTrackButton;
+    private ImageButton turnShuffleOnButton, turnShuffleOffButton;
     private String totalTrackTime = "0:00";
   //  private ListNotifier listNotifier;
     private PlayerFragment playerFragment;
@@ -203,6 +205,8 @@ public class MainActivity extends AppCompatActivity{
         stopButton = findViewById(R.id.stopButton);
         nextTrackButton = findViewById(R.id.nextTrackButton);
         previousTrackButton = findViewById(R.id.previousTrackButton);
+        turnShuffleOnButton = findViewById(R.id.turnShuffleOnButton);
+        turnShuffleOffButton = findViewById(R.id.turnShuffleOffButton);
     }
 
 
@@ -212,6 +216,8 @@ public class MainActivity extends AppCompatActivity{
         nextTrackButton.setOnClickListener((View v) -> nextTrack());
         previousTrackButton.setOnClickListener((View v) -> previousTrack());
         stopButton.setOnClickListener((View v) -> stopTrack());
+        turnShuffleOnButton.setOnClickListener((View v) -> mediaPlayerService.enableShuffle());
+        turnShuffleOffButton.setOnClickListener((View v) -> mediaPlayerService.disableShuffle());
     }
 
 
@@ -230,6 +236,19 @@ public class MainActivity extends AppCompatActivity{
         playButton.setVisibility(View.VISIBLE);
         pauseButton.setVisibility(View.GONE);
     }
+
+
+    public void notifyShuffleEnabled(){
+        turnShuffleOnButton.setVisibility(View.GONE);
+        turnShuffleOffButton.setVisibility(View.VISIBLE);
+    }
+
+
+    public void notifyShuffleDisabled(){
+        turnShuffleOnButton.setVisibility(View.VISIBLE);
+        turnShuffleOffButton.setVisibility(View.GONE);
+    }
+
 
 
     public void notifyMediaPlayerPlaying(){

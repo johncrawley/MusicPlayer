@@ -26,6 +26,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private List<Integer> unPlayedPathnameIndexes;
     private final TrackHistory trackHistory;
     private MediaPlayerService mediaPlayerService;
+    private boolean isShuffleEnabled = true;
 
 
     public PlaylistManagerImpl(Context context){
@@ -43,6 +44,15 @@ public class PlaylistManagerImpl implements PlaylistManager {
     @Override
     public void onDestroy(){
         mediaPlayerService = null;
+    }
+
+
+    public void enableShuffle(){
+        isShuffleEnabled = true;
+    }
+
+    public void disableShuffle(){
+        isShuffleEnabled = false;
     }
 
 
@@ -102,19 +112,47 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public Track getNextTrack(){
-        return getNextRandomUnPlayedTrack();
+        return isShuffleEnabled ? getNextRandomUnPlayedTrack() : getNextTrackOnList();
     }
 
 
     @Override
     public Track getPreviousTrack(){
-        return trackHistory.getPreviousTrack();
+        return isShuffleEnabled ? getPreviousTrackFromHistory() : getPreviousTrackOnList();
+    }
+
+
+    private Track getPreviousTrackFromHistory(){
+        Track track = trackHistory.getPreviousTrack();
+        currentIndex = track.getIndex();
+        return track;
     }
 
 
     @Override
     public int getCurrentTrackIndex(){
         return this.currentIndex;
+    }
+
+
+    public Track getNextTrackOnList(){
+        if(!attemptSetupOfIndexesIfEmpty()){
+            return null;
+        }
+        currentIndex = currentIndex >= tracks.size() -1 ? 0 : currentIndex + 1;
+        Track currentTrack = tracks.get(currentIndex);
+        trackHistory.removeHistoriesAfterCurrent();
+        trackHistory.add(currentTrack);
+        return currentTrack;
+    }
+
+
+    private Track getPreviousTrackOnList(){
+        currentIndex--;
+        if(currentIndex < 0){
+            currentIndex = tracks.size()-1;
+        }
+        return tracks.get(currentIndex);
     }
 
 
