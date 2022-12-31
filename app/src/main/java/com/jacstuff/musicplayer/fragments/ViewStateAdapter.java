@@ -38,13 +38,16 @@ public class ViewStateAdapter extends FragmentStateAdapter {
         if(position == 0){
             return new PlayerFragment();
         }
-        return new PlaylistsFragment();
+        else if (position == 1){
+            return new PlaylistsFragment();
+        }
+        return new ArtistsFragment();
     }
 
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 
 }

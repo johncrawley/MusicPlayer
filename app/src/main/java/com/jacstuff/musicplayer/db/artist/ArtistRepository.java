@@ -7,6 +7,9 @@ import android.database.Cursor;
 import com.jacstuff.musicplayer.db.AbstractRepository;
 import com.jacstuff.musicplayer.db.DbContract;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ArtistRepository extends AbstractRepository {
 
 
@@ -30,6 +33,18 @@ public class ArtistRepository extends AbstractRepository {
         }
         cursor.close();
         return id;
+    }
+
+
+    public List<Artist> getAllArtists(){
+        List<Artist> artists = new ArrayList<>(100);
+        cursor =  db.query(DbContract.ArtistsEntry.TABLE_NAME, null, null , null, null, null, null);
+        while(cursor.moveToNext()){
+            long id = getLong(DbContract.ArtistsEntry._ID);
+            String  name= getString(DbContract.ArtistsEntry.COL_NAME);
+            artists.add(new Artist(id, name));
+        }
+        return artists;
     }
 
 
