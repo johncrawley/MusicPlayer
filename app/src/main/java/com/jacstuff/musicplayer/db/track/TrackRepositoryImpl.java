@@ -6,6 +6,8 @@ import android.database.SQLException;
 
 import com.jacstuff.musicplayer.db.AbstractRepository;
 import com.jacstuff.musicplayer.db.DbContract;
+import com.jacstuff.musicplayer.db.DbContract.ArtistsEntry;
+import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.artist.ArtistRepository;
 
 import static com.jacstuff.musicplayer.db.DbContract.TracksEntry.*;
@@ -50,13 +52,26 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
 
     @Override
     public List<Track> getAllTracks() {
-        return  getTracksUsingQuery("SELECT * FROM " + TABLE_NAME
+        String query = createGetQuery() + ";";
+        return  getTracksUsingQuery(query);
+    }
+
+    @Override
+    public List<Track> getTracksForArtist(Artist artist){
+        String query = createGetQuery() + " WHERE " + ArtistsEntry.COL_NAME + " = '" + artist.getName() + "';";
+        return getTracksUsingQuery(query);
+    }
+
+
+    private String createGetQuery(){
+        return  "SELECT * FROM " + TABLE_NAME
                 + " INNER JOIN " + DbContract.ArtistsEntry.TABLE_NAME
                 + " ON " + TABLE_NAME + "." + COL_ARTIST_ID
                 + " = "
-                + DbContract.ArtistsEntry.TABLE_NAME + "." + DbContract.ArtistsEntry._ID
-                + ";");
+                + ArtistsEntry.TABLE_NAME + "." + ArtistsEntry._ID;
     }
+
+
 
 
     public List<Track> getAllTracksStartingWith(String prefix){

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
+import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.fragments.PlayerFragment;
 import com.jacstuff.musicplayer.fragments.PlaylistsFragment;
@@ -344,6 +345,10 @@ public class MainActivity extends AppCompatActivity{
             }
             updateViews(updatedTracks);
         });
+    }
+
+    public void loadTracksFromArtist(Artist artist){
+        mediaPlayerService.loadTracksFromArtist(artist);
     }
 
 

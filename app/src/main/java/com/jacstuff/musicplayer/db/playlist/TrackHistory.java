@@ -11,10 +11,14 @@ public class TrackHistory {
     private List<Track> trackHistory;
 
     public TrackHistory(){
+        reset();
+    }
+
+
+    public void reset(){
         trackHistory = new ArrayList<>();
         resetCurrentIndex();
     }
-
 
     public Track getPreviousTrack(){
         currentHistoryIndex = Math.max(0, currentHistoryIndex-1);

@@ -37,7 +37,6 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Tr
                 deselectCurrentlySelectedItem();
                 currentlySelectedView = v;
                 currentlySelectedArtistName = artistTextView.getText().toString();
-                mediaPlayerView.notifyCurrentlySelectedTrack(getLayoutPosition());
                 setIndexToScrollTo(getLayoutPosition());
                 currentlySelectedView.setSelected(true);
                 selectedPosition = RecyclerView.NO_POSITION;
@@ -55,8 +54,8 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Tr
     }
 
 
-    public String getCurrentlySelectedArtistName(){
-        return currentlySelectedArtistName;
+    public Artist getCurrentlySelectedArtist(){
+        return new Artist(-1, currentlySelectedArtistName);
     }
 
 

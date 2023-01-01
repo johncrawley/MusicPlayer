@@ -20,6 +20,7 @@ import android.os.PowerManager;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.TimeConverter;
+import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
@@ -130,6 +131,12 @@ public class MediaPlayerService extends Service {
         if(shouldUpdateMainView) {
             mainActivity.notifyMediaPlayerStopped();
         }
+    }
+
+
+    public void loadTracksFromArtist(Artist artist){
+        playlistManager.loadTracksFromArtist(artist);
+        updateViewTrackList();
     }
 
 

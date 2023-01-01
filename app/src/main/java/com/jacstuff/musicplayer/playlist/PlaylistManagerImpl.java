@@ -2,6 +2,7 @@ package com.jacstuff.musicplayer.playlist;
 
 import android.content.Context;
 
+import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.playlist.TrackHistory;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.db.track.TrackRepository;
@@ -79,8 +80,22 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void initTrackList(){
-        tracks = trackRepository.getAllTracks().stream().sorted(Comparator.comparing(Track::getOrderedString)).collect(Collectors.toList());
+        tracks = getSortedTracks(trackRepository.getAllTracks());
         assignIndexesToTracks();
+    }
+
+
+    private List getSortedTracks(List<Track> list){
+        return list.stream().sorted(Comparator.comparing(Track::getOrderedString)).collect(Collectors.toList());
+    }
+
+
+    public void loadTracksFromArtist(Artist artist){
+        tracks = getSortedTracks(trackRepository.getTracksForArtist(artist));
+        assignIndexesToTracks();
+        setupUnplayedIndexes();
+        trackHistory.reset();
+        currentIndex = -1;
     }
 
 
@@ -92,8 +107,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void setupUnplayedIndexes(){
-        final int INITIAL_LIST_CAPACITY = 10_000;
-        unPlayedPathnameIndexes = new ArrayList<>(INITIAL_LIST_CAPACITY);
+        unPlayedPathnameIndexes = new ArrayList<>(tracks.size());
         for(int i = 0; i< tracks.size(); i++){
            unPlayedPathnameIndexes.add(i);
         }

@@ -1,5 +1,6 @@
 package com.jacstuff.musicplayer.playlist;
 
+import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.track.Track;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public interface PlaylistManager {
     void enableShuffle();
     void disableShuffle();
     void onDestroy();
+    void loadTracksFromArtist(Artist artist);
 
     String getTrackNameAt(int position);
 }

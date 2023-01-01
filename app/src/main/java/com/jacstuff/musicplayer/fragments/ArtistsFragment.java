@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -27,9 +27,9 @@ public class ArtistsFragment extends Fragment implements MediaPlayerView {
     private RecyclerView recyclerView;
     private ArtistListAdapter artistListAdapter;
     private int previousIndex = 0;
-    ImageView coverArt;
     private View parentView;
     private ArtistRepository artistRepository;
+    private Button loadArtistTracksButton;
 
     public ArtistsFragment() {
         // Required empty public constructor
@@ -48,17 +48,20 @@ public class ArtistsFragment extends Fragment implements MediaPlayerView {
     public void onViewCreated(View view,  Bundle savedInstanceState){
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.artistsRecyclerView);
+        setupLoadTracksButton(parentView);
         refreshArtistsList();
     }
 
 
-    public void notifyCurrentlySelectedTrack(int position){
-        getMainActivity().selectTrack(position);
+    private void setupLoadTracksButton(View parentView){
+        loadArtistTracksButton = parentView.findViewById(R.id.loadTracksFromArtistButton);
+       loadArtistTracksButton.setOnClickListener((View v) -> {
+           getMainActivity().loadTracksFromArtist(artistListAdapter.getCurrentlySelectedArtist());
+        });
     }
 
-
-    public void setCoverImage(Bitmap bitmap){
-        coverArt.setImageBitmap(bitmap);
+    public void notifyCurrentlySelectedTrack(int position){
+        getMainActivity().selectTrack(position);
     }
 
 
@@ -67,7 +70,7 @@ public class ArtistsFragment extends Fragment implements MediaPlayerView {
     }
 
 
-    public void updateTracksList(List<Artist> artists, int currentTrackIndex){
+    public void updateArtistsList(List<Artist> artists, int currentTrackIndex){
         refreshArtistsList();
         scrollToListPosition(currentTrackIndex);
     }
