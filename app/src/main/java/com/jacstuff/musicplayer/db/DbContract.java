@@ -40,8 +40,17 @@ public final class DbContract {
 
     public static class PlaylistItemsEntry implements BaseColumns {
        public static final String TABLE_NAME = "Playlist_items";
-       public static final String COL_PLAYLIST_ID = "pl_item_playlistId";
-       public static final String COL_TRACK_ID = "pl_item_song_id";
+        public static final String COL_PLAYLIST_ID= "pl_item_playlist_id";
+        public static final String COL_ORDERING = "pl_item_playlist_id";
+
+       public static final String COL_PATH = "pl_item_path";
+       public static final String COL_TITLE = "pl_item_title";
+       public static final String COL_ALBUM = "pl_item_album";
+       public static final String COL_ARTIST = "pl_item_artist";
+       public static final String COL_ARTIST_ID = "pl_item_artist_id";
+       public static final String COL_TRACK_NUMBER = "pl_item_number";
+       public static final String COL_GENRE = "pl_item_genre";
+       public static final String COL_DURATION = "pl_item_duration";
     }
 
 }

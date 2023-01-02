@@ -3,7 +3,6 @@ package com.jacstuff.musicplayer.playlist;
 import android.content.Context;
 
 import com.jacstuff.musicplayer.db.artist.Artist;
-import com.jacstuff.musicplayer.db.playlist.TrackHistory;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.db.track.TrackRepository;
 import com.jacstuff.musicplayer.db.track.TrackRepositoryImpl;

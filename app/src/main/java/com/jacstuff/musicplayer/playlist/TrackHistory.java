@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.db.playlist;
+package com.jacstuff.musicplayer.playlist;
 
 import com.jacstuff.musicplayer.db.track.Track;
 

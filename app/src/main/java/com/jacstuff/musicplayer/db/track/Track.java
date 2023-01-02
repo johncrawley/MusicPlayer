@@ -17,6 +17,7 @@ public class Track {
         this.artist = builder.artist;
         this.album = builder.album;
         this.trackNumber = builder.trackNumber;
+        this.index = builder.index;
         this.disc = builder.disc;
         this.genre = builder.genre;
         createOrderedStr();
@@ -93,6 +94,7 @@ public class Track {
         private long id = -1;
         private long trackNumber;
         private long duration;
+        private int index;
 
         public Track build(){
             return new Track(this);
@@ -113,6 +115,12 @@ public class Track {
 
         public Builder withGenre(String genre){
             this.genre = genre;
+            return this;
+        }
+
+
+        public Builder withIndex(long index){
+            this.index = (int)index;
             return this;
         }
 

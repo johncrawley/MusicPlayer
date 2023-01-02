@@ -17,7 +17,7 @@ import java.util.List;
 
 public class TrackRepositoryImpl extends AbstractRepository implements TrackRepository {
 
-    private ArtistRepository artistRepository;
+    private final ArtistRepository artistRepository;
 
     public TrackRepositoryImpl(Context context){
         super(context);
@@ -56,6 +56,7 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
         return  getTracksUsingQuery(query);
     }
 
+
     @Override
     public List<Track> getTracksForArtist(Artist artist){
         String query = createGetQuery() + " WHERE " + ArtistsEntry.COL_NAME + " = '" + artist.getName() + "';";
@@ -70,8 +71,6 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
                 + " = "
                 + ArtistsEntry.TABLE_NAME + "." + ArtistsEntry._ID;
     }
-
-
 
 
     public List<Track> getAllTracksStartingWith(String prefix){
@@ -128,7 +127,6 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
         cursor.close();
         return  tracks;
     }
-
 
 
     private Track createTrackFromCursor(){
