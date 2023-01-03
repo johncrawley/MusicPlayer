@@ -10,5 +10,6 @@ public interface TrackRepository {
     void deleteTrack(Track track);
     List<Track> getAllTracks();
     List<Track> getTracksForArtist(Artist artist);
+    List<Track> getAllTracksStartingWith(String prefix);
 
 }

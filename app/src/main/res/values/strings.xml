@@ -26,6 +26,10 @@
     <string name="playlists_tab">Playlists</string>
     <string name="artists_tab">Artists</string>
 
+    <string name="button_search_add_selected">Add</string>
+    <string name="button_search_cancel">Cancel</string>
+    <string name="button_search_play_selected">Play</string>
+    <string name="button_search_add_all">Add All</string>
     <string name="button_add_playlist">Add</string>
     <string name="button_load_tracks_from_artist">Load Tracks</string>
     <string name="add_playlist_input_text_hint">Playlist Name</string>
@@ -40,5 +44,7 @@
     <string name="notification_button_title_pause">Pause</string>
     <string name="notification_button_title_previous">Previous</string>
     <string name="notification_button_title_next">Next</string>
+
+    <string name="search_edit_text_label">Search for track title, artist or album</string>
 
 </resources>

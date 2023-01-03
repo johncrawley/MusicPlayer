@@ -2,6 +2,7 @@ package com.jacstuff.musicplayer.db.search;
 
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.db.track.TrackRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,13 +13,12 @@ import java.util.stream.Collectors;
 
 public class TrackFinder {
 
-    private PlaylistRepository playlistRepository;
-    private final int MINIMUM_SEARCH_LENGTH = 4;
-    private String lastPrefix;
-    private Map<String, List<Track>> resultsMap;
+    private final TrackRepository trackRepository;
+    private final Map<String, List<Track>> resultsMap;
 
-    public TrackFinder(PlaylistRepository playlistRepository){
-        this.playlistRepository = playlistRepository;
+
+    public TrackFinder(TrackRepository trackRepository){
+        this.trackRepository = trackRepository;
         resultsMap = new HashMap<>();
     }
 
@@ -30,11 +30,33 @@ public class TrackFinder {
         if(resultsMap.containsKey(prefix)){
             return resultsMap.get(prefix);
         }
-        if(prefix.length() < lastPrefix.length()){
-            deleteListsWithKeysLongerThan(prefix.length());
-        }
-        lastPrefix = prefix;
-        return new ArrayList<>();
+        return createListForPrefix(prefix);
+    }
+
+
+    public List<Track> createListForPrefix(String prefix){
+        List<Track> tracks = getCachedOrDbResultsFor(prefix);
+                resultsMap.put(prefix, tracks);
+        return tracks;
+    }
+
+
+    private String getParentPrefix(String str){
+       return str.substring(0, str.length()-1);
+    }
+
+
+    private List<Track> getCachedOrDbResultsFor(String prefix){
+        String prePrefix = getParentPrefix(prefix);
+        return resultsMap.containsKey(prePrefix) ?
+                getFilteredTracksForPrefix(prefix, prePrefix)
+                : trackRepository.getAllTracksStartingWith(prefix);
+    }
+
+
+    private List<Track> getFilteredTracksForPrefix(String prefix, String prePrefix){
+        List<Track> results = resultsMap.get(prePrefix);
+        return results.stream().filter(t -> t.getOrderedString().contains(prefix)).collect(Collectors.toList());
     }
 
 
@@ -45,7 +67,9 @@ public class TrackFinder {
         }
     }
 
+
     public boolean isTooShortToSearch(String prefix){
+        int MINIMUM_SEARCH_LENGTH = 3;
         return prefix.length() < MINIMUM_SEARCH_LENGTH;
     }
 }

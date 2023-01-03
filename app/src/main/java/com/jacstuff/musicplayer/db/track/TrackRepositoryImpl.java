@@ -72,13 +72,18 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
                 + ArtistsEntry.TABLE_NAME + "." + ArtistsEntry._ID;
     }
 
-
+    @Override
     public List<Track> getAllTracksStartingWith(String prefix){
         String query = "SELECT * FROM " + TABLE_NAME
-                + " WHERE " + COL_TITLE + " GLOB '" + prefix + " *';";
+                + " WHERE " + COL_TITLE + beginsWith(prefix)
+                + " OR WHERE " + COL_ARTIST + beginsWith(prefix)
+                + " OR WHERE " + COL_ALBUM + beginsWith(prefix) + ";";
         return getTracksUsingQuery( query);
     }
 
+    private String beginsWith(String str){
+        return "GLOB '" + str + "*'";
+    }
 
     private List<Track> getTracksUsingQuery(String query){
         List<Track> tracks = new ArrayList<>();
