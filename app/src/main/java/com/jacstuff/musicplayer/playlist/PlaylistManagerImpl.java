@@ -114,7 +114,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public String getTrackNameAt(int position){
-        return position >= tracks.size() ? "" : tracks.get(position).getName();
+        return position >= tracks.size() ? "" : tracks.get(position).getTitle();
     }
 
 

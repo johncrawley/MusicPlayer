@@ -17,7 +17,7 @@ import java.util.List;
 public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.TrackViewHolder> {
 
     private final List<String> trackNames;
-    private final MediaPlayerView mediaPlayerView;
+    private MediaPlayerView mediaPlayerView;
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
@@ -43,12 +43,16 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     }
 
 
-    public TrackListAdapter(List<Track> trackDetailsList, MediaPlayerView view){
+    public TrackListAdapter(List<Track> trackDetailsList){
         this.trackNames = new ArrayList<>();
-        this.mediaPlayerView = view;
         for(Track trackDetails : trackDetailsList){
             this.trackNames.add(getStrOf(trackDetails));
         }
+    }
+
+
+    public void setMediaPlayerView(MediaPlayerView mediaPlayerView){
+        this.mediaPlayerView = mediaPlayerView;
     }
 
 
@@ -61,7 +65,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
 
 
     private String getStrOf(Track trackDetails){
-        return trackDetails.getArtist() + " : " +  trackDetails.getName();
+        return trackDetails.getArtist() + " : " +  trackDetails.getTitle();
     }
 
 

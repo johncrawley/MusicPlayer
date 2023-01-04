@@ -1,10 +1,8 @@
 package com.jacstuff.musicplayer.db.search;
 
-import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.db.track.TrackRepository;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -23,48 +21,44 @@ public class TrackFinder {
     }
 
 
-    public List<Track> getTracksWithPrefix(String prefix){
-        if(isTooShortToSearch(prefix)) {
+    public List<Track> searchFor(String searchTerm){
+        if(isTooShortToSearch(searchTerm)) {
             return Collections.emptyList();
         }
-        if(resultsMap.containsKey(prefix)){
-            return resultsMap.get(prefix);
+        String searchTermLC = searchTerm.toLowerCase();
+        if(resultsMap.containsKey(searchTermLC)){
+            return resultsMap.get(searchTermLC);
         }
-        return createListForPrefix(prefix);
+        return createTracksListFor(searchTermLC);
     }
 
 
-    public List<Track> createListForPrefix(String prefix){
-        List<Track> tracks = getCachedOrDbResultsFor(prefix);
-                resultsMap.put(prefix, tracks);
+    public List<Track> createTracksListFor(String searchTerm){
+        List<Track> tracks = getCachedOrDbResultsFor(searchTerm);
+        resultsMap.put(searchTerm, tracks);
         return tracks;
     }
 
 
+    private List<Track> getCachedOrDbResultsFor(String searchTerm){
+        String prefix = getParentPrefix(searchTerm);
+        return resultsMap.containsKey(prefix) ?
+                getFilteredTracksFor(searchTerm, prefix)
+                : trackRepository.getAllTracksContaining(searchTerm);
+    }
+
+
     private String getParentPrefix(String str){
-       return str.substring(0, str.length()-1);
+        return str.substring(0, str.length()-1);
     }
 
 
-    private List<Track> getCachedOrDbResultsFor(String prefix){
-        String prePrefix = getParentPrefix(prefix);
-        return resultsMap.containsKey(prePrefix) ?
-                getFilteredTracksForPrefix(prefix, prePrefix)
-                : trackRepository.getAllTracksStartingWith(prefix);
-    }
-
-
-    private List<Track> getFilteredTracksForPrefix(String prefix, String prePrefix){
+    private List<Track> getFilteredTracksFor(String prefix, String prePrefix){
         List<Track> results = resultsMap.get(prePrefix);
-        return results.stream().filter(t -> t.getOrderedString().contains(prefix)).collect(Collectors.toList());
-    }
-
-
-    private void deleteListsWithKeysLongerThan(int prefixLength){
-        List<String> keysToBeRemoved = resultsMap.keySet().stream().filter(str -> str.length() > prefixLength).collect(Collectors.toList());
-        for(String key : keysToBeRemoved){
-            resultsMap.remove(key); //TODO: verify that this works!
+        if(results == null){
+            return Collections.emptyList();
         }
+       return results.stream().filter(t -> t.getSearchString().toLowerCase().contains(prefix)).collect(Collectors.toList());
     }
 
 

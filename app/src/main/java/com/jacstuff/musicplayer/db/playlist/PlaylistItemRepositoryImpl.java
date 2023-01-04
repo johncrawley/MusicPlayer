@@ -101,8 +101,8 @@ public class PlaylistItemRepositoryImpl extends AbstractRepository implements Pl
         return new Track.Builder()
                 .createTrackWithPathname(getString(COL_PATH))
                 .withId(getLong(_ID))
-                .withName(getString(COL_TITLE))
-                .withIndex(getLong(COL_ORDERING))
+                .withTitle(getString(COL_TITLE))
+                .withIndex(getLong(COL_INDEX))
                 .withTrackNumber(getLong(COL_TRACK_NUMBER))
                 .withArtist(getString(COL_ARTIST))
                 .withAlbum(getString(COL_ALBUM))
@@ -114,10 +114,10 @@ public class PlaylistItemRepositoryImpl extends AbstractRepository implements Pl
 
     private ContentValues createTrackContentValuesFor(Track track, long playlistId){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_TITLE, track.getName());
+        contentValues.put(COL_TITLE, track.getTitle());
         contentValues.put(COL_ARTIST, track.getArtist());
         contentValues.put(COL_ALBUM, track.getAlbum());
-        contentValues.put(COL_ORDERING, track.getIndex());
+        contentValues.put(COL_INDEX, track.getIndex());
         contentValues.put(COL_PLAYLIST_ID, playlistId);
         contentValues.put(COL_PATH, track.getPathname());
         contentValues.put(COL_ALBUM, track.getAlbum());

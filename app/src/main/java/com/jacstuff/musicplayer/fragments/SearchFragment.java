@@ -1,22 +1,38 @@
 package com.jacstuff.musicplayer.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.list.SearchResultsListAdapter;
+
+import java.util.Collections;
+import java.util.List;
 
 public class SearchFragment extends DialogFragment {
+
+    MainActivity activity;
+    private RecyclerView recyclerView;
+    private SearchResultsListAdapter searchResultsListAdapter;
 
 
     public static SearchFragment newInstance() {
@@ -33,12 +49,37 @@ public class SearchFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        MainActivity activity = (MainActivity) getActivity();
+        activity = (MainActivity) getActivity();
+        recyclerView = view.findViewById(R.id.searchResultsRecyclerView);
+        setupRecyclerView(Collections.emptyList());
+        setupSearchKeyListener();
         if(activity == null){
             return;
         }
         setupButtons(view);
         setupDimensions(view, activity);
+    }
+
+
+    private void setupRecyclerView(List<Track> tracks){
+        if(tracks == null){
+            return;
+        }
+        searchResultsListAdapter = new SearchResultsListAdapter(tracks);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(searchResultsListAdapter);
+    }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void refreshTrackList(List<Track> tracks){
+       // setupRecyclerView(tracks);
+        log("refreshTrackList() update size: " + tracks.size());
+        searchResultsListAdapter.setTracks(tracks);
+        searchResultsListAdapter.notifyDataSetChanged();
+      //  recyclerView.setAdapter(searchResultsListAdapter);
+
     }
 
     void setupDimensions(View rootView, Activity activity){
@@ -47,6 +88,25 @@ public class SearchFragment extends DialogFragment {
         rootView.setLayoutParams(new FrameLayout.LayoutParams(width, rootView.getLayoutParams().height));
     }
 
+
+    private void setupSearchKeyListener(){
+        EditText inputEditText = getView().findViewById(R.id.trackSearchEditText);
+
+        inputEditText.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void afterTextChanged(Editable s) {
+                log("key struck: ");
+                List<Track> tracks = activity.getTracksForSearch(inputEditText.getText().toString());
+                refreshTrackList(tracks);
+            }
+        });
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ SearchFragment: " + msg);
+    }
 
     public DisplayMetrics getDisplayMetrics(Activity activity){
         DisplayMetrics displayMetrics = new DisplayMetrics();

@@ -5,73 +5,74 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.track.Track;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResultsListAdapter.TrackViewHolder> {
 
-public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecyclerAdapter.PlaylistViewHolder> {
-
-    private final List<Playlist> playlists;
+    private final List<String> trackNames;
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
 
 
-    class PlaylistViewHolder extends RecyclerView.ViewHolder {
+    class TrackViewHolder extends RecyclerView.ViewHolder {
 
         TextView trackNameTextView;
 
-        PlaylistViewHolder(View view) {
+        TrackViewHolder(View view) {
             super(view);
             trackNameTextView = view.findViewById(R.id.trackName);
 
             view.setOnClickListener(v -> {
-                if(currentlySelectedView != null){
-                    currentlySelectedView.setSelected(false);
-                }
+                deselectCurrentlySelectedItem();
                 currentlySelectedView = v;
                 currentlySelectedView.setSelected(true);
-               // mediaPlayerView.notifyCurrentlySelectedTrack(getLayoutPosition());
-               // mediaPlayerView.scrollToListPosition(getLayoutPosition());
-               // setIndexToScrollTo(getLayoutPosition());
-                currentlySelectedView.setSelected(true);
+                selectedPosition = RecyclerView.NO_POSITION;
             });
         }
     }
 
 
-    public PlaylistRecyclerAdapter(List<Playlist> playlists){
-        this.playlists = new ArrayList<>(playlists);
-       /*
-        for(Playlist playlist : playlists){
+    public SearchResultsListAdapter(List<Track> trackDetailsList){
+        this.trackNames = new ArrayList<>();
+        for(Track trackDetails : trackDetailsList){
             this.trackNames.add(getStrOf(trackDetails));
         }
-
-        */
     }
 
-    public void refresh(List<Playlist> playlists){
-        this.playlists.clear();
-        this.playlists.addAll(playlists);
+
+    public void setTracks(List<Track> tracks){
+        this.trackNames.clear();
+        for(Track track : tracks){
+            this.trackNames.add(getStrOf(track));
+        }
     }
 
 
     @Override
     @NonNull
-    public PlaylistRecyclerAdapter.PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+    public SearchResultsListAdapter.TrackViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.track_list_item_view, parent,false);
-        return new PlaylistViewHolder(view);
+        return new TrackViewHolder(view);
     }
 
 
     private String getStrOf(Track trackDetails){
         return trackDetails.getArtist() + " : " +  trackDetails.getTitle();
+    }
+
+
+    public void selectItemAt(int index){
+        deselectCurrentlySelectedItem();
+        setIndexToScrollTo(index);
+        changePositionTo(index);
     }
 
 
@@ -83,9 +84,9 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
 
     @Override
-    public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position){
-        holder.trackNameTextView.setText(playlists.get(position).getName());
-        //holder.trackNameTextView.setTag(playlists.get(position));
+    public void onBindViewHolder(@NonNull TrackViewHolder holder, int position){
+        holder.trackNameTextView.setText(trackNames.get(position));
+        holder.trackNameTextView.setTag(trackNames.get(position));
         holder.itemView.setSelected(selectedPosition == position);
 
         if(position == indexToScrollTo){
@@ -98,11 +99,11 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
     @Override
     public int getItemCount(){
-        return playlists.size();
+        return trackNames.size();
     }
 
 
-    private void changePositionTo(int newPosition){
+    public void changePositionTo(int newPosition){
         notifyItemChanged(selectedPosition);
         selectedPosition = newPosition;
         notifyItemChanged(selectedPosition);

@@ -15,6 +15,7 @@ import static com.jacstuff.musicplayer.db.DbContract.TracksEntry;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PlaylistRepositoryImpl implements PlaylistRepository {
@@ -41,16 +42,7 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
 
     @Override
     public List<Track> getAllTracksFromPlaylist(Long playlistId){
-      List<Track> tracks = new ArrayList<>();
-
-      String query3 = "SELECT * FROM " + TracksEntry.TABLE_NAME
-              + " INNER JOIN " + PlaylistItemsEntry.TABLE_NAME
-              + " ON " + TracksEntry._ID + " = " + PlaylistItemsEntry.COL_TRACK_ID
-                + " WHERE "  + PlaylistItemsEntry.COL_PLAYLIST_ID + " = " + playlistId + ";";
-
-        gatherData(query3, ()-> DbUtils.addTrackTo(tracks, cursor));
-
-        return tracks;
+     return Collections.emptyList();
     }
 
 
@@ -83,26 +75,13 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
 
     @Override
     public void addTrackToPlaylist(Long playlistId, Long trackId) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(PlaylistItemsEntry.COL_TRACK_ID, trackId);
-        contentValues.put(PlaylistItemsEntry.COL_PLAYLIST_ID, playlistId);
-
-        DbUtils.addValuesToTable(db,
-                PlaylistItemsEntry.TABLE_NAME,
-                contentValues);
+        //do nothing
     }
 
 
     @Override
     public void removeTrackFromPlaylist(Long playlistId, Long trackId) {
-        String query = "DELETE FROM "
-                + PlaylistItemsEntry.TABLE_NAME
-                + " WHERE "
-                + PlaylistItemsEntry.COL_TRACK_ID + " = "  + trackId
-                + " AND"
-                + PlaylistItemsEntry.COL_PLAYLIST_ID + " = "  + playlistId
-                + ";";
-       execSql(query);
+       //do nothing
     }
 
 

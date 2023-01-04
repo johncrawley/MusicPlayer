@@ -41,7 +41,7 @@ public final class DbContract {
     public static class PlaylistItemsEntry implements BaseColumns {
        public static final String TABLE_NAME = "Playlist_items";
         public static final String COL_PLAYLIST_ID= "pl_item_playlist_id";
-        public static final String COL_ORDERING = "pl_item_playlist_id";
+        public static final String COL_INDEX = "pl_item_index";
 
        public static final String COL_PATH = "pl_item_path";
        public static final String COL_TITLE = "pl_item_title";

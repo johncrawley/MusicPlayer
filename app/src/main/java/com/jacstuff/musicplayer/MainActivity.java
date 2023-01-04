@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -17,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.fragments.PlayerFragment;
 import com.jacstuff.musicplayer.fragments.PlaylistsFragment;
+import com.jacstuff.musicplayer.fragments.SearchFragment;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
@@ -133,6 +135,24 @@ public class MainActivity extends AppCompatActivity{
         Intent mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
         getApplicationContext().startForegroundService(mediaPlayerServiceIntent);
         getApplicationContext().bindService(mediaPlayerServiceIntent, serviceConnection, 0);
+    }
+
+
+    public void startSearchFragment(){
+        String tag = "search_for_tracks";
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        removePreviousFragmentTransaction(tag, fragmentTransaction);
+        SearchFragment searchFragment = SearchFragment.newInstance();
+        searchFragment.show(fragmentTransaction, tag);
+    }
+
+
+    private void removePreviousFragmentTransaction(String tag, FragmentTransaction fragmentTransaction){
+        Fragment prev = getSupportFragmentManager().findFragmentByTag(tag);
+        if (prev != null) {
+            fragmentTransaction.remove(prev);
+        }
+        fragmentTransaction.addToBackStack(null);
     }
 
 
@@ -262,7 +282,7 @@ public class MainActivity extends AppCompatActivity{
 
     public void setTrackInfoOnView(final Track track, int elapsedTime){
         runOnUiThread(()-> {
-                setTrackInfo(track.getName());
+                setTrackInfo(track.getTitle());
                 setAlbumInfo(track.getAlbum());
                 setArtistInfo(track.getArtist());
                 setTrackTimeInfo(elapsedTime, track.getDuration());
@@ -390,11 +410,18 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.refresh_button, menu);
         return true;
+    }
+
+
+    public List<Track> getTracksForSearch(String str){
+      return mediaPlayerService.getTracksForSearch(str);
     }
 
 
@@ -408,7 +435,8 @@ public class MainActivity extends AppCompatActivity{
           mediaPlayerService.scanForTracks();
         }
         else if(id == R.id.test_stop_after_current){
-            mediaPlayerService.enableStopAfterTrackFinishes();
+            startSearchFragment();
+            //mediaPlayerService.enableStopAfterTrackFinishes();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -92,7 +92,8 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, ListSub
             log("tracks or parentView are null, returning");
             return;
         }
-        trackListAdapter = new TrackListAdapter(tracks, this);
+        trackListAdapter = new TrackListAdapter(tracks);
+        trackListAdapter.setMediaPlayerView(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(trackListAdapter);

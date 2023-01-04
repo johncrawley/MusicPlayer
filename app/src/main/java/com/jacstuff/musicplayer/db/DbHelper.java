@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import static com.jacstuff.musicplayer.db.DbContract.PlaylistItemsEntry;
+
 public class DbHelper extends SQLiteOpenHelper {
 
     private static DbHelper instance;
@@ -70,9 +72,17 @@ public class DbHelper extends SQLiteOpenHelper {
             CREATE_TABLE_IF_NOT_EXISTS
                     + DbContract.PlaylistItemsEntry.TABLE_NAME
                     + OPENING_BRACKET
-                    + DbContract.PlaylistItemsEntry._ID + INTEGER + PRIMARY_KEY + COMMA
-                    + DbContract.PlaylistItemsEntry.COL_PLAYLIST_ID + INTEGER + COMMA
-                    + DbContract.PlaylistItemsEntry.COL_TRACK_ID + INTEGER
+                    + PlaylistItemsEntry._ID + INTEGER + PRIMARY_KEY + COMMA
+                    + PlaylistItemsEntry.COL_PLAYLIST_ID + INTEGER + COMMA
+                    + PlaylistItemsEntry.COL_INDEX + INTEGER + COMMA
+                    + PlaylistItemsEntry.COL_PATH + TEXT + COMMA
+                    + PlaylistItemsEntry.COL_TITLE + TEXT + COMMA
+                    + PlaylistItemsEntry.COL_ALBUM + TEXT + COMMA
+                    + PlaylistItemsEntry.COL_ARTIST + TEXT + COMMA
+                    + PlaylistItemsEntry.COL_ARTIST_ID + INTEGER + COMMA
+                    + PlaylistItemsEntry.COL_TRACK_NUMBER + INTEGER + COMMA
+                    + PlaylistItemsEntry.COL_GENRE + TEXT + COMMA
+                    + PlaylistItemsEntry.COL_DURATION + INTEGER
                     + CLOSING_BRACKET;
 
 

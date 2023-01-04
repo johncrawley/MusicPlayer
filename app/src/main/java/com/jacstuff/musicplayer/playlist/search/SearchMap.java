@@ -18,7 +18,7 @@ public class SearchMap {
     public void buildMap(List<Track> tracks){
         for(int i=0; i< tracks.size(); i++){
             Track track = tracks.get(i);
-            SearchItem searchItem = new SearchItem(i, track.getArtist(), track.getAlbum(), track.getName());
+            SearchItem searchItem = new SearchItem(i, track.getArtist(), track.getAlbum(), track.getTitle());
             //for(int i)
 
         }

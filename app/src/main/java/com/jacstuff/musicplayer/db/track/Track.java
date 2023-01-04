@@ -2,8 +2,9 @@ package com.jacstuff.musicplayer.db.track;
 
 public class Track {
 
-    private final String pathname, name, artist, album, disc, genre;
+    private final String pathname, title, artist, album, disc, genre;
     private String orderedStr;
+    private String searchStr;
     private final long id, trackNumber;
     private int index;
     private final long duration;
@@ -13,7 +14,7 @@ public class Track {
         this.id = builder.id;
         this.pathname = builder.pathname;
         this.duration = builder.duration;
-        this.name = builder.name;
+        this.title = builder.title;
         this.artist = builder.artist;
         this.album = builder.album;
         this.trackNumber = builder.trackNumber;
@@ -21,18 +22,31 @@ public class Track {
         this.disc = builder.disc;
         this.genre = builder.genre;
         createOrderedStr();
+        createSearchStr();
     }
 
 
     private void createOrderedStr(){
         String trackNumberPrefix = trackNumber < 10 ? "0" : "";
         String trackStr = trackNumberPrefix + trackNumber;
-        this.orderedStr = artist + "-" + album + "-" + trackStr;
+        orderedStr = artist + "-" + album + "-" + trackStr;
+        orderedStr = orderedStr.toLowerCase();
+    }
+
+
+    private void createSearchStr(){
+        searchStr = artist + "-" + album + "-" + title;
+        searchStr = searchStr.toLowerCase();
     }
 
 
     public String getOrderedString(){
         return orderedStr;
+    }
+
+
+    public String getSearchString(){
+        return searchStr;
     }
 
 
@@ -55,7 +69,7 @@ public class Track {
     }
 
 
-    public String getName(){return name;}
+    public String getTitle(){return title;}
 
 
     public long getTrackNumber(){return trackNumber;}
@@ -80,7 +94,7 @@ public class Track {
 
     @Override
     public String toString(){
-       return "::: Track name: " +  getName()
+       return "::: Track name: " +  getTitle()
                + " artist: " + getArtist()
                + " album: " + getAlbum()
                + " trackNumber: " + getTrackNumber()
@@ -90,7 +104,7 @@ public class Track {
     public static class Builder{
 
 
-        private String pathname, name, artist, album, disc, genre;
+        private String pathname, title, artist, album, disc, genre;
         private long id = -1;
         private long trackNumber;
         private long duration;
@@ -107,8 +121,8 @@ public class Track {
         }
 
 
-        public Builder withName(String name){
-            this.name = name;
+        public Builder withTitle(String title){
+            this.title = title;
             return this;
         }
 

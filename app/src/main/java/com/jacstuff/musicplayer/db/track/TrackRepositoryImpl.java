@@ -72,18 +72,22 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
                 + ArtistsEntry.TABLE_NAME + "." + ArtistsEntry._ID;
     }
 
+
     @Override
-    public List<Track> getAllTracksStartingWith(String prefix){
+    public List<Track> getAllTracksContaining(String prefix){
         String query = "SELECT * FROM " + TABLE_NAME
                 + " WHERE " + COL_TITLE + beginsWith(prefix)
-                + " OR WHERE " + COL_ARTIST + beginsWith(prefix)
-                + " OR WHERE " + COL_ALBUM + beginsWith(prefix) + ";";
-        return getTracksUsingQuery( query);
+                + " OR " + COL_ARTIST + beginsWith(prefix)
+                + " OR " + COL_ALBUM + beginsWith(prefix) + ";";
+
+        return getTracksUsingQuery(query);
     }
 
+
     private String beginsWith(String str){
-        return "GLOB '" + str + "*'";
+        return " LIKE '%" + str + "%'";
     }
+
 
     private List<Track> getTracksUsingQuery(String query){
         List<Track> tracks = new ArrayList<>();
@@ -138,7 +142,7 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
         return new Track.Builder()
                 .createTrackWithPathname(getString(COL_PATH))
                 .withId(getLong(_ID))
-                .withName(getString(COL_TITLE))
+                .withTitle(getString(COL_TITLE))
                 .withTrackNumber(getLong(COL_TRACK_NUMBER))
                 .withArtist(getString(COL_ARTIST))
                 .withAlbum(getString(COL_ALBUM))
@@ -150,7 +154,7 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
 
     private ContentValues createTrackContentValuesFor(Track track, long artistId){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_TITLE, track.getName());
+        contentValues.put(COL_TITLE, track.getTitle());
         contentValues.put(COL_ARTIST, track.getArtist());
         contentValues.put(COL_ALBUM, track.getAlbum());
         contentValues.put(COL_PATH, track.getPathname());

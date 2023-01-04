@@ -87,7 +87,7 @@ public class AudioInfoLoader {
         Track track = new Track.Builder().createTrackWithPathname(data)
                 .withAlbum(album)
                 .withArtist(artist)
-                .withName(title)
+                .withTitle(title)
                 .duration(duration)
                 .withTrackNumber(trackNumber)
                 .withGenre(genre)

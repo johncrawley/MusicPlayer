@@ -21,7 +21,9 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.TimeConverter;
 import com.jacstuff.musicplayer.db.artist.Artist;
+import com.jacstuff.musicplayer.db.search.TrackFinder;
 import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.db.track.TrackRepositoryImpl;
 import com.jacstuff.musicplayer.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
 
@@ -68,6 +70,7 @@ public class MediaPlayerService extends Service {
     private ScheduledFuture<?> updateElapsedTimeFuture;
     private boolean isPlaylistInitialized;
     private int elapsedTime;
+    private TrackFinder trackFinder;
 
 
     public MediaPlayerService() {
@@ -99,6 +102,11 @@ public class MediaPlayerService extends Service {
             updateViewTrackList();
             isScanningForTracks = false;
         });
+    }
+
+
+    public List<Track> getTracksForSearch(String str){
+       return trackFinder.searchFor(str);
     }
 
 
@@ -157,6 +165,9 @@ public class MediaPlayerService extends Service {
             loadNextTrack();
             isPlaylistInitialized = true;
             mainActivity.displayPlaylistRefreshedMessage(tracks.size());
+        }
+        if(trackFinder == null){
+            trackFinder =  new TrackFinder(new TrackRepositoryImpl(getApplicationContext()));
         }
     }
 
@@ -408,7 +419,7 @@ public class MediaPlayerService extends Service {
 
 
     String getCurrentTrackName(){
-        return currentTrack == null ? "" : currentTrack.getName();
+        return currentTrack == null ? "" : currentTrack.getTitle();
     }
 
 

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,11 +15,12 @@
         app:layout_constraintBottom_toTopOf="@+id/searchResultsRecyclerView"
         android:paddingTop="@dimen/search_edit_text_padding_top">
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/stationUrlEditText"
+            android:id="@+id/trackSearchEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textImeMultiLine"
             android:maxLines="1"
+            android:maxLength="@integer/search_input_max_length"
             android:imeOptions="actionDone"
             android:hint="@string/search_edit_text_label" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -29,7 +29,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchResultsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="200dp"
         android:layout_marginHorizontal="@dimen/playlist_list_view_horizontal_margin"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="18dp"
