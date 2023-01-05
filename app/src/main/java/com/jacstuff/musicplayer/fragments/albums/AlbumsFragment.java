@@ -1,7 +1,6 @@
-package com.jacstuff.musicplayer.fragments;
+package com.jacstuff.musicplayer.fragments.albums;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,22 +15,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.MediaPlayerView;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.db.album.AlbumRepository;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.artist.ArtistRepository;
-import com.jacstuff.musicplayer.list.ArtistListAdapter;
+import com.jacstuff.musicplayer.fragments.artist.ArtistListAdapter;
 
 import java.util.List;
 
-public class ArtistsFragment extends Fragment implements MediaPlayerView {
+public class AlbumsFragment extends Fragment implements MediaPlayerView {
 
     private RecyclerView recyclerView;
     private ArtistListAdapter artistListAdapter;
     private int previousIndex = 0;
     private View parentView;
-    private ArtistRepository artistRepository;
-    private Button loadArtistTracksButton;
+    private AlbumRepository albumsRepository;
 
-    public ArtistsFragment() {
+    public AlbumsFragment() {
         // Required empty public constructor
     }
 
@@ -39,7 +38,7 @@ public class ArtistsFragment extends Fragment implements MediaPlayerView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_artists, container, false);
-        artistRepository = new ArtistRepository(getContext());
+        albumsRepository = new AlbumRepository(getContext());
         return view;
     }
 
@@ -54,9 +53,9 @@ public class ArtistsFragment extends Fragment implements MediaPlayerView {
 
 
     private void setupLoadTracksButton(View parentView){
-        loadArtistTracksButton = parentView.findViewById(R.id.loadTracksFromArtistButton);
-       loadArtistTracksButton.setOnClickListener((View v) -> {
-           getMainActivity().loadTracksFromArtist(artistListAdapter.getCurrentlySelectedArtist());
+        Button loadArtistTracksButton = parentView.findViewById(R.id.loadTracksFromArtistButton);
+        loadArtistTracksButton.setOnClickListener((View v) -> {
+            getMainActivity().loadTracksFromArtist(artistListAdapter.getCurrentlySelectedArtist());
         });
     }
 
@@ -77,7 +76,7 @@ public class ArtistsFragment extends Fragment implements MediaPlayerView {
 
 
     private void refreshArtistsList(){
-        List<Artist> artists = artistRepository.getAllArtists();
+        List<Artist> artists = albumsRepository.getAll();
         if(this.parentView == null ||artists == null){
             return;
         }

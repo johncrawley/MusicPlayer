@@ -1,13 +1,13 @@
 package com.jacstuff.musicplayer.fragments;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+
+import com.jacstuff.musicplayer.fragments.artist.ArtistsFragment;
+import com.jacstuff.musicplayer.fragments.playlist.PlayerFragment;
 
 public class ViewStateAdapter extends FragmentStateAdapter {
 
@@ -41,13 +41,19 @@ public class ViewStateAdapter extends FragmentStateAdapter {
         else if (position == 1){
             return new PlaylistsFragment();
         }
-        return new ArtistsFragment();
+        else if (position == 2){
+            return new ArtistsFragment();
+        }
+        else if (position == 3){
+            return new ArtistsFragment();
+        }
+        return new SearchFragment();
     }
 
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 5;
     }
 
 }

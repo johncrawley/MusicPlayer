@@ -26,7 +26,7 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.track.Track;
-import com.jacstuff.musicplayer.fragments.PlayerFragment;
+import com.jacstuff.musicplayer.fragments.playlist.PlayerFragment;
 import com.jacstuff.musicplayer.fragments.PlaylistsFragment;
 import com.jacstuff.musicplayer.fragments.SearchFragment;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity{
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         removePreviousFragmentTransaction(tag, fragmentTransaction);
         SearchFragment searchFragment = SearchFragment.newInstance();
-        searchFragment.show(fragmentTransaction, tag);
+        //searchFragment.show(fragmentTransaction, tag);
     }
 
 

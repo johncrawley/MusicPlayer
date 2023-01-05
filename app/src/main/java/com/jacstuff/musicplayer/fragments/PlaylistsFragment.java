@@ -11,7 +11,7 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
-import com.jacstuff.musicplayer.list.PlaylistRecyclerAdapter;
+import com.jacstuff.musicplayer.fragments.playlist.PlaylistRecyclerAdapter;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
 import java.util.List;

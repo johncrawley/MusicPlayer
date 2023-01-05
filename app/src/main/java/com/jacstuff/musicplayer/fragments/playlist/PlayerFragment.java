@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.fragments;
+package com.jacstuff.musicplayer.fragments.playlist;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

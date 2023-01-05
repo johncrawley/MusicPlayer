@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.list;
+package com.jacstuff.musicplayer.fragments.artist;
 
 import android.view.LayoutInflater;
 import android.view.View;

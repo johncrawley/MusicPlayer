@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +29,7 @@ import com.jacstuff.musicplayer.list.SearchResultsListAdapter;
 import java.util.Collections;
 import java.util.List;
 
-public class SearchFragment extends DialogFragment {
+public class SearchFragment extends Fragment {
 
     MainActivity activity;
     private RecyclerView recyclerView;
@@ -57,7 +58,7 @@ public class SearchFragment extends DialogFragment {
             return;
         }
         setupButtons(view);
-        setupDimensions(view, activity);
+       // setupDimensions(view, activity);
     }
 
 
@@ -117,10 +118,13 @@ public class SearchFragment extends DialogFragment {
 
 
     private void setupButtons(View parentView){
+        /*
         setupButton(parentView, R.id.addSelectedButton, this::dismiss);
         setupButton(parentView, R.id.addAllButton, this::dismiss);
         setupButton(parentView, R.id.playSelectedButton, this::dismiss);
         setupButton(parentView, R.id.cancelButton, this::dismiss);
+
+         */
     }
 
     private void setupButton(View parentView, int buttonId, Runnable runnable){

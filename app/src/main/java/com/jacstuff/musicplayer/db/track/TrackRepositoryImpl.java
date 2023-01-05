@@ -7,6 +7,7 @@ import android.database.SQLException;
 import com.jacstuff.musicplayer.db.AbstractRepository;
 import com.jacstuff.musicplayer.db.DbContract;
 import com.jacstuff.musicplayer.db.DbContract.ArtistsEntry;
+import com.jacstuff.musicplayer.db.album.AlbumRepository;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.artist.ArtistRepository;
 
@@ -18,19 +19,22 @@ import java.util.List;
 public class TrackRepositoryImpl extends AbstractRepository implements TrackRepository {
 
     private final ArtistRepository artistRepository;
+    private final AlbumRepository albumRepository;
 
     public TrackRepositoryImpl(Context context){
         super(context);
         artistRepository = new ArtistRepository(context);
+        albumRepository = new AlbumRepository(context);
     }
 
 
     @Override
     public void addTrack(Track track) {
         long artistId = artistRepository.addOrGetArtist(track.getArtist());
+        long albumId = albumRepository.addOrGet(track.getAlbum());
         addValuesToTable(db,
                 DbContract.TracksEntry.TABLE_NAME,
-                createTrackContentValuesFor(track, artistId));
+                createTrackContentValuesFor(track, artistId, albumId));
     }
 
 
@@ -152,14 +156,14 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
     }
 
 
-    private ContentValues createTrackContentValuesFor(Track track, long artistId){
+    private ContentValues createTrackContentValuesFor(Track track, long artistId, long albumId){
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_TITLE, track.getTitle());
         contentValues.put(COL_ARTIST, track.getArtist());
         contentValues.put(COL_ALBUM, track.getAlbum());
         contentValues.put(COL_PATH, track.getPathname());
         contentValues.put(COL_ARTIST_ID, artistId);
-        contentValues.put(COL_ALBUM, track.getAlbum());
+        contentValues.put(COL_ALBUM, albumId);
         contentValues.put(COL_DURATION, track.getDuration());
         contentValues.put(COL_GENRE, track.getGenre());
         contentValues.put(COL_TRACK_NUMBER, track.getTrackNumber());
