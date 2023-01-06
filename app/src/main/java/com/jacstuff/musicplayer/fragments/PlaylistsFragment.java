@@ -29,7 +29,6 @@ public class PlaylistsFragment extends Fragment {
 
     private Context context;
     private MainViewModel viewModel;
-    private Button addPlaylistButton;
     private boolean hasClicked;
     private RecyclerView recyclerView;
     private PlaylistRecyclerAdapter playlistRecyclerAdapter;
@@ -38,6 +37,7 @@ public class PlaylistsFragment extends Fragment {
     public PlaylistsFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,17 +53,18 @@ public class PlaylistsFragment extends Fragment {
         return view;
     }
 
+
     private void setupButtons(View parentView){
         setupAddPlaylistButton(parentView);
     }
 
+
     private void setupAddPlaylistButton(View parentView){
-        addPlaylistButton = parentView.findViewById(R.id.addPlaylistButton);
+        Button addPlaylistButton = parentView.findViewById(R.id.addPlaylistButton);
         addPlaylistButton.setOnClickListener((View v)->{
             startAddPlaylistFragment();
         });
     }
-
 
 
     private void setupPlaylistRecyclerView(View parentView){

@@ -15,17 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.MediaPlayerView;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.album.AlbumRepository;
 import com.jacstuff.musicplayer.db.artist.Artist;
-import com.jacstuff.musicplayer.db.artist.ArtistRepository;
-import com.jacstuff.musicplayer.fragments.artist.ArtistListAdapter;
 
 import java.util.List;
 
 public class AlbumsFragment extends Fragment implements MediaPlayerView {
 
     private RecyclerView recyclerView;
-    private ArtistListAdapter artistListAdapter;
+    private AlbumListAdapter listAdapter;
     private int previousIndex = 0;
     private View parentView;
     private AlbumRepository albumsRepository;
@@ -37,7 +36,7 @@ public class AlbumsFragment extends Fragment implements MediaPlayerView {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_artists, container, false);
+        View view = inflater.inflate(R.layout.fragment_albums, container, false);
         albumsRepository = new AlbumRepository(getContext());
         return view;
     }
@@ -46,18 +45,20 @@ public class AlbumsFragment extends Fragment implements MediaPlayerView {
     @Override
     public void onViewCreated(View view,  Bundle savedInstanceState){
         this.parentView = view;
-        recyclerView = parentView.findViewById(R.id.artistsRecyclerView);
+        recyclerView = parentView.findViewById(R.id.albumsRecyclerView);
         setupLoadTracksButton(parentView);
-        refreshArtistsList();
+        refreshList();
     }
 
 
     private void setupLoadTracksButton(View parentView){
-        Button loadArtistTracksButton = parentView.findViewById(R.id.loadTracksFromArtistButton);
-        loadArtistTracksButton.setOnClickListener((View v) -> {
-            getMainActivity().loadTracksFromArtist(artistListAdapter.getCurrentlySelectedArtist());
+        Button loadButton = parentView.findViewById(R.id.loadTracksFromAlbumButton);
+        loadButton.setOnClickListener((View v) -> {
+            Album album = new Album(-1, listAdapter.getCurrentlySelectedItem());
+            getMainActivity().loadTracksFromAlbum(album);
         });
     }
+
 
     public void notifyCurrentlySelectedTrack(int position){
         getMainActivity().selectTrack(position);
@@ -69,29 +70,29 @@ public class AlbumsFragment extends Fragment implements MediaPlayerView {
     }
 
 
-    public void updateArtistsList(List<Artist> artists, int currentTrackIndex){
-        refreshArtistsList();
+    public void updateList(List<Album> albums, int currentTrackIndex){
+        refreshList();
         scrollToListPosition(currentTrackIndex);
     }
 
 
-    private void refreshArtistsList(){
+    private void refreshList(){
         List<Artist> artists = albumsRepository.getAll();
         if(this.parentView == null ||artists == null){
             return;
         }
-        artistListAdapter = new ArtistListAdapter(artists, this);
+        listAdapter = new AlbumListAdapter(artists, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(artistListAdapter);
+        recyclerView.setAdapter(listAdapter);
     }
 
 
     public void scrollToListPosition(int index){
-        if(artistListAdapter == null){
+        if(listAdapter == null){
             return;
         }
-        artistListAdapter.selectItemAt(index);
+        listAdapter.selectItemAt(index);
         int calculatedScrollIndex = calculateIndexWithOffset(index);
         recyclerView.smoothScrollToPosition(calculatedScrollIndex);
     }
@@ -99,7 +100,7 @@ public class AlbumsFragment extends Fragment implements MediaPlayerView {
 
     private int calculateIndexWithOffset(int index){
         int indexWithOffset = getPlaylistItemOffset(index);
-        if ( indexWithOffset > artistListAdapter.getItemCount() || indexWithOffset < 0) {
+        if ( indexWithOffset > listAdapter.getItemCount() || indexWithOffset < 0) {
             indexWithOffset = index;
         }
         previousIndex = index;
@@ -119,7 +120,7 @@ public class AlbumsFragment extends Fragment implements MediaPlayerView {
 
     @SuppressLint("NotifyDataSetChanged")
     private void updateTrackViews(){
-        artistListAdapter.notifyDataSetChanged();
+        listAdapter.notifyDataSetChanged();
     }
 
 }

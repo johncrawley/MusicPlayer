@@ -23,7 +23,7 @@ public class AlbumRepository extends AbstractRepository {
         cursor = searchFor(album);
         if(cursor.getCount() == 0){
             cursor.close();
-            return addArtist(album);
+            return add(album);
         }
         cursor.moveToNext();
         long id = -1;
@@ -38,14 +38,14 @@ public class AlbumRepository extends AbstractRepository {
 
 
     public List<Artist> getAll(){
-        List<Artist> artists = new ArrayList<>(100);
-        cursor =  db.query(DbContract.ArtistsEntry.TABLE_NAME, null, null , null, null, null, null);
+        List<Artist> albums = new ArrayList<>(1000);
+        cursor =  db.query(DbContract.AlbumsEntry.TABLE_NAME, null, null , null, null, null, null);
         while(cursor.moveToNext()){
-            long id = getLong(DbContract.ArtistsEntry._ID);
-            String  name= getString(DbContract.ArtistsEntry.COL_NAME);
-            artists.add(new Artist(id, name));
+            long id = getLong(DbContract.AlbumsEntry._ID);
+            String  name= getString(DbContract.AlbumsEntry.COL_NAME);
+            albums.add(new Artist(id, name));
         }
-        return artists;
+        return albums;
     }
 
 
@@ -57,11 +57,10 @@ public class AlbumRepository extends AbstractRepository {
     }
 
 
-
-    private long addArtist(String artist){
+    private long add(String artist){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DbContract.ArtistsEntry.COL_NAME, artist);
-        return addValuesToTable(db, DbContract.ArtistsEntry.TABLE_NAME, contentValues);
+        contentValues.put(DbContract.AlbumsEntry.COL_NAME, artist);
+        return addValuesToTable(db, DbContract.AlbumsEntry.TABLE_NAME, contentValues);
     }
 
 

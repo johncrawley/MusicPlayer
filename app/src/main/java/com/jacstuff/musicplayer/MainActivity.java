@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
+import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.fragments.playlist.PlayerFragment;
@@ -34,6 +35,7 @@ import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
@@ -122,7 +124,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     public List<Track> getTrackList(){
-       return mediaPlayerService.getTrackList();
+       return mediaPlayerService == null ? Collections.emptyList() : mediaPlayerService.getTrackList();
     }
 
 
@@ -369,6 +371,11 @@ public class MainActivity extends AppCompatActivity{
 
     public void loadTracksFromArtist(Artist artist){
         mediaPlayerService.loadTracksFromArtist(artist);
+    }
+
+
+    public void loadTracksFromAlbum(Album album){
+        mediaPlayerService.loadTracksFromAlbum(album);
     }
 
 

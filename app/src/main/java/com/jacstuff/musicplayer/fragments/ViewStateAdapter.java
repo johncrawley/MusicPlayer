@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.jacstuff.musicplayer.fragments.albums.AlbumsFragment;
 import com.jacstuff.musicplayer.fragments.artist.ArtistsFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlayerFragment;
 
@@ -45,7 +46,7 @@ public class ViewStateAdapter extends FragmentStateAdapter {
             return new ArtistsFragment();
         }
         else if (position == 3){
-            return new ArtistsFragment();
+            return new AlbumsFragment();
         }
         return new SearchFragment();
     }

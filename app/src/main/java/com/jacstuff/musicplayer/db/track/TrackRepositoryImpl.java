@@ -7,6 +7,8 @@ import android.database.SQLException;
 import com.jacstuff.musicplayer.db.AbstractRepository;
 import com.jacstuff.musicplayer.db.DbContract;
 import com.jacstuff.musicplayer.db.DbContract.ArtistsEntry;
+import com.jacstuff.musicplayer.db.DbContract.AlbumsEntry;
+import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.album.AlbumRepository;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.artist.ArtistRepository;
@@ -68,12 +70,21 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
     }
 
 
+    @Override
+    public List<Track> getTracksForAlbum(Album album){
+        String query = createGetQuery() + " WHERE " + DbContract.AlbumsEntry.COL_NAME + " = '" + album.getName() + "';";
+        return getTracksUsingQuery(query);
+    }
+
+
     private String createGetQuery(){
         return  "SELECT * FROM " + TABLE_NAME
-                + " INNER JOIN " + DbContract.ArtistsEntry.TABLE_NAME
+                + " INNER JOIN " + ArtistsEntry.TABLE_NAME
                 + " ON " + TABLE_NAME + "." + COL_ARTIST_ID
-                + " = "
-                + ArtistsEntry.TABLE_NAME + "." + ArtistsEntry._ID;
+                + " = "  + ArtistsEntry.TABLE_NAME + "." + ArtistsEntry._ID
+                + " INNER JOIN " + AlbumsEntry.TABLE_NAME
+                + " ON " + TABLE_NAME + "." + COL_ALBUM_ID
+                + " = " + AlbumsEntry.TABLE_NAME + "." + AlbumsEntry._ID;
     }
 
 
@@ -117,31 +128,6 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
     }
 
 
-    public List<Track> searchForTracks(String searchTerms){
-        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " +
-                COL_ARTIST + " LIKE ?;";
-        String[] selectionArgs = new String[] { "searchTerms"};
-        return getTracks(query, selectionArgs);
-    }
-
-
-    private List<Track> getTracks(String query, String[] selectionArgs){
-        List<Track> tracks = new ArrayList<>();
-        try {
-            cursor = db.rawQuery(query, selectionArgs);
-            while(cursor.moveToNext()){
-                tracks.add(createTrackFromCursor());
-            }
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-            return tracks;
-        }
-        cursor.close();
-        return  tracks;
-    }
-
-
     private Track createTrackFromCursor(){
         return new Track.Builder()
                 .createTrackWithPathname(getString(COL_PATH))
@@ -163,7 +149,7 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
         contentValues.put(COL_ALBUM, track.getAlbum());
         contentValues.put(COL_PATH, track.getPathname());
         contentValues.put(COL_ARTIST_ID, artistId);
-        contentValues.put(COL_ALBUM, albumId);
+        contentValues.put(COL_ALBUM_ID, albumId);
         contentValues.put(COL_DURATION, track.getDuration());
         contentValues.put(COL_GENRE, track.getGenre());
         contentValues.put(COL_TRACK_NUMBER, track.getTrackNumber());

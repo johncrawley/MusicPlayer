@@ -11,7 +11,7 @@ public final class DbContract {
         public static final String COL_PATH = "track_path";
         public static final String COL_TITLE = "track_title";
         public static final String COL_ALBUM = "track_album";
-        public static final String COL_ALBUM_ID = "track_album";
+        public static final String COL_ALBUM_ID = "track_album_id";
         public static final String COL_ARTIST = "track_artist";
         public static final String COL_ARTIST_ID = "track_artist_id";
         public static final String COL_TRACK_NUMBER = "track_number";
@@ -47,6 +47,7 @@ public final class DbContract {
        public static final String COL_PATH = "pl_item_path";
        public static final String COL_TITLE = "pl_item_title";
        public static final String COL_ALBUM = "pl_item_album";
+       public static final String COL_ALBUM_ID = "pl_item_album_id";
        public static final String COL_ARTIST = "pl_item_artist";
        public static final String COL_ARTIST_ID = "pl_item_artist_id";
        public static final String COL_TRACK_NUMBER = "pl_item_number";

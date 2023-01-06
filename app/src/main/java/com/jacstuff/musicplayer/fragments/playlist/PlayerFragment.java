@@ -18,6 +18,7 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.list.TrackListAdapter;
 
+import java.util.Collections;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
@@ -51,6 +52,7 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, ListSub
         log("Entered onViewCreated()");
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.recyclerView);
+        setupRecyclerView(getMainActivity().getTrackList());
         getMainActivity().setPlayerFragment(this);
     }
 
@@ -81,8 +83,8 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, ListSub
     }
 
 
-    public void refreshTrackList(List<Track> trackDetailsList){
-        setupRecyclerView(trackDetailsList);
+    public void refreshTrackList(List<Track> tracks){
+        setupRecyclerView(tracks);
     }
 
 
@@ -126,7 +128,11 @@ public class PlayerFragment extends Fragment implements MediaPlayerView, ListSub
             return index;
         }
         int direction = index > previousIndex ? 1 : -1;
-        int offset =  getResources().getInteger(R.integer.playlist_item_offset) * direction ;
+        MainActivity mainActivity = getMainActivity();
+        if(mainActivity == null){
+            return 0;
+        }
+        int offset =  mainActivity.getResources().getInteger(R.integer.playlist_item_offset) * direction ;
         return index + offset;
     }
 

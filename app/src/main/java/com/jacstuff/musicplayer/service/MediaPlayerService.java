@@ -20,6 +20,7 @@ import android.os.PowerManager;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.TimeConverter;
+import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.search.TrackFinder;
 import com.jacstuff.musicplayer.db.track.Track;
@@ -144,6 +145,13 @@ public class MediaPlayerService extends Service {
 
     public void loadTracksFromArtist(Artist artist){
         playlistManager.loadTracksFromArtist(artist);
+        updateViewTrackList();
+    }
+
+
+    public void loadTracksFromAlbum(Album album){
+        playlistManager.loadTracksFromAlbum(album);
+
         updateViewTrackList();
     }
 
