@@ -58,7 +58,6 @@ public class SearchFragment extends Fragment {
             return;
         }
         setupButtons(view);
-       // setupDimensions(view, activity);
     }
 
 
@@ -75,20 +74,10 @@ public class SearchFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void refreshTrackList(List<Track> tracks){
-       // setupRecyclerView(tracks);
         log("refreshTrackList() update size: " + tracks.size());
         searchResultsListAdapter.setTracks(tracks);
         searchResultsListAdapter.notifyDataSetChanged();
-      //  recyclerView.setAdapter(searchResultsListAdapter);
-
     }
-
-    void setupDimensions(View rootView, Activity activity){
-        DisplayMetrics metrics = getDisplayMetrics(activity);
-        int width = (int)(metrics.widthPixels /1.5f);
-        rootView.setLayoutParams(new FrameLayout.LayoutParams(width, rootView.getLayoutParams().height));
-    }
-
 
     private void setupSearchKeyListener(){
         EditText inputEditText = getView().findViewById(R.id.trackSearchEditText);
@@ -98,23 +87,16 @@ public class SearchFragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             public void afterTextChanged(Editable s) {
-                log("key struck: ");
                 List<Track> tracks = activity.getTracksForSearch(inputEditText.getText().toString());
                 refreshTrackList(tracks);
             }
         });
     }
 
+
     private void log(String msg){
         System.out.println("^^^ SearchFragment: " + msg);
     }
-
-    public DisplayMetrics getDisplayMetrics(Activity activity){
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        return displayMetrics;
-    }
-
 
 
     private void setupButtons(View parentView){

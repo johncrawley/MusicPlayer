@@ -1,23 +1,29 @@
 package com.jacstuff.musicplayer;
 
 import android.Manifest;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.Animator;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.IBinder;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -27,6 +33,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.fragments.MainFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlayerFragment;
 import com.jacstuff.musicplayer.fragments.PlaylistsFragment;
 import com.jacstuff.musicplayer.fragments.SearchFragment;
@@ -38,7 +45,7 @@ import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
 
     private ViewStateAdapter viewStateAdapter;
@@ -77,17 +84,87 @@ public class MainActivity extends AppCompatActivity{
         mediaPlayerService.initPlaylist();
     }
 
+    private View searchView;
+
+    private void toggleSearch(){
+        if(searchView.getVisibility() == View.VISIBLE){
+            hideSearch();
+            return;
+        }
+        showSearch();
+    }
+
+    private void showSearch(){
+        // get the center for the clipping circle
+        int cx = searchView.getWidth() / 2;
+        int cy = searchView.getHeight() / 2;
+
+        // get the final radius for the clipping circle
+        float finalRadius = (float) Math.hypot(cx, cy);
+
+        // create the animator for this view (the start radius is zero)
+        Animator anim = ViewAnimationUtils.createCircularReveal(searchView, cx, cy, 1f, finalRadius);
+
+
+        anim.setDuration(300);
+
+        // make the view visible and start the animation
+        searchView.setVisibility(View.VISIBLE);
+        anim.start();
+
+    }
+
+    private void hideSearch(){
+        int cx = searchView.getWidth() / 2;
+        int cy = searchView.getHeight() / 2;
+        float finalRadius = (float) Math.hypot(cx, cy);
+        animator = ViewAnimationUtils.createCircularReveal(searchView, cx, cy, finalRadius, 1f);
+        animator.setDuration(300);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override public void onAnimationStart(@NonNull Animator animator) {}
+            @Override public void onAnimationCancel(@NonNull Animator animator) {}
+            @Override public void onAnimationRepeat(@NonNull Animator animator) {}
+            @Override
+            public void onAnimationEnd(@NonNull Animator animator) {
+                searchView.setVisibility(View.GONE);
+            }
+        });
+        animator.start();
+
+    }
+    Animator animator;
+
+    private void setupSearchAnimation(){
+        int cx = searchView.getWidth() / 2;
+        int cy = searchView.getHeight() / 2;
+        float finalRadius = (float) Math.hypot(cx, cy);
+        animator = ViewAnimationUtils.createCircularReveal(searchView, cx, cy, finalRadius, 1f);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override public void onAnimationStart(@NonNull Animator animator) {}
+            @Override public void onAnimationCancel(@NonNull Animator animator) {}
+            @Override public void onAnimationRepeat(@NonNull Animator animator) {}
+            @Override
+            public void onAnimationEnd(@NonNull Animator animator) {
+                searchView.setVisibility(View.GONE);
+            }
+        });
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         log("Entered onCreate() *********************************");
+        //setContentView(R.layout.activity_main);
         setContentView(R.layout.activity_main);
+
         setupViews();
         setupTabLayout();
         setupViewModel();
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         startMediaPlayerService();
+       // setupSearchAnimation();
+
     }
 
 
@@ -230,6 +307,7 @@ public class MainActivity extends AppCompatActivity{
         previousTrackButton = findViewById(R.id.previousTrackButton);
         turnShuffleOnButton = findViewById(R.id.turnShuffleOnButton);
         turnShuffleOffButton = findViewById(R.id.turnShuffleOffButton);
+        searchView = findViewById(R.id.searchView);
     }
 
 
@@ -417,8 +495,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -442,7 +518,9 @@ public class MainActivity extends AppCompatActivity{
           mediaPlayerService.scanForTracks();
         }
         else if(id == R.id.test_stop_after_current){
-            startSearchFragment();
+            //startSearchFragment();
+            //flipCard();
+            toggleSearch();
             //mediaPlayerService.enableStopAfterTrackFinishes();
         }
         return super.onOptionsItemSelected(item);

@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
-
     <include layout="@layout/player"
         android:layout_height="0dp"
         android:layout_width="match_parent"
@@ -17,4 +16,13 @@
         android:layout_height="0dp"
         android:layout_width="match_parent"
         android:layout_weight="0.5"/>
+
+
+    <include layout="@layout/fragment_search"
+        android:id="@+id/searchView"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+
 </LinearLayout>
