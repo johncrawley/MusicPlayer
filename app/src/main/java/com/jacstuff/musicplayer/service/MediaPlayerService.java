@@ -151,7 +151,6 @@ public class MediaPlayerService extends Service {
 
     public void loadTracksFromAlbum(Album album){
         playlistManager.loadTracksFromAlbum(album);
-
         updateViewTrackList();
     }
 
@@ -292,7 +291,6 @@ public class MediaPlayerService extends Service {
 
     private void createMediaPlayer(){
         mediaPlayer = new MediaPlayer();
-        log("Entered createMediaPlayer()");
         mediaPlayer.setOnCompletionListener(this::onTrackFinished);
     }
 
@@ -304,7 +302,8 @@ public class MediaPlayerService extends Service {
         loadNextTrack();
         if(shouldNextTrackPlayAfterCurrentTrackEnds) {
             play();
-        }else{
+        }
+        else{
             stop();
         }
     }
