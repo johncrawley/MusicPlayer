@@ -20,6 +20,7 @@
 
     <include layout="@layout/fragment_search"
         android:id="@+id/searchView"
+        android:visibility="gone"
         android:layout_weight="1"
         android:layout_height="match_parent"
         android:layout_width="match_parent" />

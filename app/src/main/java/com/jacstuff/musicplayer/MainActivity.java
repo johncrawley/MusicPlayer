@@ -1,12 +1,16 @@
 package com.jacstuff.musicplayer;
 
+import static com.jacstuff.musicplayer.search.AnimatorHelper.createShowAnimatorFor;
+
 import android.Manifest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -14,6 +18,9 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.IBinder;
@@ -23,6 +30,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +45,9 @@ import com.jacstuff.musicplayer.fragments.playlist.PlayerFragment;
 import com.jacstuff.musicplayer.fragments.PlaylistsFragment;
 import com.jacstuff.musicplayer.fragments.SearchFragment;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
+import com.jacstuff.musicplayer.list.SearchResultsListAdapter;
+import com.jacstuff.musicplayer.search.AnimatorHelper;
+import com.jacstuff.musicplayer.search.KeyListenerHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
@@ -50,28 +63,26 @@ public class MainActivity extends AppCompatActivity {
     private TextView trackTime;
     private TextView trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton, pauseButton, stopButton;
+    private EditText searchEditText;
     private ImageButton nextTrackButton, previousTrackButton;
     private ImageButton turnShuffleOnButton, turnShuffleOffButton;
     private String totalTrackTime = "0:00";
-  //  private ListNotifier listNotifier;
     private PlayerFragment playerFragment;
     private ViewGroup playerButtonPanel;
-
+    private RecyclerView searchResultsRecyclerView;
+    private SearchResultsListAdapter searchResultsListAdapter;
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
 
         @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            log("Entered onServiceConnected!!");
+        public void onServiceConnected(ComponentName className, IBinder service) {
             MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
             mediaPlayerService = binder.getService();
             mediaPlayerService.setActivity(MainActivity.this);
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-        }
+        public void onServiceDisconnected(ComponentName arg0) {}
     };
 
 
@@ -93,32 +104,39 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showSearch(){
-        int cx = searchView.getWidth() / 2;
-        int cy = searchView.getHeight() / 2;
-        float finalRadius = (float) Math.hypot(cx, cy);
-        Animator anim = ViewAnimationUtils.createCircularReveal(searchView, cx, cy, 1f, finalRadius);
-        anim.setDuration(300);
+        Animator animator = createShowAnimatorFor(searchView, ()->{
+            searchEditText.requestFocus();
+            //showKeyboard();
+            searchEditText.postDelayed(new Runnable(){
+                                            @Override public void run(){
+                                                InputMethodManager keyboard=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                                keyboard.showSoftInput(searchEditText,0);
+                                            }
+                                        }
+                    ,200);
+        });
         searchView.setVisibility(View.VISIBLE);
-        anim.start();
+        animator.start();
+
     }
 
 
     private void hideSearch(){
-        int cx = searchView.getWidth() / 2;
-        int cy = searchView.getHeight() / 2;
-        float finalRadius = (float) Math.hypot(cx, cy);
-        Animator animator = ViewAnimationUtils.createCircularReveal(searchView, cx, cy, finalRadius, 1f);
-        animator.setDuration(300);
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override public void onAnimationStart(@NonNull Animator animator) {}
-            @Override public void onAnimationCancel(@NonNull Animator animator) {}
-            @Override public void onAnimationRepeat(@NonNull Animator animator) {}
-            @Override
-            public void onAnimationEnd(@NonNull Animator animator) {
-                searchView.setVisibility(View.GONE);
-            }
-        });
+        Animator animator = AnimatorHelper.createHideAnimatorFor(searchView);
+        hideKeyboard();
         animator.start();
+    }
+
+
+    private void hideKeyboard(){
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+    }
+
+
+    private void showKeyboard(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(searchView, InputMethodManager.SHOW_FORCED);
     }
 
 
@@ -131,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         setupViewModel();
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         startMediaPlayerService();
+        setupSearchView();
     }
 
 
@@ -279,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
         turnShuffleOnButton = findViewById(R.id.turnShuffleOnButton);
         turnShuffleOffButton = findViewById(R.id.turnShuffleOffButton);
         searchView = findViewById(R.id.searchView);
+        searchEditText = findViewById(R.id.trackSearchEditText);
     }
 
 
@@ -406,7 +426,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     public void updatePlaylistList(){
         PlaylistsFragment fragment = (PlaylistsFragment)getSupportFragmentManager().findFragmentByTag("f1");
         fragment.onAddNewPlaylist();
@@ -486,21 +505,85 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if(id == R.id.refresh_button) {
           mediaPlayerService.scanForTracks();
         }
         else if(id == R.id.test_stop_after_current){
-            //startSearchFragment();
-            //flipCard();
             toggleSearch();
             //mediaPlayerService.enableStopAfterTrackFinishes();
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    public void setupSearchView() {
+        searchResultsRecyclerView = findViewById(R.id.searchResultsRecyclerView);
+        setupRecyclerView(Collections.emptyList());
+        setupSearchKeyListener();
+        setupButtons();
+
+    }
+
+
+    private void setupRecyclerView(List<Track> tracks){
+        if(tracks == null){
+            return;
+        }
+        searchResultsListAdapter = new SearchResultsListAdapter(tracks);
+        searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        searchResultsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        searchResultsRecyclerView.setAdapter(searchResultsListAdapter);
+    }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void refreshTrackList(List<Track> tracks){
+        searchResultsListAdapter.setTracks(tracks);
+        searchResultsListAdapter.notifyDataSetChanged();
+    }
+
+
+    private void setupSearchKeyListener(){
+        KeyListenerHelper.setListener(searchEditText, () ->{
+            List<Track> tracks = getTracksForSearch(searchEditText.getText().toString());
+            refreshTrackList(tracks);
+        });
+    }
+
+
+    private void setupButtons(){
+        setupButton(R.id.addSelectedButton, this::addSelectedSearchResultToPlaylist);
+        setupButton(R.id.addAllButton, this::addAllSearchResultsToPlaylist);
+        setupButton(R.id.playSelectedButton, this::playSelectedSearchResult);
+        setupButton(R.id.cancelButton, this::toggleSearch);
+    }
+
+
+    private void addSelectedSearchResultToPlaylist(){
+
+    }
+
+
+    private void addAllSearchResultsToPlaylist(){
+
+    }
+
+
+    private void playSelectedSearchResult(){
+        Track track = searchResultsListAdapter.getSelectedTrack();
+        if(track != null){
+            mediaPlayerService.playSelectedTrack(track);
+        }
+    }
+
+
+    private void setupButton(int buttonId, Runnable runnable){
+        Button button = findViewById(buttonId);
+        button.setOnClickListener((View v)-> runnable.run());
+    }
+
+
 
 
 }

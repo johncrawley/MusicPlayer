@@ -199,6 +199,14 @@ public class MediaPlayerService extends Service {
     }
 
 
+    public void playSelectedTrack(Track track){
+        selectTrack(track);
+        if(currentState == MediaPlayerState.STOPPED){
+            play();
+        }
+    }
+
+
     public void selectTrack(int index){
         assignTrack(playlistManager.selectTrack(index));
     }

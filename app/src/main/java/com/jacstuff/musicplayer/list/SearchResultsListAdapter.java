@@ -17,6 +17,7 @@ import java.util.List;
 public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResultsListAdapter.TrackViewHolder> {
 
     private final List<String> trackNames;
+    private List<Track> tracks;
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
@@ -40,19 +41,29 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     }
 
 
-    public SearchResultsListAdapter(List<Track> trackDetailsList){
+    public SearchResultsListAdapter(List<Track> tracks){
         this.trackNames = new ArrayList<>();
-        for(Track trackDetails : trackDetailsList){
+        this.tracks = tracks;
+        for(Track trackDetails : tracks){
             this.trackNames.add(getStrOf(trackDetails));
         }
     }
 
 
     public void setTracks(List<Track> tracks){
+        this.tracks = tracks;
         this.trackNames.clear();
         for(Track track : tracks){
             this.trackNames.add(getStrOf(track));
         }
+    }
+
+
+    public Track getSelectedTrack(){
+        if(selectedPosition == RecyclerView.NO_POSITION){
+            return null;
+        }
+        return tracks.get(selectedPosition);
     }
 
 
