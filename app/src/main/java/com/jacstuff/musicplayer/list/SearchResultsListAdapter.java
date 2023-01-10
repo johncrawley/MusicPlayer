@@ -21,7 +21,7 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
-
+    private Track selectedTrack;
 
     class TrackViewHolder extends RecyclerView.ViewHolder {
 
@@ -35,6 +35,10 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
                 deselectCurrentlySelectedItem();
                 currentlySelectedView = v;
                 currentlySelectedView.setSelected(true);
+                Integer position = (Integer)trackNameTextView.getTag();
+                if(position != null) {
+                    selectedTrack = tracks.get(position);
+                }
                 selectedPosition = RecyclerView.NO_POSITION;
             });
         }
@@ -60,10 +64,7 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
 
 
     public Track getSelectedTrack(){
-        if(selectedPosition == RecyclerView.NO_POSITION){
-            return null;
-        }
-        return tracks.get(selectedPosition);
+        return selectedTrack;
     }
 
 
@@ -97,7 +98,7 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     @Override
     public void onBindViewHolder(@NonNull TrackViewHolder holder, int position){
         holder.trackNameTextView.setText(trackNames.get(position));
-        holder.trackNameTextView.setTag(trackNames.get(position));
+        holder.trackNameTextView.setTag(position);
         holder.itemView.setSelected(selectedPosition == position);
 
         if(position == indexToScrollTo){

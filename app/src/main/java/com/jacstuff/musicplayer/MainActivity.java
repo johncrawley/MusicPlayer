@@ -4,7 +4,6 @@ import static com.jacstuff.musicplayer.search.AnimatorHelper.createShowAnimatorF
 
 import android.Manifest;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
@@ -15,8 +14,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,7 +25,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -43,7 +39,6 @@ import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.fragments.playlist.PlayerFragment;
 import com.jacstuff.musicplayer.fragments.PlaylistsFragment;
-import com.jacstuff.musicplayer.fragments.SearchFragment;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
 import com.jacstuff.musicplayer.list.SearchResultsListAdapter;
 import com.jacstuff.musicplayer.search.AnimatorHelper;
@@ -106,14 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private void showSearch(){
         Animator animator = createShowAnimatorFor(searchView, ()->{
             searchEditText.requestFocus();
-            //showKeyboard();
-            searchEditText.postDelayed(new Runnable(){
-                                            @Override public void run(){
-                                                InputMethodManager keyboard=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                                                keyboard.showSoftInput(searchEditText,0);
-                                            }
-                                        }
-                    ,200);
+            searchEditText.postDelayed(this::showKeyboard, 200);
         });
         searchView.setVisibility(View.VISIBLE);
         animator.start();
@@ -122,7 +110,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void hideSearch(){
-        Animator animator = AnimatorHelper.createHideAnimatorFor(searchView);
+        Animator animator = AnimatorHelper.createHideAnimatorFor(searchView, ()->{
+                searchView.setVisibility(View.GONE);
+                searchEditText.setText("");
+                clearSearchResults();
+        });
         hideKeyboard();
         animator.start();
     }
@@ -136,8 +128,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void showKeyboard(){
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(searchView, InputMethodManager.SHOW_FORCED);
+        imm.showSoftInput(searchEditText, InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
+
 
 
     @Override
@@ -204,24 +197,6 @@ public class MainActivity extends AppCompatActivity {
         Intent mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
         getApplicationContext().startForegroundService(mediaPlayerServiceIntent);
         getApplicationContext().bindService(mediaPlayerServiceIntent, serviceConnection, 0);
-    }
-
-
-    public void startSearchFragment(){
-        String tag = "search_for_tracks";
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        removePreviousFragmentTransaction(tag, fragmentTransaction);
-        SearchFragment searchFragment = SearchFragment.newInstance();
-        //searchFragment.show(fragmentTransaction, tag);
-    }
-
-
-    private void removePreviousFragmentTransaction(String tag, FragmentTransaction fragmentTransaction){
-        Fragment prev = getSupportFragmentManager().findFragmentByTag(tag);
-        if (prev != null) {
-            fragmentTransaction.remove(prev);
-        }
-        fragmentTransaction.addToBackStack(null);
     }
 
 
@@ -428,7 +403,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void updatePlaylistList(){
         PlaylistsFragment fragment = (PlaylistsFragment)getSupportFragmentManager().findFragmentByTag("f1");
-        fragment.onAddNewPlaylist();
+        if(fragment != null) {
+            fragment.onAddNewPlaylist();
+        }
     }
 
 
@@ -521,8 +498,7 @@ public class MainActivity extends AppCompatActivity {
         searchResultsRecyclerView = findViewById(R.id.searchResultsRecyclerView);
         setupRecyclerView(Collections.emptyList());
         setupSearchKeyListener();
-        setupButtons();
-
+        setupSearchViewButtons();
     }
 
 
@@ -538,21 +514,26 @@ public class MainActivity extends AppCompatActivity {
 
 
     @SuppressLint("NotifyDataSetChanged")
-    private void refreshTrackList(List<Track> tracks){
+    private void setSearchResults(List<Track> tracks){
         searchResultsListAdapter.setTracks(tracks);
         searchResultsListAdapter.notifyDataSetChanged();
+    }
+
+
+    private void clearSearchResults(){
+        setSearchResults(Collections.emptyList());
     }
 
 
     private void setupSearchKeyListener(){
         KeyListenerHelper.setListener(searchEditText, () ->{
             List<Track> tracks = getTracksForSearch(searchEditText.getText().toString());
-            refreshTrackList(tracks);
+            setSearchResults(tracks);
         });
     }
 
 
-    private void setupButtons(){
+    private void setupSearchViewButtons(){
         setupButton(R.id.addSelectedButton, this::addSelectedSearchResultToPlaylist);
         setupButton(R.id.addAllButton, this::addAllSearchResultsToPlaylist);
         setupButton(R.id.playSelectedButton, this::playSelectedSearchResult);
@@ -573,7 +554,7 @@ public class MainActivity extends AppCompatActivity {
     private void playSelectedSearchResult(){
         Track track = searchResultsListAdapter.getSelectedTrack();
         if(track != null){
-            mediaPlayerService.playSelectedTrack(track);
+            mediaPlayerService.selectAndPlayTrack(track);
         }
     }
 

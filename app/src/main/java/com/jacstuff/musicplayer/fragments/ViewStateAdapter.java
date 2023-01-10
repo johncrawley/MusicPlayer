@@ -45,16 +45,13 @@ public class ViewStateAdapter extends FragmentStateAdapter {
         else if (position == 2){
             return new ArtistsFragment();
         }
-        else if (position == 3){
-            return new AlbumsFragment();
-        }
-        return new SearchFragment();
+        return new AlbumsFragment();
     }
 
 
     @Override
     public int getItemCount() {
-        return 5;
+        return 4;
     }
 
 }
