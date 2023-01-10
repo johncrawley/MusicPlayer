@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewGroup playerButtonPanel;
     private RecyclerView searchResultsRecyclerView;
     private SearchResultsListAdapter searchResultsListAdapter;
+    private Button addSelectedSearchResultButton, addAllSearchResultsButton;
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
 
@@ -534,10 +535,23 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setupSearchViewButtons(){
-        setupButton(R.id.addSelectedButton, this::addSelectedSearchResultToPlaylist);
-        setupButton(R.id.addAllButton, this::addAllSearchResultsToPlaylist);
+        addSelectedSearchResultButton = setupButton(R.id.addSelectedButton, this::addSelectedSearchResultToPlaylist);
+        addAllSearchResultsButton = setupButton(R.id.addAllButton, this::addAllSearchResultsToPlaylist);
         setupButton(R.id.playSelectedButton, this::playSelectedSearchResult);
         setupButton(R.id.cancelButton, this::toggleSearch);
+    }
+
+
+
+    public void hideSearchAddButtons(){
+        addSelectedSearchResultButton.setVisibility(View.GONE);
+        addAllSearchResultsButton.setVisibility(View.GONE);
+    }
+
+
+    public void showSearchAddButtons(){
+        addSelectedSearchResultButton.setVisibility(View.VISIBLE);
+        addAllSearchResultsButton.setVisibility(View.VISIBLE);
     }
 
 
@@ -559,9 +573,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setupButton(int buttonId, Runnable runnable){
+    private Button setupButton(int buttonId, Runnable runnable){
         Button button = findViewById(buttonId);
         button.setOnClickListener((View v)-> runnable.run());
+        return button;
     }
 
 

@@ -12,8 +12,10 @@ import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistRecyclerAdapter;
+import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
@@ -69,13 +71,22 @@ public class PlaylistsFragment extends Fragment {
 
     private void setupPlaylistRecyclerView(View parentView){
         recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
-        List<Playlist> playlists = playlistRepository.getAllPlaylists();
+
+        List<Playlist> playlists = new ArrayList<>(100);
+        addAllTracksPlaylist(playlists);
+        playlists.addAll(playlistRepository.getAllPlaylists());
         playlists.forEach(x -> System.out.println(x.getName()));
         playlistRecyclerAdapter = new PlaylistRecyclerAdapter(playlists);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(playlistRecyclerAdapter);
+    }
+
+
+    private void addAllTracksPlaylist(List<Playlist> playlists){
+        Playlist playlist = new Playlist(PlaylistManagerImpl.ALL_TRACKS_PLAYLIST_ID, PlaylistManagerImpl.ALL_TRACKS_PLAYLIST);
+        playlists.add(playlist);
     }
 
 
