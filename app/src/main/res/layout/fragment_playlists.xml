@@ -33,6 +33,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/button_add_playlist"/>
+
+        <Button
+            android:id="@+id/deletePlaylistButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_delete_playlist"/>
+
+        <Button
+            android:id="@+id/loadPlaylistButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_load_playlist"/>
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

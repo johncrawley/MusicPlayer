@@ -33,8 +33,12 @@
     <string name="button_search_play_selected">Play</string>
     <string name="button_search_add_all">Add All</string>
     <string name="button_add_playlist">Add</string>
+    <string name="button_load_playlist">Load</string>
+    <string name="button_delete_playlist">Remove</string>
     <string name="button_load_tracks_from_artist">Load Tracks</string>
     <string name="add_playlist_input_text_hint">Playlist Name</string>
+
+    <string name="add_playlist_already_exists_error">A playlist with this name already exists</string>
     <string name="create_playlist_button_text">Create</string>
     <string name="status_ready">Ready</string>
     <string name="status_error">Error - Unable To Play</string>
