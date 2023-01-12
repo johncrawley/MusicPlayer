@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
+import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.fragments.playlist.PlayerFragment;
 import com.jacstuff.musicplayer.fragments.PlaylistsFragment;
@@ -562,6 +563,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void addAllSearchResultsToPlaylist(){
 
+    }
+
+    public void setActivePlaylist(Playlist playlist){
+        mediaPlayerService.setActivePlaylist(playlist);
     }
 
 

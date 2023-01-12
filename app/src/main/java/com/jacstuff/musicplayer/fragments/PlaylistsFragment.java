@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
@@ -44,7 +45,6 @@ public class PlaylistsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        System.out.println("Entered onCreateView");
         context = getContext();
         View view = inflater.inflate(R.layout.fragment_playlists, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
@@ -76,7 +76,7 @@ public class PlaylistsFragment extends Fragment {
         addAllTracksPlaylist(playlists);
         playlists.addAll(playlistRepository.getAllPlaylists());
         playlists.forEach(x -> System.out.println(x.getName()));
-        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(playlists);
+        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(playlists, this::setPlaylist);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -110,6 +110,20 @@ public class PlaylistsFragment extends Fragment {
         removePreviousFragmentTransaction(fragmentManager,tag, fragmentTransaction);
         AddPlaylistFragment addPlaylistFragment = AddPlaylistFragment.newInstance();
         addPlaylistFragment.show(fragmentTransaction, tag);
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ PlaylistsFragment: " + msg);
+    }
+
+
+    private void setPlaylist(Playlist playlist){
+        MainActivity mainActivity = (MainActivity)getActivity();
+        if(mainActivity != null){
+            boolean isPlaylistNull = playlist == null;
+            log("setPlaylist()  playlist null: " + isPlaylistNull);
+            mainActivity.setActivePlaylist(playlist);
+        }
     }
 
 

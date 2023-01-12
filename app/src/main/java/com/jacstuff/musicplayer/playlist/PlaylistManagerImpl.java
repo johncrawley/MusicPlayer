@@ -95,8 +95,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    private void loadPlaylist(Playlist playlist){
-        if(this.currentPlaylist.getId() == playlist.getId()){
+    public void loadPlaylist(Playlist playlist){
+        if(currentPlaylist != null && (this.currentPlaylist.getId() == playlist.getId())){
             return;
         }
         this.currentPlaylist = playlist;

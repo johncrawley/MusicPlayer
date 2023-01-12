@@ -22,6 +22,7 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.TimeConverter;
 import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
+import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.search.TrackFinder;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.db.track.TrackRepositoryImpl;
@@ -164,6 +165,16 @@ public class MediaPlayerService extends Service {
             mainActivity.setTrackInfoOnView(currentTrack, elapsedTime);
         });
     }
+
+
+    public void setActivePlaylist(Playlist playlist){
+        boolean isNull = playlist == null;
+        log("setActivePlaylist() is playlist null: " + isNull);
+        playlistManager.loadPlaylist(playlist);
+        updateViewTrackList();
+
+    }
+
 
 
     private void reloadPlaylistIfNotInitialized(){

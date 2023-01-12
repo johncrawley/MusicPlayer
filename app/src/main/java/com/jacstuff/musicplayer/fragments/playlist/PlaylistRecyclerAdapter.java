@@ -11,6 +11,7 @@ import com.jacstuff.musicplayer.db.track.Track;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +22,11 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
+    private final Consumer<Playlist> onItemClickConsumer;
 
+    private void log(String msg){
+        System.out.println("^^^ PlaylistRecyclerAdapter: " + msg);
+    }
 
     class PlaylistViewHolder extends RecyclerView.ViewHolder {
 
@@ -35,25 +40,25 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
                 if(currentlySelectedView != null){
                     currentlySelectedView.setSelected(false);
                 }
+                Playlist playlist = (Playlist)trackNameTextView.getTag();
+                if(playlist == null){
+                    log("PlaylistViewHolder on click: attached playlist is null");
+                    playlist = new Playlist(-20L, "not found!");
+                }
+                onItemClickConsumer.accept(playlist);
                 currentlySelectedView = v;
                 currentlySelectedView.setSelected(true);
-               // mediaPlayerView.notifyCurrentlySelectedTrack(getLayoutPosition());
-               // mediaPlayerView.scrollToListPosition(getLayoutPosition());
-               // setIndexToScrollTo(getLayoutPosition());
                 currentlySelectedView.setSelected(true);
             });
         }
     }
 
 
-    public PlaylistRecyclerAdapter(List<Playlist> playlists){
-        this.playlists = new ArrayList<>(playlists);
-       /*
-        for(Playlist playlist : playlists){
-            this.trackNames.add(getStrOf(trackDetails));
-        }
 
-        */
+    public PlaylistRecyclerAdapter(List<Playlist> playlists, Consumer<Playlist> onItemClickConsumer){
+        this.playlists = new ArrayList<>(playlists);
+        this.onItemClickConsumer = onItemClickConsumer;
+
     }
 
     public void refresh(List<Playlist> playlists){
@@ -85,9 +90,9 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     @Override
     public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position){
         holder.trackNameTextView.setText(playlists.get(position).getName());
-        //holder.trackNameTextView.setTag(playlists.get(position));
+        holder.trackNameTextView.setTag(playlists.get(position));
         holder.itemView.setSelected(selectedPosition == position);
-
+        System.out.println("PlaylistRecyclerAdapter: onBindViewHolder() playlists size: " + playlists.size());
         if(position == indexToScrollTo){
             deselectCurrentlySelectedItem();
             currentlySelectedView = holder.itemView;

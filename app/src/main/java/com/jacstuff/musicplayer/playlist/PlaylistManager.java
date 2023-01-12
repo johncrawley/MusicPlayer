@@ -2,6 +2,7 @@ package com.jacstuff.musicplayer.playlist;
 
 import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
+import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.track.Track;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public interface PlaylistManager {
     List<Track> getTracks();
     void init();
     int getCurrentTrackIndex();
+    void loadPlaylist(Playlist playlist);
     int getNumberOfTracks();
     void enableShuffle();
     void disableShuffle();
