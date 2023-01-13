@@ -20,6 +20,7 @@ public interface PlaylistManager {
     void init();
     int getCurrentTrackIndex();
     void loadPlaylist(Playlist playlist);
+    void addTrackToCurrentPlaylist(Track track);
     int getNumberOfTracks();
     void enableShuffle();
     void disableShuffle();

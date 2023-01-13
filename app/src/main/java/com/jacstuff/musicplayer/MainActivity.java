@@ -38,8 +38,8 @@ import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.track.Track;
-import com.jacstuff.musicplayer.fragments.playlist.PlayerFragment;
-import com.jacstuff.musicplayer.fragments.PlaylistsFragment;
+import com.jacstuff.musicplayer.fragments.queue.QueueFragment;
+import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
 import com.jacstuff.musicplayer.list.SearchResultsListAdapter;
 import com.jacstuff.musicplayer.search.AnimatorHelper;
@@ -63,11 +63,12 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton nextTrackButton, previousTrackButton;
     private ImageButton turnShuffleOnButton, turnShuffleOffButton;
     private String totalTrackTime = "0:00";
-    private PlayerFragment playerFragment;
+    private QueueFragment queueFragment;
     private ViewGroup playerButtonPanel;
     private RecyclerView searchResultsRecyclerView;
     private SearchResultsListAdapter searchResultsListAdapter;
     private Button addSelectedSearchResultButton, addAllSearchResultsButton;
+    private TabLayout tabLayout;
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
 
@@ -153,8 +154,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void setPlayerFragment(PlayerFragment playerFragment){
-        this.playerFragment = playerFragment;
+    public void setPlayerFragment(QueueFragment queueFragment){
+        this.queueFragment = queueFragment;
         onQueueFragmentReady();
     }
 
@@ -361,8 +362,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void scrollToPosition(int index){
        runOnUiThread(()-> {
-           if(playerFragment!= null){
-               playerFragment.scrollToListPosition(index);
+           if(queueFragment != null){
+               queueFragment.scrollToListPosition(index);
            }
        });
     }
@@ -392,14 +393,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setupTabLayout(){
-        TabLayout tabLayout = findViewById(R.id.tabLayout);
-        final ViewPager2 pager = findViewById(R.id.pager);
+        tabLayout = findViewById(R.id.tabLayout);
+        ViewPager2 tabViewPager = findViewById(R.id.pager);
         if(tabLayout == null){
             return;
         }
         viewStateAdapter = new ViewStateAdapter(getSupportFragmentManager(), getLifecycle());
-        pager.setAdapter(viewStateAdapter);
-        new TabHelper().setupTabLayout(tabLayout, pager);
+        tabViewPager.setAdapter(viewStateAdapter);
+        new TabHelper().setupTabLayout(tabLayout, tabViewPager);
     }
 
 
@@ -413,10 +414,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
         runOnUiThread(()-> {
-            if(playerFragment!= null){
-                playerFragment.updateTracksList(updatedTracks, currentTrackIndex);
+            if(queueFragment != null){
+                queueFragment.updateTracksList(updatedTracks, currentTrackIndex);
             }
             updateViews(updatedTracks);
+            tabLayout.getTabAt(0).select();
         });
     }
 
@@ -557,7 +559,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void addSelectedSearchResultToPlaylist(){
-
+       Track track = searchResultsListAdapter.getSelectedTrack();
+       if(track != null){
+           mediaPlayerService.addTrackToCurrentPlaylist(track);
+       }
     }
 
 

@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.fragments;
+package com.jacstuff.musicplayer.fragments.playlist;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
+import com.jacstuff.musicplayer.fragments.AddPlaylistFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistRecyclerAdapter;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
@@ -57,6 +58,7 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void setupButtons(View parentView){
+        setupLoadPlaylistButton(parentView);
         setupAddPlaylistButton(parentView);
     }
 
@@ -69,14 +71,20 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
+    private void setupLoadPlaylistButton(View parentView){
+        Button loadPlaylistButton = parentView.findViewById(R.id.loadPlaylistButton);
+        loadPlaylistButton.setOnClickListener((View v)->{
+            loadPlaylist();
+        });
+    }
+
+
     private void setupPlaylistRecyclerView(View parentView){
         recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
-
         List<Playlist> playlists = new ArrayList<>(100);
         addAllTracksPlaylist(playlists);
         playlists.addAll(playlistRepository.getAllPlaylists());
-        playlists.forEach(x -> System.out.println(x.getName()));
-        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(playlists, this::setPlaylist);
+        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(playlists, (Playlist p)->{});
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -95,6 +103,16 @@ public class PlaylistsFragment extends Fragment {
         playlistRecyclerAdapter.refresh(playlistRepository.getAllPlaylists());
     }
 
+    private void loadPlaylist(){
+        Playlist playlist = playlistRecyclerAdapter.getSelectedPlaylist();
+        if(playlist != null){
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if(mainActivity != null){
+                mainActivity.setActivePlaylist(playlist);
+            }
+        }
+    }
+
 
     private void startAddPlaylistFragment(){
         if(hasClicked){
@@ -110,20 +128,6 @@ public class PlaylistsFragment extends Fragment {
         removePreviousFragmentTransaction(fragmentManager,tag, fragmentTransaction);
         AddPlaylistFragment addPlaylistFragment = AddPlaylistFragment.newInstance();
         addPlaylistFragment.show(fragmentTransaction, tag);
-    }
-
-    private void log(String msg){
-        System.out.println("^^^ PlaylistsFragment: " + msg);
-    }
-
-
-    private void setPlaylist(Playlist playlist){
-        MainActivity mainActivity = (MainActivity)getActivity();
-        if(mainActivity != null){
-            boolean isPlaylistNull = playlist == null;
-            log("setPlaylist()  playlist null: " + isPlaylistNull);
-            mainActivity.setActivePlaylist(playlist);
-        }
     }
 
 

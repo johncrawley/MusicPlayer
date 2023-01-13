@@ -114,6 +114,16 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
+    @Override
+    public void addTrackToCurrentPlaylist(Track track) {
+        if(currentPlaylist.getId() == ALL_TRACKS_PLAYLIST_ID){
+            return;
+        }
+        tracks.add(track);
+        playlistItemRepository.addPlaylistItem(track, currentPlaylist.getId());
+    }
+
+
     private void loadAllTracksPlaylist(){
         if(allTracks == null){
             initTrackList();

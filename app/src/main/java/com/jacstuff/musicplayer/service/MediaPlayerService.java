@@ -172,9 +172,13 @@ public class MediaPlayerService extends Service {
         log("setActivePlaylist() is playlist null: " + isNull);
         playlistManager.loadPlaylist(playlist);
         updateViewTrackList();
-
     }
 
+
+    public void addTrackToCurrentPlaylist(Track track){
+        playlistManager.addTrackToCurrentPlaylist(track);
+        updateViewTrackList();
+    }
 
 
     private void reloadPlaylistIfNotInitialized(){

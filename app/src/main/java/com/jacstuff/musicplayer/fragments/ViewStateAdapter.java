@@ -8,7 +8,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.jacstuff.musicplayer.fragments.albums.AlbumsFragment;
 import com.jacstuff.musicplayer.fragments.artist.ArtistsFragment;
-import com.jacstuff.musicplayer.fragments.playlist.PlayerFragment;
+import com.jacstuff.musicplayer.fragments.queue.QueueFragment;
+import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 
 public class ViewStateAdapter extends FragmentStateAdapter {
 
@@ -37,7 +38,7 @@ public class ViewStateAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         if(position == 0){
-            return new PlayerFragment();
+            return new QueueFragment();
         }
         else if (position == 1){
             return new PlaylistsFragment();

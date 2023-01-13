@@ -26,7 +26,7 @@ public class PlaylistItemRepositoryImpl extends AbstractRepository implements Pl
     @Override
     public void addPlaylistItem(Track track, long playlistId) {
         addValuesToTable(db,
-                DbContract.TracksEntry.TABLE_NAME,
+                DbContract.PlaylistItemsEntry.TABLE_NAME,
                 createTrackContentValuesFor(track, playlistId));
     }
 

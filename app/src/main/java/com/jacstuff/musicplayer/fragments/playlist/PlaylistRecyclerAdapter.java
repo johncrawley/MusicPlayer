@@ -23,6 +23,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
     private final Consumer<Playlist> onItemClickConsumer;
+    private Playlist selectedPlaylist;
 
     private void log(String msg){
         System.out.println("^^^ PlaylistRecyclerAdapter: " + msg);
@@ -40,12 +41,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
                 if(currentlySelectedView != null){
                     currentlySelectedView.setSelected(false);
                 }
-                Playlist playlist = (Playlist)trackNameTextView.getTag();
-                if(playlist == null){
-                    log("PlaylistViewHolder on click: attached playlist is null");
-                    playlist = new Playlist(-20L, "not found!");
-                }
-                onItemClickConsumer.accept(playlist);
+                selectedPlaylist = (Playlist)trackNameTextView.getTag();
                 currentlySelectedView = v;
                 currentlySelectedView.setSelected(true);
                 currentlySelectedView.setSelected(true);
@@ -54,16 +50,21 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     }
 
 
-
     public PlaylistRecyclerAdapter(List<Playlist> playlists, Consumer<Playlist> onItemClickConsumer){
         this.playlists = new ArrayList<>(playlists);
         this.onItemClickConsumer = onItemClickConsumer;
 
     }
 
+
     public void refresh(List<Playlist> playlists){
         this.playlists.clear();
         this.playlists.addAll(playlists);
+    }
+
+
+    public Playlist getSelectedPlaylist(){
+        return selectedPlaylist;
     }
 
 
