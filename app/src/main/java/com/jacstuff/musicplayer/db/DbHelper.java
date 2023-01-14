@@ -68,6 +68,10 @@ public class DbHelper extends SQLiteOpenHelper {
                     + DbContract.AlbumsEntry.COL_NAME + TEXT
                     + CLOSING_BRACKET;
 
+    private static final String PLAYLISTS_TABLE_PRIMARY_KEY = DbContract.PlaylistEntry.TABLE_NAME
+            + "."
+            + DbContract.PlaylistEntry._ID;
+
 
     private static final String SQL_CREATE_PLAYLIST_ITEMS_TABLE =
             CREATE_TABLE_IF_NOT_EXISTS
@@ -84,7 +88,11 @@ public class DbHelper extends SQLiteOpenHelper {
                     + PlaylistItemsEntry.COL_ARTIST_ID + INTEGER + COMMA
                     + PlaylistItemsEntry.COL_TRACK_NUMBER + INTEGER + COMMA
                     + PlaylistItemsEntry.COL_GENRE + TEXT + COMMA
-                    + PlaylistItemsEntry.COL_DURATION + INTEGER
+                    + PlaylistItemsEntry.COL_DURATION + INTEGER + COMMA
+                    + " CONSTRAINT fk_playlists "
+                    + "     FOREIGN KEY (" + PlaylistItemsEntry.COL_PLAYLIST_ID + ")"
+                    + "     REFERENCES departments(" + PLAYLISTS_TABLE_PRIMARY_KEY + ")"
+                    + "     ON DELETE CASCADE "
                     + CLOSING_BRACKET;
 
 

@@ -1,11 +1,13 @@
 package com.jacstuff.musicplayer.fragments.playlist;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
@@ -13,9 +15,7 @@ import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.fragments.AddPlaylistFragment;
-import com.jacstuff.musicplayer.fragments.playlist.PlaylistRecyclerAdapter;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
-import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,9 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class PlaylistsFragment extends Fragment {
 
     private Context context;
-    private MainViewModel viewModel;
     private boolean hasClicked;
-    private RecyclerView recyclerView;
     private PlaylistRecyclerAdapter playlistRecyclerAdapter;
     private PlaylistRepository playlistRepository;
 
@@ -48,43 +45,37 @@ public class PlaylistsFragment extends Fragment {
                              Bundle savedInstanceState) {
         context = getContext();
         View view = inflater.inflate(R.layout.fragment_playlists, container, false);
-        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         playlistRepository = new PlaylistRepositoryImpl(getContext());
-        setupButtons(view);
         setupPlaylistRecyclerView(view);
         hasClicked = false;
         return view;
     }
 
 
+    @Override
+    public void onViewCreated(View view,  Bundle savedInstanceState){
+        setupButtons(view);
+    }
+
+
     private void setupButtons(View parentView){
-        setupLoadPlaylistButton(parentView);
-        setupAddPlaylistButton(parentView);
+        setupButton(parentView, R.id.addPlaylistButton, this::startAddPlaylistFragment);
+        setupButton(parentView, R.id.deletePlaylistButton, this::showDeletePlaylistConfirmationDialog);
+        setupButton(parentView, R.id.loadPlaylistButton, this::loadPlaylist);
     }
 
 
-    private void setupAddPlaylistButton(View parentView){
-        Button addPlaylistButton = parentView.findViewById(R.id.addPlaylistButton);
-        addPlaylistButton.setOnClickListener((View v)->{
-            startAddPlaylistFragment();
-        });
-    }
-
-
-    private void setupLoadPlaylistButton(View parentView){
-        Button loadPlaylistButton = parentView.findViewById(R.id.loadPlaylistButton);
-        loadPlaylistButton.setOnClickListener((View v)->{
-            loadPlaylist();
-        });
+    private void setupButton(View parentView, int buttonId, Runnable onClick){
+        if(parentView!= null){
+            Button button = parentView.findViewById(buttonId);
+            button.setOnClickListener((View v)->onClick.run());
+        }
     }
 
 
     private void setupPlaylistRecyclerView(View parentView){
-        recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
-        List<Playlist> playlists = new ArrayList<>(100);
-        addAllTracksPlaylist(playlists);
-        playlists.addAll(playlistRepository.getAllPlaylists());
-        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(playlists, (Playlist p)->{});
+        RecyclerView recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
+        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(getAllPlaylists(), (Playlist p)->{});
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -100,8 +91,9 @@ public class PlaylistsFragment extends Fragment {
 
     public void onAddNewPlaylist(){
         hasClicked = false;
-        playlistRecyclerAdapter.refresh(playlistRepository.getAllPlaylists());
+        refreshList();
     }
+
 
     private void loadPlaylist(){
         Playlist playlist = playlistRecyclerAdapter.getSelectedPlaylist();
@@ -147,5 +139,44 @@ public class PlaylistsFragment extends Fragment {
         }
         fragmentTransaction.addToBackStack(null);
     }
+
+
+    private void showDeletePlaylistConfirmationDialog(){
+        Playlist playlist = playlistRecyclerAdapter.getSelectedPlaylist();
+        if(playlist == null){
+            return;
+        }
+        new AlertDialog.Builder(getContext())
+                .setTitle(getString(R.string.delete_confirm_dialog_title))
+                .setMessage(getResources().getString(R.string.delete_confirm_dialog_text, playlist.getName()))
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                    playlistRepository.deletePlaylist(playlist.getId());
+                    refreshList();
+                    showPlaylistDeletedToast();
+                })
+                .setNegativeButton(android.R.string.no, null).show();
+    }
+
+
+    private void showPlaylistDeletedToast(){
+        Toast.makeText(getContext(), getString(R.string.delete_playlist_toast_success), Toast.LENGTH_SHORT).show();
+    }
+
+
+    @SuppressWarnings("notifyDataSetChanged")
+    private void refreshList(){
+        playlistRecyclerAdapter.refresh(getAllPlaylists());
+        playlistRecyclerAdapter.notifyDataSetChanged();
+    }
+
+
+    private List<Playlist> getAllPlaylists(){
+        List<Playlist> playlists = new ArrayList<>(100);
+        addAllTracksPlaylist(playlists);
+        playlists.addAll(playlistRepository.getAllPlaylists());
+        return playlists;
+    }
+
 
 }

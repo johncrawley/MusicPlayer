@@ -38,6 +38,13 @@
     <string name="button_load_tracks_from_artist">Load Tracks</string>
     <string name="add_playlist_input_text_hint">Playlist Name</string>
 
+
+    <string name="delete_confirm_dialog_title">Delete Playlist</string>
+    <string name="delete_confirm_dialog_text">Are you sure you want to delete Playlist %1$s?</string>
+    <string name="delete_playlist_toast_success">Playlist Deleted</string>
+
+
+
     <string name="add_playlist_already_exists_error">A playlist with this name already exists</string>
     <string name="create_playlist_button_text">Create</string>
     <string name="status_ready">Ready</string>

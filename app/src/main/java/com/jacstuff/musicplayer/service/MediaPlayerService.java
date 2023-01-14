@@ -203,6 +203,10 @@ public class MediaPlayerService extends Service {
         }
     }
 
+    public PlaylistManager getPlaylistManager(){
+        return playlistManager;
+    }
+
 
     private void updateViewTrackList(){
         mainActivity.updateTracksList(playlistManager.getTracks(), currentTrack.getIndex());
