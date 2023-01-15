@@ -4,6 +4,7 @@ import static com.jacstuff.musicplayer.search.AnimatorHelper.createShowAnimatorF
 
 import android.Manifest;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
@@ -69,18 +70,18 @@ public class MainActivity extends AppCompatActivity {
     private SearchResultsListAdapter searchResultsListAdapter;
     private Button addSelectedSearchResultButton, addAllSearchResultsButton;
     private TabLayout tabLayout;
+    private View searchView;
+    private OnBackPressedCallback dismissSearchViewOnBackPressedCallback;
+
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
-
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
             MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
             mediaPlayerService = binder.getService();
             mediaPlayerService.setActivity(MainActivity.this);
         }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {}
+        @Override public void onServiceDisconnected(ComponentName arg0) {}
     };
 
 
@@ -90,7 +91,20 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayerService.initPlaylist();
     }
 
-    private View searchView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        setupViews();
+        setupTabLayout();
+        setupViewModel();
+        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
+        startMediaPlayerService();
+        setupSearchView();
+        setupDismissSearchOnBackPressed();
+    }
+
 
     private void toggleSearch(){
         if(searchView.getVisibility() == View.VISIBLE){
@@ -101,24 +115,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void setupDismissSearchOnBackPressed(){
+        dismissSearchViewOnBackPressedCallback = new OnBackPressedCallback(false) {
+            @Override
+            public void handleOnBackPressed() {
+                hideSearch();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, dismissSearchViewOnBackPressedCallback);
+    }
+
+
     private void showSearch(){
         Animator animator = createShowAnimatorFor(searchView, ()->{
             searchEditText.requestFocus();
             searchEditText.postDelayed(this::showKeyboard, 200);
         });
         searchView.setVisibility(View.VISIBLE);
+        dismissSearchViewOnBackPressedCallback.setEnabled(true);
         animator.start();
-
     }
 
 
     private void hideSearch(){
+        if(searchView.getVisibility() != View.VISIBLE){
+            return;
+        }
         Animator animator = AnimatorHelper.createHideAnimatorFor(searchView, ()->{
-                searchView.setVisibility(View.GONE);
-                searchEditText.setText("");
-                clearSearchResults();
+            searchView.setVisibility(View.GONE);
+            searchEditText.setText("");
+            clearSearchResults();
         });
         hideKeyboard();
+        dismissSearchViewOnBackPressedCallback.setEnabled(false);
         animator.start();
     }
 
@@ -132,20 +161,6 @@ public class MainActivity extends AppCompatActivity {
     private void showKeyboard(){
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(searchEditText, InputMethodManager.RESULT_UNCHANGED_SHOWN);
-    }
-
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        setupViews();
-        setupTabLayout();
-        setupViewModel();
-        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
-        startMediaPlayerService();
-        setupSearchView();
     }
 
 
