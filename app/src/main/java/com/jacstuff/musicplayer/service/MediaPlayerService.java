@@ -180,6 +180,13 @@ public class MediaPlayerService extends Service {
     }
 
 
+    public void addTracksToCurrentPlaylist(List<Track> tracks){
+        playlistManager.addTracksToCurrentPlaylist(tracks);
+        updateViewTrackList();
+        mediaNotificationManager.updateNotification();
+    }
+
+
     private void reloadPlaylistIfNotInitialized(){
         if(!isPlaylistInitialized) {
             playlistManager.init();

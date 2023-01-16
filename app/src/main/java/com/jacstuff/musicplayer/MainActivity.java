@@ -580,7 +580,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void addAllSearchResultsToPlaylist(){
-
+        List<Track> tracks = searchResultsListAdapter.getAllItems();
+        if(tracks != null){
+            mediaPlayerService.addTracksToCurrentPlaylist(tracks);
+        }
     }
 
     public void setActivePlaylist(Playlist playlist){

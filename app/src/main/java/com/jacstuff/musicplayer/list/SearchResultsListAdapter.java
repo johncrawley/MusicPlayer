@@ -68,6 +68,11 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     }
 
 
+    public List<Track> getAllItems(){
+        return tracks;
+    }
+
+
     @Override
     @NonNull
     public SearchResultsListAdapter.TrackViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
