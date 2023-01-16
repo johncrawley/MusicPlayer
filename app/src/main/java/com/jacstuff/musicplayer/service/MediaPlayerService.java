@@ -63,7 +63,6 @@ public class MediaPlayerService extends Service {
     private enum MediaPlayerState { PAUSED, PLAYING, STOPPED, FINISHED}
     private MediaPlayerState currentState = MediaPlayerState.STOPPED;
     private MainActivity mainActivity;
-    private List<Track> tracks;
     private PlaylistManager playlistManager;
     private boolean isScanningForTracks;
     private final IBinder binder = new LocalBinder();
@@ -77,7 +76,6 @@ public class MediaPlayerService extends Service {
 
     public MediaPlayerService() {
         executorService = Executors.newScheduledThreadPool(3);
-        tracks = new ArrayList<>();
     }
 
 
@@ -178,6 +176,7 @@ public class MediaPlayerService extends Service {
     public void addTrackToCurrentPlaylist(Track track){
         playlistManager.addTrackToCurrentPlaylist(track);
         updateViewTrackList();
+        mediaNotificationManager.updateNotification();
     }
 
 
@@ -186,7 +185,7 @@ public class MediaPlayerService extends Service {
             playlistManager.init();
             loadNextTrack();
             isPlaylistInitialized = true;
-            mainActivity.displayPlaylistRefreshedMessage(tracks.size());
+            mainActivity.displayPlaylistRefreshedMessage(getTrackCount());
         }
         if(trackFinder == null){
             trackFinder =  new TrackFinder(new TrackRepositoryImpl(getApplicationContext()));
@@ -297,8 +296,7 @@ public class MediaPlayerService extends Service {
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         playlistManager = new PlaylistManagerImpl(mainActivity.getApplicationContext());
-        tracks = playlistManager.getTracks();
-        mainActivity.onServiceReady(tracks);
+        mainActivity.onServiceReady();
     }
 
 
@@ -419,8 +417,8 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public int getNumberOfTracks(){
-        return playlistManager.getNumberOfTracks();
+    int getTrackCount(){
+        return playlistManager == null ? 0 : playlistManager.getNumberOfTracks();
     }
 
 
@@ -460,11 +458,6 @@ public class MediaPlayerService extends Service {
 
     String getCurrentUrl(){
         return currentTrack == null ? "" : currentTrack.getPathname();
-    }
-
-
-    int getTrackCount(){
-        return tracks.size();
     }
 
 

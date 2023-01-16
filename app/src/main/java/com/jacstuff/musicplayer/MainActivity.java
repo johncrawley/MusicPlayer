@@ -85,9 +85,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    public void onServiceReady(List<Track> tracks){
-        log("Entered onServiceReady(), about to initPlaylist and refresh on mediaPlayerService");
-        //getPlayerFragment().onServiceReady(tracks);
+    public void onServiceReady(){
         mediaPlayerService.initPlaylist();
     }
 
