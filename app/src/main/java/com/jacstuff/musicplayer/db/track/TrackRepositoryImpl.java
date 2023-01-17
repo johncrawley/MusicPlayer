@@ -8,6 +8,7 @@ import com.jacstuff.musicplayer.db.AbstractRepository;
 import com.jacstuff.musicplayer.db.DbContract;
 import com.jacstuff.musicplayer.db.DbContract.ArtistsEntry;
 import com.jacstuff.musicplayer.db.DbContract.AlbumsEntry;
+import com.jacstuff.musicplayer.db.DbHelper;
 import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.album.AlbumRepository;
 import com.jacstuff.musicplayer.db.artist.Artist;
@@ -22,11 +23,13 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
 
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
+    private final DbHelper dbHelper;
 
     public TrackRepositoryImpl(Context context){
         super(context);
         artistRepository = new ArtistRepository(context);
         albumRepository = new AlbumRepository(context);
+        dbHelper = DbHelper.getInstance(context);
     }
 
 
@@ -37,6 +40,12 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
         addValuesToTable(db,
                 DbContract.TracksEntry.TABLE_NAME,
                 createTrackContentValuesFor(track, artistId, albumId));
+    }
+
+
+    @Override
+    public void recreateTracksTables(){
+        dbHelper.dropAndRecreateTracksArtistsAndAlbumsTables(db);
     }
 
 

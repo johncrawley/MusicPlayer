@@ -61,8 +61,14 @@ public class QueueFragment extends Fragment implements MediaPlayerView, ListSubs
 
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
+        log("Entered updateTrackList()");
         refreshTrackList(updatedTracks);
         scrollToListPosition(currentTrackIndex);
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ QueueFragment: " + msg);
     }
 
 

@@ -24,6 +24,12 @@ public class AudioInfoLoader {
 
 
     public void loadAudioFiles(){
+        rebuildTables();
+        addTracksData();
+    }
+
+
+    private void addTracksData(){
         Cursor cursor = createCursorForFilesystemTracks();
         if(cursor != null){
             while(cursor.moveToNext()){
@@ -31,6 +37,11 @@ public class AudioInfoLoader {
             }
             cursor.close();
         }
+    }
+
+
+    private void rebuildTables(){
+        trackRepository.recreateTracksTables();
     }
 
 

@@ -2,12 +2,12 @@ package com.jacstuff.musicplayer.playlist;
 
 import android.content.Context;
 
+import com.jacstuff.musicplayer.MediaPlayerView;
 import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistItemRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistItemRepositoryImpl;
-import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.db.track.TrackRepository;
 import com.jacstuff.musicplayer.db.track.TrackRepositoryImpl;
@@ -26,6 +26,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private final AudioInfoLoader sdCardReader;
     private final Random random;
     private final TrackRepository trackRepository;
+    private final PlaylistItemRepository playlistItemRepository;
     private int previousNumberOfTracks;
     private List<Track> tracks;
     private List<Track> allTracks;
@@ -36,7 +37,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     public static String ALL_TRACKS_PLAYLIST = "All Tracks";
     public static long ALL_TRACKS_PLAYLIST_ID = -10L;
     private Playlist currentPlaylist;
-    private PlaylistItemRepository playlistItemRepository;
+    private boolean isInitialized;
 
 
     public PlaylistManagerImpl(Context context){
@@ -68,19 +69,22 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
-    public void addTracksFromStorage(){
+    public void addTracksFromStorage(MediaPlayerService mediaPlayerService){
         sdCardReader.loadAudioFiles();
         initTrackList();
-        calculateAndDisplayNewTracksStats();
+        calculateAndDisplayNewTracksStats(mediaPlayerService);
     }
 
 
-    private void calculateAndDisplayNewTracksStats(){
-        int numberOfNewTracks = tracks.size() - previousNumberOfTracks;
-        if(numberOfNewTracks > 0){
-            mediaPlayerService.displayPlaylistRefreshedMessage(numberOfNewTracks);
-        }
-        previousNumberOfTracks = tracks.size();
+    private void calculateAndDisplayNewTracksStats(MediaPlayerService mediaPlayerService){
+        log("Entered calculateAndDisplayNewTracksStats()");
+        boolean isTracksNull = tracks == null;
+        log("calculateAndDisplayNewTracksStats() tracks are null : " + isTracksNull);
+        boolean isMediaPlayerServiceNull = mediaPlayerService == null;
+        log("calculateAndDisplayNewTracksStats() isMediaPlayerService null: " + isMediaPlayerServiceNull);
+        //int numberOfNewTracks = tracks.size() - previousNumberOfTracks;
+        mediaPlayerService.displayPlaylistRefreshedMessage(0);
+       // previousNumberOfTracks = tracks.size();
     }
 
 
@@ -93,6 +97,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
         tracks = getSortedTracks(trackRepository.getAllTracks());
         assignIndexesToTracks();
         allTracks = new ArrayList<>(tracks);
+        isInitialized = true;
+    }
+
+    @Override
+    public boolean hasBeenInitialized(){
+        return isInitialized;
     }
 
 
@@ -117,7 +127,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void addTrackToCurrentPlaylist(Track track) {
-        if(currentPlaylist.getId() == ALL_TRACKS_PLAYLIST_ID){
+        if(currentPlaylist == null || currentPlaylist.getId() == ALL_TRACKS_PLAYLIST_ID){
             return;
         }
         tracks.add(track);
@@ -135,7 +145,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
             playlistItemRepository.addPlaylistItem(track, currentPlaylist.getId());
         }
     }
-
 
 
     private void loadAllTracksPlaylist(){

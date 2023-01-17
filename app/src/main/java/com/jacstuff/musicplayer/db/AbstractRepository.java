@@ -17,6 +17,7 @@ public class AbstractRepository {
         db = dbHelper.getWritableDatabase();
     }
 
+
     protected String getString(String name){
         return cursor.getString(cursor.getColumnIndexOrThrow(name));
     }
@@ -26,8 +27,8 @@ public class AbstractRepository {
         return cursor.getLong(cursor.getColumnIndexOrThrow(name));
     }
 
+
     public long addValuesToTable(SQLiteDatabase db, String tableName, ContentValues contentValues){
-        log("Entered addValuesToTable()");
         long id = -1;
         db.beginTransaction();
         try {
@@ -39,9 +40,5 @@ public class AbstractRepository {
         }
         db.endTransaction();
         return id;
-    }
-
-    private void log(String msg){
-        System.out.println("^^^AbstractRepository: " + msg);
     }
 }

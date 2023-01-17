@@ -9,6 +9,7 @@ public interface TrackRepository {
 
     void addTrack(Track track);
     void deleteTrack(Track track);
+    void recreateTracksTables();
     List<Track> getAllTracks();
     List<Track> getTracksForArtist(Artist artist);
     List<Track> getTracksForAlbum(Album album);

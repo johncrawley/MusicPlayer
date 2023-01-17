@@ -98,7 +98,9 @@ public class MediaPlayerService extends Service {
         }
         executorService.execute(()->{
             isScanningForTracks = true;
-            playlistManager.addTracksFromStorage();
+            log("scanForTracks, about to call playlistManager, addTracksFromStorage()");
+            playlistManager.addTracksFromStorage(this);
+            log("scanForTracks() track scan finished, about to updateViewTrackList()");
             updateViewTrackList();
             isScanningForTracks = false;
         });
@@ -119,6 +121,8 @@ public class MediaPlayerService extends Service {
 
 
     public void displayPlaylistRefreshedMessage(int numberOfNewTracks){
+        log("entered displayPlaylistRefreshedMessage()");
+        System.out.flush();
         mainActivity.displayPlaylistRefreshedMessage(numberOfNewTracks);
     }
 
@@ -162,6 +166,21 @@ public class MediaPlayerService extends Service {
             updateViewTrackList();
             mainActivity.setTrackInfoOnView(currentTrack, elapsedTime);
         });
+    }
+
+
+    public void initPlaylistIfFirstTime(){
+        initPlaylist();
+
+        //boolean isPlManNull = playlistManager == null;
+//        log("Entered initPlaylistIfFirstTime() playlist manager null: " + isPlManNull);
+//        boolean isPlaylistInitialized = playlistManager.hasBeenInitialized();
+//        log("Entered initPlaylistIfFirstTime() playlist  has been initialized: " + isPlaylistInitialized);
+//        if(playlistManager == null || !playlistManager.hasBeenInitialized()){
+//            log("initPlaylistIfFirstTime() about to initPlaylist())");
+//            initPlaylist();
+//        }
+//        updateViewTrackList();
     }
 
 

@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onServiceReady(){
-        mediaPlayerService.initPlaylist();
+        mediaPlayerService.initPlaylistIfFirstTime();
     }
 
 
@@ -427,7 +427,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
         runOnUiThread(()-> {
+            log("Entered updateTrackList()");
             if(queueFragment != null){
+                log("QueueFragment is not null, updating tracks");
                 queueFragment.updateTracksList(updatedTracks, currentTrackIndex);
             }
             updateViews(updatedTracks);
@@ -493,7 +495,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public List<Track> getTracksForSearch(String str){
-      return mediaPlayerService.getTracksForSearch(str);
+        if(mediaPlayerService == null){
+            return Collections.emptyList();
+        }
+        return mediaPlayerService.getTracksForSearch(str);
     }
 
 

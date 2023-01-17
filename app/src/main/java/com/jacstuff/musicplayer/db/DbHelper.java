@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import static com.jacstuff.musicplayer.db.DbContract.PlaylistItemsEntry;
+import static com.jacstuff.musicplayer.db.DbContract.TracksEntry;
+import static com.jacstuff.musicplayer.db.DbContract.AlbumsEntry;
+import static com.jacstuff.musicplayer.db.DbContract.ArtistsEntry;
 
 public class DbHelper extends SQLiteOpenHelper {
 
@@ -30,16 +33,16 @@ public class DbHelper extends SQLiteOpenHelper {
             CREATE_TABLE_IF_NOT_EXISTS
                     + DbContract.TracksEntry.TABLE_NAME
                     + OPENING_BRACKET
-                    + DbContract.TracksEntry._ID + INTEGER + PRIMARY_KEY + COMMA
-                    + DbContract.TracksEntry.COL_TITLE + TEXT + COMMA
-                    + DbContract.TracksEntry.COL_PATH + TEXT + COMMA
-                    + DbContract.TracksEntry.COL_ALBUM + TEXT + COMMA
-                    + DbContract.TracksEntry.COL_ALBUM_ID + TEXT + COMMA
-                    + DbContract.TracksEntry.COL_ARTIST + TEXT + COMMA
-                    + DbContract.TracksEntry.COL_ARTIST_ID + INTEGER + COMMA
-                    + DbContract.TracksEntry.COL_TRACK_NUMBER + INTEGER + COMMA
-                    + DbContract.TracksEntry.COL_DURATION + INTEGER + COMMA
-                    + DbContract.TracksEntry.COL_GENRE + TEXT
+                    + TracksEntry._ID + INTEGER + PRIMARY_KEY + COMMA
+                    + TracksEntry.COL_TITLE + TEXT + COMMA
+                    + TracksEntry.COL_PATH + TEXT + COMMA
+                    + TracksEntry.COL_ALBUM + TEXT + COMMA
+                    + TracksEntry.COL_ALBUM_ID + TEXT + COMMA
+                    + TracksEntry.COL_ARTIST + TEXT + COMMA
+                    + TracksEntry.COL_ARTIST_ID + INTEGER + COMMA
+                    + TracksEntry.COL_TRACK_NUMBER + INTEGER + COMMA
+                    + TracksEntry.COL_DURATION + INTEGER + COMMA
+                    + TracksEntry.COL_GENRE + TEXT
                     + CLOSING_BRACKET;
 
 
@@ -54,18 +57,18 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_ARTISTS_TABLE =
             CREATE_TABLE_IF_NOT_EXISTS
-                    + DbContract.ArtistsEntry.TABLE_NAME
+                    + ArtistsEntry.TABLE_NAME
                     + OPENING_BRACKET
-                    + DbContract.ArtistsEntry._ID + INTEGER + PRIMARY_KEY + COMMA
-                    + DbContract.ArtistsEntry.COL_NAME + TEXT
+                    + ArtistsEntry._ID + INTEGER + PRIMARY_KEY + COMMA
+                    + ArtistsEntry.COL_NAME + TEXT
                     + CLOSING_BRACKET;
 
     private static final String SQL_CREATE_ALBUMS_TABLE =
             CREATE_TABLE_IF_NOT_EXISTS
-                    + DbContract.AlbumsEntry.TABLE_NAME
+                    + AlbumsEntry.TABLE_NAME
                     + OPENING_BRACKET
-                    + DbContract.AlbumsEntry._ID + INTEGER + PRIMARY_KEY + COMMA
-                    + DbContract.AlbumsEntry.COL_NAME + TEXT
+                    + AlbumsEntry._ID + INTEGER + PRIMARY_KEY + COMMA
+                    + AlbumsEntry.COL_NAME + TEXT
                     + CLOSING_BRACKET;
 
     private static final String PLAYLISTS_TABLE_PRIMARY_KEY = DbContract.PlaylistEntry.TABLE_NAME
@@ -114,6 +117,21 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_PLAYLIST_ITEMS_TABLE);
         db.execSQL(SQL_CREATE_ARTISTS_TABLE);
         db.execSQL(SQL_CREATE_ALBUMS_TABLE);
+    }
+
+
+    public void dropAndRecreateTracksArtistsAndAlbumsTables(SQLiteDatabase db){
+        dropTable(TracksEntry.TABLE_NAME, db);
+        dropTable(ArtistsEntry.TABLE_NAME, db);
+        dropTable(AlbumsEntry.TABLE_NAME, db);
+        db.execSQL(SQL_CREATE_TRACKS_TABLE);
+        db.execSQL(SQL_CREATE_ARTISTS_TABLE);
+        db.execSQL(SQL_CREATE_ALBUMS_TABLE);
+    }
+
+
+    private void dropTable(String tableName, SQLiteDatabase db){
+        db.execSQL("DROP TABLE "  + tableName + ";");
     }
 
 
