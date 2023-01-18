@@ -32,7 +32,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private List<Track> allTracks;
     private List<Integer> unPlayedPathnameIndexes;
     private final TrackHistory trackHistory;
-    private MediaPlayerService mediaPlayerService;
     private boolean isShuffleEnabled = true;
     public static String ALL_TRACKS_PLAYLIST = "All Tracks";
     public static long ALL_TRACKS_PLAYLIST_ID = -10L;
@@ -52,10 +51,13 @@ public class PlaylistManagerImpl implements PlaylistManager {
         trackHistory = new TrackHistory();
     }
 
+    public void setContext(Context context){
+
+    }
+
 
     @Override
     public void onDestroy(){
-        mediaPlayerService = null;
     }
 
 

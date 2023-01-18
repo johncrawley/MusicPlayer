@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onServiceReady(){
-        mediaPlayerService.initPlaylistIfFirstTime();
+        mediaPlayerService.initPlaylist();
     }
 
 
@@ -216,11 +216,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ MainActivity: " + msg);
-    }
-
-
     private void setupViews(){
         assignViews();
         assignClickListeners();
@@ -333,7 +328,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     public void notifyMediaPlayerPlaying(){
         runOnUiThread(()->{
             playButton.setVisibility(View.GONE);
@@ -427,9 +421,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
         runOnUiThread(()-> {
-            log("Entered updateTrackList()");
             if(queueFragment != null){
-                log("QueueFragment is not null, updating tracks");
                 queueFragment.updateTracksList(updatedTracks, currentTrackIndex);
             }
             updateViews(updatedTracks);

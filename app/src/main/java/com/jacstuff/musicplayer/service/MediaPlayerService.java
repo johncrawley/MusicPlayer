@@ -30,7 +30,6 @@ import com.jacstuff.musicplayer.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,9 +97,7 @@ public class MediaPlayerService extends Service {
         }
         executorService.execute(()->{
             isScanningForTracks = true;
-            log("scanForTracks, about to call playlistManager, addTracksFromStorage()");
             playlistManager.addTracksFromStorage(this);
-            log("scanForTracks() track scan finished, about to updateViewTrackList()");
             updateViewTrackList();
             isScanningForTracks = false;
         });
@@ -139,6 +136,7 @@ public class MediaPlayerService extends Service {
             mediaPlayer.reset();
         }
         stopUpdatingElapsedTimeOnView();
+        elapsedTime = 0;
         mediaNotificationManager.updateNotification();
         if(shouldUpdateMainView) {
             mainActivity.notifyMediaPlayerStopped();
@@ -169,24 +167,8 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void initPlaylistIfFirstTime(){
-        initPlaylist();
-
-        //boolean isPlManNull = playlistManager == null;
-//        log("Entered initPlaylistIfFirstTime() playlist manager null: " + isPlManNull);
-//        boolean isPlaylistInitialized = playlistManager.hasBeenInitialized();
-//        log("Entered initPlaylistIfFirstTime() playlist  has been initialized: " + isPlaylistInitialized);
-//        if(playlistManager == null || !playlistManager.hasBeenInitialized()){
-//            log("initPlaylistIfFirstTime() about to initPlaylist())");
-//            initPlaylist();
-//        }
-//        updateViewTrackList();
-    }
-
 
     public void setActivePlaylist(Playlist playlist){
-        boolean isNull = playlist == null;
-        log("setActivePlaylist() is playlist null: " + isNull);
         playlistManager.loadPlaylist(playlist);
         updateViewTrackList();
     }
@@ -321,7 +303,9 @@ public class MediaPlayerService extends Service {
 
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
-        playlistManager = new PlaylistManagerImpl(mainActivity.getApplicationContext());
+        if(playlistManager == null) {
+            playlistManager = new PlaylistManagerImpl(mainActivity.getApplicationContext());
+        }
         mainActivity.onServiceReady();
     }
 
