@@ -2,7 +2,6 @@ package com.jacstuff.musicplayer.playlist;
 
 import android.content.Context;
 
-import com.jacstuff.musicplayer.MediaPlayerView;
 import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
@@ -79,11 +78,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void calculateAndDisplayNewTracksStats(MediaPlayerService mediaPlayerService){
-        log("Entered calculateAndDisplayNewTracksStats()");
-        boolean isTracksNull = tracks == null;
-        log("calculateAndDisplayNewTracksStats() tracks are null : " + isTracksNull);
-        boolean isMediaPlayerServiceNull = mediaPlayerService == null;
-        log("calculateAndDisplayNewTracksStats() isMediaPlayerService null: " + isMediaPlayerServiceNull);
         //int numberOfNewTracks = tracks.size() - previousNumberOfTracks;
         mediaPlayerService.displayPlaylistRefreshedMessage(0);
        // previousNumberOfTracks = tracks.size();
@@ -101,6 +95,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         allTracks = new ArrayList<>(tracks);
         isInitialized = true;
     }
+
 
     @Override
     public boolean hasBeenInitialized(){
@@ -168,6 +163,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         assignIndexesToTracks();
         setupQueue();
     }
+
 
     @Override
     public void loadTracksFromAlbum(Album album) {
@@ -260,6 +256,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
+    @Override
     public Track getNextRandomUnPlayedTrack(){
         if(trackHistory.isHistoryIndexOld()){
             return trackHistory.getNextTrack();
@@ -274,6 +271,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
         Track currentTrack = tracks.get(currentIndex);
         trackHistory.add(currentTrack);
         return currentTrack;
+    }
+
+
+    @Override
+    public boolean areAllTracksLoaded(){
+        return currentPlaylist == null || currentPlaylist.getId() == ALL_TRACKS_PLAYLIST_ID;
     }
 
 

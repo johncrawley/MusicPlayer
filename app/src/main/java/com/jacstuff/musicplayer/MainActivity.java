@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showSearch(){
+        showOrHideSearchAddButtons();
         Animator animator = createShowAnimatorFor(searchView, ()->{
             searchEditText.requestFocus();
             searchEditText.postDelayed(this::showKeyboard, 200);
@@ -132,6 +133,15 @@ public class MainActivity extends AppCompatActivity {
         searchView.setVisibility(View.VISIBLE);
         dismissSearchViewOnBackPressedCallback.setEnabled(true);
         animator.start();
+    }
+
+
+    private void showOrHideSearchAddButtons(){
+        if(mediaPlayerService.getPlaylistManager().areAllTracksLoaded()){
+            hideSearchAddButtons();
+            return;
+        }
+        showSearchAddButtons();
     }
 
 

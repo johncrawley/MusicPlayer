@@ -21,6 +21,7 @@ public interface PlaylistManager {
     List<Track> getTracks();
     void init();
     int getCurrentTrackIndex();
+    boolean areAllTracksLoaded();
     void loadPlaylist(Playlist playlist);
     void addTrackToCurrentPlaylist(Track track);
     void addTracksToCurrentPlaylist(List<Track> tracks);
