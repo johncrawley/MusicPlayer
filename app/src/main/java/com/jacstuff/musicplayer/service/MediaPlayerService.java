@@ -520,6 +520,7 @@ public class MediaPlayerService extends Service {
     }
 
 
+
     private void setupOnInfoListener(){
         mediaPlayer.setOnInfoListener((mediaPlayer, i, i1) -> {
             updateStatusFromConnectingToPlaying();

@@ -172,16 +172,17 @@ public class PlaylistManagerImpl implements PlaylistManager {
     @Override
     public void loadTracksFromAlbum(Album album) {
         tracks = getSortedTracks(trackRepository.getTracksForAlbum(album));
-        log("Entered loadTracksFromAlbum, number of tracks: " + tracks.size());
         assignIndexesToTracks();
         setupQueue();
     }
+
 
     private void setupQueue(){
         setupUnplayedIndexes();
         trackHistory.reset();
         currentIndex = -1;
     }
+
 
     private void assignIndexesToTracks(){
         for(int i=0; i< tracks.size(); i++){
@@ -298,6 +299,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(index > tracks.size()){
             return null;
         }
+        currentIndex = index;
         trackHistory.removeHistoriesAfterCurrent();
         Track track = tracks.get(index);
         trackHistory.add(track);
