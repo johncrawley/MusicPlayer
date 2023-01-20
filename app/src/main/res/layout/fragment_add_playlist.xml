@@ -21,11 +21,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/playlistAlreadyExistsTextView"
         android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_search_add_all"/>
+        android:text="@string/add_playlist_already_exists_error"/>
 
     <Button
         android:layout_width="wrap_content"

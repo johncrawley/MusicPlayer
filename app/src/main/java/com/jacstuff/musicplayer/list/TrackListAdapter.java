@@ -80,14 +80,8 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
         if(currentlySelectedView != null){
             currentlySelectedView.setSelected(false);
         }
-        else{
-            log("deselectCurrentlySelectedItem() item is null!");
-        }
     }
 
-    private void log(String msg){
-        System.out.println("^^^ TrackListAdapter: " + msg);
-    }
 
     @Override
     public void onBindViewHolder(@NonNull TrackViewHolder holder, int position){

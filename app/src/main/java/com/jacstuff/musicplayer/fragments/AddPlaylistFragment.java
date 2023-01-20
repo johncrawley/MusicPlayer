@@ -1,6 +1,7 @@
 package com.jacstuff.musicplayer.fragments;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
@@ -21,12 +24,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import java.util.Collections;
+import java.util.Set;
+
 public class AddPlaylistFragment extends DialogFragment {
 
     private MainActivity activity;
     private EditText addPlaylistNameEditText;
     private Button createPlaylistButton;
     private PlaylistRepository playlistRepository;
+    private Set<String> playlistNames;
+    private TextView playlistAlreadyExistsTextView;
 
     public static AddPlaylistFragment newInstance() {
         return new AddPlaylistFragment();
@@ -37,6 +45,7 @@ public class AddPlaylistFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_playlist, container, false);
         playlistRepository = new PlaylistRepositoryImpl(getContext());
+        assignPlaylistNames();
         return rootView;
     }
 
@@ -60,6 +69,7 @@ public class AddPlaylistFragment extends DialogFragment {
 
 
     private void setupViews(View rootView){
+        playlistAlreadyExistsTextView = rootView.findViewById(R.id.playlistAlreadyExistsTextView);
         createPlaylistButton = rootView.findViewById(R.id.createPlaylistButton);
         addPlaylistNameEditText = rootView.findViewById(R.id.addPlaylistNameEditText);
         addPlaylistNameEditText.addTextChangedListener(new TextWatcher() {
@@ -90,14 +100,28 @@ public class AddPlaylistFragment extends DialogFragment {
 
 
     private void updatePlaylistsOnParentFragment(){
-        Fragment fragment = getParentFragmentManager().findFragmentByTag("f1");
-        if(fragment == null || !fragment.getClass().equals(PlaylistsFragment.class)){
+        PlaylistsFragment playlistsFragment = getPlaylistsFragment();
+        if(playlistsFragment != null){
+            playlistsFragment.onAddNewPlaylist();
+        }
+    }
+
+    private void assignPlaylistNames(){
+        PlaylistsFragment playlistsFragment = getPlaylistsFragment();
+        if(playlistsFragment == null){
+            playlistNames = Collections.emptySet();
             return;
         }
-        PlaylistsFragment playlistsFragment = (PlaylistsFragment) fragment;
-        playlistsFragment.onAddNewPlaylist();
-
+        playlistNames = playlistsFragment.getPlaylistNames();
     }
+
+
+    @Override
+    public void onDismiss(DialogInterface dialogInterface){
+        super.onDismiss(dialogInterface);
+        notifyDismissOnParentFragment();
+    }
+
 
     @Override
     public void dismiss(){
@@ -106,13 +130,43 @@ public class AddPlaylistFragment extends DialogFragment {
     }
 
 
+    private void notifyDismissOnParentFragment(){
+        PlaylistsFragment playlistsFragment = getPlaylistsFragment();
+        if(playlistsFragment != null){
+            playlistsFragment.onAddDialogDismissed();
+        }
+    }
+
+
+
+    private PlaylistsFragment getPlaylistsFragment(){
+        Fragment fragment = getParentFragmentManager().findFragmentByTag("f1");
+        if(fragment == null || !fragment.getClass().equals(PlaylistsFragment.class)){
+            return null;
+        }
+        return (PlaylistsFragment) fragment;
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ AddPlaylistFragment: " + msg);
+    }
+
+
     private void disableButtonIfInputsAreEmpty(){
-        createPlaylistButton.setEnabled(isNameValid());
+        createPlaylistButton.setEnabled(isNameValid() && isNameUnique());
     }
 
 
     private boolean isNameValid(){
         return !getEditText().isEmpty();
+    }
+
+
+    private boolean isNameUnique(){
+        boolean isNameUnique =  !playlistNames.contains(getEditText().toLowerCase());
+        playlistAlreadyExistsTextView.setVisibility(isNameUnique ? View.INVISIBLE : View.VISIBLE);
+        return isNameUnique;
     }
 
 

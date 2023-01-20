@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jacstuff.musicplayer.MainActivity;
@@ -18,7 +19,9 @@ import com.jacstuff.musicplayer.fragments.AddPlaylistFragment;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -35,6 +38,8 @@ public class PlaylistsFragment extends Fragment {
     private PlaylistRecyclerAdapter playlistRecyclerAdapter;
     private PlaylistRepository playlistRepository;
     private RecyclerView recyclerView;
+    private Set<String> playlistNames;
+    private final int INITIAL_PLAYLIST_CAPACITY = 50;
 
     public PlaylistsFragment() {
         // Required empty public constructor
@@ -56,6 +61,22 @@ public class PlaylistsFragment extends Fragment {
     @Override
     public void onViewCreated(View view,  Bundle savedInstanceState){
         setupButtons(view);
+    }
+
+
+    public Set<String> getPlaylistNames(){
+        return playlistNames;
+    }
+
+
+    public void onAddNewPlaylist(){
+        hasClicked = false;
+        refreshList();
+    }
+
+
+    public void onAddDialogDismissed(){
+        hasClicked = false;
     }
 
 
@@ -88,12 +109,6 @@ public class PlaylistsFragment extends Fragment {
     private void addAllTracksPlaylist(List<Playlist> playlists){
         Playlist playlist = new Playlist(PlaylistManagerImpl.ALL_TRACKS_PLAYLIST_ID, PlaylistManagerImpl.ALL_TRACKS_PLAYLIST);
         playlists.add(playlist);
-    }
-
-
-    public void onAddNewPlaylist(){
-        hasClicked = false;
-        refreshList();
     }
 
 
@@ -186,11 +201,20 @@ public class PlaylistsFragment extends Fragment {
 
 
     private List<Playlist> getAllPlaylists(){
-        List<Playlist> playlists = new ArrayList<>(100);
+        List<Playlist> playlists = new ArrayList<>(INITIAL_PLAYLIST_CAPACITY);
         addAllTracksPlaylist(playlists);
         playlists.addAll(playlistRepository.getAllPlaylists());
+        assignPlaylistNames(playlists);
         return playlists;
     }
+
+
+    private void assignPlaylistNames(List<Playlist> playlists){
+        playlistNames = new HashSet<>(INITIAL_PLAYLIST_CAPACITY);
+        playlists.forEach((Playlist pl) -> playlistNames.add(pl.getName().toLowerCase()));
+    }
+
+
 
 
 }
