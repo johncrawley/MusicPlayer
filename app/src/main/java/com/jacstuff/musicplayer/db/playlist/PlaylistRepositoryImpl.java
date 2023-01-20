@@ -22,11 +22,13 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
 
     private final SQLiteDatabase db;
     private Cursor cursor;
+    private final PlaylistItemRepository playlistItemRepository;
 
 
     public PlaylistRepositoryImpl(Context context){
         DbHelper dbHelper = DbHelper.getInstance(context);
         db = dbHelper.getWritableDatabase();
+        playlistItemRepository = new PlaylistItemRepositoryImpl(context);
     }
 
 
@@ -46,22 +48,6 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
     }
 
 
-    private void gatherData(String query, Runnable runnable){
-        try {
-            cursor = db.rawQuery(query, null);
-            while(cursor.moveToNext()){
-                runnable.run();
-            }
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
-        finally {
-            cursor.close();
-        }
-    }
-
-
     @Override
     public void deletePlaylist(Long playlistId) {
         String query = "DELETE FROM "
@@ -70,6 +56,7 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
                 + PlaylistEntry._ID + " = "  + playlistId
                 + ";";
         execSql(query);
+        playlistItemRepository.deleteAllPlaylistItems(playlistId);
     }
 
 

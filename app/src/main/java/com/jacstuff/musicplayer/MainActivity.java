@@ -435,8 +435,12 @@ public class MainActivity extends AppCompatActivity {
                 queueFragment.updateTracksList(updatedTracks, currentTrackIndex);
             }
             updateViews(updatedTracks);
-            tabLayout.getTabAt(0).select();
         });
+    }
+
+
+    public void switchToTracksTab(){
+        tabLayout.getTabAt(0).select();
     }
 
 
@@ -593,8 +597,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setActivePlaylist(Playlist playlist){
+
+    public void setActivePlaylist(Playlist playlist, boolean shouldSwitchToTracksTab){
         mediaPlayerService.setActivePlaylist(playlist);
+        if(shouldSwitchToTracksTab){
+            switchToTracksTab();
+        }
     }
 
 

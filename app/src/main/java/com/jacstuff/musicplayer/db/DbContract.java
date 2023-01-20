@@ -34,7 +34,7 @@ public final class DbContract {
 
 
     public static class PlaylistEntry implements BaseColumns {
-        public static final String TABLE_NAME = "Playlist";
+        public static final String TABLE_NAME = "Playlists";
         public static final String COL_NAME = "playlist_name";
     }
 

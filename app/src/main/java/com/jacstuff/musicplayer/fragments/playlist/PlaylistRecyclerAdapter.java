@@ -25,9 +25,6 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     private final Consumer<Playlist> onItemClickConsumer;
     private Playlist selectedPlaylist;
 
-    private void log(String msg){
-        System.out.println("^^^ PlaylistRecyclerAdapter: " + msg);
-    }
 
     class PlaylistViewHolder extends RecyclerView.ViewHolder {
 
@@ -44,7 +41,6 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
                 selectedPlaylist = (Playlist)trackNameTextView.getTag();
                 currentlySelectedView = v;
                 currentlySelectedView.setSelected(true);
-                currentlySelectedView.setSelected(true);
             });
         }
     }
@@ -53,7 +49,6 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     public PlaylistRecyclerAdapter(List<Playlist> playlists, Consumer<Playlist> onItemClickConsumer){
         this.playlists = new ArrayList<>(playlists);
         this.onItemClickConsumer = onItemClickConsumer;
-
     }
 
 
@@ -65,6 +60,19 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
     public Playlist getSelectedPlaylist(){
         return selectedPlaylist;
+    }
+
+
+    public int getSelectedPosition(){
+        return selectedPosition;
+    }
+
+
+    public void select(View view){
+       // int index = Math.max(Math.min(position, playlists.size()-1), 0);
+        changePositionTo(0);
+        selectedPlaylist = playlists.get(0);
+        currentlySelectedView = view;
     }
 
 
@@ -93,7 +101,6 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
         holder.trackNameTextView.setText(playlists.get(position).getName());
         holder.trackNameTextView.setTag(playlists.get(position));
         holder.itemView.setSelected(selectedPosition == position);
-        System.out.println("PlaylistRecyclerAdapter: onBindViewHolder() playlists size: " + playlists.size());
         if(position == indexToScrollTo){
             deselectCurrentlySelectedItem();
             currentlySelectedView = holder.itemView;

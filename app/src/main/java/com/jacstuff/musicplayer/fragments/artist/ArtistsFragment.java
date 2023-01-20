@@ -27,7 +27,6 @@ public class ArtistsFragment extends Fragment implements MediaPlayerView {
     private int previousIndex = 0;
     private View parentView;
     private ArtistRepository artistRepository;
-    private Button loadArtistTracksButton;
 
     public ArtistsFragment() {
         // Required empty public constructor
@@ -52,9 +51,10 @@ public class ArtistsFragment extends Fragment implements MediaPlayerView {
 
 
     private void setupLoadTracksButton(View parentView){
-        loadArtistTracksButton = parentView.findViewById(R.id.loadTracksFromArtistButton);
-       loadArtistTracksButton.setOnClickListener((View v) -> {
+        Button loadArtistTracksButton = parentView.findViewById(R.id.loadTracksFromArtistButton);
+        loadArtistTracksButton.setOnClickListener((View v) -> {
            getMainActivity().loadTracksFromArtist(artistListAdapter.getCurrentlySelectedArtist());
+           getMainActivity().switchToTracksTab();
         });
     }
 

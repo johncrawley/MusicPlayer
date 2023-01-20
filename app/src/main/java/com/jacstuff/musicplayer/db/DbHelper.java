@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import static com.jacstuff.musicplayer.db.DbContract.PlaylistItemsEntry;
+import static com.jacstuff.musicplayer.db.DbContract.PlaylistEntry;
 import static com.jacstuff.musicplayer.db.DbContract.TracksEntry;
 import static com.jacstuff.musicplayer.db.DbContract.AlbumsEntry;
 import static com.jacstuff.musicplayer.db.DbContract.ArtistsEntry;
@@ -48,10 +49,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_PLAYLIST_TABLE =
             CREATE_TABLE_IF_NOT_EXISTS
-                    + DbContract.PlaylistEntry.TABLE_NAME
+                    + PlaylistEntry.TABLE_NAME
                     + OPENING_BRACKET
-                    + DbContract.PlaylistEntry._ID + INTEGER + PRIMARY_KEY + COMMA
-                    + DbContract.PlaylistEntry.COL_NAME + TEXT
+                    + PlaylistEntry._ID + INTEGER + PRIMARY_KEY + COMMA
+                    + PlaylistEntry.COL_NAME + TEXT
                     + CLOSING_BRACKET;
 
 
@@ -81,7 +82,8 @@ public class DbHelper extends SQLiteOpenHelper {
                     + DbContract.PlaylistItemsEntry.TABLE_NAME
                     + OPENING_BRACKET
                     + PlaylistItemsEntry._ID + INTEGER + PRIMARY_KEY + COMMA
-                    + PlaylistItemsEntry.COL_PLAYLIST_ID + INTEGER + COMMA
+                    + PlaylistItemsEntry.COL_PLAYLIST_ID + INTEGER
+                        + " REFERENCES " + PlaylistEntry.TABLE_NAME + "(" + PlaylistEntry._ID + ") ON DELETE CASCADE" + COMMA
                     + PlaylistItemsEntry.COL_INDEX + INTEGER + COMMA
                     + PlaylistItemsEntry.COL_PATH + TEXT + COMMA
                     + PlaylistItemsEntry.COL_TITLE + TEXT + COMMA
@@ -91,13 +93,16 @@ public class DbHelper extends SQLiteOpenHelper {
                     + PlaylistItemsEntry.COL_ARTIST_ID + INTEGER + COMMA
                     + PlaylistItemsEntry.COL_TRACK_NUMBER + INTEGER + COMMA
                     + PlaylistItemsEntry.COL_GENRE + TEXT + COMMA
-                    + PlaylistItemsEntry.COL_DURATION + INTEGER + COMMA
-                    + " CONSTRAINT fk_playlists "
-                    + "     FOREIGN KEY (" + PlaylistItemsEntry.COL_PLAYLIST_ID + ")"
-                    + "     REFERENCES departments(" + PLAYLISTS_TABLE_PRIMARY_KEY + ")"
-                    + "     ON DELETE CASCADE "
+                    + PlaylistItemsEntry.COL_DURATION + INTEGER
                     + CLOSING_BRACKET;
 
+
+/*
+   + " CONSTRAINT fk_playlists "
+                    + "     FOREIGN KEY (" + PlaylistItemsEntry.COL_PLAYLIST_ID + ")"
+                    + "     REFERENCES " + PlaylistEntry.TABLE_NAME + "(" + PlaylistEntry._ID + ")"
+                    + "     ON DELETE CASCADE "
+ */
 
     private DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

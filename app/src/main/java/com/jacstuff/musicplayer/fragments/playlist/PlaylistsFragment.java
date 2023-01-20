@@ -34,6 +34,7 @@ public class PlaylistsFragment extends Fragment {
     private boolean hasClicked;
     private PlaylistRecyclerAdapter playlistRecyclerAdapter;
     private PlaylistRepository playlistRepository;
+    private RecyclerView recyclerView;
 
     public PlaylistsFragment() {
         // Required empty public constructor
@@ -60,8 +61,8 @@ public class PlaylistsFragment extends Fragment {
 
     private void setupButtons(View parentView){
         setupButton(parentView, R.id.addPlaylistButton, this::startAddPlaylistFragment);
-        setupButton(parentView, R.id.deletePlaylistButton, this::showDeletePlaylistConfirmationDialog);
-        setupButton(parentView, R.id.loadPlaylistButton, this::loadPlaylist);
+        setupButton(parentView, R.id.deletePlaylistButton, this::showDeletePlaylistDialog);
+        setupButton(parentView, R.id.loadPlaylistButton, ()->loadSelectedPlaylist(true));
     }
 
 
@@ -74,10 +75,11 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void setupPlaylistRecyclerView(View parentView){
-        RecyclerView recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
+        recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
         playlistRecyclerAdapter = new PlaylistRecyclerAdapter(getAllPlaylists(), (Playlist p)->{});
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
+
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(playlistRecyclerAdapter);
     }
@@ -92,17 +94,6 @@ public class PlaylistsFragment extends Fragment {
     public void onAddNewPlaylist(){
         hasClicked = false;
         refreshList();
-    }
-
-
-    private void loadPlaylist(){
-        Playlist playlist = playlistRecyclerAdapter.getSelectedPlaylist();
-        if(playlist != null){
-            MainActivity mainActivity = (MainActivity) getActivity();
-            if(mainActivity != null){
-                mainActivity.setActivePlaylist(playlist);
-            }
-        }
     }
 
 
@@ -141,7 +132,7 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-    private void showDeletePlaylistConfirmationDialog(){
+    private void showDeletePlaylistDialog(){
         Playlist playlist = playlistRecyclerAdapter.getSelectedPlaylist();
         if(playlist == null){
             return;
@@ -151,11 +142,34 @@ public class PlaylistsFragment extends Fragment {
                 .setMessage(getResources().getString(R.string.delete_confirm_dialog_text, playlist.getName()))
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
-                    playlistRepository.deletePlaylist(playlist.getId());
-                    refreshList();
-                    showPlaylistDeletedToast();
+                    deletePlaylistAndSelectFirstPlaylist(playlist);
                 })
                 .setNegativeButton(android.R.string.no, null).show();
+    }
+
+
+    private void deletePlaylistAndSelectFirstPlaylist(Playlist playlist){
+        playlistRepository.deletePlaylist(playlist.getId());
+        refreshList();
+        showPlaylistDeletedToast();
+        View item = recyclerView.getChildAt(0);
+        playlistRecyclerAdapter.select(item);
+        loadSelectedPlaylist(false);
+    }
+
+
+    private void loadSelectedPlaylist(boolean shouldSwitchToTracksTab){
+        Playlist playlist = playlistRecyclerAdapter.getSelectedPlaylist();
+        if(playlist != null){
+            if(getMainActivity() != null){
+                getMainActivity().setActivePlaylist(playlist, shouldSwitchToTracksTab);
+            }
+        }
+    }
+
+
+    private MainActivity getMainActivity(){
+        return (MainActivity) getActivity();
     }
 
 

@@ -56,6 +56,7 @@ public class AlbumsFragment extends Fragment implements MediaPlayerView {
         loadButton.setOnClickListener((View v) -> {
             Album album = new Album(-1, listAdapter.getCurrentlySelectedItem());
             getMainActivity().loadTracksFromAlbum(album);
+            getMainActivity().switchToTracksTab();
         });
     }
 
