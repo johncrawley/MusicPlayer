@@ -137,11 +137,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showOrHideSearchAddButtons(){
-        if(mediaPlayerService.getPlaylistManager().areAllTracksLoaded()){
-            hideSearchAddButtons();
+        if(mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded()){
+            showSearchAddButtons();
             return;
         }
-        showSearchAddButtons();
+        hideSearchAddButtons();
     }
 
 

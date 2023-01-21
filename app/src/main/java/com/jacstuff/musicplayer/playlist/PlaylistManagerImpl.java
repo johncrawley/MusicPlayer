@@ -14,8 +14,10 @@ import com.jacstuff.musicplayer.service.MediaPlayerService;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -34,6 +36,10 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private boolean isShuffleEnabled = true;
     public static String ALL_TRACKS_PLAYLIST = "All Tracks";
     public static long ALL_TRACKS_PLAYLIST_ID = -10L;
+    public static long SOME_ALBUM_PLAYLIST_ID = -20L;
+    public static long SOME_ARTIST_PLAYLIST_ID = -30L;
+    private Playlist someArtistPlaylist, someAlbumPlaylist;
+    private Set<Long> defaultPlaylistIds;
     private Playlist currentPlaylist;
     private boolean isInitialized;
 
@@ -46,12 +52,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
         random = new Random(System.currentTimeMillis());
         sdCardReader = new AudioInfoLoader(context, trackRepository);
         initTrackList();
+        setupDefaultPlaylists();
         previousNumberOfTracks = tracks.size();
         trackHistory = new TrackHistory();
-    }
-
-    public void setContext(Context context){
-
     }
 
 
@@ -77,6 +80,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
+    @Override
+    public boolean isUserPlaylistLoaded(){
+        return !defaultPlaylistIds.contains(currentPlaylist.getId());
+    }
+
+
     private void calculateAndDisplayNewTracksStats(MediaPlayerService mediaPlayerService){
         //int numberOfNewTracks = tracks.size() - previousNumberOfTracks;
         mediaPlayerService.displayPlaylistRefreshedMessage(0);
@@ -94,6 +103,17 @@ public class PlaylistManagerImpl implements PlaylistManager {
         assignIndexesToTracks();
         allTracks = new ArrayList<>(tracks);
         isInitialized = true;
+    }
+
+
+    private void setupDefaultPlaylists(){
+        defaultPlaylistIds = new HashSet<>();
+        defaultPlaylistIds.add(SOME_ALBUM_PLAYLIST_ID);
+        defaultPlaylistIds.add(SOME_ARTIST_PLAYLIST_ID);
+        defaultPlaylistIds.add(ALL_TRACKS_PLAYLIST_ID);
+
+        someAlbumPlaylist = new Playlist(SOME_ALBUM_PLAYLIST_ID, "Some Album");
+        someArtistPlaylist = new Playlist(SOME_ARTIST_PLAYLIST_ID, "Some Artist");
     }
 
 
@@ -162,6 +182,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         tracks = getSortedTracks(trackRepository.getTracksForArtist(artist));
         assignIndexesToTracks();
         setupQueue();
+        currentPlaylist = someArtistPlaylist;
     }
 
 
@@ -170,6 +191,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         tracks = getSortedTracks(trackRepository.getTracksForAlbum(album));
         assignIndexesToTracks();
         setupQueue();
+        currentPlaylist = someAlbumPlaylist;
     }
 
 

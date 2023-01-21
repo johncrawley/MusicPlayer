@@ -14,6 +14,7 @@ public interface PlaylistManager {
     void savePlaylist();
     Track getNextTrack();
     boolean hasBeenInitialized();
+    boolean isUserPlaylistLoaded();
     Track getPreviousTrack();
     Track getNextRandomUnPlayedTrack();
     Track selectTrack(int index);
