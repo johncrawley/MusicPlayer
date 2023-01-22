@@ -240,6 +240,10 @@ public class MediaPlayerService extends Service {
 
 
     public void loadNextTrack(){
+        if(playlistManager.hasTracksQueued()){
+            loadTrackDeselectCurrentTrack(playlistManager.getNextTrack());
+            return;
+        }
         loadTrack(playlistManager.getNextTrack());
     }
 
@@ -252,6 +256,12 @@ public class MediaPlayerService extends Service {
     public void loadTrack(Track track){
         assignTrack(track);
         mainActivity.scrollToPosition(track.getIndex());
+        mediaNotificationManager.updateNotification();
+    }
+
+    public void loadTrackDeselectCurrentTrack(Track track){
+        assignTrack(track);
+        mainActivity.deselectCurrentTrack();
         mediaNotificationManager.updateNotification();
     }
 

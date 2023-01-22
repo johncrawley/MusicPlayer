@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface PlaylistManager {
 
-
     void savePlaylist();
     Track getNextTrack();
+    boolean hasTracksQueued();
     boolean hasBeenInitialized();
     boolean isUserPlaylistLoaded();
     Track getPreviousTrack();
@@ -23,6 +23,7 @@ public interface PlaylistManager {
     void init();
     int getCurrentTrackIndex();
     boolean areAllTracksLoaded();
+    void addTrackToQueue(Track track);
     void loadPlaylist(Playlist playlist);
     void addTrackToCurrentPlaylist(Track track);
     void addTracksToCurrentPlaylist(List<Track> tracks);

@@ -69,10 +69,10 @@
             android:text="@string/button_search_play_selected" />
 
         <Button
-            android:id="@+id/cancelButton"
+            android:id="@+id/playNextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_search_cancel" />
+            android:text="@string/button_search_play_next" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

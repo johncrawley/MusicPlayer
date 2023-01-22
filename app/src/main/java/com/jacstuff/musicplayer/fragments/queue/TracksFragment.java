@@ -1,12 +1,10 @@
 package com.jacstuff.musicplayer.fragments.queue;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.jacstuff.musicplayer.ListSubscriber;
 import com.jacstuff.musicplayer.MainActivity;
@@ -22,14 +20,14 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class QueueFragment extends Fragment implements MediaPlayerView, ListSubscriber {
+public class TracksFragment extends Fragment implements MediaPlayerView, ListSubscriber {
 
     private RecyclerView recyclerView;
     private TrackListAdapter trackListAdapter;
     private int previousIndex = 0;
     private View parentView;
 
-    public QueueFragment() {
+    public TracksFragment() {
         // Required empty public constructor
     }
 
@@ -47,6 +45,13 @@ public class QueueFragment extends Fragment implements MediaPlayerView, ListSubs
         recyclerView = parentView.findViewById(R.id.recyclerView);
         setupRecyclerView(getMainActivity().getTrackList());
         getMainActivity().setPlayerFragment(this);
+    }
+
+
+    public void deselectCurrentItem(){
+        if(trackListAdapter != null){
+            trackListAdapter.deselectCurrentlySelectedItem();
+        }
     }
 
 

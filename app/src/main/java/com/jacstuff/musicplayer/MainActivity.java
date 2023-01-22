@@ -39,7 +39,7 @@ import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.track.Track;
-import com.jacstuff.musicplayer.fragments.queue.QueueFragment;
+import com.jacstuff.musicplayer.fragments.queue.TracksFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
 import com.jacstuff.musicplayer.list.SearchResultsListAdapter;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton nextTrackButton, previousTrackButton;
     private ImageButton turnShuffleOnButton, turnShuffleOffButton;
     private String totalTrackTime = "0:00";
-    private QueueFragment queueFragment;
+    private TracksFragment tracksFragment;
     private ViewGroup playerButtonPanel;
     private RecyclerView searchResultsRecyclerView;
     private SearchResultsListAdapter searchResultsListAdapter;
@@ -177,8 +177,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void setPlayerFragment(QueueFragment queueFragment){
-        this.queueFragment = queueFragment;
+    public void setPlayerFragment(TracksFragment tracksFragment){
+        this.tracksFragment = tracksFragment;
         onQueueFragmentReady();
     }
 
@@ -379,10 +379,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void scrollToPosition(int index){
        runOnUiThread(()-> {
-           if(queueFragment != null){
-               queueFragment.scrollToListPosition(index);
+           if(tracksFragment != null){
+               tracksFragment.scrollToListPosition(index);
            }
        });
+    }
+
+
+    public void deselectCurrentTrack(){
+        tracksFragment.deselectCurrentItem();
     }
 
 
@@ -431,8 +436,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
         runOnUiThread(()-> {
-            if(queueFragment != null){
-                queueFragment.updateTracksList(updatedTracks, currentTrackIndex);
+            if(tracksFragment != null){
+                tracksFragment.updateTracksList(updatedTracks, currentTrackIndex);
             }
             updateViews(updatedTracks);
         });
@@ -565,7 +570,7 @@ public class MainActivity extends AppCompatActivity {
         addSelectedSearchResultButton = setupButton(R.id.addSelectedButton, this::addSelectedSearchResultToPlaylist);
         addAllSearchResultsButton = setupButton(R.id.addAllButton, this::addAllSearchResultsToPlaylist);
         setupButton(R.id.playSelectedButton, this::playSelectedSearchResult);
-        setupButton(R.id.cancelButton, this::toggleSearch);
+        setupButton(R.id.playNextButton, this::addTrackToQueue);
     }
 
 
@@ -610,6 +615,14 @@ public class MainActivity extends AppCompatActivity {
         Track track = searchResultsListAdapter.getSelectedTrack();
         if(track != null){
             mediaPlayerService.selectAndPlayTrack(track);
+        }
+    }
+
+
+    private void addTrackToQueue(){
+        Track track = searchResultsListAdapter.getSelectedTrack();
+        if(track != null){
+            mediaPlayerService.getPlaylistManager().addTrackToQueue(track);
         }
     }
 

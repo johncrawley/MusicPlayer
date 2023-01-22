@@ -31,6 +31,7 @@
     <string name="button_search_add_selected">Add</string>
     <string name="button_search_cancel">Cancel</string>
     <string name="button_search_play_selected">Play</string>
+    <string name="button_search_play_next">Enqueue</string>
     <string name="button_search_add_all">Add All</string>
     <string name="button_add_playlist">Add</string>
     <string name="button_load_playlist">Load</string>
