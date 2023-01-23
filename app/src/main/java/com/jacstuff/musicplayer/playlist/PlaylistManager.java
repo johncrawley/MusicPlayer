@@ -27,6 +27,7 @@ public interface PlaylistManager {
     void loadPlaylist(Playlist playlist);
     void addTrackToCurrentPlaylist(Track track);
     void addTracksToCurrentPlaylist(List<Track> tracks);
+    void removeTrackToCurrentPlaylist(Track track);
     int getNumberOfTracks();
     void enableShuffle();
     void disableShuffle();

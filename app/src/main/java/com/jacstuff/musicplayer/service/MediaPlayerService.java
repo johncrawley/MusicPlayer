@@ -188,6 +188,13 @@ public class MediaPlayerService extends Service {
     }
 
 
+    public void removeTrackFromCurrentPlaylist(Track track){
+        playlistManager.removeTrackToCurrentPlaylist(track);
+        updateViewTrackList();
+        mediaNotificationManager.updateNotification();
+    }
+
+    
     private void reloadPlaylistIfNotInitialized(){
         if(!isPlaylistInitialized) {
             playlistManager.init();
@@ -232,6 +239,8 @@ public class MediaPlayerService extends Service {
         }
         mainActivity.setTrackInfoOnView(currentTrack, 0);
     }
+
+
 
 
     public void selectTrack(int index){

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/button_fragment_margin"
+    android:orientation="vertical">
+
+
+    <Button
+        android:id="@+id/enqueueTrackButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_track_options_enqueue" />
+
+    <Button
+        android:id="@+id/removeFromPlaylistButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_track_options_remove_from_playlist" />
+
+</LinearLayout>

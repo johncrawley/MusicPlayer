@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private View searchView;
     private OnBackPressedCallback dismissSearchViewOnBackPressedCallback;
+    private Track selectedTrack;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -144,6 +145,9 @@ public class MainActivity extends AppCompatActivity {
         hideSearchAddButtons();
     }
 
+    public boolean isUserPlaylistLoaded(){
+        return mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
+    }
 
     private void hideSearch(){
         if(searchView.getVisibility() != View.VISIBLE){
@@ -201,6 +205,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void selectTrack(int index) {
         mediaPlayerService.selectTrack(index);
+    }
+
+
+    public void enqueueTrack(){
+        mediaPlayerService.getPlaylistManager().addTrackToQueue(selectedTrack);
+    }
+
+
+    public void setSelectedTrack(Track track){
+        this.selectedTrack = track;
+    }
+
+
+    public void removeTrack(){
+        mediaPlayerService.removeTrackFromCurrentPlaylist(selectedTrack);
     }
 
 

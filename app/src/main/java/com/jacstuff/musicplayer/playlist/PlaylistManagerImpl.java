@@ -92,7 +92,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public boolean isUserPlaylistLoaded(){
-        return !defaultPlaylistIds.contains(currentPlaylist.getId());
+        return currentPlaylist != null && !defaultPlaylistIds.contains(currentPlaylist.getId());
     }
 
 
@@ -157,8 +157,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void addTrackToCurrentPlaylist(Track track) {
-        if(currentPlaylist == null || currentPlaylist.getId() == ALL_TRACKS_PLAYLIST_ID){
-            return;
+        if(!isUserPlaylistLoaded()){
+              return;
         }
         tracks.add(track);
         playlistItemRepository.addPlaylistItem(track, currentPlaylist.getId());
@@ -167,13 +167,23 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void addTracksToCurrentPlaylist(List<Track> tracks) {
-        if(currentPlaylist.getId() == ALL_TRACKS_PLAYLIST_ID){
+        if(!isUserPlaylistLoaded()){
             return;
         }
         this.tracks.addAll(tracks);
         for(Track track : tracks){
             playlistItemRepository.addPlaylistItem(track, currentPlaylist.getId());
         }
+    }
+
+
+    @Override
+    public void removeTrackToCurrentPlaylist(Track track) {
+        if(!isUserPlaylistLoaded()){
+            return;
+        }
+        tracks.remove(track);
+        playlistItemRepository.deletePlaylistItem(track.getId());
     }
 
 

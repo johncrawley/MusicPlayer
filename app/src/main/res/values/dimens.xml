@@ -18,4 +18,5 @@
     <dimen name="dialog_layout_padding_horizontal">8dp</dimen>
     <dimen name="input_text_padding_top">12dp</dimen>
     <dimen name="search_edit_text_padding_top">12dp</dimen>
+    <dimen name="button_fragment_margin">4dp</dimen>
 </resources>

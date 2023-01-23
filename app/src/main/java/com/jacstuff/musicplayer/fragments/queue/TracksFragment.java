@@ -16,6 +16,7 @@ import com.jacstuff.musicplayer.list.TrackListAdapter;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +27,7 @@ public class TracksFragment extends Fragment implements MediaPlayerView, ListSub
     private TrackListAdapter trackListAdapter;
     private int previousIndex = 0;
     private View parentView;
+    public final static String BUNDLE_TRACK_ID = "Track_ID";
 
     public TracksFragment() {
         // Required empty public constructor
@@ -55,30 +57,21 @@ public class TracksFragment extends Fragment implements MediaPlayerView, ListSub
     }
 
 
-    public void notifyCurrentlySelectedTrack(int position){
-        getMainActivity().selectTrack(position);
-    }
-
-
     private MainActivity getMainActivity(){
         return (MainActivity)getActivity();
     }
 
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
-        log("Entered updateTrackList()");
         refreshTrackList(updatedTracks);
         scrollToListPosition(currentTrackIndex);
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ QueueFragment: " + msg);
-    }
-
-
+    @SuppressWarnings("notifyDataSetChanged")
     public void refreshTrackList(List<Track> tracks){
-        setupRecyclerView(tracks);
+        trackListAdapter.setItems(tracks);
+        trackListAdapter.notifyDataSetChanged();
     }
 
 
@@ -86,12 +79,47 @@ public class TracksFragment extends Fragment implements MediaPlayerView, ListSub
         if(this.parentView == null ||tracks == null){
             return;
         }
-        trackListAdapter = new TrackListAdapter(tracks);
-        trackListAdapter.setMediaPlayerView(this);
+        trackListAdapter = new TrackListAdapter(tracks, this::selectTrack, this::createTrackOptionsFragment );
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(trackListAdapter);
     }
+
+
+    private void createTrackOptionsFragment(Track track){
+        String tag = "track_options_dialog";
+        MainActivity mainActivity = getMainActivity();
+        if(mainActivity == null){
+            return;
+        }
+        mainActivity.setSelectedTrack(track);
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        removePreviousFragmentTransaction(tag, fragmentTransaction);
+        TrackOptionsDialog trackOptionsDialog = TrackOptionsDialog.newInstance();
+        trackOptionsDialog.show(fragmentTransaction, tag);
+    }
+
+
+    private void removePreviousFragmentTransaction(String tag, FragmentTransaction fragmentTransaction){
+        Fragment prev = getParentFragmentManager().findFragmentByTag(tag);
+        if (prev != null) {
+            fragmentTransaction.remove(prev);
+        }
+        fragmentTransaction.addToBackStack(null);
+    }
+
+
+    public void notifyCurrentlySelectedTrack(int position){
+        getMainActivity().selectTrack(position);
+    }
+
+
+    public void selectTrack(Track track){
+        int position = track.getIndex();
+        getMainActivity().selectTrack(position);
+    }
+
+
 
 
     public void scrollToListPosition(int index){
@@ -125,12 +153,6 @@ public class TracksFragment extends Fragment implements MediaPlayerView, ListSub
         }
         int offset =  mainActivity.getResources().getInteger(R.integer.playlist_item_offset) * direction ;
         return index + offset;
-    }
-
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void updateTrackViews(){
-        trackListAdapter.notifyDataSetChanged();
     }
 
 
