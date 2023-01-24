@@ -2,7 +2,7 @@
     <string name="app_name">Music Player</string>
     <string name="menu_button_refresh">Refresh</string>
     <string name="playlist_refreshed_message">Playlist Refreshed</string>
-    <string name="playlist_refreshed_message_new_tracks_count">Playlist Refreshed (%1$d New)</string>
+    <string name="playlist_refreshed_message_new_tracks_count">Playlist Refreshed (%1$d Found)</string>
     <string name="playlist_refreshed_one_new_track">Playlist Refreshed (1 New)</string>
     <string name="no_tracks_found">No tracks found!</string>
     <string name="elapsed_time_label">Elapsed Time</string>
@@ -22,7 +22,7 @@
     <string name="thumbnail_content_description">Next Track</string>
     <string name="default_path">Music/</string>
 
-    <string name="Queue_tab">Queue</string>
+    <string name="tracks_tab">Tracks</string>
     <string name="playlists_tab">Lists</string>
     <string name="artists_tab">Artists</string>
     <string name="albums_tab">Albums</string>
@@ -42,10 +42,14 @@
     <string name="button_track_options_enqueue">Enqueue</string>
     <string name="button_track_options_remove_from_playlist">Remove From Playlist</string>
 
+
+    <string name="button_stop_now">Stop Now</string>
+    <string name="button_stop_after_current_track">Stop After Current Track</string>
+    <string name="button_stop_in_three_minutes">Stop In Three Minutes</string>
+
     <string name="delete_confirm_dialog_title">Delete Playlist</string>
     <string name="delete_confirm_dialog_text">Are you sure you want to delete Playlist %1$s?</string>
     <string name="delete_playlist_toast_success">Playlist Deleted</string>
-
 
 
     <string name="add_playlist_already_exists_error">A playlist with this name already exists</string>

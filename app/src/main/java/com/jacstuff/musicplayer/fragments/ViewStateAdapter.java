@@ -8,29 +8,14 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.jacstuff.musicplayer.fragments.albums.AlbumsFragment;
 import com.jacstuff.musicplayer.fragments.artist.ArtistsFragment;
-import com.jacstuff.musicplayer.fragments.queue.TracksFragment;
+import com.jacstuff.musicplayer.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 
 public class ViewStateAdapter extends FragmentStateAdapter {
 
-//    private List<Fragment> fragments;
 
     public ViewStateAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
-        log("Entered ViewStateAdapter");
-        //fragments = new ArrayList<>();
-        //fragments.add(new PlaylistsFragment());    // auto-assigned tag: 'f0'
-        //fragments.add(new PlayerFragment()); // auto-assigned tag: 'f1'
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ View State Adapter: " + msg);
-    }
-
-
-    public void onDestroy(){
-      //  fragments = null;
     }
 
 
@@ -38,10 +23,10 @@ public class ViewStateAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         if(position == 0){
-            return new TracksFragment();
+            return new TracksFragment(); // auto-assigned tag: 'f0'
         }
         else if (position == 1){
-            return new PlaylistsFragment();
+            return new PlaylistsFragment(); // auto-assigned tag: 'f1', and so on.
         }
         else if (position == 2){
             return new ArtistsFragment();

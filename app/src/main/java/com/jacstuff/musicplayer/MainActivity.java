@@ -15,6 +15,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,7 +41,8 @@ import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.track.Track;
-import com.jacstuff.musicplayer.fragments.queue.TracksFragment;
+import com.jacstuff.musicplayer.fragments.options.StopOptionsFragment;
+import com.jacstuff.musicplayer.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
 import com.jacstuff.musicplayer.list.SearchResultsListAdapter;
@@ -84,11 +87,6 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override public void onServiceDisconnected(ComponentName arg0) {}
     };
-
-
-    public void onServiceReady(){
-        mediaPlayerService.initPlaylist();
-    }
 
 
     @Override
@@ -145,9 +143,11 @@ public class MainActivity extends AppCompatActivity {
         hideSearchAddButtons();
     }
 
+
     public boolean isUserPlaylistLoaded(){
         return mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
     }
+
 
     private void hideSearch(){
         if(searchView.getVisibility() != View.VISIBLE){
@@ -260,11 +260,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void setElapsedTime(String elapsedTime){
-        this.setTrackTime(elapsedTime);
-    }
-
-
-    private void setTrackTime(String elapsedTime){
         runOnUiThread(()->{
             if(trackTime != null){
                 String time = elapsedTime + " / " + this.totalTrackTime;
@@ -278,7 +273,6 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy(){
         super.onDestroy();
         if(viewStateAdapter != null) {
-            viewStateAdapter.onDestroy();
             viewStateAdapter = null;
         }
     }
@@ -323,8 +317,37 @@ public class MainActivity extends AppCompatActivity {
         nextTrackButton.setOnClickListener((View v) -> nextTrack());
         previousTrackButton.setOnClickListener((View v) -> previousTrack());
         stopButton.setOnClickListener((View v) -> stopTrack());
+        setupStopLongClick();
         turnShuffleOnButton.setOnClickListener((View v) -> mediaPlayerService.enableShuffle());
         turnShuffleOffButton.setOnClickListener((View v) -> mediaPlayerService.disableShuffle());
+    }
+
+
+    private void setupStopLongClick(){
+        stopButton.setOnLongClickListener((View v)->{
+            if(mediaPlayerService.isPlaying()){
+                createStopOptionsFragment();
+            }
+            return true;
+        });
+    }
+
+
+    private void createStopOptionsFragment(){
+        String tag = "stop_options_dialog";
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        removePreviousFragmentTransaction(tag, fragmentTransaction);
+        StopOptionsFragment stopOptionsFragment = StopOptionsFragment.newInstance();
+        stopOptionsFragment.show(fragmentTransaction, tag);
+    }
+
+
+    private void removePreviousFragmentTransaction(String tag, FragmentTransaction fragmentTransaction){
+        Fragment prev = getSupportFragmentManager().findFragmentByTag(tag);
+        if (prev != null) {
+            fragmentTransaction.remove(prev);
+        }
+        fragmentTransaction.addToBackStack(null);
     }
 
 
@@ -334,14 +357,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void notifyMediaPlayerStopped(){
-        playButton.setVisibility(View.VISIBLE);
-        pauseButton.setVisibility(View.GONE);
+        runOnUiThread(()->{
+            playButton.setVisibility(View.VISIBLE);
+            pauseButton.setVisibility(View.GONE);
+        });
     }
 
 
     public void notifyMediaPlayerPaused(){
-        playButton.setVisibility(View.VISIBLE);
-        pauseButton.setVisibility(View.GONE);
+        runOnUiThread(()->{
+            playButton.setVisibility(View.VISIBLE);
+            pauseButton.setVisibility(View.GONE);
+        });
     }
 
 
@@ -540,9 +567,13 @@ public class MainActivity extends AppCompatActivity {
         }
         else if(id == R.id.test_stop_after_current){
             toggleSearch();
-            //mediaPlayerService.enableStopAfterTrackFinishes();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public MediaPlayerService getMediaPlayerService(){
+        return this.mediaPlayerService;
     }
 
 

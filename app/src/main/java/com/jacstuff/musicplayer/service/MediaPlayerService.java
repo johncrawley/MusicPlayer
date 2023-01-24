@@ -71,6 +71,8 @@ public class MediaPlayerService extends Service {
     private boolean isPlaylistInitialized;
     private int elapsedTime;
     private TrackFinder trackFinder;
+    private ScheduledFuture<?> stopTrackFuture;
+
 
 
     public MediaPlayerService() {
@@ -118,8 +120,6 @@ public class MediaPlayerService extends Service {
 
 
     public void displayPlaylistRefreshedMessage(int numberOfNewTracks){
-        log("entered displayPlaylistRefreshedMessage()");
-        System.out.flush();
         mainActivity.displayPlaylistRefreshedMessage(numberOfNewTracks);
     }
 
@@ -140,6 +140,15 @@ public class MediaPlayerService extends Service {
         mediaNotificationManager.updateNotification();
         if(shouldUpdateMainView) {
             mainActivity.notifyMediaPlayerStopped();
+        }
+        cancelFutures();
+    }
+
+
+    private void cancelFutures(){
+        if(stopTrackFuture != null) {
+            stopTrackFuture.cancel(false);
+
         }
     }
 
@@ -200,6 +209,7 @@ public class MediaPlayerService extends Service {
             playlistManager.init();
             loadNextTrack();
             isPlaylistInitialized = true;
+            mainActivity.updateTracksList(playlistManager.getTracks(), playlistManager.getCurrentTrackIndex());
             mainActivity.displayPlaylistRefreshedMessage(getTrackCount());
         }
         if(trackFinder == null){
@@ -238,9 +248,8 @@ public class MediaPlayerService extends Service {
             play();
         }
         mainActivity.setTrackInfoOnView(currentTrack, 0);
+        cancelFutures();
     }
-
-
 
 
     public void selectTrack(int index){
@@ -249,6 +258,12 @@ public class MediaPlayerService extends Service {
 
 
     public void loadNextTrack(){
+        loadNext();
+        cancelFutures();
+    }
+
+
+    private void loadNext(){
         if(playlistManager.hasTracksQueued()){
             loadTrackDeselectCurrentTrack(playlistManager.getNextTrack());
             return;
@@ -259,6 +274,7 @@ public class MediaPlayerService extends Service {
 
     public void loadPreviousTrack(){
         loadTrack(playlistManager.getPreviousTrack());
+        cancelFutures();
     }
 
 
@@ -267,6 +283,7 @@ public class MediaPlayerService extends Service {
         mainActivity.scrollToPosition(track.getIndex());
         mediaNotificationManager.updateNotification();
     }
+
 
     public void loadTrackDeselectCurrentTrack(Track track){
         assignTrack(track);
@@ -279,6 +296,22 @@ public class MediaPlayerService extends Service {
         if(currentState == MediaPlayerState.PLAYING) {
             shouldNextTrackPlayAfterCurrentTrackEnds = false;
         }
+    }
+
+
+    public void stopPlayingInThreeMinutes(){
+        stopPlayingInMinutes(3);
+    }
+
+
+    private void stopPlayingInMinutes(int minutes){
+      stopTrackFuture = executorService.schedule( this::stopAndResetTime, minutes, TimeUnit.SECONDS);
+    }
+
+
+    private void stopAndResetTime(){
+        stop(true);
+        mainActivity.resetElapsedTime();
     }
 
 
@@ -325,11 +358,11 @@ public class MediaPlayerService extends Service {
         if(playlistManager == null) {
             playlistManager = new PlaylistManagerImpl(mainActivity.getApplicationContext());
         }
-        mainActivity.onServiceReady();
+        initPlaylist();
     }
 
 
-    boolean isPlaying(){
+    public boolean isPlaying(){
         return currentState == MediaPlayerState.PLAYING;
     }
 
@@ -418,7 +451,7 @@ public class MediaPlayerService extends Service {
 
 
     public void playTrack(){
-        if(currentState == MediaPlayerState.STOPPED){
+        if(currentState == MediaPlayerState.STOPPED || currentState == MediaPlayerState.FINISHED){
             play();
         }
         else if(currentState == MediaPlayerState.PAUSED){
@@ -539,15 +572,6 @@ public class MediaPlayerService extends Service {
     }
 
 
-
-    private void setupOnInfoListener(){
-        mediaPlayer.setOnInfoListener((mediaPlayer, i, i1) -> {
-            updateStatusFromConnectingToPlaying();
-            return false;
-        });
-    }
-
-
     private void updateStatusFromConnectingToPlaying(){
         if(!wasInfoFound){
             sendBroadcast(ACTION_NOTIFY_VIEW_OF_PLAYING);
@@ -585,6 +609,7 @@ public class MediaPlayerService extends Service {
         wasInfoFound = false;
         mediaNotificationManager.updateNotification();
         mainActivity.notifyMediaPlayerPaused();
+        cancelFutures();
     }
 
 
@@ -593,9 +618,6 @@ public class MediaPlayerService extends Service {
             mediaPlayer.pause();
             stopUpdatingElapsedTimeOnView();
             currentState = MediaPlayerState.PAUSED;
-        }
-        else{
-            log("Media player was either null or not playing");
         }
     }
 

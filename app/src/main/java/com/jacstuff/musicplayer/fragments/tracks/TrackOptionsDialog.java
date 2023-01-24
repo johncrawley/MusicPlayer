@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.fragments.queue;
+package com.jacstuff.musicplayer.fragments.tracks;
 
 
 import android.os.Bundle;

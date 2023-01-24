@@ -1,6 +1,5 @@
-package com.jacstuff.musicplayer.fragments.queue;
+package com.jacstuff.musicplayer.fragments.tracks;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -118,8 +117,6 @@ public class TracksFragment extends Fragment implements MediaPlayerView, ListSub
         int position = track.getIndex();
         getMainActivity().selectTrack(position);
     }
-
-
 
 
     public void scrollToListPosition(int index){
