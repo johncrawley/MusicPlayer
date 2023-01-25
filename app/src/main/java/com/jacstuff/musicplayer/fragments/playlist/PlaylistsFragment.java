@@ -87,11 +87,10 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-    private void setupButton(View parentView, int buttonId, Runnable onClick){
-        if(parentView!= null){
-            Button button = parentView.findViewById(buttonId);
-            button.setOnClickListener((View v)->onClick.run());
-        }
+    private Button setupButton(View parentView, int buttonId, Runnable onClick){
+        Button button = parentView.findViewById(buttonId);
+        button.setOnClickListener((View v)->onClick.run());
+        return button;
     }
 
 

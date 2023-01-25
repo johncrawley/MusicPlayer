@@ -143,6 +143,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/stop_button_content_description"
             android:paddingBottom="@dimen/button_padding"
+            android:tintMode="src_in"
             app:srcCompat="@mipmap/ic_action_stop" />
 
 
@@ -170,6 +171,7 @@
             android:visibility="gone"
             android:contentDescription="@string/shuffle_on_button_content_description"
             android:paddingBottom="@dimen/button_padding"
+            app:tint="@color/image_button_shuffle_on_tint"
             app:srcCompat="@mipmap/ic_action_enable_shuffle" />
 
     </LinearLayout>
