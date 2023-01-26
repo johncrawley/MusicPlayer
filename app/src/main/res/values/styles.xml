@@ -1,18 +1,24 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+   <!-- <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar"> -->
+    <style name="AppTheme" parent="Theme.Material3.Dark">
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorPrimaryDark">@color/primary_color_dark</item>
         <item name="colorAccent">@color/color_accent</item>
         <item name="android:windowBackground">@color/background</item>
         <item name="android:textColor">@color/text</item>
         <item name="android:buttonTint">@color/primary_color</item>
-        <item name="tabTextColor">@color/tab_text_color</item>
-        <item name="tabSelectedTextColor">@color/tab_selected_text_color</item>
+        <item name="tabTextColor">@color/tab_text</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected</item>
         <item name="buttonTint">#3D3D3D</item>
         <item name="android:navigationBarColor">@android:color/black</item>
          <item name="imageButtonStyle">@style/customImageButtonStyle</item>
         <item name="buttonStyle">@style/customButtonStyle</item>
+
+        <item name="android:alertDialogTheme">@style/customAlertDialogStyle</item>
+        <item name="android:dialogTheme">@style/customDialogStyle</item>
+
+        <item name="materialButtonStyle">@style/customMaterialButtonStyle</item>
     </style>
 
 
@@ -23,9 +29,33 @@
 
 
     <style name="customButtonStyle" parent="Widget.AppCompat.Button">
-        <item name="android:textColor">@color/button_text_color</item>
+        <item name="android:textColor">@color/button_text</item>
         <item name="android:backgroundTint">@color/button_background_tint</item>
     </style>
+
+
+    <style name="customMaterialButtonStyle" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/button_text</item>
+        <item name="android:backgroundTint">@color/button_background_tint</item>
+    </style>
+
+
+    <style name="customAlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/dialog_background</item>
+    </style>
+
+    <style name="customDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/dialog_background</item>
+        <item name="buttonStyle">@style/customButtonStyle</item>
+
+    </style>
+
+
+    <style name="customTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+    </style>
+
+
 
 
 </resources>

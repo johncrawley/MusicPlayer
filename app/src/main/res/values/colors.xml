@@ -13,12 +13,12 @@
     <color name="list_item_unfocused">#f2f7f9</color>
     <color name="background">#030404</color>
     <color name="text">#1CAE23</color>
-    <color name="customButtonText">#BEBFC1</color>
-    <color name="tab_text_color">#9A9A9B</color>
-    <color name="tab_selected_text_color">#D9D9DA</color>
+    <color name="tab_text">#9A9A9B</color>
+    <color name="tab_text_selected">#D9D9DA</color>
     <color name="image_button_background_tint">#373737</color>
     <color name="image_button_tint">#DCDCDC</color>
     <color name="image_button_shuffle_on_tint">#737373</color>
-    <color name="button_text_color">#D9D9DA</color>
+    <color name="button_text">#D9D9DA</color>
     <color name="button_background_tint">#373737</color>
+    <color name="dialog_background">#454444</color>
 </resources>

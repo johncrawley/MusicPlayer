@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/playlist_list_view_horizontal_margin"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="18dp"
+        android:layout_marginTop="@dimen/list_margin_top"
+        android:layout_marginBottom="@dimen/list_margin_bottom"
         android:fadeScrollbars="true"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/playlistButtonsLayout"
@@ -32,18 +32,21 @@
             android:id="@+id/addPlaylistButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/list_button_margin"
             android:text="@string/button_add_playlist"/>
 
         <Button
             android:id="@+id/deletePlaylistButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/list_button_margin"
             android:text="@string/button_delete_playlist"/>
 
         <Button
             android:id="@+id/loadPlaylistButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/list_button_margin"
             android:text="@string/button_load_playlist"/>
 
 

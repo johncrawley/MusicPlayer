@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:paddingHorizontal="@dimen/dialog_layout_padding_horizontal"
@@ -7,8 +8,12 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/addPlaylistTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/customTextInputLayoutStyle"
+        android:textColorHint="#fff"
+        app:boxStrokeColor="#fff"
         android:paddingTop="@dimen/input_text_padding_top">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/addPlaylistNameEditText"
@@ -17,7 +22,7 @@
             android:inputType="text"
             android:maxLines="1"
             android:imeOptions="actionDone"
-            android:hint="@string/button_add_playlist" />
+            android:hint="@string/add_playlist_input_text_hint" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
