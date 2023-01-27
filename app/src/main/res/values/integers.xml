@@ -2,7 +2,8 @@
 <resources>
 
     <integer name="playlist_item_offset">3</integer>
-    <integer name="search_input_max_length">12</integer>
+    <integer name="search_input_max_length">16</integer>
+    <integer name="playlist_name_max_length">32</integer>
     <integer name="card_flip_time_full">800</integer>
     <integer name="card_flip_time_half">800</integer>
 </resources>

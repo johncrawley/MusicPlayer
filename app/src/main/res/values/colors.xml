@@ -6,8 +6,8 @@
     <color name="pressed_color">#66bb6a</color>
     <!-- custom colors below -->
     <color name="color_accent">#2B712E</color>
-    <color name="primary_color">#114914</color>
-    <color name="primary_color_dark">#0B300D</color>
+    <color name="primary_color">#388E3C</color>
+    <color name="primary_color_dark">#072B09</color>
     <color name="list_item_selected">#0F3E1C</color>
     <color name="list_item_focused">#333539</color>
     <color name="list_item_unfocused">#f2f7f9</color>
@@ -21,4 +21,7 @@
     <color name="button_text">#D9D9DA</color>
     <color name="button_background_tint">#373737</color>
     <color name="dialog_background">#454444</color>
+    <color name="material_edit_text_focussed">#388E3C</color>
+    <color name="material_edit_text_hover">#388E3C</color>
+    <color name="material_edit_text">#2E7D32</color>
 </resources>

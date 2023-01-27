@@ -1,6 +1,6 @@
-package com.jacstuff.musicplayer.fragments;
+package com.jacstuff.musicplayer.fragments.playlist;
 
-import android.app.Dialog;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,10 +14,9 @@ import android.widget.TextView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
-import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
+import com.jacstuff.musicplayer.utils.KeyboardHelper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +28,6 @@ import java.util.Set;
 
 public class AddPlaylistFragment extends DialogFragment {
 
-    private MainActivity activity;
     private EditText addPlaylistNameEditText;
     private Button createPlaylistButton;
     private PlaylistRepository playlistRepository;
@@ -45,6 +43,7 @@ public class AddPlaylistFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_playlist, container, false);
         playlistRepository = new PlaylistRepositoryImpl(getContext());
+        setupKeyboardHelper();
         assignPlaylistNames();
         return rootView;
     }
@@ -53,18 +52,18 @@ public class AddPlaylistFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Dialog dialog =  getDialog();
-        activity = (MainActivity)getActivity();
+        setupViews(view);
+        setupKeyboardHelper();
+    }
+
+
+    private void setupKeyboardHelper(){
+        Activity activity = getActivity();
         if(activity == null){
             return;
         }
-        if(dialog != null){
-        //    dialog.setTitle(activity.getString(R.string.update_station_dialog_title));
-        }
-
-        //setupTitle(activity, view, R.string.update_station_dialog_title);
-        setupViews(view);
-       // FragmentUtils.setupDimensions(view, activity);
+        KeyboardHelper keyboardHelper = new KeyboardHelper(activity);
+        keyboardHelper.showKeyboardAndFocusOn(addPlaylistNameEditText);
     }
 
 
@@ -72,25 +71,30 @@ public class AddPlaylistFragment extends DialogFragment {
         playlistAlreadyExistsTextView = rootView.findViewById(R.id.playlistAlreadyExistsTextView);
         createPlaylistButton = rootView.findViewById(R.id.createPlaylistButton);
         addPlaylistNameEditText = rootView.findViewById(R.id.addPlaylistNameEditText);
+        setupTextChangedListener();
+        setupCreateButton();
+        setupCancelButton(rootView);
+    }
+
+
+    private void setupTextChangedListener(){
         addPlaylistNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                disableButtonIfInputsAreEmpty();
+                disableCreateButtonIfInputsAreEmpty();
             }
 
             @Override
             public void afterTextChanged(Editable editable) { }
         });
-
-        setupCreateButton();
     }
 
 
     private void setupCreateButton(){
-        disableButtonIfInputsAreEmpty();
+        disableCreateButtonIfInputsAreEmpty();
         createPlaylistButton.setOnClickListener((View v) -> {
             playlistRepository.createPlaylist(getEditText());
             updatePlaylistsOnParentFragment();
@@ -98,6 +102,10 @@ public class AddPlaylistFragment extends DialogFragment {
         });
     }
 
+    private void setupCancelButton(View parentView){
+        Button cancelButton = parentView.findViewById(R.id.cancelDialogButton);
+        cancelButton.setOnClickListener((View v)->dismiss());
+    }
 
     private void updatePlaylistsOnParentFragment(){
         PlaylistsFragment playlistsFragment = getPlaylistsFragment();
@@ -117,6 +125,7 @@ public class AddPlaylistFragment extends DialogFragment {
 
 
     @Override
+    @SuppressWarnings("@NonNull")
     public void onDismiss(DialogInterface dialogInterface){
         super.onDismiss(dialogInterface);
         notifyDismissOnParentFragment();
@@ -125,7 +134,10 @@ public class AddPlaylistFragment extends DialogFragment {
 
     @Override
     public void dismiss(){
-        activity.updatePlaylistList();
+        MainActivity mainActivity = (MainActivity)getActivity();
+        if(mainActivity != null) {
+            mainActivity.updatePlaylistList();
+        }
         super.dismiss();
     }
 
@@ -148,12 +160,7 @@ public class AddPlaylistFragment extends DialogFragment {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ AddPlaylistFragment: " + msg);
-    }
-
-
-    private void disableButtonIfInputsAreEmpty(){
+    private void disableCreateButtonIfInputsAreEmpty(){
         createPlaylistButton.setEnabled(isNameValid() && isNameUnique());
     }
 

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jacstuff.musicplayer.MainActivity;
@@ -15,7 +14,6 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
-import com.jacstuff.musicplayer.fragments.AddPlaylistFragment;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
 
 import java.util.ArrayList;

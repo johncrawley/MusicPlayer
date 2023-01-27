@@ -35,7 +35,7 @@ public class TracksFragment extends Fragment implements MediaPlayerView, ListSub
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_queue, container, false);
+        View view = inflater.inflate(R.layout.fragment_tracks, container, false);
         return view;
     }
 

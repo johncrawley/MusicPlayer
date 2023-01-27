@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -29,7 +28,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -49,6 +47,7 @@ import com.jacstuff.musicplayer.list.SearchResultsListAdapter;
 import com.jacstuff.musicplayer.search.AnimatorHelper;
 import com.jacstuff.musicplayer.search.KeyListenerHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
+import com.jacstuff.musicplayer.utils.KeyboardHelper;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
@@ -76,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private View searchView;
     private OnBackPressedCallback dismissSearchViewOnBackPressedCallback;
     private Track selectedTrack;
+    private KeyboardHelper keyboardHelper;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        keyboardHelper = new KeyboardHelper(this);
         setupViews();
         setupTabLayout();
         setupViewModel();
@@ -126,8 +127,7 @@ public class MainActivity extends AppCompatActivity {
     private void showSearch(){
         showOrHideSearchAddButtons();
         Animator animator = createShowAnimatorFor(searchView, ()->{
-            searchEditText.requestFocus();
-            searchEditText.postDelayed(this::showKeyboard, 200);
+            keyboardHelper.showKeyboardAndFocusOn(searchEditText);
         });
         searchView.setVisibility(View.VISIBLE);
         dismissSearchViewOnBackPressedCallback.setEnabled(true);
@@ -158,22 +158,11 @@ public class MainActivity extends AppCompatActivity {
             searchEditText.setText("");
             clearSearchResults();
         });
-        hideKeyboard();
+        keyboardHelper.hideKeyboard(searchView);
         dismissSearchViewOnBackPressedCallback.setEnabled(false);
         animator.start();
     }
 
-
-    private void hideKeyboard(){
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
-    }
-
-
-    private void showKeyboard(){
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(searchEditText, InputMethodManager.RESULT_UNCHANGED_SHOWN);
-    }
 
 
     public void playTrack() {

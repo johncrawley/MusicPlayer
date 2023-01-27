@@ -16,8 +16,6 @@
         <item name="buttonStyle">@style/customButtonStyle</item>
 
         <item name="android:alertDialogTheme">@style/customAlertDialogStyle</item>
-        <item name="android:dialogTheme">@style/customDialogStyle</item>
-
         <item name="materialButtonStyle">@style/customMaterialButtonStyle</item>
     </style>
 
@@ -53,6 +51,7 @@
 
     <style name="customTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+        <item name="hintTextColor">@color/button_text</item>
     </style>
 
 

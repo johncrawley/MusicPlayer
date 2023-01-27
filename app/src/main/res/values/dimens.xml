@@ -3,10 +3,11 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">8dp</dimen>
     <dimen name="activity_vertical_margin">8dp</dimen>
+    <dimen name="player_margin_bottom">0dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="row_pad_v">6dp</dimen>
     <dimen name="button_padding">12dp</dimen>
-    <dimen name="button_panel_margin_bottom">8dp</dimen>
+    <dimen name="button_panel_margin_bottom">0dp</dimen>
     <dimen name="horizontal_divider_side_margin">12dp</dimen>
     <dimen name="playlist_list_view_horizontal_margin">2dp</dimen>
     <dimen name="track_name_text_size">24sp</dimen>
