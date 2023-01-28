@@ -1,5 +1,6 @@
 package com.jacstuff.musicplayer.fragments.tracks;
 
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,13 +36,12 @@ public class TracksFragment extends Fragment implements MediaPlayerView, ListSub
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tracks, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_tracks, container, false);
     }
 
 
     @Override
-    public void onViewCreated(View view,  Bundle savedInstanceState){
+    public void onViewCreated(View view, Bundle savedInstanceState){
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.recyclerView);
         setupRecyclerView(getMainActivity().getTrackList());

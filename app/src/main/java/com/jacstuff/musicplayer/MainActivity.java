@@ -613,7 +613,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     public void hideSearchAddButtons(){
         addSelectedSearchResultButton.setVisibility(View.GONE);
         addAllSearchResultsButton.setVisibility(View.GONE);

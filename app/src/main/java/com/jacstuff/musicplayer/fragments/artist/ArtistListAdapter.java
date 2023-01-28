@@ -54,7 +54,7 @@ public class ArtistListAdapter extends RecyclerView.Adapter<ArtistListAdapter.Tr
     }
 
 
-    public Artist getCurrentlySelectedArtist(){
+    public Artist getCurrentlySelectedItem(){
         return new Artist(-1, currentlySelectedArtistName);
     }
 

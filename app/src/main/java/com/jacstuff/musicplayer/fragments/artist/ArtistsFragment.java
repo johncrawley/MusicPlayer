@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -17,6 +16,7 @@ import com.jacstuff.musicplayer.MediaPlayerView;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.artist.ArtistRepository;
+import com.jacstuff.musicplayer.utils.ButtonMaker;
 
 import java.util.List;
 
@@ -45,18 +45,26 @@ public class ArtistsFragment extends Fragment implements MediaPlayerView {
     public void onViewCreated(View view,  Bundle savedInstanceState){
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.artistsRecyclerView);
-        setupLoadTracksButton(parentView);
+        setupButtons(parentView);
         refreshArtistsList();
     }
 
 
-    private void setupLoadTracksButton(View parentView){
-        Button loadArtistTracksButton = parentView.findViewById(R.id.loadTracksFromArtistButton);
-        loadArtistTracksButton.setOnClickListener((View v) -> {
-           getMainActivity().loadTracksFromArtist(artistListAdapter.getCurrentlySelectedArtist());
-           getMainActivity().switchToTracksTab();
+    private void setupButtons(View parentView){
+        ButtonMaker.createButton(parentView, R.id.loadTracksFromArtistButton, ()->{
+            getMainActivity().loadTracksFromArtist(getSelectedArtist());
+            getMainActivity().switchToTracksTab();
         });
+
+        ButtonMaker.createButton(parentView, R.id.addTracksFromArtistToPlaylistButton, ()->
+            getMainActivity().getMediaPlayerService().addTracksFromAristToCurrentPlaylist(getSelectedArtist()));
     }
+
+
+    private Artist getSelectedArtist(){
+        return artistListAdapter.getCurrentlySelectedItem();
+    }
+
 
     public void notifyCurrentlySelectedTrack(int position){
         getMainActivity().selectTrack(position);

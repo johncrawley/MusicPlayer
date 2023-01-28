@@ -165,6 +165,18 @@ public class MediaPlayerService extends Service {
     }
 
 
+    public void addTracksFromAlbumToCurrentPlaylist(Album album){
+        playlistManager.addTracksFromAlbumToCurrentPlaylist(album);
+        updateViewTrackList();
+    }
+
+
+    public void addTracksFromAristToCurrentPlaylist(Artist artist){
+        playlistManager.addTracksFromArtistToCurrentPlaylist(artist);
+        updateViewTrackList();
+    }
+
+
     public void initPlaylist(){
         executorService.execute(() -> {
             reloadPlaylistIfNotInitialized();
@@ -198,7 +210,7 @@ public class MediaPlayerService extends Service {
 
 
     public void removeTrackFromCurrentPlaylist(Track track){
-        playlistManager.removeTrackToCurrentPlaylist(track);
+        playlistManager.removeTrackFromCurrentPlaylist(track);
         updateViewTrackList();
         mediaNotificationManager.updateNotification();
     }
@@ -226,6 +238,7 @@ public class MediaPlayerService extends Service {
             mainActivity.notifyMediaPlayerPaused();
         }
     }
+
 
     public PlaylistManager getPlaylistManager(){
         return playlistManager;

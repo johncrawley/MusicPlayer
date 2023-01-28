@@ -27,13 +27,15 @@ public interface PlaylistManager {
     void loadPlaylist(Playlist playlist);
     void addTrackToCurrentPlaylist(Track track);
     void addTracksToCurrentPlaylist(List<Track> tracks);
-    void removeTrackToCurrentPlaylist(Track track);
+    void removeTrackFromCurrentPlaylist(Track track);
     int getNumberOfTracks();
     void enableShuffle();
     void disableShuffle();
     void onDestroy();
     void loadTracksFromArtist(Artist artist);
     void loadTracksFromAlbum(Album album);
+    void addTracksFromArtistToCurrentPlaylist(Artist artist);
+    void addTracksFromAlbumToCurrentPlaylist(Album album);
 
     String getTrackNameAt(int position);
 }

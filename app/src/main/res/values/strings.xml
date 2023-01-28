@@ -37,6 +37,8 @@
     <string name="button_load_playlist">Load</string>
     <string name="button_delete_playlist">Remove</string>
     <string name="button_load_tracks_from_artist">Load Tracks</string>
+    <string name="button_add_tracks_from_artist">Add To Playlist</string>
+    <string name="button_add_tracks_from_album">Add To Playlist</string>
     <string name="add_playlist_input_text_hint">Playlist Name</string>
 
     <string name="button_track_options_enqueue">Enqueue</string>

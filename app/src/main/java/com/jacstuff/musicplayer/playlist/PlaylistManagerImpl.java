@@ -43,7 +43,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private Set<Long> defaultPlaylistIds;
     private Playlist currentPlaylist;
     private boolean isInitialized;
-    private ArrayDeque<Track> queuedTracks;
+    private final ArrayDeque<Track> queuedTracks;
 
 
     public PlaylistManagerImpl(Context context){
@@ -171,6 +171,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
             return;
         }
         this.tracks.addAll(tracks);
+        assignIndexesToTracks();
         for(Track track : tracks){
             playlistItemRepository.addPlaylistItem(track, currentPlaylist.getId());
         }
@@ -178,11 +179,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
-    public void removeTrackToCurrentPlaylist(Track track) {
+    public void removeTrackFromCurrentPlaylist(Track track) {
         if(!isUserPlaylistLoaded()){
             return;
         }
-        tracks.remove(track);
+        tracks.remove(track.getIndex());
+        assignIndexesToTracks();
         playlistItemRepository.deletePlaylistItem(track.getId());
     }
 
@@ -216,6 +218,18 @@ public class PlaylistManagerImpl implements PlaylistManager {
         assignIndexesToTracks();
         setupQueue();
         currentPlaylist = someAlbumPlaylist;
+    }
+
+
+    @Override
+    public void addTracksFromArtistToCurrentPlaylist(Artist artist) {
+        addTracksToCurrentPlaylist(getSortedTracks(trackRepository.getTracksForArtist(artist)));
+    }
+
+
+    @Override
+    public void addTracksFromAlbumToCurrentPlaylist(Album album) {
+        addTracksToCurrentPlaylist(getSortedTracks(trackRepository.getTracksForAlbum(album)));
     }
 
 
@@ -349,6 +363,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public Track selectTrack(int index){
+        log("Entered selectTrack, index: " + index + " tracks size() : " + tracks.size());
         if(index > tracks.size()){
             return null;
         }
@@ -357,6 +372,11 @@ public class PlaylistManagerImpl implements PlaylistManager {
         Track track = tracks.get(index);
         trackHistory.add(track);
         return tracks.get(index);
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ PlaylistManagerImpl: " + msg);
     }
 
 

@@ -20,7 +20,6 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-
     <View
         android:id="@+id/albumsBottomDivider"
         android:layout_width="match_parent"
@@ -37,15 +36,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        style="?android:attr/buttonBarStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
+
         <Button
             android:id="@+id/loadTracksFromAlbumButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/list_button_margin"
-            android:text="@string/button_load_tracks_from_artist"/>
+            android:text="@string/button_load_tracks_from_artist"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/addTracksFromAlbumToPlaylistButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/list_button_margin"
+            android:text="@string/button_add_tracks_from_album"
+            style="?android:attr/buttonBarButtonStyle" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

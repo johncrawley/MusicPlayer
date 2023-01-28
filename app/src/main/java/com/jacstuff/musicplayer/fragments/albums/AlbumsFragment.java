@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -18,6 +17,7 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.album.AlbumRepository;
 import com.jacstuff.musicplayer.db.artist.Artist;
+import com.jacstuff.musicplayer.utils.ButtonMaker;
 
 import java.util.List;
 
@@ -46,18 +46,24 @@ public class AlbumsFragment extends Fragment implements MediaPlayerView {
     public void onViewCreated(View view,  Bundle savedInstanceState){
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.albumsRecyclerView);
-        setupLoadTracksButton(parentView);
+        setupButtons(parentView);
         refreshList();
     }
 
 
-    private void setupLoadTracksButton(View parentView){
-        Button loadButton = parentView.findViewById(R.id.loadTracksFromAlbumButton);
-        loadButton.setOnClickListener((View v) -> {
-            Album album = new Album(-1, listAdapter.getCurrentlySelectedItem());
-            getMainActivity().loadTracksFromAlbum(album);
+    private void setupButtons(View parentView){
+        ButtonMaker.createButton(parentView, R.id.loadTracksFromAlbumButton, ()->{
+            getMainActivity().loadTracksFromAlbum(getSelectedAlbum());
             getMainActivity().switchToTracksTab();
         });
+
+        ButtonMaker.createButton(parentView, R.id.addTracksFromAlbumToPlaylistButton, ()->
+                getMainActivity().getMediaPlayerService().addTracksFromAlbumToCurrentPlaylist(getSelectedAlbum()));
+    }
+
+
+    private Album getSelectedAlbum(){
+       return new Album(-1, listAdapter.getCurrentlySelectedItem());
     }
 
 
@@ -68,12 +74,6 @@ public class AlbumsFragment extends Fragment implements MediaPlayerView {
 
     private MainActivity getMainActivity(){
         return (MainActivity)getActivity();
-    }
-
-
-    public void updateList(List<Album> albums, int currentTrackIndex){
-        refreshList();
-        scrollToListPosition(currentTrackIndex);
     }
 
 
