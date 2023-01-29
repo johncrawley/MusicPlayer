@@ -7,7 +7,7 @@
     <!-- custom colors below -->
     <color name="color_accent">#2B712E</color>
     <color name="primary_color">#388E3C</color>
-    <color name="primary_color_dark">#072B09</color>
+    <color name="primary_color_dark">#1E1E1E</color>
     <color name="list_item_selected">#0F3E1C</color>
     <color name="list_item_focused">#333539</color>
     <color name="list_item_unfocused">#f2f7f9</color>

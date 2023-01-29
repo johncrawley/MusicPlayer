@@ -15,6 +15,7 @@ import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
+import com.jacstuff.musicplayer.utils.ButtonMaker;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -77,29 +78,35 @@ public class PlaylistsFragment extends Fragment {
         hasClicked = false;
     }
 
+    private Button addPlaylistButton, removePlaylistButton, loadPlaylistButton;
 
     private void setupButtons(View parentView){
-        setupButton(parentView, R.id.addPlaylistButton, this::startAddPlaylistFragment);
-        setupButton(parentView, R.id.deletePlaylistButton, this::showDeletePlaylistDialog);
-        setupButton(parentView, R.id.loadPlaylistButton, ()->loadSelectedPlaylist(true));
+        addPlaylistButton = ButtonMaker.createButton(parentView, R.id.addPlaylistButton, this::startAddPlaylistFragment);
+        removePlaylistButton = ButtonMaker.createButton(parentView, R.id.deletePlaylistButton, this::showDeletePlaylistDialog);
+        loadPlaylistButton = ButtonMaker.createButton(parentView, R.id.loadPlaylistButton, ()->loadSelectedPlaylist(true));
     }
 
-
-    private Button setupButton(View parentView, int buttonId, Runnable onClick){
-        Button button = parentView.findViewById(buttonId);
-        button.setOnClickListener((View v)->onClick.run());
-        return button;
-    }
 
 
     private void setupPlaylistRecyclerView(View parentView){
         recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
-        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(getAllPlaylists(), (Playlist p)->{});
+        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(getAllPlaylists(), this::showOrHideButtonsOnPlaylistItemSelected);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(playlistRecyclerAdapter);
+    }
+
+
+    private void showOrHideButtonsOnPlaylistItemSelected(Playlist p){
+        if(p.getId().equals(PlaylistManagerImpl.ALL_TRACKS_PLAYLIST_ID)){
+            removePlaylistButton.setVisibility(View.INVISIBLE);
+        }
+        else{
+            removePlaylistButton.setVisibility(View.VISIBLE);
+        }
+        loadPlaylistButton.setVisibility(View.VISIBLE);
     }
 
 
@@ -174,7 +181,7 @@ public class PlaylistsFragment extends Fragment {
         Playlist playlist = playlistRecyclerAdapter.getSelectedPlaylist();
         if(playlist != null){
             if(getMainActivity() != null){
-                getMainActivity().setActivePlaylist(playlist, shouldSwitchToTracksTab);
+                getMainActivity().loadPlaylist(playlist, shouldSwitchToTracksTab);
             }
         }
     }

@@ -8,21 +8,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jacstuff.musicplayer.MediaPlayerView;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.TrackViewHolder> {
 
     private final List<String> albumNames;
-    private final MediaPlayerView mediaPlayerView;
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
-    private String currentlySelectedItem;
+    private String currentlySelectedName;
     private int indexToScrollTo = -1;
+    private Consumer<Album> clickConsumer;
+    private Album currentItem;
 
 
     class TrackViewHolder extends RecyclerView.ViewHolder {
@@ -36,26 +38,28 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Trac
             view.setOnClickListener(v -> {
                 deselectCurrentlySelectedItem();
                 currentlySelectedView = v;
-                currentlySelectedItem = textView.getText().toString();
+                currentlySelectedName = textView.getText().toString();
+                currentItem = new Album(-1, currentlySelectedName);
                 setIndexToScrollTo(getLayoutPosition());
                 currentlySelectedView.setSelected(true);
                 selectedPosition = RecyclerView.NO_POSITION;
+                clickConsumer.accept(new Album(-1, currentlySelectedName));
             });
         }
     }
 
 
-    public AlbumListAdapter(List<Artist> artists, MediaPlayerView view){
+    public AlbumListAdapter(List<Artist> artists, Consumer<Album> clickConsumer){
         this.albumNames = new ArrayList<>();
-        this.mediaPlayerView = view;
         for(Artist artist : artists){
             this.albumNames.add(artist.getName());
         }
+        this.clickConsumer = clickConsumer;
     }
 
 
-    public String getCurrentlySelectedItem(){
-        return currentlySelectedItem;
+    public Album getCurrentlySelectedItem(){
+        return currentItem;
     }
 
 

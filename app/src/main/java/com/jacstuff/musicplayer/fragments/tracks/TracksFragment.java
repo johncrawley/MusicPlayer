@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.jacstuff.musicplayer.ListSubscriber;
 import com.jacstuff.musicplayer.MainActivity;
-import com.jacstuff.musicplayer.MediaPlayerView;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.list.TrackListAdapter;
@@ -21,7 +20,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class TracksFragment extends Fragment implements MediaPlayerView, ListSubscriber {
+public class TracksFragment extends Fragment implements ListSubscriber {
 
     private RecyclerView recyclerView;
     private TrackListAdapter trackListAdapter;

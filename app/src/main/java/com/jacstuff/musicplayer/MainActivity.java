@@ -39,6 +39,7 @@ import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.fragments.PlaylistLoadedNotifier;
 import com.jacstuff.musicplayer.fragments.options.StopOptionsFragment;
 import com.jacstuff.musicplayer.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private OnBackPressedCallback dismissSearchViewOnBackPressedCallback;
     private Track selectedTrack;
     private KeyboardHelper keyboardHelper;
+    private final PlaylistLoadedNotifier playlistLoadedNotifier = new PlaylistLoadedNotifier();
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -121,6 +123,11 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         getOnBackPressedDispatcher().addCallback(this, dismissSearchViewOnBackPressedCallback);
+    }
+
+
+    public PlaylistLoadedNotifier getPlaylistLoadedNotifier(){
+        return playlistLoadedNotifier;
     }
 
 
@@ -641,11 +648,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void setActivePlaylist(Playlist playlist, boolean shouldSwitchToTracksTab){
+    public void loadPlaylist(Playlist playlist, boolean shouldSwitchToTracksTab){
         mediaPlayerService.setActivePlaylist(playlist);
         if(shouldSwitchToTracksTab){
             switchToTracksTab();
         }
+        playlistLoadedNotifier.notifyObservers();
     }
 
 

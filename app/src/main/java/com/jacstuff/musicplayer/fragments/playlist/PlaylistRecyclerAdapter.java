@@ -41,6 +41,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
                 selectedPlaylist = (Playlist)trackNameTextView.getTag();
                 currentlySelectedView = v;
                 currentlySelectedView.setSelected(true);
+                onItemClickConsumer.accept(selectedPlaylist);
             });
         }
     }

@@ -45,6 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/list_button_margin"
             android:text="@string/button_load_tracks_from_artist"
+            android:visibility="invisible"
             style="?android:attr/buttonBarButtonStyle" />
 
         <Button
@@ -53,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/list_button_margin"
             android:text="@string/button_add_tracks_from_artist"
+            android:visibility="invisible"
             style="?android:attr/buttonBarButtonStyle" />
     </LinearLayout>
 
