@@ -36,7 +36,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        style="?android:attr/buttonBarStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -47,8 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/list_button_margin"
             android:text="@string/button_load_tracks_from_artist"
-            android:visibility="invisible"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/addTracksFromAlbumToPlaylistButton"
@@ -56,8 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/list_button_margin"
             android:text="@string/button_add_tracks_from_album"
-            android:visibility="invisible"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:visibility="invisible"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,10 +18,12 @@
     <color name="image_button_background_tint">#373737</color>
     <color name="image_button_tint">#DCDCDC</color>
     <color name="image_button_shuffle_on_tint">#737373</color>
-    <color name="button_text">#D9D9DA</color>
+    <color name="button_text">#9A9A9B</color>
     <color name="button_background_tint">#373737</color>
     <color name="dialog_background">#454444</color>
     <color name="material_edit_text_focussed">#388E3C</color>
     <color name="material_edit_text_hover">#388E3C</color>
     <color name="material_edit_text">#2E7D32</color>
+
+    <color name="button_outline">#388E3C</color>
 </resources>

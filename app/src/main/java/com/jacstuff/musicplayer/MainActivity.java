@@ -57,15 +57,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private ViewStateAdapter viewStateAdapter;
     private MediaPlayerService mediaPlayerService;
-    private TextView trackTime;
-    private TextView trackTitle, trackAlbum, trackArtist;
-    private ImageButton playButton, pauseButton, stopButton;
+    private TextView trackTime, trackTitle, trackAlbum, trackArtist;
+    private ImageButton playButton, pauseButton, stopButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton;
     private EditText searchEditText;
-    private ImageButton nextTrackButton, previousTrackButton;
-    private ImageButton turnShuffleOnButton, turnShuffleOffButton;
     private String totalTrackTime = "0:00";
     private TracksFragment tracksFragment;
     private ViewGroup playerButtonPanel;
@@ -77,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private OnBackPressedCallback dismissSearchViewOnBackPressedCallback;
     private Track selectedTrack;
     private KeyboardHelper keyboardHelper;
-    private final PlaylistLoadedNotifier playlistLoadedNotifier = new PlaylistLoadedNotifier();
+    private PlaylistLoadedNotifier playlistLoadedNotifier;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -96,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         keyboardHelper = new KeyboardHelper(this);
+        playlistLoadedNotifier = new PlaylistLoadedNotifier();
         setupViews();
         setupTabLayout();
         setupViewModel();
@@ -103,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         startMediaPlayerService();
         setupSearchView();
         setupDismissSearchOnBackPressed();
+
     }
 
 
@@ -628,7 +626,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showSearchAddButtons(){
         addSelectedSearchResultButton.setVisibility(View.VISIBLE);
-        addAllSearchResultsButton.setVisibility(View.VISIBLE);
+       // addAllSearchResultsButton.setVisibility(View.VISIBLE);
     }
 
 

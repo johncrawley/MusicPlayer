@@ -100,6 +100,7 @@
             android:id="@+id/previousTrackButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="?android:attr/buttonBarButtonStyle"
             android:contentDescription="@string/previous_track_button_content_description"
             android:paddingBottom="@dimen/button_padding"
             app:srcCompat="@mipmap/ic_action_previous" />

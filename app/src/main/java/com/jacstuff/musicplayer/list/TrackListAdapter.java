@@ -61,7 +61,6 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     }
 
 
-
     public TrackListAdapter(List<Track> tracks, Consumer<Track> onClick, Consumer<Track> onLongClick){
         this.trackNames = new ArrayList<>();
         this.tracks = tracks;
@@ -71,6 +70,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
             this.trackNames.add(getStrOf(track));
         }
     }
+
 
     public Track getSelectedItem(){
         return selectedTrack;

@@ -12,17 +12,23 @@
         <item name="tabSelectedTextColor">@color/tab_text_selected</item>
         <item name="buttonTint">#3D3D3D</item>
         <item name="android:navigationBarColor">@android:color/black</item>
-         <item name="imageButtonStyle">@style/customImageButtonStyle</item>
         <item name="buttonStyle">@style/customButtonStyle</item>
-
+        <item name="materialButtonStyle">@style/customMaterialOutlineButtonStyle</item>
         <item name="android:alertDialogTheme">@style/customAlertDialogStyle</item>
-        <item name="materialButtonStyle">@style/customMaterialButtonStyle</item>
+        <item name="android:buttonBarButtonStyle">@style/customMaterialButtonStyle</item>
+        <item name="imageButtonStyle">@style/customImageButtonStyle</item>
     </style>
+
+    <!--
+        <item name="materialButtonStyle">@style/customMaterialButtonStyle</item>
+
+    -->
 
 
     <style name="customImageButtonStyle" parent="Widget.AppCompat.ImageButton">
-        <item name="backgroundTint">@color/image_button_background_tint</item>
+        <item name="backgroundTint">@color/background</item>
         <item name="tint">@color/image_button_tint</item>
+        <item name="cornerRadius">15dp</item>
     </style>
 
 
@@ -33,9 +39,23 @@
 
 
     <style name="customMaterialButtonStyle" parent="Widget.Material3.Button">
-        <item name="android:textColor">@color/button_text</item>
+        <item name="android:textColor">@color/colorAccent</item>
         <item name="android:backgroundTint">@color/button_background_tint</item>
     </style>
+
+    <style name="customButtonBarButtonStyle" parent="Widget.AppCompat.ButtonBar">
+        <item name="android:textColor">@color/color_accent</item>
+    </style>
+
+
+    <style name="customMaterialOutlineButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/button_text</item>
+        <item name="cornerRadius">15dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="backgroundColor">@color/color_accent</item>
+        <item name="strokeColor">@color/button_outline</item>
+    </style>
+
 
 
     <style name="customAlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
