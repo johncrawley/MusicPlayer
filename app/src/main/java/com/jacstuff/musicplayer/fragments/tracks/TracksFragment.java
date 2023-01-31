@@ -124,7 +124,9 @@ public class TracksFragment extends Fragment implements ListSubscriber {
         }
         trackListAdapter.selectItemAt(index);
         int calculatedScrollIndex = calculateIndexWithOffset(index);
-        recyclerView.smoothScrollToPosition(calculatedScrollIndex);
+        //could use: smoothScrollToPosition(calculatedScrollIndex)
+        // but it would take too long for large list
+        recyclerView.scrollToPosition(calculatedScrollIndex);
     }
 
 
