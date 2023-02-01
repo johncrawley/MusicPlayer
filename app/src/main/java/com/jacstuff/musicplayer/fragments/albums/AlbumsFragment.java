@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,12 +18,12 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.album.AlbumRepository;
 import com.jacstuff.musicplayer.db.artist.Artist;
-import com.jacstuff.musicplayer.fragments.PlaylistLoadedObserver;
+import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.utils.ButtonMaker;
 
 import java.util.List;
 
-public class AlbumsFragment extends Fragment implements PlaylistLoadedObserver {
+public class AlbumsFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private AlbumListAdapter listAdapter;
@@ -39,7 +40,6 @@ public class AlbumsFragment extends Fragment implements PlaylistLoadedObserver {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_albums, container, false);
         albumsRepository = new AlbumRepository(getContext());
-        getMainActivity().getPlaylistLoadedNotifier().addObserver(this);
         return view;
     }
 
@@ -50,6 +50,25 @@ public class AlbumsFragment extends Fragment implements PlaylistLoadedObserver {
         recyclerView = parentView.findViewById(R.id.albumsRecyclerView);
         setupButtons(parentView);
         refreshList();
+        setupFragmentListener();
+    }
+
+
+    private void setupFragmentListener(){
+        getParentFragmentManager().setFragmentResultListener(PlaylistsFragment.NOTIFY_PLAYLIST_LOADED_FRAGMENT_RESULT, this, (requestKey, bundle) -> {
+            int visibility =  isBundleUserPlaylistLoaded(bundle) && isItemSelected()? View.VISIBLE : View.INVISIBLE;
+            addTracksToPlaylistButton.setVisibility(visibility);
+        });
+    }
+
+
+    private boolean isBundleUserPlaylistLoaded(Bundle bundle){
+       return bundle.getBoolean(PlaylistsFragment.BUNDLE_KEY_USER_PLAYLIST_LOADED);
+    }
+
+
+    private boolean isItemSelected(){
+        return listAdapter.getCurrentlySelectedItem() != null;
     }
 
 
@@ -98,8 +117,4 @@ public class AlbumsFragment extends Fragment implements PlaylistLoadedObserver {
     }
 
 
-    @Override
-    public void notifyOnPlaylistLoaded() {
-        setButtonsVisibility(listAdapter.getCurrentlySelectedItem());
-    }
 }

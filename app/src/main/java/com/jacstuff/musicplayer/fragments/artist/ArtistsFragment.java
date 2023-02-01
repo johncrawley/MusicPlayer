@@ -17,14 +17,15 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.artist.ArtistRepository;
 import com.jacstuff.musicplayer.fragments.PlaylistLoadedObserver;
+import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.utils.ButtonMaker;
 
 import java.util.List;
 
-public class ArtistsFragment extends Fragment implements PlaylistLoadedObserver {
+public class ArtistsFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private ArtistListAdapter artistListAdapter;
+    private ArtistListAdapter listAdapter;
     private int previousIndex = 0;
     private View parentView;
     private ArtistRepository artistRepository;
@@ -39,7 +40,6 @@ public class ArtistsFragment extends Fragment implements PlaylistLoadedObserver 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_artists, container, false);
         artistRepository = new ArtistRepository(getContext());
-        getMainActivity().getPlaylistLoadedNotifier().addObserver(this);
         return view;
     }
 
@@ -50,6 +50,25 @@ public class ArtistsFragment extends Fragment implements PlaylistLoadedObserver 
         recyclerView = parentView.findViewById(R.id.artistsRecyclerView);
         setupButtons(parentView);
         refreshArtistsList();
+        setupFragmentListener();
+    }
+
+
+    private void setupFragmentListener(){
+        getParentFragmentManager().setFragmentResultListener(PlaylistsFragment.NOTIFY_PLAYLIST_LOADED_FRAGMENT_RESULT, this, (requestKey, bundle) -> {
+            int visibility =  isBundleUserPlaylistLoaded(bundle) && isItemSelected()? View.VISIBLE : View.INVISIBLE;
+            addTracksToPlaylistButton.setVisibility(visibility);
+        });
+    }
+
+
+    private boolean isBundleUserPlaylistLoaded(Bundle bundle){
+        return bundle.getBoolean(PlaylistsFragment.BUNDLE_KEY_USER_PLAYLIST_LOADED);
+    }
+
+
+    private boolean isItemSelected(){
+        return listAdapter.getCurrentlySelectedItem() != null;
     }
 
 
@@ -65,7 +84,7 @@ public class ArtistsFragment extends Fragment implements PlaylistLoadedObserver 
 
 
     private Artist getSelectedArtist(){
-        return artistListAdapter.getCurrentlySelectedItem();
+        return listAdapter.getCurrentlySelectedItem();
     }
 
 
@@ -84,16 +103,16 @@ public class ArtistsFragment extends Fragment implements PlaylistLoadedObserver 
         if(this.parentView == null ||artists == null){
             return;
         }
-        artistListAdapter = new ArtistListAdapter(artists, this::setButtonsVisibility);
+        listAdapter = new ArtistListAdapter(artists, this::setButtonsVisibility);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(artistListAdapter);
+        recyclerView.setAdapter(listAdapter);
     }
 
 
     @SuppressLint("NotifyDataSetChanged")
     private void updateTrackViews(){
-        artistListAdapter.notifyDataSetChanged();
+        listAdapter.notifyDataSetChanged();
     }
 
 
@@ -108,10 +127,5 @@ public class ArtistsFragment extends Fragment implements PlaylistLoadedObserver 
         return getMainActivity().getMediaPlayerService().getPlaylistManager().isUserPlaylistLoaded() ? View.VISIBLE : View.INVISIBLE;
     }
 
-
-    @Override
-    public void notifyOnPlaylistLoaded() {
-        setButtonsVisibility(null);
-    }
 
 }

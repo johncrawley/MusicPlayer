@@ -39,6 +39,8 @@ public class PlaylistsFragment extends Fragment {
     private RecyclerView recyclerView;
     private Set<String> playlistNames;
     private final int INITIAL_PLAYLIST_CAPACITY = 50;
+    public final static String NOTIFY_PLAYLIST_LOADED_FRAGMENT_RESULT = "Notify_Playlist_Loaded";
+    public final static String BUNDLE_KEY_USER_PLAYLIST_LOADED = "User_Playlist_Loaded_message";
 
     public PlaylistsFragment() {
         // Required empty public constructor
@@ -180,10 +182,19 @@ public class PlaylistsFragment extends Fragment {
     private void loadSelectedPlaylist(boolean shouldSwitchToTracksTab){
         Playlist playlist = playlistRecyclerAdapter.getSelectedPlaylist();
         if(playlist != null){
-            if(getMainActivity() != null){
-                getMainActivity().loadPlaylist(playlist, shouldSwitchToTracksTab);
+            MainActivity mainActivity = getMainActivity();
+            if(mainActivity != null){
+                mainActivity.loadPlaylist(playlist, shouldSwitchToTracksTab);
+                notifyFragmentsOfPlaylistType(mainActivity.isUserPlaylistLoaded());
             }
         }
+    }
+
+
+    private void notifyFragmentsOfPlaylistType(boolean isUserPlaylistLoaded){
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(BUNDLE_KEY_USER_PLAYLIST_LOADED, isUserPlaylistLoaded);
+        getParentFragmentManager().setFragmentResult(NOTIFY_PLAYLIST_LOADED_FRAGMENT_RESULT, bundle);
     }
 
 
