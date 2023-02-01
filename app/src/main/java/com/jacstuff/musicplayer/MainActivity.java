@@ -91,11 +91,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupViewModel();
         keyboardHelper = new KeyboardHelper(this);
         playlistLoadedNotifier = new PlaylistLoadedNotifier();
         setupViews();
         setupTabLayout();
-        setupViewModel();
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         startMediaPlayerService();
         setupSearchView();
@@ -448,9 +448,10 @@ public class MainActivity extends AppCompatActivity {
         this.trackArtist.setText(artistInfo);
     }
 
+    private MainViewModel viewModel;
 
     private void setupViewModel(){
-        MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
     }
 
 
@@ -462,7 +463,7 @@ public class MainActivity extends AppCompatActivity {
         }
         viewStateAdapter = new ViewStateAdapter(getSupportFragmentManager(), getLifecycle());
         tabViewPager.setAdapter(viewStateAdapter);
-        new TabHelper().setupTabLayout(tabLayout, tabViewPager);
+        new TabHelper(viewModel).setupTabLayout(tabLayout, tabViewPager);
     }
 
 
