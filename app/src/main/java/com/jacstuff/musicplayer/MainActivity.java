@@ -39,7 +39,6 @@ import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.track.Track;
-import com.jacstuff.musicplayer.fragments.PlaylistLoadedNotifier;
 import com.jacstuff.musicplayer.fragments.options.StopOptionsFragment;
 import com.jacstuff.musicplayer.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
@@ -73,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
     private OnBackPressedCallback dismissSearchViewOnBackPressedCallback;
     private Track selectedTrack;
     private KeyboardHelper keyboardHelper;
-    private PlaylistLoadedNotifier playlistLoadedNotifier;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -93,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setupViewModel();
         keyboardHelper = new KeyboardHelper(this);
-        playlistLoadedNotifier = new PlaylistLoadedNotifier();
         setupViews();
         setupTabLayout();
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
@@ -124,16 +121,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public PlaylistLoadedNotifier getPlaylistLoadedNotifier(){
-        return playlistLoadedNotifier;
-    }
-
-
     private void showSearch(){
         showOrHideSearchAddButtons();
-        Animator animator = createShowAnimatorFor(searchView, ()->{
-            keyboardHelper.showKeyboardAndFocusOn(searchEditText);
-        });
+        Animator animator = createShowAnimatorFor(searchView, ()-> keyboardHelper.showKeyboardAndFocusOn(searchEditText));
         searchView.setVisibility(View.VISIBLE);
         dismissSearchViewOnBackPressedCallback.setEnabled(true);
         animator.start();
@@ -486,7 +476,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void switchToTracksTab(){
-        tabLayout.getTabAt(0).select();
+        TabLayout.Tab tab = tabLayout.getTabAt(0);
+        if(tab != null){
+            tab.select();
+        }
     }
 
 
@@ -652,7 +645,6 @@ public class MainActivity extends AppCompatActivity {
         if(shouldSwitchToTracksTab){
             switchToTracksTab();
         }
-        playlistLoadedNotifier.notifyObservers();
     }
 
 

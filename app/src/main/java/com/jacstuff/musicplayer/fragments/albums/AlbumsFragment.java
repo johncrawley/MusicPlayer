@@ -55,7 +55,7 @@ public class AlbumsFragment extends Fragment {
 
 
     private void setupFragmentListener(){
-        getParentFragmentManager().setFragmentResultListener(PlaylistsFragment.NOTIFY_PLAYLIST_LOADED_FRAGMENT_RESULT, this, (requestKey, bundle) -> {
+        getParentFragmentManager().setFragmentResultListener(PlaylistsFragment.NOTIFY_ALBUMS_FRAGMENT_OF_PLAYLIST, this, (requestKey, bundle) -> {
             int visibility =  isBundleUserPlaylistLoaded(bundle) && isItemSelected()? View.VISIBLE : View.INVISIBLE;
             addTracksToPlaylistButton.setVisibility(visibility);
         });

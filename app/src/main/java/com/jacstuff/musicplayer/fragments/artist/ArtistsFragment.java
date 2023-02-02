@@ -16,7 +16,6 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.artist.ArtistRepository;
-import com.jacstuff.musicplayer.fragments.PlaylistLoadedObserver;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.utils.ButtonMaker;
 
@@ -55,8 +54,8 @@ public class ArtistsFragment extends Fragment {
 
 
     private void setupFragmentListener(){
-        getParentFragmentManager().setFragmentResultListener(PlaylistsFragment.NOTIFY_PLAYLIST_LOADED_FRAGMENT_RESULT, this, (requestKey, bundle) -> {
-            int visibility =  isBundleUserPlaylistLoaded(bundle) && isItemSelected()? View.VISIBLE : View.INVISIBLE;
+        getParentFragmentManager().setFragmentResultListener(PlaylistsFragment.NOTIFY_ARTISTS_FRAGMENT_OF_PLAYLIST, this, (requestKey, bundle) -> {
+            int visibility = isBundleUserPlaylistLoaded(bundle) && isItemSelected()? View.VISIBLE : View.INVISIBLE;
             addTracksToPlaylistButton.setVisibility(visibility);
         });
     }

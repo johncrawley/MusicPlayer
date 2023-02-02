@@ -35,11 +35,14 @@ public class PlaylistsFragment extends Fragment {
     private Context context;
     private boolean hasClicked;
     private PlaylistRecyclerAdapter playlistRecyclerAdapter;
+    private Button removePlaylistButton;
+    private Button loadPlaylistButton;
     private PlaylistRepository playlistRepository;
     private RecyclerView recyclerView;
     private Set<String> playlistNames;
     private final int INITIAL_PLAYLIST_CAPACITY = 50;
-    public final static String NOTIFY_PLAYLIST_LOADED_FRAGMENT_RESULT = "Notify_Playlist_Loaded";
+    public final static String NOTIFY_ARTISTS_FRAGMENT_OF_PLAYLIST= "Notify_Artists_Fragment_Of_Playlist_Loaded";
+    public final static String NOTIFY_ALBUMS_FRAGMENT_OF_PLAYLIST = "Notify_Albums_Fragment_Of_Playlist_Loaded";
     public final static String BUNDLE_KEY_USER_PLAYLIST_LOADED = "User_Playlist_Loaded_message";
 
     public PlaylistsFragment() {
@@ -80,14 +83,12 @@ public class PlaylistsFragment extends Fragment {
         hasClicked = false;
     }
 
-    private Button addPlaylistButton, removePlaylistButton, loadPlaylistButton;
 
     private void setupButtons(View parentView){
-        addPlaylistButton = ButtonMaker.createButton(parentView, R.id.addPlaylistButton, this::startAddPlaylistFragment);
+        ButtonMaker.createButton(parentView, R.id.addPlaylistButton, this::startAddPlaylistFragment);
         removePlaylistButton = ButtonMaker.createButton(parentView, R.id.deletePlaylistButton, this::showDeletePlaylistDialog);
         loadPlaylistButton = ButtonMaker.createButton(parentView, R.id.loadPlaylistButton, ()->loadSelectedPlaylist(true));
     }
-
 
 
     private void setupPlaylistRecyclerView(View parentView){
@@ -194,7 +195,8 @@ public class PlaylistsFragment extends Fragment {
     private void notifyFragmentsOfPlaylistType(boolean isUserPlaylistLoaded){
         Bundle bundle = new Bundle();
         bundle.putBoolean(BUNDLE_KEY_USER_PLAYLIST_LOADED, isUserPlaylistLoaded);
-        getParentFragmentManager().setFragmentResult(NOTIFY_PLAYLIST_LOADED_FRAGMENT_RESULT, bundle);
+        getParentFragmentManager().setFragmentResult(NOTIFY_ARTISTS_FRAGMENT_OF_PLAYLIST, bundle);
+        getParentFragmentManager().setFragmentResult(NOTIFY_ALBUMS_FRAGMENT_OF_PLAYLIST, bundle);
     }
 
 
