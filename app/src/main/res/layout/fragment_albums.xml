@@ -36,6 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -44,7 +45,9 @@
             android:id="@+id/loadTracksFromAlbumButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/list_button_margin"
+            android:layout_marginHorizontal="@dimen/list_button_margin_horizontal"
+            android:layout_marginVertical="@dimen/list_button_margin_vertical"
+
             android:text="@string/button_load_tracks_from_artist"
             android:visibility="invisible" />
 
@@ -52,7 +55,8 @@
             android:id="@+id/addTracksFromAlbumToPlaylistButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/list_button_margin"
+            android:layout_marginHorizontal="@dimen/list_button_margin_horizontal"
+            android:layout_marginVertical="@dimen/list_button_margin_vertical"
             android:text="@string/button_add_tracks_from_album"
             android:visibility="invisible"/>
     </LinearLayout>

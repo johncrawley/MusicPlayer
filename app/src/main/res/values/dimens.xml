@@ -20,7 +20,8 @@
     <dimen name="input_text_padding_top">12dp</dimen>
     <dimen name="search_edit_text_padding_top">12dp</dimen>
     <dimen name="button_fragment_margin">4dp</dimen>
-    <dimen name="list_button_margin">8dp</dimen>
+    <dimen name="list_button_margin_horizontal">8dp</dimen>
+    <dimen name="list_button_margin_vertical">2dp</dimen>
     <dimen name="list_margin_top">0dp</dimen>
-    <dimen name="list_margin_bottom">2dp</dimen>
+    <dimen name="list_margin_bottom">0dp</dimen>
 </resources>
