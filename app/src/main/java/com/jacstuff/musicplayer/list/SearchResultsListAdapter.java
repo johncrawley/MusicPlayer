@@ -13,6 +13,7 @@ import com.jacstuff.musicplayer.db.track.Track;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResultsListAdapter.TrackViewHolder> {
 
@@ -22,6 +23,7 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
     private Track selectedTrack;
+    private final Consumer<Track> onClickConsumer;
 
     class TrackViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,18 +41,18 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
                 if(position != null) {
                     selectedTrack = tracks.get(position);
                 }
+                onClickConsumer.accept(selectedTrack);
                 selectedPosition = RecyclerView.NO_POSITION;
             });
         }
     }
 
 
-    public SearchResultsListAdapter(List<Track> tracks){
+    public SearchResultsListAdapter(List<Track> tracks, Consumer<Track> onClickConsumer){
         this.trackNames = new ArrayList<>();
         this.tracks = tracks;
-        for(Track trackDetails : tracks){
-            this.trackNames.add(getStrOf(trackDetails));
-        }
+        tracks.forEach(t -> trackNames.add(getStrOf(t)));
+        this.onClickConsumer = onClickConsumer;
     }
 
 
@@ -65,11 +67,6 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
 
     public Track getSelectedTrack(){
         return selectedTrack;
-    }
-
-
-    public List<Track> getAllItems(){
-        return tracks;
     }
 
 

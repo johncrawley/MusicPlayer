@@ -29,16 +29,26 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchResultsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/playlist_list_view_horizontal_margin"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="18dp"
         android:fadeScrollbars="true"
         android:scrollbars="vertical"
         app:layout_constraintTop_toBottomOf="@+id/searchInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/searchButtonsLayout"
+        />
+
+    <View
+        android:id="@+id/searchButtonsDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/searchButtonsLayout"
         />
 
     <LinearLayout

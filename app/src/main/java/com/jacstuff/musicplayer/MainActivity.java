@@ -60,17 +60,18 @@ public class MainActivity extends AppCompatActivity {
     private MediaPlayerService mediaPlayerService;
     private TextView trackTime, trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton, pauseButton, stopButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton;
+    private Button addSearchResultButton, addAllSearchResultsButton, enqueueSearchResultButton, playSearchResultButton;
     private EditText searchEditText;
     private String totalTrackTime = "0:00";
     private TracksFragment tracksFragment;
     private ViewGroup playerButtonPanel;
     private RecyclerView searchResultsRecyclerView;
     private SearchResultsListAdapter searchResultsListAdapter;
-    private Button addSelectedSearchResultButton, addAllSearchResultsButton;
     private TabLayout tabLayout;
     private View searchView;
     private OnBackPressedCallback dismissSearchViewOnBackPressedCallback;
     private Track selectedTrack;
+    private Track selectedSearchResultTrack;
     private KeyboardHelper keyboardHelper;
 
 
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showSearch(){
-        showOrHideSearchAddButtons();
+        hideAllSearchResultsButtons();
         Animator animator = createShowAnimatorFor(searchView, ()-> keyboardHelper.showKeyboardAndFocusOn(searchEditText));
         searchView.setVisibility(View.VISIBLE);
         dismissSearchViewOnBackPressedCallback.setEnabled(true);
@@ -132,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showOrHideSearchAddButtons(){
         if(mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded()){
-            showSearchAddButtons();
+            showSearchAddButton();
             return;
         }
         hideSearchAddButtons();
@@ -577,10 +578,16 @@ public class MainActivity extends AppCompatActivity {
         if(tracks == null){
             return;
         }
-        searchResultsListAdapter = new SearchResultsListAdapter(tracks);
+        searchResultsListAdapter = new SearchResultsListAdapter(tracks, this::onSearchResultSelect);
         searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         searchResultsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         searchResultsRecyclerView.setAdapter(searchResultsListAdapter);
+    }
+
+
+    private void onSearchResultSelect(Track track){
+        selectedSearchResultTrack = track;
+        showSearchResultsButtons();
     }
 
 
@@ -605,38 +612,43 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setupSearchViewButtons(){
-        addSelectedSearchResultButton = setupButton(R.id.addSelectedButton, this::addSelectedSearchResultToPlaylist);
-        addAllSearchResultsButton = setupButton(R.id.addAllButton, this::addAllSearchResultsToPlaylist);
-        setupButton(R.id.playSelectedButton, this::playSelectedSearchResult);
-        setupButton(R.id.playNextButton, this::addTrackToQueue);
+        addSearchResultButton       = setupButton(R.id.addSelectedButton, this::addSelectedSearchResultToPlaylist);
+        playSearchResultButton      = setupButton(R.id.playSelectedButton, this::playSelectedSearchResult);
+        enqueueSearchResultButton   = setupButton(R.id.playNextButton, this::addTrackToQueue);
     }
 
 
     public void hideSearchAddButtons(){
-        addSelectedSearchResultButton.setVisibility(View.GONE);
+        addSearchResultButton.setVisibility(View.GONE);
         addAllSearchResultsButton.setVisibility(View.GONE);
     }
 
 
-    public void showSearchAddButtons(){
-        addSelectedSearchResultButton.setVisibility(View.VISIBLE);
-       // addAllSearchResultsButton.setVisibility(View.VISIBLE);
+    public void hideAllSearchResultsButtons(){
+        addSearchResultButton.setVisibility(View.GONE);
+        playSearchResultButton.setVisibility(View.GONE);
+        enqueueSearchResultButton.setVisibility(View.GONE);
+    }
+
+
+    public void showSearchResultsButtons(){
+        playSearchResultButton.setVisibility(View.VISIBLE);
+        enqueueSearchResultButton.setVisibility(View.VISIBLE);
+        if(isUserPlaylistLoaded()){
+            addSearchResultButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    public void showSearchAddButton(){
+        addSearchResultButton.setVisibility(View.VISIBLE);
     }
 
 
     private void addSelectedSearchResultToPlaylist(){
-       Track track = searchResultsListAdapter.getSelectedTrack();
-       if(track != null){
-           mediaPlayerService.addTrackToCurrentPlaylist(track);
+       if(selectedSearchResultTrack != null){
+           mediaPlayerService.addTrackToCurrentPlaylist(selectedSearchResultTrack);
        }
-    }
-
-
-    private void addAllSearchResultsToPlaylist(){
-        List<Track> tracks = searchResultsListAdapter.getAllItems();
-        if(tracks != null){
-            mediaPlayerService.addTracksToCurrentPlaylist(tracks);
-        }
     }
 
 
@@ -649,17 +661,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void playSelectedSearchResult(){
-        Track track = searchResultsListAdapter.getSelectedTrack();
-        if(track != null){
-            mediaPlayerService.selectAndPlayTrack(track);
+        if(selectedSearchResultTrack != null){
+            mediaPlayerService.selectAndPlayTrack(selectedSearchResultTrack);
         }
     }
 
 
     private void addTrackToQueue(){
-        Track track = searchResultsListAdapter.getSelectedTrack();
-        if(track != null){
-            mediaPlayerService.getPlaylistManager().addTrackToQueue(track);
+        if(selectedSearchResultTrack != null){
+            mediaPlayerService.getPlaylistManager().addTrackToQueue(selectedSearchResultTrack);
         }
     }
 
