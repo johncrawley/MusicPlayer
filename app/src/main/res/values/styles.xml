@@ -15,7 +15,7 @@
         <item name="buttonStyle">@style/customButtonStyle</item>
         <item name="materialButtonStyle">@style/customMaterialOutlineButtonStyle</item>
         <item name="android:alertDialogTheme">@style/customAlertDialogStyle</item>
-        <item name="android:buttonBarButtonStyle">@style/customMaterialButtonStyle</item>
+        <item name="android:dialogTheme">@style/customDialogStyle2</item>
         <item name="imageButtonStyle">@style/customImageButtonStyle</item>
     </style>
 
@@ -23,7 +23,6 @@
         <item name="materialButtonStyle">@style/customMaterialButtonStyle</item>
 
     -->
-
 
     <style name="customImageButtonStyle" parent="Widget.AppCompat.ImageButton">
         <item name="backgroundTint">@color/background</item>
@@ -38,16 +37,6 @@
     </style>
 
 
-    <style name="customMaterialButtonStyle" parent="Widget.Material3.Button">
-        <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:backgroundTint">@color/button_background_tint</item>
-    </style>
-
-    <style name="customButtonBarButtonStyle" parent="Widget.AppCompat.ButtonBar">
-        <item name="android:textColor">@color/color_accent</item>
-    </style>
-
-
     <style name="customMaterialOutlineButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textColor">@color/button_text</item>
         <item name="cornerRadius">15dp</item>
@@ -57,15 +46,20 @@
     </style>
 
 
-
     <style name="customAlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:background">@color/dialog_background</item>
     </style>
 
+
     <style name="customDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:background">@color/dialog_background</item>
         <item name="buttonStyle">@style/customButtonStyle</item>
+    </style>
 
+
+    <style name="customDialogStyle2" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/dialog_background</item>
+        <item name="buttonStyle">@style/customButtonStyle</item>
     </style>
 
 

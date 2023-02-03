@@ -22,6 +22,8 @@
     <dimen name="button_fragment_margin">4dp</dimen>
     <dimen name="list_button_margin_horizontal">8dp</dimen>
     <dimen name="list_button_margin_vertical">2dp</dimen>
+    <dimen name="dialog_option_button_margin_horizontal">10dp</dimen>
+    <dimen name="dialog_option_button_margin_vertical">4dp</dimen>
     <dimen name="list_margin_top">0dp</dimen>
     <dimen name="list_margin_bottom">0dp</dimen>
 </resources>

@@ -3,19 +3,23 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/button_fragment_margin"
+    android:gravity="center"
     android:orientation="vertical">
-
 
     <Button
         android:id="@+id/enqueueTrackButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
+        android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"
         android:text="@string/button_track_options_enqueue" />
 
     <Button
         android:id="@+id/removeFromPlaylistButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
+        android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"
         android:text="@string/button_track_options_remove_from_playlist" />
 
 </LinearLayout>
