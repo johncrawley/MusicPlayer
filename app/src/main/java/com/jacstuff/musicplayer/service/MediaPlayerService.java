@@ -50,7 +50,6 @@ public class MediaPlayerService extends Service {
     public static final String ACTION_NOTIFY_VIEW_OF_STOP = "com.j.crawley.music_player.notifyViewOfStop";
     public static final String ACTION_NOTIFY_VIEW_OF_CONNECTING = "com.j.crawley.music_player.notifyViewOfPlay";
     public static final String ACTION_NOTIFY_VIEW_OF_PLAYING = "com.j.crawley.music_player.notifyViewOfPlayInfo";
-    public static final String ACTION_NOTIFY_VIEW_OF_ERROR = "com.j.crawley.music_player.notifyViewOfError";
 
 
     private MediaPlayer mediaPlayer;
@@ -197,13 +196,6 @@ public class MediaPlayerService extends Service {
 
     public void addTrackToCurrentPlaylist(Track track){
         playlistManager.addTrackToCurrentPlaylist(track);
-        updateViewTrackList();
-        mediaNotificationManager.updateNotification();
-    }
-
-
-    public void addTracksToCurrentPlaylist(List<Track> tracks){
-        playlistManager.addTracksToCurrentPlaylist(tracks);
         updateViewTrackList();
         mediaNotificationManager.updateNotification();
     }
@@ -392,7 +384,9 @@ public class MediaPlayerService extends Service {
 
     private void createMediaPlayer(){
         mediaPlayer = new MediaPlayer();
+        currentState = MediaPlayerState.STOPPED;
         mediaPlayer.setOnCompletionListener(this::onTrackFinished);
+        setupErrorListener();
     }
 
 
@@ -558,6 +552,10 @@ public class MediaPlayerService extends Service {
         }catch (IOException e){
             e.printStackTrace();
             currentState = MediaPlayerState.STOPPED;
+            mainActivity.notifyMediaPlayerStopped();
+            releaseAndResetMediaPlayer();
+            createMediaPlayer();
+            mainActivity.toastError(currentTrack);
         }
     }
 
@@ -585,16 +583,7 @@ public class MediaPlayerService extends Service {
     }
 
 
-    private void updateStatusFromConnectingToPlaying(){
-        if(!wasInfoFound){
-            sendBroadcast(ACTION_NOTIFY_VIEW_OF_PLAYING);
-            wasInfoFound = true;
-            mediaNotificationManager.updateNotification();
-        }
-    }
-
-
-    private void setupOnErrorListener(){
+    private void setupErrorListener(){
         mediaPlayer.setOnErrorListener((mediaPlayer, i, i1) -> {
             stopPlayer();
             handleConnectionError();
@@ -606,7 +595,7 @@ public class MediaPlayerService extends Service {
     private void handleConnectionError(){
         hasEncounteredError = true;
         mediaNotificationManager.updateNotification();
-        sendBroadcast(ACTION_NOTIFY_VIEW_OF_ERROR);
+        mainActivity.toastError(currentTrack);
     }
 
 

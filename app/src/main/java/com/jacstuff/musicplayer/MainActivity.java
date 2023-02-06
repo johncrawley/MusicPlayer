@@ -263,6 +263,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void toastError(Track track){
+        runOnUiThread(()->{
+            String errorMessage = getString(R.string.error_playing_track_toast_message, track.getPathname());
+            Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+        });
+    }
+
+
     public void setVisibilityOnDetailsAndNavViews(int visibility){
         trackTitle.setVisibility(visibility);
         trackAlbum.setVisibility(visibility);
