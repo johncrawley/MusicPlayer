@@ -551,12 +551,17 @@ public class MediaPlayerService extends Service {
             mediaNotificationManager.updateNotification();
         }catch (IOException e){
             e.printStackTrace();
-            currentState = MediaPlayerState.STOPPED;
-            mainActivity.notifyMediaPlayerStopped();
-            releaseAndResetMediaPlayer();
-            createMediaPlayer();
-            mainActivity.toastError(currentTrack);
+            onError();
+            mainActivity.displayError(currentTrack);
         }
+    }
+
+
+    private void onError(){
+        currentState = MediaPlayerState.STOPPED;
+        mainActivity.notifyMediaPlayerStopped();
+        releaseAndResetMediaPlayer();
+        createMediaPlayer();
     }
 
 
@@ -595,7 +600,7 @@ public class MediaPlayerService extends Service {
     private void handleConnectionError(){
         hasEncounteredError = true;
         mediaNotificationManager.updateNotification();
-        mainActivity.toastError(currentTrack);
+        onError();
     }
 
 

@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void toastError(Track track){
+    public void displayError(Track track){
         runOnUiThread(()->{
             String errorMessage = getString(R.string.error_playing_track_toast_message, track.getPathname());
             Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show();
