@@ -15,7 +15,7 @@
         <item name="buttonStyle">@style/customButtonStyle</item>
         <item name="materialButtonStyle">@style/customMaterialOutlineButtonStyle</item>
         <item name="android:alertDialogTheme">@style/customAlertDialogStyle</item>
-        <item name="android:dialogTheme">@style/customDialogStyle2</item>
+        <item name="android:dialogTheme">@style/customDialogStyle</item>
         <item name="imageButtonStyle">@style/customImageButtonStyle</item>
     </style>
 

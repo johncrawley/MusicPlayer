@@ -66,6 +66,12 @@ public class TracksFragment extends Fragment implements ListSubscriber {
     }
 
 
+    public void updateTracksList(List<Track> updatedTracks){
+        refreshTrackList(updatedTracks);
+        trackListAdapter.deselectCurrentlySelectedItem();
+    }
+
+
     @SuppressWarnings("notifyDataSetChanged")
     public void refreshTrackList(List<Track> tracks){
         trackListAdapter.setItems(tracks);

@@ -147,20 +147,19 @@ public class MediaPlayerService extends Service {
     private void cancelFutures(){
         if(stopTrackFuture != null) {
             stopTrackFuture.cancel(false);
-
         }
     }
 
 
     public void loadTracksFromArtist(Artist artist){
         playlistManager.loadTracksFromArtist(artist);
-        updateViewTrackList();
+        updateViewTrackListAndDeselectList();
     }
 
 
     public void loadTracksFromAlbum(Album album){
         playlistManager.loadTracksFromAlbum(album);
-        updateViewTrackList();
+        updateViewTrackListAndDeselectList();
     }
 
 
@@ -188,9 +187,9 @@ public class MediaPlayerService extends Service {
 
 
 
-    public void setActivePlaylist(Playlist playlist){
+    public void loadPlaylist(Playlist playlist){
         playlistManager.loadPlaylist(playlist);
-        updateViewTrackList();
+        updateViewTrackListAndDeselectList();
     }
 
 
@@ -239,6 +238,11 @@ public class MediaPlayerService extends Service {
 
     private void updateViewTrackList(){
         mainActivity.updateTracksList(playlistManager.getTracks(), currentTrack.getIndex());
+    }
+
+
+    private void updateViewTrackListAndDeselectList(){
+        mainActivity.updateTracksList(playlistManager.getTracks());
     }
 
 

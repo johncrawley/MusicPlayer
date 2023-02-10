@@ -104,9 +104,17 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
 
 
     public void deselectCurrentlySelectedItem(){
+        log("Entered deselectCurrentlySelectedItem()");
         if(currentlySelectedView != null){
             currentlySelectedView.setSelected(false);
         }
+        else{
+            log("Current selected item is null!");
+        }
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ TrackListAdapter: " + msg);
     }
 
 

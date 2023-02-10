@@ -477,10 +477,20 @@ public class MainActivity extends AppCompatActivity {
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
         runOnUiThread(()-> {
             if(tracksFragment != null){
-                tracksFragment.updateTracksList(updatedTracks, currentTrackIndex);
+                if(currentTrackIndex == -1){
+                    tracksFragment.updateTracksList(updatedTracks);
+                }
+                else{
+                    tracksFragment.updateTracksList(updatedTracks, currentTrackIndex);
+                }
             }
             updateViews(updatedTracks);
         });
+    }
+
+
+    public void updateTracksList(List<Track> updatedTracks){
+        updateTracksList(updatedTracks, -1);
     }
 
 
@@ -661,7 +671,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void loadPlaylist(Playlist playlist, boolean shouldSwitchToTracksTab){
-        mediaPlayerService.setActivePlaylist(playlist);
+        mediaPlayerService.loadPlaylist(playlist);
         if(shouldSwitchToTracksTab){
             switchToTracksTab();
         }
