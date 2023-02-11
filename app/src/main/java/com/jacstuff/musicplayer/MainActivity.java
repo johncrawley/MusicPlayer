@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private MediaPlayerService mediaPlayerService;
     private TextView trackTime, trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton, pauseButton, stopButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton;
-    private Button addSearchResultButton, addAllSearchResultsButton, enqueueSearchResultButton, playSearchResultButton;
+    private Button addSearchResultButton, enqueueSearchResultButton, playSearchResultButton;
     private EditText searchEditText;
     private String totalTrackTime = "0:00";
     private TracksFragment tracksFragment;
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void removeTrack(){
+    public void removeSelectedTrackFromPlaylist(){
         mediaPlayerService.removeTrackFromCurrentPlaylist(selectedTrack);
     }
 
@@ -638,7 +638,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void hideSearchAddButtons(){
         addSearchResultButton.setVisibility(View.GONE);
-        addAllSearchResultsButton.setVisibility(View.GONE);
     }
 
 

@@ -132,7 +132,6 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
 
 
     public void changePositionTo(int newPosition){
-        log("Entered changePositionTo() " +  newPosition);
         notifyItemChanged(selectedPosition);
         selectedPosition = newPosition;
         notifyItemChanged(selectedPosition);

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,10 +30,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private final Random random;
     private final TrackRepository trackRepository;
     private final PlaylistItemRepository playlistItemRepository;
-    private int previousNumberOfTracks;
     private List<Track> tracks;
+    private List<Track> unPlayedTracks;
     private List<Track> allTracks;
-    private List<Integer> unPlayedPathnameIndexes;
     private final TrackHistory trackHistory;
     private boolean isShuffleEnabled = true;
     public static String ALL_TRACKS_PLAYLIST = "All Tracks";
@@ -49,13 +49,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
     public PlaylistManagerImpl(Context context){
         trackRepository = new TrackRepositoryImpl(context);
         playlistItemRepository = new PlaylistItemRepositoryImpl(context);
-        tracks = new ArrayList<>();
-        unPlayedPathnameIndexes = new ArrayList<>();
+        tracks = new ArrayList<>(10_000);
+        unPlayedTracks = new ArrayList<>();
         random = new Random(System.currentTimeMillis());
         sdCardReader = new AudioInfoLoader(context, trackRepository);
         initTrackList();
         setupDefaultPlaylists();
-        previousNumberOfTracks = tracks.size();
         trackHistory = new TrackHistory();
         queuedTracks = new ArrayDeque<>();
     }
@@ -68,7 +67,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     public void enableShuffle(){
         isShuffleEnabled = true;
+        unPlayedTracks = new ArrayList<>(tracks);
     }
+
 
     public void disableShuffle(){
         isShuffleEnabled = false;
@@ -85,8 +86,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public boolean hasTracksQueued(){
-        boolean hasTracksQueued = !queuedTracks.isEmpty();
-        return hasTracksQueued;
+        return !queuedTracks.isEmpty();
     }
 
 
@@ -97,9 +97,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void calculateAndDisplayNewTracksStats(MediaPlayerService mediaPlayerService){
-        //int numberOfNewTracks = tracks.size() - previousNumberOfTracks;
         mediaPlayerService.displayPlaylistRefreshedMessage(0);
-       // previousNumberOfTracks = tracks.size();
     }
 
 
@@ -136,7 +134,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public void loadPlaylist(Playlist playlist){
-        if(currentPlaylist != null && (this.currentPlaylist.getId() == playlist.getId())){
+        if(isAlreadyCurrentPlaylist(playlist)){
             return;
         }
         this.currentPlaylist = playlist;
@@ -149,9 +147,14 @@ public class PlaylistManagerImpl implements PlaylistManager {
             tracks = playlistItemRepository.getTracksForPlaylistId(playlist.getId());
             assignIndexesToTracks();
         }
-        setupUnplayedIndexes();
+        setupUnPlayedIndexes();
         trackHistory.reset();
         currentIndex = -1;
+    }
+
+
+    private boolean isAlreadyCurrentPlaylist(Playlist playlist){
+       return currentPlaylist != null && (Objects.equals(this.currentPlaylist.getId(), playlist.getId()));
     }
 
 
@@ -161,18 +164,21 @@ public class PlaylistManagerImpl implements PlaylistManager {
               return;
         }
         tracks.add(track);
+        unPlayedTracks.add(track);
+        track.setIndex(tracks.size()-1);
         playlistItemRepository.addPlaylistItem(track, currentPlaylist.getId());
     }
 
 
     @Override
-    public void addTracksToCurrentPlaylist(List<Track> tracks) {
+    public void addTracksToCurrentPlaylist(List<Track> additionalTracks) {
         if(!isUserPlaylistLoaded()){
             return;
         }
-        this.tracks.addAll(tracks);
+        tracks.addAll(additionalTracks);
+        unPlayedTracks.addAll(additionalTracks);
         assignIndexesToTracks();
-        for(Track track : tracks){
+        for(Track track : additionalTracks){
             playlistItemRepository.addPlaylistItem(track, currentPlaylist.getId());
         }
     }
@@ -184,16 +190,18 @@ public class PlaylistManagerImpl implements PlaylistManager {
             return;
         }
         tracks.remove(track.getIndex());
+        unPlayedTracks.remove(track);
         assignIndexesToTracks();
         playlistItemRepository.deletePlaylistItem(track.getId());
     }
+
 
 
     private void loadAllTracksPlaylist(){
         if(allTracks == null){
             initTrackList();
         }
-        setupUnplayedIndexes();
+        setupUnPlayedIndexes();
         trackHistory.reset();
         currentPlaylist = allTracksPlaylist;
     }
@@ -234,7 +242,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void setupQueue(){
-        setupUnplayedIndexes();
+        setupUnPlayedIndexes();
         trackHistory.reset();
         currentIndex = -1;
     }
@@ -247,11 +255,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    private void setupUnplayedIndexes(){
-        unPlayedPathnameIndexes = new ArrayList<>(tracks.size());
-        for(int i = 0; i< tracks.size(); i++){
-           unPlayedPathnameIndexes.add(i);
-        }
+    private void setupUnPlayedIndexes(){
+        unPlayedTracks = new ArrayList<>(tracks);
     }
 
 
@@ -328,11 +333,10 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(!attemptSetupOfIndexesIfEmpty()){
             return null;
         }
-        int freshSongsCount = unPlayedPathnameIndexes.size();
-        int randomIndex = getNextRandomIndex(freshSongsCount);
-        currentIndex = getAndRemoveSongIndex(randomIndex);
+        int randomIndex = getNextRandomIndex(unPlayedTracks.size());
+        Track currentTrack = unPlayedTracks.remove(randomIndex);
+        currentIndex = currentTrack.getIndex();
         attemptSetupOfIndexesIfEmpty();
-        Track currentTrack = tracks.get(currentIndex);
         trackHistory.add(currentTrack);
         return currentTrack;
     }
@@ -344,26 +348,18 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    private int getAndRemoveSongIndex(int index){
-        int songIndex = unPlayedPathnameIndexes.get(index);
-        unPlayedPathnameIndexes.remove(index);
-        return songIndex;
-    }
-
-
     private boolean attemptSetupOfIndexesIfEmpty(){
-        if(unPlayedPathnameIndexes.isEmpty()){
+        if(unPlayedTracks.isEmpty()){
             if(tracks.isEmpty()){
                 return false;
             }
-            setupUnplayedIndexes();
+            setupUnPlayedIndexes();
         }
         return true;
     }
 
 
     public Track selectTrack(int index){
-        log("Entered selectTrack, index: " + index + " tracks size() : " + tracks.size());
         if(index > tracks.size()){
             return null;
         }
@@ -372,11 +368,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         Track track = tracks.get(index);
         trackHistory.add(track);
         return tracks.get(index);
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ PlaylistManagerImpl: " + msg);
     }
 
 
