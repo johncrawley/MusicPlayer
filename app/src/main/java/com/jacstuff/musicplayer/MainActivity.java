@@ -478,7 +478,7 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(()-> {
             if(tracksFragment != null){
                 if(currentTrackIndex == -1){
-                    tracksFragment.updateTracksList(updatedTracks);
+                    tracksFragment.setupRecyclerView(updatedTracks);
                 }
                 else{
                     tracksFragment.updateTracksList(updatedTracks, currentTrackIndex);

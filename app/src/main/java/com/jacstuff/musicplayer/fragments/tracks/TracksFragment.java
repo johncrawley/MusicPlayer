@@ -26,7 +26,6 @@ public class TracksFragment extends Fragment implements ListSubscriber {
     private TrackListAdapter trackListAdapter;
     private int previousIndex = 0;
     private View parentView;
-    public final static String BUNDLE_TRACK_ID = "Track_ID";
 
     public TracksFragment() {
         // Required empty public constructor
@@ -66,12 +65,6 @@ public class TracksFragment extends Fragment implements ListSubscriber {
     }
 
 
-    public void updateTracksList(List<Track> updatedTracks){
-        refreshTrackList(updatedTracks);
-        trackListAdapter.deselectCurrentlySelectedItem();
-    }
-
-
     @SuppressWarnings("notifyDataSetChanged")
     public void refreshTrackList(List<Track> tracks){
         trackListAdapter.setItems(tracks);
@@ -79,7 +72,7 @@ public class TracksFragment extends Fragment implements ListSubscriber {
     }
 
 
-    private void setupRecyclerView(List<Track> tracks){
+    public void setupRecyclerView(List<Track> tracks){
         if(this.parentView == null ||tracks == null){
             return;
         }
@@ -110,11 +103,6 @@ public class TracksFragment extends Fragment implements ListSubscriber {
             fragmentTransaction.remove(prev);
         }
         fragmentTransaction.addToBackStack(null);
-    }
-
-
-    public void notifyCurrentlySelectedTrack(int position){
-        getMainActivity().selectTrack(position);
     }
 
 
@@ -150,11 +138,11 @@ public class TracksFragment extends Fragment implements ListSubscriber {
         if(previousIndex == 0){
             return index;
         }
-        int direction = index > previousIndex ? 1 : -1;
         MainActivity mainActivity = getMainActivity();
         if(mainActivity == null){
             return 0;
         }
+        int direction = index > previousIndex ? 1 : -1;
         int offset =  mainActivity.getResources().getInteger(R.integer.playlist_item_offset) * direction ;
         return index + offset;
     }

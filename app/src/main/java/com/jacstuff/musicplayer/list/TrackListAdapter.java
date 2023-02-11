@@ -23,7 +23,6 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
     private final Consumer<Track> clickConsumer, longClickConsumer;
-    private Track selectedTrack;
 
 
     class TrackViewHolder extends RecyclerView.ViewHolder {
@@ -38,22 +37,20 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
                 deselectCurrentlySelectedItem();
                 currentlySelectedView = v;
                 setIndexToScrollTo(getLayoutPosition());
-                processTrackCorrespondingToCurrentView(clickConsumer);
+                processTrackCorrespondingToCurrentView(clickConsumer, getLayoutPosition());
                 currentlySelectedView.setSelected(true);
                 selectedPosition = RecyclerView.NO_POSITION;
             });
 
             view.setOnLongClickListener(v ->{
-                processTrackCorrespondingToCurrentView(longClickConsumer);
+                processTrackCorrespondingToCurrentView(longClickConsumer, getLayoutPosition());
                 return true;
             });
         }
 
 
-        private void processTrackCorrespondingToCurrentView(Consumer<Track> consumer){
-            int position = (int)trackNameTextView.getTag();
-            Track track = tracks.get(position);
-            selectedTrack = track;
+        private void processTrackCorrespondingToCurrentView(Consumer<Track> consumer, int layoutPosition){
+            Track track = tracks.get(layoutPosition);
             if(track != null) {
                 consumer.accept(track);
             }
@@ -72,14 +69,9 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     }
 
 
-    public Track getSelectedItem(){
-        return selectedTrack;
-    }
-
-
     public void setItems(List<Track> tracks){
         this.tracks = tracks;
-        trackNames = tracks.stream().map(t -> getStrOf(t)).collect(Collectors.toList());;
+        trackNames = tracks.stream().map(this::getStrOf).collect(Collectors.toList());
     }
 
 
@@ -104,14 +96,15 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
 
 
     public void deselectCurrentlySelectedItem(){
-        log("Entered deselectCurrentlySelectedItem()");
         if(currentlySelectedView != null){
             currentlySelectedView.setSelected(false);
         }
+
         else{
             log("Current selected item is null!");
         }
     }
+
 
     private void log(String msg){
         System.out.println("^^^ TrackListAdapter: " + msg);
@@ -139,6 +132,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
 
 
     public void changePositionTo(int newPosition){
+        log("Entered changePositionTo() " +  newPosition);
         notifyItemChanged(selectedPosition);
         selectedPosition = newPosition;
         notifyItemChanged(selectedPosition);
