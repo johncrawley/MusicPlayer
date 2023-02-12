@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView trackTime, trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton, pauseButton, stopButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton;
     private Button addSearchResultButton, enqueueSearchResultButton, playSearchResultButton;
+    private SeekBar trackTimeSeekBar;
+    private boolean isTrackTimeSeekBarHeld = false;
     private EditText searchEditText;
     private String totalTrackTime = "0:00";
     private TracksFragment tracksFragment;
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     private Track selectedTrack;
     private Track selectedSearchResultTrack;
     private KeyboardHelper keyboardHelper;
+    private MainViewModel viewModel;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -178,6 +182,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void setupTrackTimeSeekBar(){
+        trackTimeSeekBar = findViewById(R.id.trackTimeSeekBar);
+        trackTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if(isTrackTimeSeekBarHeld) {
+                    setElapsedTimeOnView(TimeConverter.convert(seekBar.getProgress()));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                isTrackTimeSeekBarHeld = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int progress = Math.min(seekBar.getMax() - 500, seekBar.getProgress());
+                mediaPlayerService.seek(progress);
+                isTrackTimeSeekBarHeld = false;
+            }
+        });
+    }
+
+
     public void nextTrack(){
         mediaPlayerService.loadNextTrack();
     }
@@ -232,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViews(){
         assignViews();
+        setupTrackTimeSeekBar();
         assignClickListeners();
         resetElapsedTime();
         playButton.setEnabled(false);
@@ -244,10 +274,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void setElapsedTime(long elapsedMilliseconds){
+        setElapsedTime(TimeConverter.convert(elapsedMilliseconds));
+        runOnUiThread(()->{
+            if(!isTrackTimeSeekBarHeld){
+                trackTimeSeekBar.setProgress((int)elapsedMilliseconds);
+            }
+        });
+    }
+
+
     public void setElapsedTime(String elapsedTime){
+        if(!isTrackTimeSeekBarHeld){
+            setElapsedTimeOnView(elapsedTime);
+        }
+    }
+
+
+    private void setElapsedTimeOnView(String elapsedTime){
         runOnUiThread(()->{
             if(trackTime != null){
-                String time = elapsedTime + " / " + this.totalTrackTime;
+                String time = elapsedTime + " / " + totalTrackTime;
                 trackTime.setText(time);
             }
         });
@@ -282,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setTrackTimeInfo(int elapsedTime, long trackDuration){
         this.totalTrackTime = TimeConverter.convert(trackDuration);
+        trackTimeSeekBar.setMax((int)trackDuration);
         setElapsedTime(TimeConverter.convert(elapsedTime));
     }
 
@@ -353,6 +401,8 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(()->{
             playButton.setVisibility(View.VISIBLE);
             pauseButton.setVisibility(View.GONE);
+            trackTimeSeekBar.setProgress(0);
+            trackTimeSeekBar.setVisibility(View.INVISIBLE);
         });
     }
 
@@ -381,6 +431,7 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(()->{
             playButton.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
+            trackTimeSeekBar.setVisibility(View.VISIBLE);
         });
     }
 
@@ -391,6 +442,7 @@ public class MainActivity extends AppCompatActivity {
                 setAlbumInfo(track.getAlbum());
                 setArtistInfo(track.getArtist());
                 setTrackTimeInfo(elapsedTime, track.getDuration());
+                trackTimeSeekBar.setProgress((int)elapsedTime);
         });
     }
 
@@ -447,7 +499,6 @@ public class MainActivity extends AppCompatActivity {
         this.trackArtist.setText(artistInfo);
     }
 
-    private MainViewModel viewModel;
 
     private void setupViewModel(){
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);

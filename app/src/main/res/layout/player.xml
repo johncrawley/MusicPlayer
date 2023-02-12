@@ -68,7 +68,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/artistTextView"
-        app:layout_constraintBottom_toTopOf="@id/buttonLayout" />
+        app:layout_constraintBottom_toTopOf="@id/trackTimeSeekBar" />
+
+    <SeekBar
+        android:id="@+id/trackTimeSeekBar"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trackTime"
+        app:layout_constraintBottom_toTopOf="@id/buttonLayout"
+        />
 
     <!--
     <View

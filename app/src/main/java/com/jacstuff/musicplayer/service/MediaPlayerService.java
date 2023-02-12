@@ -144,6 +144,11 @@ public class MediaPlayerService extends Service {
     }
 
 
+    public void seek(int milliseconds){
+        mediaPlayer.seekTo(milliseconds);
+    }
+
+
     private void cancelFutures(){
         if(stopTrackFuture != null) {
             stopTrackFuture.cancel(false);
@@ -486,7 +491,7 @@ public class MediaPlayerService extends Service {
 
     private void updateElapsedTimeOnView(){
         elapsedTime = mediaPlayer.getCurrentPosition();
-        mainActivity.setElapsedTime(TimeConverter.convert(elapsedTime));
+        mainActivity.setElapsedTime(elapsedTime);
     }
 
 
