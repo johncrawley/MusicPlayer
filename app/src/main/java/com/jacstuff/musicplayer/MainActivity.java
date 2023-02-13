@@ -52,6 +52,7 @@ import com.jacstuff.musicplayer.utils.KeyboardHelper;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -135,15 +136,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void showOrHideSearchAddButtons(){
-        if(mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded()){
-            showSearchAddButton();
-            return;
-        }
-        hideSearchAddButtons();
-    }
-
-
     public boolean isUserPlaylistLoaded(){
         return mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
     }
@@ -162,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
         dismissSearchViewOnBackPressedCallback.setEnabled(false);
         animator.start();
     }
-
 
 
     public void playTrack() {
@@ -195,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 isTrackTimeSeekBarHeld = true;
+                setPlayerControlsEnabled(false);
             }
 
             @Override
@@ -202,8 +194,17 @@ public class MainActivity extends AppCompatActivity {
                 int progress = Math.min(seekBar.getMax() - 500, seekBar.getProgress());
                 mediaPlayerService.seek(progress);
                 isTrackTimeSeekBarHeld = false;
+                setPlayerControlsEnabled(true);
             }
         });
+    }
+
+
+    private void setPlayerControlsEnabled(boolean isEnabled){
+        List<View> controls = Arrays.asList(stopButton, playButton, pauseButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton);
+        for(View control : controls){
+            control.setEnabled(isEnabled);
+        }
     }
 
 
@@ -687,11 +688,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void hideSearchAddButtons(){
-        addSearchResultButton.setVisibility(View.GONE);
-    }
-
-
     public void hideAllSearchResultsButtons(){
         addSearchResultButton.setVisibility(View.GONE);
         playSearchResultButton.setVisibility(View.GONE);
@@ -705,11 +701,6 @@ public class MainActivity extends AppCompatActivity {
         if(isUserPlaylistLoaded()){
             addSearchResultButton.setVisibility(View.VISIBLE);
         }
-    }
-
-
-    public void showSearchAddButton(){
-        addSearchResultButton.setVisibility(View.VISIBLE);
     }
 
 

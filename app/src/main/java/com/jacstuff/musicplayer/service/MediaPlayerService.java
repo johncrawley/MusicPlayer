@@ -145,7 +145,9 @@ public class MediaPlayerService extends Service {
 
 
     public void seek(int milliseconds){
-        mediaPlayer.seekTo(milliseconds);
+        if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
+            mediaPlayer.seekTo(milliseconds);
+        }
     }
 
 
@@ -625,6 +627,7 @@ public class MediaPlayerService extends Service {
         wasInfoFound = false;
         mediaNotificationManager.updateNotification();
         mainActivity.notifyMediaPlayerPaused();
+        log("pause() mediaPlayer isPlaying() : " + mediaPlayer.isPlaying());
         cancelFutures();
     }
 
