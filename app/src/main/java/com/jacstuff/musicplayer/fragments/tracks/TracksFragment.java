@@ -60,6 +60,10 @@ public class TracksFragment extends Fragment implements ListSubscriber {
 
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
+        if(currentTrackIndex < 0){
+            setupRecyclerView(updatedTracks);
+            return;
+        }
         refreshTrackList(updatedTracks);
         scrollToListPosition(currentTrackIndex);
     }

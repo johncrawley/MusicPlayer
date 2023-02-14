@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Handler;
 import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -157,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void playTrack() {
+        disableViewForAWhile(pauseButton, 300);
         mediaPlayerService.playTrack();
     }
 
@@ -209,11 +211,27 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void nextTrack(){
+        disableViewForAWhile(nextTrackButton);
         mediaPlayerService.loadNextTrack();
     }
 
 
+    public void disableViewForAWhile(View view){
+        disableViewForAWhile(view, 700);
+    }
+
+
+    public void disableViewForAWhile(View view, int delayTime) {
+        view.setEnabled(false);
+        Handler handler = new Handler(getMainLooper());
+        handler.postDelayed(()->{
+            view.setEnabled(true);
+        },delayTime);
+    }
+
+
     public void previousTrack(){
+        disableViewForAWhile(previousTrackButton);
         mediaPlayerService.loadPreviousTrack();
     }
 
@@ -248,7 +266,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void pauseMediaPlayer() {
+    public void pauseTrack() {
+        disableViewForAWhile(playButton, 300);
         mediaPlayerService.pause();
     }
 
@@ -355,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void assignClickListeners(){
         playButton.setOnClickListener((View v) -> playTrack());
-        pauseButton.setOnClickListener((View v) -> pauseMediaPlayer());
+        pauseButton.setOnClickListener((View v) -> pauseTrack());
         nextTrackButton.setOnClickListener((View v) -> nextTrack());
         previousTrackButton.setOnClickListener((View v) -> previousTrack());
         stopButton.setOnClickListener((View v) -> stopTrack());
@@ -528,14 +547,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
         runOnUiThread(()-> {
-            if(tracksFragment != null){
-                if(currentTrackIndex == -1){
-                    tracksFragment.setupRecyclerView(updatedTracks);
-                }
-                else{
-                    tracksFragment.updateTracksList(updatedTracks, currentTrackIndex);
-                }
+            if(tracksFragment == null) {
+                return;
             }
+            tracksFragment.updateTracksList(updatedTracks, currentTrackIndex);
             updateViews(updatedTracks);
         });
     }
