@@ -5,19 +5,13 @@
 
 
     <item android:id="@+id/refresh_button" android:name="refresh"
-        android:orderInCategory="100" app:showAsAction="ifRoom"
+        android:orderInCategory="100" app:showAsAction="never"
         android:icon="@android:drawable/ic_popup_sync"
         android:title="@string/menu_button_refresh"/>
 
     <item android:id="@+id/search" android:name="search"
         android:orderInCategory="100" app:showAsAction="ifRoom"
         android:icon="?android:attr/actionModeWebSearchDrawable"
-        android:title="@string/menu_button_refresh"/>
-
-    <item android:id="@+id/delete" android:name="delete"
-        android:orderInCategory="100" app:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_delete"
-        android:title="@string/menu_button_refresh"/>
-
+        android:title="@string/menu_button_search"/>
 
 </menu>

@@ -636,7 +636,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.refresh_button, menu);
+        inflater.inflate(R.menu.menu_buttons, menu);
         return true;
     }
 
@@ -657,9 +657,6 @@ public class MainActivity extends AppCompatActivity {
         }
         else if(id == R.id.search){
             toggleSearch();
-        }
-        else if(id == R.id.delete){
-           deleteAllTrackListings();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -726,14 +723,6 @@ public class MainActivity extends AppCompatActivity {
         enqueueSearchResultButton   = setupButton(R.id.playNextButton, this::addTrackToQueue);
     }
 
-
-    public void hidePlayerButtonPanel(){
-        playerButtonPanel.setVisibility(View.INVISIBLE);
-    }
-
-    public void showPlayerButtonPanel(){
-        playerButtonPanel.setVisibility(View.VISIBLE);
-    }
 
     public void hideAllSearchResultsButtons(){
         addSearchResultButton.setVisibility(View.GONE);

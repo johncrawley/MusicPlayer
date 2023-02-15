@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Music Player</string>
     <string name="menu_button_refresh">Refresh</string>
+    <string name="menu_button_search">Search</string>
     <string name="playlist_refreshed_message">Playlist Refreshed</string>
     <string name="playlist_refreshed_message_new_tracks_count">Playlist Refreshed (%1$d Found)</string>
     <string name="playlist_refreshed_one_new_track">Playlist Refreshed (1 New)</string>
