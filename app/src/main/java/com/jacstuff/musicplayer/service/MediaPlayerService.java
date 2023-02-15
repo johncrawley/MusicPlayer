@@ -29,6 +29,7 @@ import com.jacstuff.musicplayer.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,15 +93,12 @@ public class MediaPlayerService extends Service {
 
 
     public void scanForTracks(){
-        log("Entered scanForTracks()");
         if(isScanningForTracks){
             return;
         }
         executorService.execute(()->{
             isScanningForTracks = true;
-            log("About to addTracksFromStorage()");
             playlistManager.addTracksFromStorage(this);
-            log("About to updateViewTrackList()");
             updateViewTrackList();
             ensureATrackIsSelectedIfAvailable();
             isScanningForTracks = false;
@@ -132,7 +130,8 @@ public class MediaPlayerService extends Service {
 
 
     public List<Track> getTracksForSearch(String str){
-       return trackFinder.searchFor(str);
+        initTrackFinder();
+        return trackFinder == null ? Collections.emptyList() : trackFinder.searchFor(str);
     }
 
 
@@ -219,7 +218,6 @@ public class MediaPlayerService extends Service {
     }
 
 
-
     public void loadPlaylist(Playlist playlist){
         playlistManager.loadPlaylist(playlist);
         updateViewTrackListAndDeselectList();
@@ -248,6 +246,10 @@ public class MediaPlayerService extends Service {
             mainActivity.updateTracksList(playlistManager.getTracks(), playlistManager.getCurrentTrackIndex());
             mainActivity.displayPlaylistRefreshedMessage(getTrackCount());
         }
+    }
+
+
+    private void initTrackFinder(){
         if(trackFinder == null){
             trackFinder =  new TrackFinder(new TrackRepositoryImpl(getApplicationContext()));
         }
