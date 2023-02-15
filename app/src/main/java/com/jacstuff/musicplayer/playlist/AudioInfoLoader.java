@@ -40,7 +40,7 @@ public class AudioInfoLoader {
     }
 
 
-    private void rebuildTables(){
+    public void rebuildTables(){
         trackRepository.recreateTracksTables();
     }
 

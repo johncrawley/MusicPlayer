@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void playTrack() {
-        disableViewForAWhile(pauseButton, 300);
+        //disableViewForAWhile(pauseButton, 300);
         mediaPlayerService.playTrack();
     }
 
@@ -237,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void selectTrack(int index) {
+        log("Entered selectTrack() playButton is enabled: " +  playButton.isEnabled());
         mediaPlayerService.selectTrack(index);
     }
 
@@ -284,8 +285,6 @@ public class MainActivity extends AppCompatActivity {
         setupTrackTimeSeekBar();
         assignClickListeners();
         resetElapsedTime();
-        playButton.setEnabled(false);
-        nextTrackButton.setEnabled(false);
     }
 
 
@@ -335,6 +334,16 @@ public class MainActivity extends AppCompatActivity {
             String errorMessage = getString(R.string.error_playing_track_toast_message, track.getPathname());
             Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show();
         });
+    }
+
+
+    public void hidePlayerViews(){
+        setVisibilityOnDetailsAndNavViews(View.INVISIBLE);
+    }
+
+
+    public void showPlayerViews(){
+        setVisibilityOnDetailsAndNavViews(View.VISIBLE);
     }
 
 
@@ -458,6 +467,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setTrackInfoOnView(final Track track, int elapsedTime){
         runOnUiThread(()-> {
+                playerButtonPanel.setVisibility(View.VISIBLE);
                 setTrackInfo(track.getTitle());
                 setAlbumInfo(track.getAlbum());
                 setArtistInfo(track.getArtist());
@@ -544,12 +554,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void log(String msg){
+        System.out.println("^^^ MainActivity: " + msg);
+    }
+
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
+        log("Entered updateTracksList()");
         runOnUiThread(()-> {
             if(tracksFragment == null) {
                 return;
             }
+            log("updateTracksList() number of tracks: " + updatedTracks.size());
             tracksFragment.updateTracksList(updatedTracks, currentTrackIndex);
             updateViews(updatedTracks);
         });
@@ -639,10 +655,18 @@ public class MainActivity extends AppCompatActivity {
         if(id == R.id.refresh_button) {
           mediaPlayerService.scanForTracks();
         }
-        else if(id == R.id.test_stop_after_current){
+        else if(id == R.id.search){
             toggleSearch();
         }
+        else if(id == R.id.delete){
+           deleteAllTrackListings();
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void deleteAllTrackListings(){
+        mediaPlayerService.deleteAll();
     }
 
 
@@ -702,6 +726,14 @@ public class MainActivity extends AppCompatActivity {
         enqueueSearchResultButton   = setupButton(R.id.playNextButton, this::addTrackToQueue);
     }
 
+
+    public void hidePlayerButtonPanel(){
+        playerButtonPanel.setVisibility(View.INVISIBLE);
+    }
+
+    public void showPlayerButtonPanel(){
+        playerButtonPanel.setVisibility(View.VISIBLE);
+    }
 
     public void hideAllSearchResultsButtons(){
         addSearchResultButton.setVisibility(View.GONE);

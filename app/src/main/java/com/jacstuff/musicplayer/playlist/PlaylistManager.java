@@ -15,6 +15,7 @@ public interface PlaylistManager {
     boolean hasTracksQueued();
     boolean hasBeenInitialized();
     boolean isUserPlaylistLoaded();
+    boolean hasAnyTracks();
     Track getPreviousTrack();
     Track getNextRandomUnPlayedTrack();
     Track selectTrack(int index);
@@ -38,4 +39,6 @@ public interface PlaylistManager {
     void addTracksFromAlbumToCurrentPlaylist(Album album);
 
     String getTrackNameAt(int position);
+
+    void deleteAll();
 }

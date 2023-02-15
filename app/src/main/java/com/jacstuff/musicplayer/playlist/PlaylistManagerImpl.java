@@ -71,6 +71,11 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
+    public boolean hasAnyTracks(){
+        return tracks != null && tracks.size() > 0;
+    }
+
+
     public void disableShuffle(){
         isShuffleEnabled = false;
     }
@@ -79,8 +84,29 @@ public class PlaylistManagerImpl implements PlaylistManager {
     @Override
     public void addTracksFromStorage(MediaPlayerService mediaPlayerService){
         sdCardReader.loadAudioFiles();
+        log("addTracksFromStorage() audio files loaded, number of tracks: " + tracks.size());
         initTrackList();
+        log("initTrackList() complete tracks size: " + tracks.size());
         calculateAndDisplayNewTracksStats(mediaPlayerService);
+        log("calculatedAndDisplayedNewTracksStats()");
+        loadAllTracksIfNoPlaylistLoaded();
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ PlaylistManagerImpl: " + msg);
+    }
+
+    private void loadAllTracksIfNoPlaylistLoaded(){
+        if(currentPlaylist == null){
+            loadAllTracksPlaylist();
+        }
+    }
+
+
+    @Override
+    public void deleteAll(){
+        sdCardReader.rebuildTables();
+        initTrackList();
     }
 
 

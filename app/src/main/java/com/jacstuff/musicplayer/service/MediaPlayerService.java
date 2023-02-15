@@ -19,7 +19,6 @@ import android.os.PowerManager;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.TimeConverter;
 import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
@@ -93,15 +92,42 @@ public class MediaPlayerService extends Service {
 
 
     public void scanForTracks(){
+        log("Entered scanForTracks()");
         if(isScanningForTracks){
             return;
         }
         executorService.execute(()->{
             isScanningForTracks = true;
+            log("About to addTracksFromStorage()");
             playlistManager.addTracksFromStorage(this);
+            log("About to updateViewTrackList()");
             updateViewTrackList();
+            ensureATrackIsSelectedIfAvailable();
             isScanningForTracks = false;
         });
+    }
+
+
+    public void deleteAll(){
+        executorService.execute(()->{
+            playlistManager.deleteAll();
+            updateViewTrackList();
+        });
+    }
+
+
+    private void ensureATrackIsSelectedIfAvailable(){
+        if(currentTrack == null){
+            if(playlistManager.hasAnyTracks()){
+                loadNextTrack();
+            }
+            else{
+                mainActivity.hidePlayerViews();
+            }
+        }
+        else{
+            mainActivity.showPlayerViews();
+        }
     }
 
 
@@ -244,7 +270,8 @@ public class MediaPlayerService extends Service {
 
 
     private void updateViewTrackList(){
-        mainActivity.updateTracksList(playlistManager.getTracks(), currentTrack.getIndex());
+        int currentTrackIndex = currentTrack == null ? -1 : currentTrack.getIndex();
+        mainActivity.updateTracksList(playlistManager.getTracks(), currentTrackIndex);
     }
 
 
