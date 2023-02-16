@@ -2,7 +2,7 @@ package com.jacstuff.musicplayer.db.track;
 
 public class Track {
 
-    private final String pathname, title, artist, album, disc, genre;
+    private  String pathname, title, artist, album, disc, genre;
     private String orderedStr;
     private String searchStr;
     private final long id, trackNumber;
@@ -21,6 +21,20 @@ public class Track {
         this.index = builder.index;
         this.disc = builder.disc;
         this.genre = builder.genre;
+        createOrderedStr();
+        createSearchStr();
+    }
+
+
+    public Track(String path, String title, String artist, String album, String genre, int duration, int trackNumber){
+        this.id = -1;
+        this.pathname = path;
+        this.duration = duration;
+        this.title = title;
+        this.artist = artist;
+        this.album = album;
+        this.trackNumber = trackNumber;
+        this.genre = genre;
         createOrderedStr();
         createSearchStr();
     }

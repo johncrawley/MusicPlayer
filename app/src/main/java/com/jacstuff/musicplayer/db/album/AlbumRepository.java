@@ -37,13 +37,13 @@ public class AlbumRepository extends AbstractRepository {
     }
 
 
-    public List<Artist> getAll(){
-        List<Artist> albums = new ArrayList<>(1000);
+    public List<Album> getAll(){
+        List<Album> albums = new ArrayList<>(1000);
         cursor =  db.query(DbContract.AlbumsEntry.TABLE_NAME, null, null , null, null, null, null);
         while(cursor.moveToNext()){
             long id = getLong(DbContract.AlbumsEntry._ID);
             String  name= getString(DbContract.AlbumsEntry.COL_NAME);
-            albums.add(new Artist(id, name));
+            albums.add(new Album(id, name));
         }
         return albums;
     }

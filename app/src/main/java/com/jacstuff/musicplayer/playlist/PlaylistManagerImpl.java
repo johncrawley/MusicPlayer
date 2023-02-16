@@ -14,9 +14,12 @@ import com.jacstuff.musicplayer.service.MediaPlayerService;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
@@ -26,7 +29,7 @@ import java.util.stream.Collectors;
 public class PlaylistManagerImpl implements PlaylistManager {
 
     private int currentIndex = 0;
-    private final AudioInfoLoader sdCardReader;
+    private final TrackLoader trackLoader;
     private final Random random;
     private final TrackRepository trackRepository;
     private final PlaylistItemRepository playlistItemRepository;
@@ -50,9 +53,10 @@ public class PlaylistManagerImpl implements PlaylistManager {
         trackRepository = new TrackRepositoryImpl(context);
         playlistItemRepository = new PlaylistItemRepositoryImpl(context);
         tracks = new ArrayList<>(10_000);
+        allTracks = new ArrayList<>(10_000);
         unPlayedTracks = new ArrayList<>();
         random = new Random(System.currentTimeMillis());
-        sdCardReader = new AudioInfoLoader(context, trackRepository);
+        trackLoader = new TrackLoader(context, trackRepository);
         initTrackList();
         setupDefaultPlaylists();
         trackHistory = new TrackHistory();
@@ -83,18 +87,22 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void addTracksFromStorage(MediaPlayerService mediaPlayerService){
-        sdCardReader.loadAudioFiles();
-        log("addTracksFromStorage() audio files loaded, number of tracks: " + tracks.size());
+        log("entered addTracksFromStorage()");
+        allTracks = getSortedTracks(trackLoader.loadAudioFiles());
+        artists = trackLoader.getArtists();
+        log("addTracksFromStorage() about to initTrackList()");
         initTrackList();
-        log("initTrackList() complete tracks size: " + tracks.size());
+        log("about to calculateAndDisplayNewTracksStats()");
         calculateAndDisplayNewTracksStats(mediaPlayerService);
-        log("calculatedAndDisplayedNewTracksStats()");
+        log("about to loadAllTracksIfNoPlaylistLoaded()");
         loadAllTracksIfNoPlaylistLoaded();
     }
+
 
     private void log(String msg){
         System.out.println("^^^ PlaylistManagerImpl: " + msg);
     }
+
 
     private void loadAllTracksIfNoPlaylistLoaded(){
         if(currentPlaylist == null){
@@ -104,8 +112,25 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
+    public Set<String> getArtists(){
+        return trackLoader.getArtists();
+    }
+
+
+    @Override
+    public Map<String, Album> getAlbums(){
+        return trackLoader.getAlbums();
+    }
+
+
+    public ArrayList<String> getAlbumNames(){
+       return new ArrayList<>(trackLoader.getAlbums().keySet());
+    }
+
+
+    @Override
     public void deleteAll(){
-        sdCardReader.rebuildTables();
+        trackLoader.rebuildTables();
         initTrackList();
     }
 
@@ -133,9 +158,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void initTrackList(){
-        tracks = getSortedTracks(trackRepository.getAllTracks());
+       // tracks = getSortedTracks(trackRepository.getAllTracks());
+        tracks = allTracks;
         assignIndexesToTracks();
-        allTracks = new ArrayList<>(tracks);
         isInitialized = true;
     }
 
@@ -167,7 +192,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
         if(playlist.getId() == ALL_TRACKS_PLAYLIST_ID){
             loadAllTracksPlaylist();
-            tracks = new ArrayList<>(allTracks);
         }
         else{
             tracks = playlistItemRepository.getTracksForPlaylistId(playlist.getId());
@@ -222,18 +246,26 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-
-    private void loadAllTracksPlaylist(){
+    @Override
+    public void loadAllTracksPlaylist(){
         if(allTracks == null){
             initTrackList();
         }
         setupUnPlayedIndexes();
         trackHistory.reset();
         currentPlaylist = allTracksPlaylist;
+        tracks = new ArrayList<>(allTracks);
     }
+
+    private Set<String> artists, albums;
 
 
     private List<Track> getSortedTracks(List<Track> list){
+        log("Entered getSortedTracks()");
+        if(list == null){
+            log("getSortedTracks() list is null, returning empty list");
+            return Collections.emptyList();
+        }
         return list.stream().sorted(Comparator.comparing(Track::getOrderedString)).collect(Collectors.toList());
     }
 
@@ -248,6 +280,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void loadTracksFromAlbum(Album album) {
+
         tracks = getSortedTracks(trackRepository.getTracksForAlbum(album));
         assignIndexesToTracks();
         setupQueue();
@@ -403,6 +436,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public List<Track> getTracks(){
+
+        log("Entered getTracks() tracks size: " + tracks.size());
         return tracks;
     }
 

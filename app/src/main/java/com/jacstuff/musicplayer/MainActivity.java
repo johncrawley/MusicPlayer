@@ -53,6 +53,7 @@ import com.jacstuff.musicplayer.utils.KeyboardHelper;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -560,7 +561,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
-        log("Entered updateTracksList()");
         runOnUiThread(()-> {
             if(tracksFragment == null) {
                 return;
@@ -572,16 +572,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void updateTracksList(List<Track> updatedTracks){
-        updateTracksList(updatedTracks, -1);
-    }
-
-
     public void switchToTracksTab(){
         TabLayout.Tab tab = tabLayout.getTabAt(0);
         if(tab != null){
             tab.select();
         }
+    }
+
+
+    public static final  String BUNDLE_KEY_ALBUM_UPDATES = "bundle_key_album_updates";
+    public static final  String BUNDLE_KEY_ARTIST_UPDATES = "bundle_key_artist_updates";
+    public static final String SEND_ALBUMS_TO_FRAGMENT = "send_albums_to_fragment";
+    public static final String SEND_ARTISTS_TO_FRAGMENT = "send_artists_to_fragment";
+
+
+    public void updateAlbumsList(ArrayList<String> albums){
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList(BUNDLE_KEY_ALBUM_UPDATES, albums);
+        getSupportFragmentManager().setFragmentResult(SEND_ALBUMS_TO_FRAGMENT, bundle);
+    }
+
+
+    public void updateArtistsList(ArrayList<String> artists){
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList(BUNDLE_KEY_ARTIST_UPDATES, artists);
+        getSupportFragmentManager().setFragmentResult(SEND_ARTISTS_TO_FRAGMENT, bundle);
     }
 
 

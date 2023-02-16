@@ -17,7 +17,11 @@ import com.jacstuff.musicplayer.db.artist.ArtistRepository;
 import static com.jacstuff.musicplayer.db.DbContract.TracksEntry.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class TrackRepositoryImpl extends AbstractRepository implements TrackRepository {
 
@@ -30,16 +34,45 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
         artistRepository = new ArtistRepository(context);
         albumRepository = new AlbumRepository(context);
         dbHelper = DbHelper.getInstance(context);
+        artists = new HashMap<>();
+        albums = new HashMap<>();
     }
+
+    private Map<String, Long> artists;
+    private Map<String, Long> albums;
 
 
     @Override
     public void addTrack(Track track) {
-        long artistId = artistRepository.addOrGetArtist(track.getArtist());
-        long albumId = albumRepository.addOrGet(track.getAlbum());
+
+
+        long artistId = getArtistId(track);
+        long albumId = getAlbumId(track);
+
         addValuesToTable(db,
                 DbContract.TracksEntry.TABLE_NAME,
                 createTrackContentValuesFor(track, artistId, albumId));
+    }
+
+
+    private long getArtistId(Track track){
+        String artist = track.getArtist();
+        Long id = artists.putIfAbsent(artist, artistRepository.addOrGetArtist(artist));
+        if(id == null){
+            id = -1L;
+        }
+        return id;
+    }
+
+
+    private long getAlbumId(Track track){
+        String album = track.getAlbum();
+
+        Long id = albums.putIfAbsent(album, albumRepository.addOrGet(album));
+        if(id == null){
+            id = -1L;
+        }
+        return id;
     }
 
 

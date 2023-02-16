@@ -11,14 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
+import com.jacstuff.musicplayer.db.track.Track;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.TrackViewHolder> {
 
-    private final List<String> albumNames;
+    private List<String> albumNames;
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
     private String currentlySelectedName;
@@ -49,13 +51,21 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Trac
     }
 
 
-    public AlbumListAdapter(List<Artist> artists, Consumer<Album> clickConsumer){
+    public void setItems(List<String> albumNames){
+        this.albumNames = albumNames;
+    }
+
+
+    public AlbumListAdapter(List<Album> albums, Consumer<Album> clickConsumer){
         this.albumNames = new ArrayList<>();
-        for(Artist artist : artists){
-            this.albumNames.add(artist.getName());
+        for(Album album : albums){
+            this.albumNames.add(album.getName());
         }
         this.clickConsumer = clickConsumer;
     }
+
+
+
 
 
     public Album getCurrentlySelectedItem(){

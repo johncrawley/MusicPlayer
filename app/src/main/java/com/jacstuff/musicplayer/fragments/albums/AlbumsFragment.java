@@ -21,7 +21,9 @@ import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.utils.ButtonMaker;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AlbumsFragment extends Fragment {
 
@@ -54,10 +56,18 @@ public class AlbumsFragment extends Fragment {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private void setupFragmentListener(){
         getParentFragmentManager().setFragmentResultListener(PlaylistsFragment.NOTIFY_ALBUMS_FRAGMENT_OF_PLAYLIST, this, (requestKey, bundle) -> {
             int visibility =  isBundleUserPlaylistLoaded(bundle) && isItemSelected()? View.VISIBLE : View.INVISIBLE;
             addTracksToPlaylistButton.setVisibility(visibility);
+        });
+
+        getParentFragmentManager().setFragmentResultListener(MainActivity.SEND_ALBUMS_TO_FRAGMENT, this, (requestKey, bundle) -> {
+            ArrayList<String> albumNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ALBUM_UPDATES);
+
+            listAdapter.setItems(albumNames);
+            listAdapter.notifyDataSetChanged();
         });
     }
 
@@ -89,11 +99,11 @@ public class AlbumsFragment extends Fragment {
 
 
     private void refreshList(){
-        List<Artist> artists = albumsRepository.getAll();
-        if(this.parentView == null ||artists == null){
+        List<Album> albums = albumsRepository.getAll();
+        if(this.parentView == null ||albums == null){
             return;
         }
-        listAdapter = new AlbumListAdapter(artists, this::setButtonsVisibility);
+        listAdapter = new AlbumListAdapter(albums, this::setButtonsVisibility);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);

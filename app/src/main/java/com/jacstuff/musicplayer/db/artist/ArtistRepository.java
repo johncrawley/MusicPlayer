@@ -8,6 +8,8 @@ import com.jacstuff.musicplayer.db.AbstractRepository;
 import com.jacstuff.musicplayer.db.DbContract;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ArtistRepository extends AbstractRepository {
@@ -44,6 +46,7 @@ public class ArtistRepository extends AbstractRepository {
             String  name= getString(DbContract.ArtistsEntry.COL_NAME);
             artists.add(new Artist(id, name));
         }
+        Collections.sort(artists, Comparator.comparing(Artist::getName));
         return artists;
     }
 

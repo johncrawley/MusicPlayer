@@ -93,13 +93,19 @@ public class MediaPlayerService extends Service {
 
 
     public void scanForTracks(){
+        log("Entered scanForTracks()");
         if(isScanningForTracks){
+            log("already scanning, returning");
             return;
         }
         executorService.execute(()->{
             isScanningForTracks = true;
             playlistManager.addTracksFromStorage(this);
+            log("scanForTracks() about to load all tracks playlist");
+            playlistManager.loadAllTracksPlaylist();
+            log("scanForTracks() after loading all tracks playlist");
             updateViewTrackList();
+            mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
             ensureATrackIsSelectedIfAvailable();
             isScanningForTracks = false;
         });
@@ -163,7 +169,9 @@ public class MediaPlayerService extends Service {
         elapsedTime = 0;
         mediaNotificationManager.updateNotification();
         if(shouldUpdateMainView) {
-            mainActivity.notifyMediaPlayerStopped();
+            if(mainActivity != null) {
+                mainActivity.notifyMediaPlayerStopped();
+            }
         }
         cancelFutures();
     }
@@ -273,12 +281,13 @@ public class MediaPlayerService extends Service {
 
     private void updateViewTrackList(){
         int currentTrackIndex = currentTrack == null ? -1 : currentTrack.getIndex();
+        log("updateViewTracksList() tracks size = " + playlistManager.getTracks().size());
         mainActivity.updateTracksList(playlistManager.getTracks(), currentTrackIndex);
     }
 
 
     private void updateViewTrackListAndDeselectList(){
-        mainActivity.updateTracksList(playlistManager.getTracks());
+        mainActivity.updateTracksList(playlistManager.getTracks(), -1);
     }
 
 

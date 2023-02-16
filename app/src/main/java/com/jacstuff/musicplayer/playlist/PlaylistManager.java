@@ -6,7 +6,10 @@ import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface PlaylistManager {
 
@@ -26,6 +29,7 @@ public interface PlaylistManager {
     boolean areAllTracksLoaded();
     void addTrackToQueue(Track track);
     void loadPlaylist(Playlist playlist);
+    void loadAllTracksPlaylist();
     void addTrackToCurrentPlaylist(Track track);
     void addTracksToCurrentPlaylist(List<Track> tracks);
     void removeTrackFromCurrentPlaylist(Track track);
@@ -37,6 +41,10 @@ public interface PlaylistManager {
     void loadTracksFromAlbum(Album album);
     void addTracksFromArtistToCurrentPlaylist(Artist artist);
     void addTracksFromAlbumToCurrentPlaylist(Album album);
+
+    Set<String> getArtists();
+    Map<String, Album> getAlbums();
+    ArrayList<String> getAlbumNames();
 
     String getTrackNameAt(int position);
 
