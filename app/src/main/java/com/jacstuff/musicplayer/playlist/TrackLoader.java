@@ -1,6 +1,11 @@
 package com.jacstuff.musicplayer.playlist;
 
 
+import static com.jacstuff.musicplayer.db.DbContract.TracksEntry.COL_ALBUM;
+import static com.jacstuff.musicplayer.db.DbContract.TracksEntry.COL_ARTIST;
+import static com.jacstuff.musicplayer.db.DbContract.TracksEntry.COL_TITLE;
+import static com.jacstuff.musicplayer.db.DbContract.TracksEntry.TABLE_NAME;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
@@ -19,19 +24,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class TrackLoader {
 
     private final Context context;
-    private final TrackRepository trackRepository;
     private List<Track> tracks;
     private Set<String> artists;
     private Map<String, Album> albums;
 
-    public TrackLoader(Context context, TrackRepository trackRepository){
+    public TrackLoader(Context context){
         this.context  = context;
-        this.trackRepository = trackRepository;
         albums = new HashMap<>();
     }
 
@@ -48,6 +52,26 @@ public class TrackLoader {
 
     public Map<String, Album> getAlbums(){
         return albums;
+    }
+
+    /*
+
+        @Override
+        public List<Track> getAllTracksContaining(String prefix){
+            String query = "SELECT * FROM " + TABLE_NAME
+                    + " WHERE " + COL_TITLE + beginsWith(prefix)
+                    + " OR " + COL_ARTIST + beginsWith(prefix)
+                    + " OR " + COL_ALBUM + beginsWith(prefix) + ";";
+
+            return getTracksUsingQuery(query);
+        }
+
+     */
+
+    public List<Track> getAllTracksContaining(String searchTerm){
+        return tracks.parallelStream()
+                .filter(track -> track.getSearchString().contains(searchTerm))
+                .collect(Collectors.toList());
     }
 
 
@@ -95,7 +119,7 @@ public class TrackLoader {
 
 
     public void rebuildTables(){
-        trackRepository.recreateTracksTables();
+     //   trackRepository.recreateTracksTables();
     }
 
 

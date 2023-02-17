@@ -8,15 +8,12 @@ import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistItemRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistItemRepositoryImpl;
 import com.jacstuff.musicplayer.db.track.Track;
-import com.jacstuff.musicplayer.db.track.TrackRepository;
-import com.jacstuff.musicplayer.db.track.TrackRepositoryImpl;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +28,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private int currentIndex = 0;
     private final TrackLoader trackLoader;
     private final Random random;
-    private final TrackRepository trackRepository;
     private final PlaylistItemRepository playlistItemRepository;
     private List<Track> tracks;
     private List<Track> unPlayedTracks;
@@ -49,14 +45,13 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private final ArrayDeque<Track> queuedTracks;
 
 
-    public PlaylistManagerImpl(Context context){
-        trackRepository = new TrackRepositoryImpl(context);
+    public PlaylistManagerImpl(Context context, TrackLoader trackLoader){
         playlistItemRepository = new PlaylistItemRepositoryImpl(context);
         tracks = new ArrayList<>(10_000);
         allTracks = new ArrayList<>(10_000);
         unPlayedTracks = new ArrayList<>();
         random = new Random(System.currentTimeMillis());
-        trackLoader = new TrackLoader(context, trackRepository);
+        this.trackLoader = trackLoader;
         initTrackList();
         setupDefaultPlaylists();
         trackHistory = new TrackHistory();
@@ -87,14 +82,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void addTracksFromStorage(MediaPlayerService mediaPlayerService){
-        log("entered addTracksFromStorage()");
         allTracks = getSortedTracks(trackLoader.loadAudioFiles());
-        artists = trackLoader.getArtists();
-        log("addTracksFromStorage() about to initTrackList()");
         initTrackList();
-        log("about to calculateAndDisplayNewTracksStats()");
         calculateAndDisplayNewTracksStats(mediaPlayerService);
-        log("about to loadAllTracksIfNoPlaylistLoaded()");
         loadAllTracksIfNoPlaylistLoaded();
     }
 
@@ -257,7 +247,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         tracks = new ArrayList<>(allTracks);
     }
 
-    private Set<String> artists, albums;
 
 
     private List<Track> getSortedTracks(List<Track> list){
@@ -271,7 +260,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public void loadTracksFromArtist(Artist artist){
-        tracks = getSortedTracks(trackRepository.getTracksForArtist(artist));
+       // tracks = getSortedTracks(trackRepository.getTracksForArtist(artist));
         assignIndexesToTracks();
         setupQueue();
         currentPlaylist = someArtistPlaylist;
@@ -297,7 +286,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void addTracksFromArtistToCurrentPlaylist(Artist artist) {
-        addTracksToCurrentPlaylist(getSortedTracks(trackRepository.getTracksForArtist(artist)));
+      //  addTracksToCurrentPlaylist(getSortedTracks(trackRepository.getTracksForArtist(artist)));
     }
 
 

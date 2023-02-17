@@ -19,14 +19,13 @@ import android.os.PowerManager;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.search.TrackFinder;
 import com.jacstuff.musicplayer.db.track.Track;
-import com.jacstuff.musicplayer.db.track.TrackRepositoryImpl;
 import com.jacstuff.musicplayer.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
+import com.jacstuff.musicplayer.playlist.TrackLoader;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -71,6 +70,7 @@ public class MediaPlayerService extends Service {
     private int elapsedTime;
     private TrackFinder trackFinder;
     private ScheduledFuture<?> stopTrackFuture;
+    private TrackLoader trackLoader;
 
 
 
@@ -259,7 +259,7 @@ public class MediaPlayerService extends Service {
 
     private void initTrackFinder(){
         if(trackFinder == null){
-            trackFinder =  new TrackFinder(new TrackRepositoryImpl(getApplicationContext()));
+            trackFinder =  new TrackFinder(trackLoader);
         }
     }
 
@@ -410,7 +410,8 @@ public class MediaPlayerService extends Service {
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         if(playlistManager == null) {
-            playlistManager = new PlaylistManagerImpl(mainActivity.getApplicationContext());
+            trackLoader = new TrackLoader(getApplicationContext());
+            playlistManager = new PlaylistManagerImpl(mainActivity.getApplicationContext(), trackLoader);
         }
         initPlaylist();
     }

@@ -1,7 +1,7 @@
 package com.jacstuff.musicplayer.db.search;
 
 import com.jacstuff.musicplayer.db.track.Track;
-import com.jacstuff.musicplayer.db.track.TrackRepository;
+import com.jacstuff.musicplayer.playlist.TrackLoader;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,12 +11,12 @@ import java.util.stream.Collectors;
 
 public class TrackFinder {
 
-    private final TrackRepository trackRepository;
     private final Map<String, List<Track>> resultsMap;
+    private final TrackLoader trackLoader;
 
 
-    public TrackFinder(TrackRepository trackRepository){
-        this.trackRepository = trackRepository;
+    public TrackFinder(TrackLoader trackLoader){
+        this.trackLoader = trackLoader;
         resultsMap = new HashMap<>();
     }
 
@@ -44,7 +44,7 @@ public class TrackFinder {
         String prefix = getParentPrefix(searchTerm);
         return resultsMap.containsKey(prefix) ?
                 getFilteredTracksFor(searchTerm, prefix)
-                : trackRepository.getAllTracksContaining(searchTerm);
+                : trackLoader.getAllTracksContaining(searchTerm);
     }
 
 
