@@ -124,7 +124,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public ArrayList<String> getAlbumNames(){
-       return new ArrayList<>(trackLoader.getAlbums().keySet());
+       return trackLoader.getAlbumNames();
     }
 
 
@@ -279,9 +279,16 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
-    public void loadTracksFromAlbum(Album album) {
-
-        tracks = getSortedTracks(trackRepository.getTracksForAlbum(album));
+    public void loadTracksFromAlbum(String albumName) {
+        Map <String, Album> albums = trackLoader.getAlbums();
+        if(albums == null){
+            return;
+        }
+        Album savedAlbum = albums.get(albumName);
+        if(savedAlbum == null){
+            return;
+        }
+        tracks = getSortedTracks(savedAlbum.getTracks());
         assignIndexesToTracks();
         setupQueue();
         currentPlaylist = someAlbumPlaylist;
@@ -295,8 +302,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
-    public void addTracksFromAlbumToCurrentPlaylist(Album album) {
-        addTracksToCurrentPlaylist(getSortedTracks(trackRepository.getTracksForAlbum(album)));
+    public void addTracksFromAlbumToCurrentPlaylist(String albumName) {
+        List<Track> tracks = trackLoader.getTracksForAlbum(albumName);
+        addTracksToCurrentPlaylist(getSortedTracks(tracks));
     }
 
 

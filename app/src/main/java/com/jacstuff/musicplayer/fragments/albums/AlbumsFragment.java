@@ -18,6 +18,7 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.album.Album;
 import com.jacstuff.musicplayer.db.album.AlbumRepository;
 import com.jacstuff.musicplayer.db.artist.Artist;
+import com.jacstuff.musicplayer.fragments.StringListAdapter;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.utils.ButtonMaker;
 
@@ -28,9 +29,8 @@ import java.util.stream.Collectors;
 public class AlbumsFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private AlbumListAdapter listAdapter;
+    private StringListAdapter listAdapter;
     private View parentView;
-    private AlbumRepository albumsRepository;
     private Button loadTracksButton, addTracksToPlaylistButton;
 
     public AlbumsFragment() {
@@ -41,7 +41,6 @@ public class AlbumsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_albums, container, false);
-        albumsRepository = new AlbumRepository(getContext());
         return view;
     }
 
@@ -84,7 +83,7 @@ public class AlbumsFragment extends Fragment {
 
     private void setupButtons(View parentView){
        loadTracksButton = ButtonMaker.createButton(parentView, R.id.loadTracksFromAlbumButton, ()->{
-            getMainActivity().loadTracksFromAlbum(listAdapter.getCurrentlySelectedItem());
+           getMainActivity().loadTracksFromAlbum(listAdapter.getCurrentlySelectedItem());
             getMainActivity().switchToTracksTab();
         });
 
@@ -99,11 +98,11 @@ public class AlbumsFragment extends Fragment {
 
 
     private void refreshList(){
-        List<Album> albums = albumsRepository.getAll();
+        List<String> albums = getMainActivity().getAlbumNames();
         if(this.parentView == null ||albums == null){
             return;
         }
-        listAdapter = new AlbumListAdapter(albums, this::setButtonsVisibility);
+        listAdapter = new StringListAdapter(albums, this::setButtonsVisibility);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);
@@ -116,7 +115,7 @@ public class AlbumsFragment extends Fragment {
     }
 
 
-    private void setButtonsVisibility(Album album){
+    private void setButtonsVisibility(String string){
         addTracksToPlaylistButton.setVisibility(getVisibilityForAddTracksButton());
         loadTracksButton.setVisibility(View.VISIBLE);
     }

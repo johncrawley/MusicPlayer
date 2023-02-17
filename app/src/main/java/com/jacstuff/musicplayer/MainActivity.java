@@ -164,6 +164,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public List<String> getAlbumNames(){
+        if(mediaPlayerService == null || mediaPlayerService.getPlaylistManager() == null){
+            return Collections.emptyList();
+        }
+        return mediaPlayerService.getPlaylistManager().getAlbumNames();
+    }
+
     public void setPlayerFragment(TracksFragment tracksFragment){
         this.tracksFragment = tracksFragment;
         onQueueFragmentReady();
@@ -605,8 +612,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void loadTracksFromAlbum(Album album){
-        mediaPlayerService.loadTracksFromAlbum(album);
+    public void loadTracksFromAlbum(String albumName){
+        mediaPlayerService.loadTracksFromAlbum(albumName);
     }
 
 

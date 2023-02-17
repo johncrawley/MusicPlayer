@@ -38,11 +38,11 @@ public interface PlaylistManager {
     void disableShuffle();
     void onDestroy();
     void loadTracksFromArtist(Artist artist);
-    void loadTracksFromAlbum(Album album);
     void addTracksFromArtistToCurrentPlaylist(Artist artist);
-    void addTracksFromAlbumToCurrentPlaylist(Album album);
+    void addTracksFromAlbumToCurrentPlaylist(String albumName);
 
     Set<String> getArtists();
+    void loadTracksFromAlbum(String albumName);
     Map<String, Album> getAlbums();
     ArrayList<String> getAlbumNames();
 

@@ -13,6 +13,7 @@ import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.db.track.TrackRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +32,7 @@ public class TrackLoader {
     public TrackLoader(Context context, TrackRepository trackRepository){
         this.context  = context;
         this.trackRepository = trackRepository;
+        albums = new HashMap<>();
     }
 
 
@@ -48,6 +50,21 @@ public class TrackLoader {
         return albums;
     }
 
+
+    public ArrayList<String> getAlbumNames(){
+        if(albums == null){
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(albums.keySet());
+    }
+
+    public List<Track> getTracksForAlbum(String albumName){
+        Album album =  albums.getOrDefault(albumName, new Album(-1, "null album!"));
+        if(album == null){
+            return Collections.emptyList();
+        }
+        return album.getTracks();
+    }
 
     public Set<String> getArtists(){
         return artists;

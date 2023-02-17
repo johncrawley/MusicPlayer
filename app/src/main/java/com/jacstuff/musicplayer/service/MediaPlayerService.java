@@ -197,14 +197,14 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void loadTracksFromAlbum(Album album){
-        playlistManager.loadTracksFromAlbum(album);
+    public void loadTracksFromAlbum(String albumName){
+        playlistManager.loadTracksFromAlbum(albumName);
         updateViewTrackListAndDeselectList();
     }
 
 
-    public void addTracksFromAlbumToCurrentPlaylist(Album album){
-        playlistManager.addTracksFromAlbumToCurrentPlaylist(album);
+    public void addTracksFromAlbumToCurrentPlaylist(String albumName){
+        playlistManager.addTracksFromAlbumToCurrentPlaylist(albumName);
         updateViewTrackList();
     }
 
