@@ -14,20 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.db.artist.Artist;
-import com.jacstuff.musicplayer.db.artist.ArtistRepository;
+import com.jacstuff.musicplayer.fragments.StringListAdapter;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.utils.ButtonMaker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArtistsFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private ArtistListAdapter listAdapter;
+    private StringListAdapter listAdapter;
     private int previousIndex = 0;
     private View parentView;
-    private ArtistRepository artistRepository;
     private Button loadTracksFromArtistButton, addTracksToPlaylistButton;
 
     public ArtistsFragment() {
@@ -38,7 +37,6 @@ public class ArtistsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_artists, container, false);
-        artistRepository = new ArtistRepository(getContext());
         return view;
     }
 
@@ -53,10 +51,16 @@ public class ArtistsFragment extends Fragment {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private void setupFragmentListener(){
         getParentFragmentManager().setFragmentResultListener(PlaylistsFragment.NOTIFY_ARTISTS_FRAGMENT_OF_PLAYLIST, this, (requestKey, bundle) -> {
             int visibility = isBundleUserPlaylistLoaded(bundle) && isItemSelected()? View.VISIBLE : View.INVISIBLE;
             addTracksToPlaylistButton.setVisibility(visibility);
+        });
+        getParentFragmentManager().setFragmentResultListener(MainActivity.SEND_ARTISTS_TO_FRAGMENT, this, (requestKey, bundle) -> {
+            ArrayList<String> artistNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ARTIST_UPDATES);
+            listAdapter.setItems(artistNames);
+            listAdapter.notifyDataSetChanged();
         });
     }
 
@@ -82,7 +86,7 @@ public class ArtistsFragment extends Fragment {
     }
 
 
-    private Artist getSelectedArtist(){
+    private String getSelectedArtist(){
         return listAdapter.getCurrentlySelectedItem();
     }
 
@@ -98,11 +102,11 @@ public class ArtistsFragment extends Fragment {
 
 
     private void refreshArtistsList(){
-        List<Artist> artists = artistRepository.getAllArtists();
+        List<String> artists = getMainActivity().getArtistNames();
         if(this.parentView == null ||artists == null){
             return;
         }
-        listAdapter = new ArtistListAdapter(artists, this::setButtonsVisibility);
+        listAdapter = new StringListAdapter(artists, this::setButtonsVisibility);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);
@@ -116,7 +120,7 @@ public class ArtistsFragment extends Fragment {
 
 
 
-    private void setButtonsVisibility(Artist artist){
+    private void setButtonsVisibility(String artistName){
         addTracksToPlaylistButton.setVisibility(getVisibilityForAddTracksButton());
         loadTracksFromArtistButton.setVisibility(View.VISIBLE);
     }

@@ -103,7 +103,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public Set<String> getArtists(){
-        return trackLoader.getArtists();
+        return trackLoader.getArtistsSet();
     }
 
 
@@ -114,7 +114,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public ArrayList<String> getAlbumNames(){
-       return trackLoader.getAlbumNames();
+        return trackLoader.getAlbumNames();
+    }
+
+
+    public ArrayList<String> getArtistNames(){
+        return trackLoader.getArtistNames();
     }
 
 
@@ -259,8 +264,20 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    public void loadTracksFromArtist(Artist artist){
-       // tracks = getSortedTracks(trackRepository.getTracksForArtist(artist));
+    public void loadTracksFromArtist(String artistName){
+        log("Entered loadTracksFromArtist() name: " + artistName);
+        Map <String, Artist> artists = trackLoader.getArtists();
+        if(artists == null){
+            return;
+        }
+        Artist savedArtist = artists.get(artistName);
+        if(savedArtist == null){
+            log("saved artist is null!");
+            return;
+        }
+
+        tracks = getSortedTracks(trackLoader.getTracksForArtist(artistName));
+        log("artist has " + tracks.size() + " number of tracks");
         assignIndexesToTracks();
         setupQueue();
         currentPlaylist = someArtistPlaylist;
@@ -285,8 +302,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
-    public void addTracksFromArtistToCurrentPlaylist(Artist artist) {
-      //  addTracksToCurrentPlaylist(getSortedTracks(trackRepository.getTracksForArtist(artist)));
+    public void addTracksFromArtistToCurrentPlaylist(String artistName) {
+        List<Track> tracks = trackLoader.getTracksForArtist(artistName);
+        addTracksToCurrentPlaylist(getSortedTracks(tracks));
     }
 
 
@@ -332,6 +350,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
             return queuedTracks.removeLast();
         }
         return isShuffleEnabled ? getNextRandomUnPlayedTrack() : getNextTrackOnList();
+    }
+
+
+    @Override
+    public boolean isShuffleEnabled(){
+        return isShuffleEnabled;
     }
 
 

@@ -81,19 +81,6 @@
         app:layout_constraintBottom_toTopOf="@id/buttonLayout"
         />
 
-    <!--
-    <View
-        android:id="@+id/divider1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/buttonLayout" />
-
-        -->
-
 
     <LinearLayout
         android:id="@+id/buttonLayout"
@@ -112,7 +99,6 @@
             android:id="@+id/previousTrackButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="?android:attr/buttonBarButtonStyle"
             android:contentDescription="@string/previous_track_button_content_description"
             android:paddingBottom="@dimen/button_padding"
             app:srcCompat="@mipmap/ic_action_previous" />

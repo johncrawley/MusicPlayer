@@ -37,8 +37,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
-import com.jacstuff.musicplayer.db.album.Album;
-import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.fragments.options.StopOptionsFragment;
@@ -170,6 +168,15 @@ public class MainActivity extends AppCompatActivity {
         }
         return mediaPlayerService.getPlaylistManager().getAlbumNames();
     }
+
+
+    public List<String> getArtistNames(){
+        if(mediaPlayerService == null || mediaPlayerService.getPlaylistManager() == null){
+            return Collections.emptyList();
+        }
+        return mediaPlayerService.getPlaylistManager().getArtistNames();
+    }
+
 
     public void setPlayerFragment(TracksFragment tracksFragment){
         this.tracksFragment = tracksFragment;
@@ -464,6 +471,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void setShuffleButtonsVisibility(){
+        if(mediaPlayerService.isShuffleEnabled()){
+            notifyShuffleEnabled();
+            return;
+        }
+        notifyShuffleDisabled();
+    }
+
+
     public void notifyMediaPlayerPlaying(){
         runOnUiThread(()->{
             playButton.setVisibility(View.GONE);
@@ -498,10 +514,13 @@ public class MainActivity extends AppCompatActivity {
         if(numberOfTracks < 2){
             nextTrackButton.setVisibility(View.INVISIBLE);
             previousTrackButton.setVisibility(View.INVISIBLE);
+            turnShuffleOffButton.setVisibility(View.GONE);
+            turnShuffleOnButton.setVisibility(View.GONE);
         }
         else{
             nextTrackButton.setVisibility(View.VISIBLE);
             previousTrackButton.setVisibility(View.VISIBLE);
+            setShuffleButtonsVisibility();
         }
     }
 
@@ -607,8 +626,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void loadTracksFromArtist(Artist artist){
-        mediaPlayerService.loadTracksFromArtist(artist);
+    public void loadTracksFromArtist(String artistName){
+        mediaPlayerService.loadTracksFromArtist(artistName);
     }
 
 
@@ -675,7 +694,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.refresh_button) {
-          mediaPlayerService.scanForTracks();
+          mediaPlayerService.loadTrackDataFromFilesystem();
         }
         else if(id == R.id.search){
             toggleSearch();

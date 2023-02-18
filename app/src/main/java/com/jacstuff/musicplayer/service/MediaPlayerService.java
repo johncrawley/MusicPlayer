@@ -19,7 +19,6 @@ import android.os.PowerManager;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.search.TrackFinder;
 import com.jacstuff.musicplayer.db.track.Track;
@@ -71,6 +70,7 @@ public class MediaPlayerService extends Service {
     private TrackFinder trackFinder;
     private ScheduledFuture<?> stopTrackFuture;
     private TrackLoader trackLoader;
+    private boolean haveTracksBeenLoaded;
 
 
 
@@ -92,20 +92,17 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void scanForTracks(){
-        log("Entered scanForTracks()");
+    public void loadTrackDataFromFilesystem(){
         if(isScanningForTracks){
-            log("already scanning, returning");
             return;
         }
         executorService.execute(()->{
             isScanningForTracks = true;
             playlistManager.addTracksFromStorage(this);
-            log("scanForTracks() about to load all tracks playlist");
             playlistManager.loadAllTracksPlaylist();
-            log("scanForTracks() after loading all tracks playlist");
             updateViewTrackList();
             mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
+            mainActivity.updateArtistsList(playlistManager.getArtistNames());
             ensureATrackIsSelectedIfAvailable();
             isScanningForTracks = false;
         });
@@ -191,8 +188,8 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void loadTracksFromArtist(Artist artist){
-        playlistManager.loadTracksFromArtist(artist);
+    public void loadTracksFromArtist(String artistName){
+        playlistManager.loadTracksFromArtist(artistName);
         updateViewTrackListAndDeselectList();
     }
 
@@ -209,8 +206,8 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void addTracksFromAristToCurrentPlaylist(Artist artist){
-        playlistManager.addTracksFromArtistToCurrentPlaylist(artist);
+    public void addTracksFromAristToCurrentPlaylist(String artistName){
+        playlistManager.addTracksFromArtistToCurrentPlaylist(artistName);
         updateViewTrackList();
     }
 
@@ -413,6 +410,11 @@ public class MediaPlayerService extends Service {
             trackLoader = new TrackLoader(getApplicationContext());
             playlistManager = new PlaylistManagerImpl(mainActivity.getApplicationContext(), trackLoader);
         }
+        if(!haveTracksBeenLoaded){
+            loadTrackDataFromFilesystem();
+            haveTracksBeenLoaded = true;
+            return;
+        }
         initPlaylist();
     }
 
@@ -482,6 +484,11 @@ public class MediaPlayerService extends Service {
     public void enableShuffle(){
         playlistManager.enableShuffle();
         mainActivity.notifyShuffleEnabled();
+    }
+
+
+    public boolean isShuffleEnabled(){
+        return playlistManager.isShuffleEnabled();
     }
 
 

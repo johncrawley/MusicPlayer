@@ -1,11 +1,6 @@
 package com.jacstuff.musicplayer.playlist;
 
 
-import static com.jacstuff.musicplayer.db.DbContract.TracksEntry.COL_ALBUM;
-import static com.jacstuff.musicplayer.db.DbContract.TracksEntry.COL_ARTIST;
-import static com.jacstuff.musicplayer.db.DbContract.TracksEntry.COL_TITLE;
-import static com.jacstuff.musicplayer.db.DbContract.TracksEntry.TABLE_NAME;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
@@ -14,8 +9,8 @@ import android.provider.MediaStore;
 
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.album.Album;
+import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.track.Track;
-import com.jacstuff.musicplayer.db.track.TrackRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,8 +26,15 @@ public class TrackLoader {
 
     private final Context context;
     private List<Track> tracks;
-    private Set<String> artists;
+    private Set<String> artistsSet;
     private Map<String, Album> albums;
+    private Map<String, Artist> artists;
+    private long artistCount;
+    private int albumCount;
+    private Map<String, Integer> columnMap;
+    private ArrayList<String> sortedArtistNames;
+
+
 
     public TrackLoader(Context context){
         this.context  = context;
@@ -43,8 +45,8 @@ public class TrackLoader {
     public List<Track> loadAudioFiles(){
         tracks = new ArrayList<>(10_000);
         albums = new HashMap<>(5000);
-        artists = new HashSet<>(1000);
-        rebuildTables();
+        artists = new HashMap<>(500);
+        artistsSet = new HashSet<>(1000);
         addTracksData();
         log("Load audio files, number of tracks: " + tracks.size());
         return tracks;
@@ -54,19 +56,11 @@ public class TrackLoader {
         return albums;
     }
 
-    /*
 
-        @Override
-        public List<Track> getAllTracksContaining(String prefix){
-            String query = "SELECT * FROM " + TABLE_NAME
-                    + " WHERE " + COL_TITLE + beginsWith(prefix)
-                    + " OR " + COL_ARTIST + beginsWith(prefix)
-                    + " OR " + COL_ALBUM + beginsWith(prefix) + ";";
+    public Map<String, Artist> getArtists(){
+        return artists;
+    }
 
-            return getTracksUsingQuery(query);
-        }
-
-     */
 
     public List<Track> getAllTracksContaining(String searchTerm){
         return tracks.parallelStream()
@@ -79,8 +73,23 @@ public class TrackLoader {
         if(albums == null){
             return new ArrayList<>();
         }
-        return new ArrayList<>(albums.keySet());
+        ArrayList<String> names = new ArrayList<>(albums.keySet());
+        Collections.sort(names);
+        return names;
     }
+
+
+    public ArrayList<String> getArtistNames(){
+        if(artists == null){
+            return new ArrayList<>();
+        }
+        if(sortedArtistNames == null){
+            sortedArtistNames = new ArrayList<>(artists.keySet());
+            Collections.sort(sortedArtistNames);
+        }
+        return sortedArtistNames;
+    }
+
 
     public List<Track> getTracksForAlbum(String albumName){
         Album album =  albums.getOrDefault(albumName, new Album(-1, "null album!"));
@@ -90,8 +99,18 @@ public class TrackLoader {
         return album.getTracks();
     }
 
-    public Set<String> getArtists(){
-        return artists;
+
+    public List<Track> getTracksForArtist(String artistName){
+        Artist artist =  artists.getOrDefault(artistName, new Artist(-1, "null album!"));
+        if(artist == null){
+            return Collections.emptyList();
+        }
+        return artist.getTracks();
+    }
+
+
+    public Set<String> getArtistsSet(){
+        return artistsSet;
     }
 
 
@@ -114,9 +133,6 @@ public class TrackLoader {
             cursor.close();
         }
     }
-
-    private Map<String, Integer> columnMap;
-
 
     public void rebuildTables(){
      //   trackRepository.recreateTracksTables();
@@ -173,47 +189,73 @@ public class TrackLoader {
         columnMap.put(str, cursor.getColumnIndexOrThrow(str));
     }
 
-    private int albumCount;
-
 
     private void addTrack(Cursor cursor) {
-
         String path = getValueFrom(cursor, MediaStore.Audio.Media.DATA);
         if (!isContainingCorrectPath(path)) {
             return;
         }
-        String genre = "";
-        int trackNumber = -1;
         String albumName = getValueFrom(cursor, MediaStore.Audio.Media.ALBUM);
-
-
-        String artist = getValueFrom(cursor, MediaStore.Audio.Media.ARTIST);
-        artists.add(artist);
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            genre = getValueFrom(cursor, MediaStore.Audio.Media.GENRE);
-            trackNumber = getIntValueFrom(cursor, MediaStore.Audio.Media.CD_TRACK_NUMBER);
-        }
+        String artistName = getValueFrom(cursor, MediaStore.Audio.Media.ARTIST);
 
         Track track = new Track(
                 path,
                 getValueFrom(cursor, MediaStore.Audio.Media.TITLE),
-                artist,
+                artistName,
                 albumName,
-                genre,
+                getGenre(cursor),
                 getIntValueFrom(cursor, MediaStore.Audio.Media.DURATION),
-                trackNumber
+                getTrackNumber(cursor)
         );
         tracks.add(track);
         addToAlbum(track, albumName);
+        addToArtist(track, artistName);
+    }
+
+
+    private void addToArtist(Track track, String artistName){
+        if(artists.containsKey(artistName)){
+            Artist savedArtist = artists.get(artistName);
+            if(savedArtist !=null){
+                savedArtist.addTrack(track);
+                return;
+            }
+        }
+        Artist artist = new Artist(artistCount++, artistName);
+        artist.addTrack(track);
+        artists.put(artistName, artist);
     }
 
 
     private void addToAlbum(Track track, String albumName){
-        Album album = albums.putIfAbsent(albumName, new Album(albumCount++, albumName));
-        if(album != null){
-            album.addTrack(track);
+        if(albums.containsKey(albumName)){
+            Album savedAlbum= albums.get(albumName);
+            if(savedAlbum !=null){
+                savedAlbum.addTrack(track);
+                return;
+            }
         }
+        Album album = new Album(albumCount++, albumName);
+        album.addTrack(track);
+        albums.put(albumName, album);
+    }
+
+
+    private String getGenre(Cursor cursor){
+        String genre = "";
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            genre = getValueFrom(cursor, MediaStore.Audio.Media.GENRE);
+        }
+        return genre;
+    }
+
+
+    private int getTrackNumber(Cursor cursor){
+        int trackNumber = 0;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            trackNumber = getIntValueFrom(cursor, MediaStore.Audio.Media.CD_TRACK_NUMBER);
+        }
+        return trackNumber;
     }
 
 

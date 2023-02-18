@@ -64,7 +64,6 @@ public class AlbumsFragment extends Fragment {
 
         getParentFragmentManager().setFragmentResultListener(MainActivity.SEND_ALBUMS_TO_FRAGMENT, this, (requestKey, bundle) -> {
             ArrayList<String> albumNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ALBUM_UPDATES);
-
             listAdapter.setItems(albumNames);
             listAdapter.notifyDataSetChanged();
         });

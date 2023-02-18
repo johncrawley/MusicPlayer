@@ -36,15 +36,17 @@ public interface PlaylistManager {
     int getNumberOfTracks();
     void enableShuffle();
     void disableShuffle();
+    boolean isShuffleEnabled();
     void onDestroy();
-    void loadTracksFromArtist(Artist artist);
-    void addTracksFromArtistToCurrentPlaylist(Artist artist);
+    void addTracksFromArtistToCurrentPlaylist(String artistName);
     void addTracksFromAlbumToCurrentPlaylist(String albumName);
 
     Set<String> getArtists();
     void loadTracksFromAlbum(String albumName);
     Map<String, Album> getAlbums();
     ArrayList<String> getAlbumNames();
+    void loadTracksFromArtist(String artistName);
+    ArrayList<String> getArtistNames();
 
     String getTrackNameAt(int position);
 
