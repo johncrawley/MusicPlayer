@@ -37,6 +37,7 @@ public class MediaNotificationManager {
     }
 
 
+
     Notification createNotification(String heading, String channelName){
         final NotificationCompat.Builder notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(heading)
@@ -99,15 +100,6 @@ public class MediaNotificationManager {
             notification.addAction(android.R.drawable.ic_media_play,
                     context.getString(R.string.notification_button_title_play),
                     createPendingIntentFor(ACTION_PLAY));
-        }
-    }
-
-
-    private void addStopButtonTo(NotificationCompat.Builder notification){
-        if(mediaPlayerService.isPlaying()){
-            notification.addAction(android.R.drawable.ic_media_previous,
-                    context.getString(R.string.notification_button_title_stop),
-                    createPendingIntentFor(ACTION_STOP_PLAYER));
         }
     }
 

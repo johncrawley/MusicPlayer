@@ -156,7 +156,12 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void stop(boolean shouldUpdateMainView){
+    private void stop(boolean shouldUpdateMainView){
+        stop(shouldUpdateMainView, true);
+    }
+
+
+    private void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
         if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED) {
             mediaPlayer.stop();
             currentState = MediaPlayerState.STOPPED;
@@ -164,7 +169,9 @@ public class MediaPlayerService extends Service {
         }
         stopUpdatingElapsedTimeOnView();
         elapsedTime = 0;
-        mediaNotificationManager.updateNotification();
+        if(shouldUpdateNotification) {
+            mediaNotificationManager.updateNotification();
+        }
         if(shouldUpdateMainView) {
             if(mainActivity != null) {
                 mainActivity.notifyMediaPlayerStopped();
@@ -172,6 +179,7 @@ public class MediaPlayerService extends Service {
         }
         cancelFutures();
     }
+
 
 
     public void seek(int milliseconds){
@@ -278,7 +286,6 @@ public class MediaPlayerService extends Service {
 
     private void updateViewTrackList(){
         int currentTrackIndex = currentTrack == null ? -1 : currentTrack.getIndex();
-        log("updateViewTracksList() tracks size = " + playlistManager.getTracks().size());
         mainActivity.updateTracksList(playlistManager.getTracks(), currentTrackIndex);
     }
 
@@ -461,17 +468,11 @@ public class MediaPlayerService extends Service {
         super.onDestroy();
         unregisterBroadcastReceivers();
         releaseMediaPlayerAndLocks();
-        stop();
+        stop(false, false);
         mediaPlayer.release();
         mediaPlayer = null;
-    }
-
-
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
-        super.onTaskRemoved(rootIntent);
         mediaNotificationManager.dismissNotification();
-        this.stopSelf();
+        mediaNotificationManager = null;
     }
 
 
@@ -673,7 +674,6 @@ public class MediaPlayerService extends Service {
         wasInfoFound = false;
         mediaNotificationManager.updateNotification();
         mainActivity.notifyMediaPlayerPaused();
-        log("pause() mediaPlayer isPlaying() : " + mediaPlayer.isPlaying());
         cancelFutures();
     }
 

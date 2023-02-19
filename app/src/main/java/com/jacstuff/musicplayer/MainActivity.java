@@ -239,9 +239,7 @@ public class MainActivity extends AppCompatActivity {
     public void disableViewForAWhile(View view, int delayTime) {
         view.setEnabled(false);
         Handler handler = new Handler(getMainLooper());
-        handler.postDelayed(()->{
-            view.setEnabled(true);
-        },delayTime);
+        handler.postDelayed(()->view.setEnabled(true), delayTime);
     }
 
 
@@ -252,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void selectTrack(int index) {
-        log("Entered selectTrack() playButton is enabled: " +  playButton.isEnabled());
         mediaPlayerService.selectTrack(index);
     }
 
@@ -581,19 +578,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void log(String msg){
-        System.out.println("^^^ MainActivity: " + msg);
-    }
-
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
         runOnUiThread(()-> {
-            if(tracksFragment == null) {
-                return;
+            if(tracksFragment != null) {
+                tracksFragment.updateTracksList(updatedTracks, currentTrackIndex);
+                updateViews(updatedTracks);
             }
-            log("updateTracksList() number of tracks: " + updatedTracks.size());
-            tracksFragment.updateTracksList(updatedTracks, currentTrackIndex);
-            updateViews(updatedTracks);
         });
     }
 
