@@ -322,11 +322,12 @@ public class MediaPlayerService extends Service {
 
 
     private void loadNext(){
+        Track nextTrack = playlistManager.getNextTrack();
         if(playlistManager.hasTracksQueued()){
-            loadTrackDeselectCurrentTrack(playlistManager.getNextTrack());
+            loadTrackDeselectCurrentTrack(nextTrack);
             return;
         }
-        loadTrack(playlistManager.getNextTrack());
+        loadTrack(nextTrack);
     }
 
 
@@ -336,14 +337,14 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void loadTrack(Track track){
+    private void loadTrack(Track track){
         assignTrack(track);
         mainActivity.scrollToPosition(track.getIndex());
         mediaNotificationManager.updateNotification();
     }
 
 
-    public void loadTrackDeselectCurrentTrack(Track track){
+    private void loadTrackDeselectCurrentTrack(Track track){
         assignTrack(track);
         mainActivity.deselectCurrentTrack();
         mediaNotificationManager.updateNotification();
@@ -384,6 +385,9 @@ public class MediaPlayerService extends Service {
             return;
         }
         mainActivity.setTrackInfoOnView(currentTrack, 0);
+        if(currentState == MediaPlayerState.PAUSED){
+            mainActivity.hideTrackSeekBar();
+        }
         selectTrack(currentTrack);
     }
 

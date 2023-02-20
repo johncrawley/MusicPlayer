@@ -448,6 +448,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void hideTrackSeekBar(){
+        trackTimeSeekBar.setVisibility(View.INVISIBLE);
+    }
+
+
     public void notifyMediaPlayerPaused(){
         runOnUiThread(()->{
             playButton.setVisibility(View.VISIBLE);
