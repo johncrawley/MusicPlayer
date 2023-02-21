@@ -100,12 +100,17 @@ public class MediaPlayerService extends Service {
             isScanningForTracks = true;
             playlistManager.addTracksFromStorage(this);
             playlistManager.loadAllTracksPlaylist();
-            updateViewTrackList();
-            mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
-            mainActivity.updateArtistsList(playlistManager.getArtistNames());
+            updateListViews();
             ensureATrackIsSelectedIfAvailable();
             isScanningForTracks = false;
         });
+    }
+
+
+    private void updateListViews(){
+        updateViewTrackList();
+        mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
+        mainActivity.updateArtistsList(playlistManager.getArtistNames());
     }
 
 
@@ -426,7 +431,7 @@ public class MediaPlayerService extends Service {
             haveTracksBeenLoaded = true;
             return;
         }
-        initPlaylist();
+        updateListViews();
     }
 
 
