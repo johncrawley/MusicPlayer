@@ -35,7 +35,6 @@ public class TrackLoader {
     private ArrayList<String> sortedArtistNames;
 
 
-
     public TrackLoader(Context context){
         this.context  = context;
         albums = new HashMap<>();
@@ -96,7 +95,7 @@ public class TrackLoader {
         if(album == null){
             return Collections.emptyList();
         }
-        return album.getTracks();
+        return album.getAllTracks();
     }
 
 
@@ -208,7 +207,7 @@ public class TrackLoader {
                 getTrackNumber(cursor)
         );
         tracks.add(track);
-        addToAlbum(track, albumName);
+        addToAlbum(track, albumName, artistName);
         addToArtist(track, artistName);
     }
 
@@ -227,11 +226,12 @@ public class TrackLoader {
     }
 
 
-    private void addToAlbum(Track track, String albumName){
+    private void addToAlbum(Track track, String albumName, String artistName){
         if(albums.containsKey(albumName)){
             Album savedAlbum= albums.get(albumName);
             if(savedAlbum !=null){
                 savedAlbum.addTrack(track);
+                savedAlbum.addArtist(artistName);
                 return;
             }
         }

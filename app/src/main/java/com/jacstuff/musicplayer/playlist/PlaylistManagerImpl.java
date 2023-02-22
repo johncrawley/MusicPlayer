@@ -294,7 +294,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(savedAlbum == null){
             return;
         }
-        tracks = getSortedTracks(savedAlbum.getTracks());
+        tracks = getSortedTracks(savedAlbum.getAllTracks());
         assignIndexesToTracks();
         setupQueue();
         currentPlaylist = someAlbumPlaylist;
