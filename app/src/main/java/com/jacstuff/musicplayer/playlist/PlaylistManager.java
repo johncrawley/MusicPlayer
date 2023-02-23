@@ -1,7 +1,6 @@
 package com.jacstuff.musicplayer.playlist;
 
 import com.jacstuff.musicplayer.db.album.Album;
-import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
@@ -22,6 +21,7 @@ public interface PlaylistManager {
     Track getPreviousTrack();
     Track getNextRandomUnPlayedTrack();
     Track selectTrack(int index);
+    void addToTrackHistory(Track track);
     void addTracksFromStorage(MediaPlayerService mediaPlayerService);
     List<Track> getTracks();
     void init();

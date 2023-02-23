@@ -186,7 +186,6 @@ public class MediaPlayerService extends Service {
     }
 
 
-
     public void seek(int milliseconds){
         if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
             mediaPlayer.seekTo(milliseconds);
@@ -307,8 +306,9 @@ public class MediaPlayerService extends Service {
 
     public void selectAndPlayTrack(Track track){
         selectTrack(track);
+        playlistManager.addToTrackHistory(track);
         if(currentState == MediaPlayerState.STOPPED){
-            play();
+            updateViewsEnsurePlayerStoppedAndSchedulePlay();
         }
         mainActivity.setTrackInfoOnView(currentTrack, 0);
         cancelFutures();
@@ -408,14 +408,14 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void selectTrack(Track track){
+    private void selectTrack(Track track){
         MediaPlayerState oldState = currentState;
         if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
             stop(false);
         }
         currentTrack = track;
         if(oldState == MediaPlayerState.PLAYING){
-            play();
+            updateViewsEnsurePlayerStoppedAndSchedulePlay();
         }
     }
 
@@ -464,7 +464,7 @@ public class MediaPlayerService extends Service {
         mediaPlayer.reset();
         loadNextTrack();
         if(shouldNextTrackPlayAfterCurrentTrackEnds) {
-            play();
+            updateViewsEnsurePlayerStoppedAndSchedulePlay();
         }
         else{
             stop();
@@ -526,7 +526,7 @@ public class MediaPlayerService extends Service {
 
     public void playTrack(){
         if(currentState == MediaPlayerState.STOPPED || currentState == MediaPlayerState.FINISHED){
-            play();
+            updateViewsEnsurePlayerStoppedAndSchedulePlay();
         }
         else if(currentState == MediaPlayerState.PAUSED){
             resume();
@@ -597,7 +597,7 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void play() {
+    private void updateViewsEnsurePlayerStoppedAndSchedulePlay() {
         updateViewsForConnecting();
         stopRunningMediaPlayer();
         shouldNextTrackPlayAfterCurrentTrackEnds = true;
@@ -610,8 +610,8 @@ public class MediaPlayerService extends Service {
         try {
             setCpuWakeLock();
             mediaPlayer.setDataSource(currentTrack.getPathname());
+            mediaPlayer.setOnPreparedListener(MediaPlayer::start);
             mediaPlayer.prepare();
-            mediaPlayer.start();
             startUpdatingElapsedTimeOnView();
             currentState = MediaPlayerState.PLAYING;
             mainActivity.notifyMediaPlayerPlaying();
@@ -742,7 +742,7 @@ public class MediaPlayerService extends Service {
                 resume();
             }
             else if(currentState == MediaPlayerState.STOPPED) {
-                play();
+                updateViewsEnsurePlayerStoppedAndSchedulePlay();
             }
         }
     };

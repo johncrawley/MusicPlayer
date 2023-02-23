@@ -384,7 +384,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    public Track getNextTrackOnList(){
+    private Track getNextTrackOnList(){
         if(!attemptSetupOfIndexesIfEmpty()){
             return null;
         }
@@ -439,6 +439,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
+    @Override
     public Track selectTrack(int index){
         if(index > tracks.size()){
             return null;
@@ -448,6 +449,13 @@ public class PlaylistManagerImpl implements PlaylistManager {
         Track track = tracks.get(index);
         trackHistory.add(track);
         return tracks.get(index);
+    }
+
+
+    @Override
+    public void addToTrackHistory(Track track) {
+        trackHistory.removeHistoriesAfterCurrent();
+        trackHistory.add(track);
     }
 
 
