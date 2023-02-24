@@ -65,7 +65,6 @@ public class MediaPlayerService extends Service {
     private Track currentTrack;
     private boolean shouldNextTrackPlayAfterCurrentTrackEnds = true;
     private ScheduledFuture<?> updateElapsedTimeFuture;
-    private boolean isPlaylistInitialized;
     private int elapsedTime;
     private TrackFinder trackFinder;
     private ScheduledFuture<?> stopTrackFuture;
@@ -224,17 +223,6 @@ public class MediaPlayerService extends Service {
     }
 
 
-    public void initPlaylist(){
-        executorService.execute(() -> {
-            reloadPlaylistIfNotInitialized();
-            mainActivity.enableControls();
-            updatePlayPauseOnView();
-            updateViewTrackList();
-            mainActivity.setTrackInfoOnView(currentTrack, elapsedTime);
-        });
-    }
-
-
     public void loadPlaylist(Playlist playlist){
         playlistManager.loadPlaylist(playlist);
         updateViewTrackListAndDeselectList();
@@ -254,31 +242,10 @@ public class MediaPlayerService extends Service {
         mediaNotificationManager.updateNotification();
     }
 
-    
-    private void reloadPlaylistIfNotInitialized(){
-        if(!isPlaylistInitialized) {
-            playlistManager.init();
-            loadNextTrack();
-            isPlaylistInitialized = true;
-            mainActivity.updateTracksList(playlistManager.getTracks(), playlistManager.getCurrentTrackIndex());
-            mainActivity.displayPlaylistRefreshedMessage(getTrackCount());
-        }
-    }
-
 
     private void initTrackFinder(){
         if(trackFinder == null){
             trackFinder =  new TrackFinder(trackLoader);
-        }
-    }
-
-
-    private void updatePlayPauseOnView(){
-        if(isPlaying()){
-            mainActivity.notifyMediaPlayerPlaying();
-        }
-        else if(currentState == MediaPlayerState.PAUSED){
-            mainActivity.notifyMediaPlayerPaused();
         }
     }
 
