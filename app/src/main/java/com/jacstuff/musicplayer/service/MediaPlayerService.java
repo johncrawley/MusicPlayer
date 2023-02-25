@@ -13,7 +13,9 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.PowerManager;
 
 
@@ -35,6 +37,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MediaPlayerService extends Service {
 
@@ -70,6 +73,8 @@ public class MediaPlayerService extends Service {
     private ScheduledFuture<?> stopTrackFuture;
     private TrackLoader trackLoader;
     private boolean haveTracksBeenLoaded;
+    private final AtomicBoolean shouldSkipBroadcastReceivedForTrackChange = new AtomicBoolean();
+    private final AtomicBoolean isPreparingTrack = new AtomicBoolean();
 
 
 
@@ -182,6 +187,17 @@ public class MediaPlayerService extends Service {
             }
         }
         cancelFutures();
+    }
+
+
+    private void stopRunningMediaPlayer(){
+        currentState = MediaPlayerState.STOPPED;
+        if(mediaPlayer != null){
+            if(mediaPlayer.isPlaying()){
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+            }
+        }
     }
 
 
@@ -310,6 +326,9 @@ public class MediaPlayerService extends Service {
 
 
     private void loadTrack(Track track){
+        if(isPreparingTrack.get()){
+            return;
+        }
         assignTrack(track);
         mainActivity.scrollToPosition(track.getIndex());
         mediaNotificationManager.updateNotification();
@@ -361,17 +380,6 @@ public class MediaPlayerService extends Service {
             mainActivity.hideTrackSeekBar();
         }
         selectTrack(currentTrack);
-    }
-
-
-    private void stopRunningMediaPlayer(){
-        currentState = MediaPlayerState.STOPPED;
-        if(mediaPlayer != null){
-            if(mediaPlayer.isPlaying()){
-                mediaPlayer.stop();
-                mediaPlayer.reset();
-            }
-        }
     }
 
 
@@ -575,6 +583,7 @@ public class MediaPlayerService extends Service {
     private void startTrack(){
         hasEncounteredError = false;
         try {
+            isPreparingTrack.set(true);
             setCpuWakeLock();
             mediaPlayer.setDataSource(currentTrack.getPathname());
             mediaPlayer.setOnPreparedListener(MediaPlayer::start);
@@ -587,6 +596,8 @@ public class MediaPlayerService extends Service {
             e.printStackTrace();
             onError();
             mainActivity.displayError(currentTrack);
+        }finally{
+            isPreparingTrack.set(false);
         }
     }
 
@@ -718,7 +729,7 @@ public class MediaPlayerService extends Service {
     private final BroadcastReceiver serviceReceiverForNext = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            loadNextTrack();
+            handleTrackChangeRequest(MediaPlayerService.this::loadNextTrack);
         }
     };
 
@@ -726,9 +737,21 @@ public class MediaPlayerService extends Service {
     private final BroadcastReceiver serviceReceiverForPrevious = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            loadPreviousTrack();
+            handleTrackChangeRequest(MediaPlayerService.this::loadPreviousTrack);
         }
     };
+
+
+    private void handleTrackChangeRequest(Runnable operation){
+        if(shouldSkipBroadcastReceivedForTrackChange.get()){
+            return;
+        }
+        shouldSkipBroadcastReceivedForTrackChange.set(true);
+        operation.run();
+        new Handler(Looper.getMainLooper()).postDelayed(()->{
+            shouldSkipBroadcastReceivedForTrackChange.set(false);
+        }, 600);
+    }
 
 
     private final BroadcastReceiver serviceReceiverForRequestStatus = new BroadcastReceiver() {

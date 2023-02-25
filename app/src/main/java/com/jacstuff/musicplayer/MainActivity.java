@@ -230,6 +230,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void previousTrack(){
+        disableViewForAWhile(previousTrackButton);
+        mediaPlayerService.loadPreviousTrack();
+    }
+
+
     public void disableViewForAWhile(View view){
         disableViewForAWhile(view, 700);
     }
@@ -239,12 +245,6 @@ public class MainActivity extends AppCompatActivity {
         view.setEnabled(false);
         Handler handler = new Handler(getMainLooper());
         handler.postDelayed(()->view.setEnabled(true), delayTime);
-    }
-
-
-    public void previousTrack(){
-        disableViewForAWhile(previousTrackButton);
-        mediaPlayerService.loadPreviousTrack();
     }
 
 
