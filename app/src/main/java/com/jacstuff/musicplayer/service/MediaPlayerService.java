@@ -39,7 +39,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class MediaPlayerService extends Service {
+public class MediaPlayerService extends Service implements MediaPlayer.OnPreparedListener{
 
     public static final String ACTION_PLAY = "com.j.crawley.music_player.play";
     public static final String ACTION_PAUSE_PLAYER = "com.j.crawley.music_player.pausePlayer";
@@ -59,6 +59,9 @@ public class MediaPlayerService extends Service {
     private MediaNotificationManager mediaNotificationManager;
     private final ScheduledExecutorService executorService;
     Map<BroadcastReceiver, String> broadcastReceiverMap;
+
+
+
     private enum MediaPlayerState { PAUSED, PLAYING, STOPPED, FINISHED}
     private MediaPlayerState currentState = MediaPlayerState.STOPPED;
     private MainActivity mainActivity;
@@ -584,9 +587,11 @@ public class MediaPlayerService extends Service {
         hasEncounteredError = false;
         try {
             isPreparingTrack.set(true);
+            stopPlayer();
+            createMediaPlayer();
             setCpuWakeLock();
             mediaPlayer.setDataSource(currentTrack.getPathname());
-            mediaPlayer.setOnPreparedListener(MediaPlayer::start);
+            mediaPlayer.setOnPreparedListener(this);
             mediaPlayer.prepare();
             startUpdatingElapsedTimeOnView();
             currentState = MediaPlayerState.PLAYING;
@@ -602,7 +607,14 @@ public class MediaPlayerService extends Service {
     }
 
 
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        mediaPlayer.start();
+    }
+
+
     private void onError(){
+        log("entered onError()");
         currentState = MediaPlayerState.STOPPED;
         mainActivity.notifyMediaPlayerStopped();
         releaseAndResetMediaPlayer();
