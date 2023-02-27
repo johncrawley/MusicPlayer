@@ -66,7 +66,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     private MediaPlayerState currentState = MediaPlayerState.STOPPED;
     private MainActivity mainActivity;
     private PlaylistManager playlistManager;
-    private boolean isScanningForTracks;
     private final IBinder binder = new LocalBinder();
     private Track currentTrack;
     private boolean shouldNextTrackPlayAfterCurrentTrackEnds = true;
@@ -78,6 +77,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     private boolean haveTracksBeenLoaded;
     private final AtomicBoolean shouldSkipBroadcastReceivedForTrackChange = new AtomicBoolean();
     private final AtomicBoolean isPreparingTrack = new AtomicBoolean();
+    private final AtomicBoolean isScanningForTracks = new AtomicBoolean();
 
 
 
@@ -99,17 +99,30 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    public void loadTrackDataFromFilesystem(){
-        if(isScanningForTracks){
-            return;
-        }
+
+    private void loadTrackDataFromFilesystem(){
+        isScanningForTracks.set(true);
         executorService.execute(()->{
-            isScanningForTracks = true;
             playlistManager.addTracksFromStorage(this);
             playlistManager.loadAllTracksPlaylist();
             updateListViews();
             ensureATrackIsSelectedIfAvailable();
-            isScanningForTracks = false;
+            isScanningForTracks.set(false);
+        });
+    }
+
+
+    public void refreshTrackDataFromFilesystem(){
+        if(isScanningForTracks.get()){
+            return;
+        }
+        isScanningForTracks.set(true);
+        executorService.execute(()->{
+            playlistManager.addTracksFromStorage(this);
+            updateListViews();
+            initTrackFinder();
+            trackFinder.initCache();
+            isScanningForTracks.set(false);
         });
     }
 
@@ -118,14 +131,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
         updateViewTrackList();
         mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
         mainActivity.updateArtistsList(playlistManager.getArtistNames());
-    }
-
-
-    public void deleteAll(){
-        executorService.execute(()->{
-            playlistManager.deleteAll();
-            updateViewTrackList();
-        });
     }
 
 
@@ -760,9 +765,9 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
         }
         shouldSkipBroadcastReceivedForTrackChange.set(true);
         operation.run();
-        new Handler(Looper.getMainLooper()).postDelayed(()->{
-            shouldSkipBroadcastReceivedForTrackChange.set(false);
-        }, 600);
+        new Handler(Looper.getMainLooper())
+                .postDelayed(()-> shouldSkipBroadcastReceivedForTrackChange.set(false),
+                        600);
     }
 
 

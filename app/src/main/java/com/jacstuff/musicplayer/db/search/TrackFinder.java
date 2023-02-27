@@ -11,12 +11,17 @@ import java.util.stream.Collectors;
 
 public class TrackFinder {
 
-    private final Map<String, List<Track>> resultsMap;
+    private Map<String, List<Track>> resultsMap;
     private final TrackLoader trackLoader;
 
 
     public TrackFinder(TrackLoader trackLoader){
         this.trackLoader = trackLoader;
+        initCache();
+    }
+
+
+    public void initCache(){
         resultsMap = new HashMap<>();
     }
 

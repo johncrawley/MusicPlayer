@@ -58,6 +58,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final  String BUNDLE_KEY_ALBUM_UPDATES = "bundle_key_album_updates";
+    public static final  String BUNDLE_KEY_ARTIST_UPDATES = "bundle_key_artist_updates";
+    public static final String SEND_ALBUMS_TO_FRAGMENT = "send_albums_to_fragment";
+    public static final String SEND_ARTISTS_TO_FRAGMENT = "send_artists_to_fragment";
     private ViewStateAdapter viewStateAdapter;
     private MediaPlayerService mediaPlayerService;
     private TextView trackTime, trackTitle, trackAlbum, trackArtist;
@@ -502,15 +506,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void enableControls(){
-        runOnUiThread(()->{
-            playButton.setEnabled(true);
-            nextTrackButton.setEnabled(true);
-            previousTrackButton.setEnabled(true);
-        });
-    }
-
-
     public void hideSeekButtonsIfOnlyOneTrack(int numberOfTracks){
         if(numberOfTracks < 2){
             nextTrackButton.setVisibility(View.INVISIBLE);
@@ -601,23 +596,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static final  String BUNDLE_KEY_ALBUM_UPDATES = "bundle_key_album_updates";
-    public static final  String BUNDLE_KEY_ARTIST_UPDATES = "bundle_key_artist_updates";
-    public static final String SEND_ALBUMS_TO_FRAGMENT = "send_albums_to_fragment";
-    public static final String SEND_ARTISTS_TO_FRAGMENT = "send_artists_to_fragment";
-
-
     public void updateAlbumsList(ArrayList<String> albums){
         Bundle bundle = new Bundle();
         bundle.putStringArrayList(BUNDLE_KEY_ALBUM_UPDATES, albums);
-        getSupportFragmentManager().setFragmentResult(SEND_ALBUMS_TO_FRAGMENT, bundle);
+        runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(SEND_ALBUMS_TO_FRAGMENT, bundle));
     }
 
 
     public void updateArtistsList(ArrayList<String> artists){
         Bundle bundle = new Bundle();
         bundle.putStringArrayList(BUNDLE_KEY_ARTIST_UPDATES, artists);
-        getSupportFragmentManager().setFragmentResult(SEND_ARTISTS_TO_FRAGMENT, bundle);
+        runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(SEND_ARTISTS_TO_FRAGMENT, bundle));
     }
 
 
@@ -689,17 +678,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.refresh_button) {
-          mediaPlayerService.loadTrackDataFromFilesystem();
+          mediaPlayerService.refreshTrackDataFromFilesystem();
         }
         else if(id == R.id.search){
             toggleSearch();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-
-    private void deleteAllTrackListings(){
-        mediaPlayerService.deleteAll();
     }
 
 

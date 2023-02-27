@@ -32,7 +32,6 @@ public class TrackLoader {
     private long artistCount;
     private int albumCount;
     private Map<String, Integer> columnMap;
-    private ArrayList<String> sortedArtistNames;
 
 
     public TrackLoader(Context context){
@@ -47,7 +46,6 @@ public class TrackLoader {
         artists = new HashMap<>(500);
         artistsSet = new HashSet<>(1000);
         addTracksData();
-        log("Load audio files, number of tracks: " + tracks.size());
         return tracks;
     }
 
@@ -82,11 +80,9 @@ public class TrackLoader {
         if(artists == null){
             return new ArrayList<>();
         }
-        if(sortedArtistNames == null){
-            sortedArtistNames = new ArrayList<>(artists.keySet());
-            Collections.sort(sortedArtistNames);
-        }
-        return sortedArtistNames;
+        ArrayList<String> names = new ArrayList<>(artists.keySet());
+        Collections.sort(names);
+        return names;
     }
 
 
@@ -121,7 +117,6 @@ public class TrackLoader {
     private void addTracksData(){
         Cursor cursor = createCursorForFilesystemTracks();
         if(cursor != null){
-            log("Starting addTracks() ~~~~~~~~~~~");
             long startTime = System.currentTimeMillis();
             setupColumnMap(cursor);
             while(cursor.moveToNext()){

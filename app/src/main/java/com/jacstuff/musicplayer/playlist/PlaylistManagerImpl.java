@@ -255,7 +255,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private List<Track> getSortedTracks(List<Track> list){
-        log("Entered getSortedTracks()");
         if(list == null){
             log("getSortedTracks() list is null, returning empty list");
             return Collections.emptyList();
@@ -265,7 +264,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public void loadTracksFromArtist(String artistName){
-        log("Entered loadTracksFromArtist() name: " + artistName);
         Map <String, Artist> artists = trackLoader.getArtists();
         if(artists == null){
             return;
@@ -465,7 +463,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public List<Track> getTracks(){
-
         log("Entered getTracks() tracks size: " + tracks.size());
         return tracks;
     }
