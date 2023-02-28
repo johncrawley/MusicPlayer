@@ -159,12 +159,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void playTrack() {
-        //disableViewForAWhile(pauseButton, 300);
-        mediaPlayerService.playTrack();
-    }
-
-
     public List<String> getAlbumNames(){
         if(mediaPlayerService == null || mediaPlayerService.getPlaylistManager() == null){
             return Collections.emptyList();
@@ -184,12 +178,6 @@ public class MainActivity extends AppCompatActivity {
     public void setPlayerFragment(TracksFragment tracksFragment){
         this.tracksFragment = tracksFragment;
         onQueueFragmentReady();
-    }
-
-
-    public void stopTrack(){
-        mediaPlayerService.stop();
-        resetElapsedTime();
     }
 
 
@@ -240,6 +228,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void playTrack() {
+        mediaPlayerService.playTrack();
+    }
+
+
+    public void pauseTrack() {
+        disableViewForAWhile(playButton, 300);
+        mediaPlayerService.pause();
+    }
+
+
+    public void stopTrack(){
+        mediaPlayerService.stop();
+        resetElapsedTime();
+    }
+
+
     public void disableViewForAWhile(View view){
         disableViewForAWhile(view, 700);
     }
@@ -282,12 +287,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void pauseTrack() {
-        disableViewForAWhile(playButton, 300);
-        mediaPlayerService.pause();
-    }
-
-
     private void startMediaPlayerService(){
         Intent mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
         getApplicationContext().startForegroundService(mediaPlayerServiceIntent);
@@ -296,9 +295,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setupViews(){
-        assignViews();
+        setupPlayerButtonPanelViews();
+        assignSearchViews();
+        assignTrackInfoViews();
         setupTrackTimeSeekBar();
-        assignClickListeners();
         resetElapsedTime();
     }
 
@@ -378,33 +378,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void assignViews(){
-        trackTime = findViewById(R.id.trackTime);
-        trackTitle = findViewById(R.id.trackTitle);
-        trackAlbum = findViewById(R.id.albumTextView);
-        trackArtist = findViewById(R.id.artistTextView);
-        playerButtonPanel = findViewById(R.id.buttonLayout);
-        playButton = findViewById(R.id.playButton);
-        pauseButton = findViewById(R.id.pauseButton);
-        stopButton = findViewById(R.id.stopButton);
-        nextTrackButton = findViewById(R.id.nextTrackButton);
-        previousTrackButton = findViewById(R.id.previousTrackButton);
-        turnShuffleOnButton = findViewById(R.id.turnShuffleOnButton);
-        turnShuffleOffButton = findViewById(R.id.turnShuffleOffButton);
+    private void assignSearchViews(){
         searchView = findViewById(R.id.searchView);
         searchEditText = findViewById(R.id.trackSearchEditText);
     }
 
 
-    private void assignClickListeners(){
-        playButton.setOnClickListener((View v) -> playTrack());
-        pauseButton.setOnClickListener((View v) -> pauseTrack());
-        nextTrackButton.setOnClickListener((View v) -> nextTrack());
-        previousTrackButton.setOnClickListener((View v) -> previousTrack());
-        stopButton.setOnClickListener((View v) -> stopTrack());
+    private void assignTrackInfoViews(){
+        trackTime = findViewById(R.id.trackTime);
+        trackTitle = findViewById(R.id.trackTitle);
+        trackAlbum = findViewById(R.id.albumTextView);
+        trackArtist = findViewById(R.id.artistTextView);
+    }
+
+
+    private void setupPlayerButtonPanelViews(){
+        playerButtonPanel = findViewById(R.id.buttonLayout);
+        previousTrackButton = setupImageButton(R.id.previousTrackButton, this::previousTrack);
+        nextTrackButton     = setupImageButton(R.id.nextTrackButton, this::nextTrack);
+        playButton  = setupImageButton(R.id.playButton, this::playTrack);
+        pauseButton = setupImageButton(R.id.pauseButton, this::pauseTrack);
+        stopButton  = setupImageButton(R.id.stopButton, this:: stopTrack);
         setupStopLongClick();
-        turnShuffleOnButton.setOnClickListener((View v) -> mediaPlayerService.enableShuffle());
-        turnShuffleOffButton.setOnClickListener((View v) -> mediaPlayerService.disableShuffle());
+        turnShuffleOnButton =  setupImageButton(R.id.turnShuffleOnButton,  ()-> mediaPlayerService.enableShuffle());
+        turnShuffleOffButton = setupImageButton(R.id.turnShuffleOffButton, ()-> mediaPlayerService.disableShuffle());
+
     }
 
 
@@ -774,6 +772,13 @@ public class MainActivity extends AppCompatActivity {
 
     private Button setupButton(int buttonId, Runnable runnable){
         Button button = findViewById(buttonId);
+        button.setOnClickListener((View v)-> runnable.run());
+        return button;
+    }
+
+
+    private ImageButton setupImageButton(int buttonId, Runnable runnable){
+        ImageButton button = findViewById(buttonId);
         button.setOnClickListener((View v)-> runnable.run());
         return button;
     }

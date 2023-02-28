@@ -28,6 +28,9 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
     private final DbHelper dbHelper;
+    private final Map<String, Long> artists;
+    private final  Map<String, Long> albums;
+
 
     public TrackRepositoryImpl(Context context){
         super(context);
@@ -38,14 +41,9 @@ public class TrackRepositoryImpl extends AbstractRepository implements TrackRepo
         albums = new HashMap<>();
     }
 
-    private Map<String, Long> artists;
-    private Map<String, Long> albums;
-
 
     @Override
     public void addTrack(Track track) {
-
-
         long artistId = getArtistId(track);
         long albumId = getAlbumId(track);
 
