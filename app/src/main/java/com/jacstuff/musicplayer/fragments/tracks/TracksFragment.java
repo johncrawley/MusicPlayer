@@ -59,6 +59,7 @@ public class TracksFragment extends Fragment{
 
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
+        previousIndex = 0;
         if(currentTrackIndex < 0){
             setupRecyclerView(updatedTracks);
             return;
