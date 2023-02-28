@@ -130,17 +130,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public boolean isUserPlaylistLoaded(){
+        return mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
+    }
+
+
     private void showSearch(){
         hideAllSearchResultsButtons();
         Animator animator = createShowAnimatorFor(searchView, ()-> keyboardHelper.showKeyboardAndFocusOn(searchEditText));
         searchView.setVisibility(View.VISIBLE);
         dismissSearchViewOnBackPressedCallback.setEnabled(true);
         animator.start();
-    }
-
-
-    public boolean isUserPlaylistLoaded(){
-        return mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
     }
 
 
@@ -437,7 +437,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void setBlankTrackInfo(){
-        runOnUiThread(()-> setTrackInfo(""));
+        runOnUiThread(()-> trackTitle.setText(""));
     }
 
 
@@ -497,9 +497,10 @@ public class MainActivity extends AppCompatActivity {
     public void setTrackInfoOnView(final Track track, int elapsedTime){
         runOnUiThread(()-> {
                 playerButtonPanel.setVisibility(View.VISIBLE);
-                setTrackInfo(track.getTitle());
-                setAlbumInfo(track.getAlbum());
-                setArtistInfo(track.getArtist());
+                String titleText = track.getTitle();
+                trackTitle.setText(titleText.isEmpty()? getString(R.string.no_tracks_found) : titleText);
+                trackAlbum.setText(track.getAlbum());
+                trackArtist.setText(track.getArtist());
                 setTrackTimeInfo(elapsedTime, track.getDuration());
                 trackTimeSeekBar.setProgress((int)elapsedTime);
         });
@@ -532,24 +533,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void deselectCurrentTrack(){
         tracksFragment.deselectCurrentItem();
-    }
-
-
-    public void setTrackInfo(String trackInfo){
-        if(trackInfo.isEmpty()){
-            trackInfo = getResources().getString(R.string.no_tracks_found);
-        }
-        this.trackTitle.setText(trackInfo);
-    }
-
-
-    public void setAlbumInfo(String albumInfo){
-        this.trackAlbum.setText(albumInfo);
-    }
-
-
-    public void setArtistInfo(String artistInfo){
-        this.trackArtist.setText(artistInfo);
     }
 
 
@@ -794,8 +777,4 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener((View v)-> runnable.run());
         return button;
     }
-
-
-
-
 }

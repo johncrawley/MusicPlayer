@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jacstuff.musicplayer.ListSubscriber;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.track.Track;
@@ -20,7 +19,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class TracksFragment extends Fragment implements ListSubscriber {
+public class TracksFragment extends Fragment{
 
     private RecyclerView recyclerView;
     private TrackListAdapter trackListAdapter;
@@ -151,11 +150,4 @@ public class TracksFragment extends Fragment implements ListSubscriber {
         return index + offset;
     }
 
-
-    @Override
-    public void notifyListUpdated() {
-        if(getView() == null){
-            return;
-        }
-    }
 }
