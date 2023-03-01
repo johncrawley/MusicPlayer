@@ -86,6 +86,23 @@ public class TrackLoader {
     }
 
 
+    public ArrayList<String> getMainArtistNames(){
+        if(artists == null){
+            return new ArrayList<>();
+        }
+        ArrayList<String> names = new ArrayList<>();
+        int minNumberOfTracks = 5;
+        for(String key : artists.keySet()){
+            Artist artist = artists.get(key);
+            if(artist != null && artist.getTracks().size() > minNumberOfTracks){
+                names.add(key);
+            }
+        }
+        Collections.sort(names);
+        return names;
+    }
+
+
     public List<Track> getTracksForAlbum(String albumName){
         Album album =  albums.getOrDefault(albumName, new Album(-1, "null album!"));
         if(album == null){

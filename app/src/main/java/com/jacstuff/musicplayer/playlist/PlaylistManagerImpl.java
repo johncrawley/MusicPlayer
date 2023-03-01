@@ -43,6 +43,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private Playlist currentPlaylist;
     private boolean isInitialized;
     private final ArrayDeque<Track> queuedTracks;
+    private boolean shouldOnlyDisplayMainArtists = true;
 
 
     public PlaylistManagerImpl(Context context, TrackLoader trackLoader){
@@ -119,7 +120,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public ArrayList<String> getArtistNames(){
-        return trackLoader.getArtistNames();
+        return  shouldOnlyDisplayMainArtists ?
+                trackLoader.getMainArtistNames()
+                : trackLoader.getArtistNames();
     }
 
 
@@ -127,6 +130,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
     public void deleteAll(){
         trackLoader.rebuildTables();
         initTrackList();
+    }
+
+
+    @Override
+    public void onlyDisplayMainArtists(boolean shouldOnlyDisplayMainArtists){
+        this.shouldOnlyDisplayMainArtists = shouldOnlyDisplayMainArtists;
     }
 
 

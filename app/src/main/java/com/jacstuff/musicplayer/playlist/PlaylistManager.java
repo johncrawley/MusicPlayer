@@ -47,6 +47,7 @@ public interface PlaylistManager {
     ArrayList<String> getAlbumNames();
     void loadTracksFromArtist(String artistName);
     ArrayList<String> getArtistNames();
+    void onlyDisplayMainArtists(boolean shouldOnlyDisplayMainArtists);
 
     String getTrackNameAt(int position);
 
