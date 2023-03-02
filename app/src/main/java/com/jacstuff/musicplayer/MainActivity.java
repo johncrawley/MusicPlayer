@@ -353,16 +353,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void hidePlayerViews(){
-        setVisibilityOnDetailsAndNavViews(View.INVISIBLE);
+        setVisibilityOnPlayerViews(View.INVISIBLE);
     }
 
 
     public void showPlayerViews(){
-        setVisibilityOnDetailsAndNavViews(View.VISIBLE);
+        setVisibilityOnPlayerViews(View.VISIBLE);
     }
 
 
-    public void setVisibilityOnDetailsAndNavViews(int visibility){
+    public void setVisibilityOnPlayerViews(int visibility){
         trackTitle.setVisibility(visibility);
         trackAlbum.setVisibility(visibility);
         trackArtist.setVisibility(visibility);
@@ -505,7 +505,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void hideSeekButtonsIfOnlyOneTrack(int numberOfTracks){
+
+    public void setSeekAndShuffleButtonsVisibility(int numberOfTracks){
         if(numberOfTracks < 2){
             nextTrackButton.setVisibility(View.INVISIBLE);
             previousTrackButton.setVisibility(View.INVISIBLE);
@@ -608,11 +609,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateViews(List<Track> updatedTracks){
         if(updatedTracks.isEmpty()){
-            setVisibilityOnDetailsAndNavViews(View.INVISIBLE);
+            setVisibilityOnPlayerViews(View.INVISIBLE);
             return;
         }
-        setVisibilityOnDetailsAndNavViews(View.VISIBLE);
-        hideSeekButtonsIfOnlyOneTrack(updatedTracks.size());
+        setVisibilityOnPlayerViews(View.VISIBLE);
+        setSeekAndShuffleButtonsVisibility(updatedTracks.size());
+        setPlayPauseAndTrackSeekBarVisibility();
+    }
+
+
+    private void setPlayPauseAndTrackSeekBarVisibility(){
+        if(mediaPlayerService.isPlaying()){
+            playButton.setVisibility(View.GONE);
+            pauseButton.setVisibility(View.VISIBLE);
+            trackTimeSeekBar.setVisibility(View.VISIBLE);
+            return;
+        }
+        playButton.setVisibility(View.VISIBLE);
+        pauseButton.setVisibility(View.GONE);
+        trackTimeSeekBar.setVisibility(View.INVISIBLE);
     }
 
 

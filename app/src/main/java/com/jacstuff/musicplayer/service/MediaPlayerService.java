@@ -405,14 +405,28 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
-        if(playlistManager == null) {
-            trackLoader = new TrackLoader(getApplicationContext());
-            playlistManager = new PlaylistManagerImpl(mainActivity.getApplicationContext(), trackLoader);
-        }
+        createPlaylistManagerAndTrackLoader();
         if(!haveTracksBeenLoaded){
             loadTrackDataFromFilesystem();
             haveTracksBeenLoaded = true;
             return;
+        }
+        updateViews();
+    }
+
+
+
+    private void createPlaylistManagerAndTrackLoader(){
+        if(playlistManager == null) {
+            trackLoader = new TrackLoader(getApplicationContext());
+            playlistManager = new PlaylistManagerImpl(mainActivity.getApplicationContext(), trackLoader);
+        }
+    }
+
+
+    private void updateViews(){
+        if(currentTrack != null){
+            mainActivity.setTrackInfoOnView(currentTrack, 0);
         }
         updateListViews();
     }
