@@ -11,10 +11,10 @@ import com.jacstuff.musicplayer.fragments.artist.ArtistsFragment;
 import com.jacstuff.musicplayer.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 
-public class ViewStateAdapter extends FragmentStateAdapter {
+public class TabsViewStateAdapter extends FragmentStateAdapter {
 
 
-    public ViewStateAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
+    public TabsViewStateAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
     }
 

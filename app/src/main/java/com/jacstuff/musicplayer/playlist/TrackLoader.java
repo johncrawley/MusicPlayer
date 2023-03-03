@@ -99,7 +99,7 @@ public class TrackLoader {
             }
         }
         Collections.sort(names);
-        return names;
+        return new ArrayList<>(names);
     }
 
 

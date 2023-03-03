@@ -2,6 +2,8 @@ package com.jacstuff.musicplayer;
 
 import static com.jacstuff.musicplayer.search.AnimatorHelper.createShowAnimatorFor;
 
+import static java.security.AccessController.getContext;
+
 import android.Manifest;
 
 import androidx.activity.OnBackPressedCallback;
@@ -12,11 +14,13 @@ import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,14 +43,16 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.fragments.SettingsFragment;
 import com.jacstuff.musicplayer.fragments.options.StopOptionsFragment;
 import com.jacstuff.musicplayer.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
-import com.jacstuff.musicplayer.fragments.ViewStateAdapter;
+import com.jacstuff.musicplayer.fragments.TabsViewStateAdapter;
 import com.jacstuff.musicplayer.list.SearchResultsListAdapter;
 import com.jacstuff.musicplayer.search.AnimatorHelper;
 import com.jacstuff.musicplayer.search.KeyListenerHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
+import com.jacstuff.musicplayer.theme.ThemeChanger;
 import com.jacstuff.musicplayer.utils.KeyboardHelper;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
@@ -62,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     public static final  String BUNDLE_KEY_ARTIST_UPDATES = "bundle_key_artist_updates";
     public static final String SEND_ALBUMS_TO_FRAGMENT = "send_albums_to_fragment";
     public static final String SEND_ARTISTS_TO_FRAGMENT = "send_artists_to_fragment";
-    private ViewStateAdapter viewStateAdapter;
+    private TabsViewStateAdapter tabsViewStateAdapter;
     private MediaPlayerService mediaPlayerService;
     private TextView trackTime, trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton, pauseButton, stopButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton;
@@ -98,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeChanger.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_main);
         setupViewModel();
         keyboardHelper = new KeyboardHelper(this);
@@ -107,6 +114,32 @@ public class MainActivity extends AppCompatActivity {
         startMediaPlayerService();
         setupSearchView();
         setupDismissSearchOnBackPressed();
+    }
+
+    public void onStart(){
+        super.onStart();
+        log("Entered onStart()");
+        changeTheme();
+    }
+
+    private String currentThemeKey;
+
+    private void changeTheme() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        String themeKey = prefs.getString("theme_color", "green");
+        if(themeKey.equals(currentThemeKey)){
+            return;
+        }
+        if(currentThemeKey != null){
+            ThemeChanger.changeToTheme(this, themeKey);
+        }
+        currentThemeKey = themeKey;
+    }
+
+
+
+    private void log(String msg){
+        System.out.println("^^^ MainActivity: " + msg);
     }
 
 
@@ -338,8 +371,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        if(viewStateAdapter != null) {
-            viewStateAdapter = null;
+        if(tabsViewStateAdapter != null) {
+            tabsViewStateAdapter = null;
         }
     }
 
@@ -422,6 +455,15 @@ public class MainActivity extends AppCompatActivity {
         removePreviousFragmentTransaction(tag, fragmentTransaction);
         StopOptionsFragment stopOptionsFragment = StopOptionsFragment.newInstance();
         stopOptionsFragment.show(fragmentTransaction, tag);
+    }
+
+
+    private void createSettingsFragment(){
+        String tag = "settings_dialog";
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        removePreviousFragmentTransaction(tag, fragmentTransaction);
+        SettingsFragment settingsFragment = SettingsFragment.newInstance();
+        settingsFragment.show(fragmentTransaction, tag);
     }
 
 
@@ -546,8 +588,8 @@ public class MainActivity extends AppCompatActivity {
         if(tabLayout == null){
             return;
         }
-        viewStateAdapter = new ViewStateAdapter(getSupportFragmentManager(), getLifecycle());
-        tabViewPager.setAdapter(viewStateAdapter);
+        tabsViewStateAdapter = new TabsViewStateAdapter(getSupportFragmentManager(), getLifecycle());
+        tabViewPager.setAdapter(tabsViewStateAdapter);
         new TabHelper(viewModel).setupTabLayout(tabLayout, tabViewPager);
     }
 
@@ -679,7 +721,17 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.search){
             toggleSearch();
         }
+        else if(id == R.id.theme){
+           // createSettingsFragment();
+            startSettingsActivity();
+            //changeTheme();
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startSettingsActivity(){
+        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+        startActivity(intent);
     }
 
 

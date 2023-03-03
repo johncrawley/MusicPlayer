@@ -14,4 +14,9 @@
         android:icon="?android:attr/actionModeWebSearchDrawable"
         android:title="@string/menu_button_search"/>
 
+    <item android:id="@+id/theme" android:name="theme"
+        android:orderInCategory="100" app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="Theme change!"/>
+
 </menu>

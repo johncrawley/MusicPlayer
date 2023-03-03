@@ -70,5 +70,19 @@
     <string name="notification_button_title_next">Next</string>
 
     <string name="search_edit_text_label">Search for track title, artist or album</string>
+    <!-- Preference Titles -->
+    <string name="theme_header">Theme</string>
+    <string name="lists_header">Lists</string>
+
+    <!-- Messages Preferences -->
+    <string name="theme_title">Theme</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 
 </resources>

@@ -19,6 +19,14 @@
         <item name="imageButtonStyle">@style/customImageButtonStyle</item>
     </style>
 
+
+    <style name="YellowTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_yellow</item>
+        <item name="colorAccent">@color/color_accent_yellow</item>
+        <item name="android:textColor">@color/text_yellow</item>
+        <item name="android:buttonTint">@color/primary_yellow</item>
+    </style>
+
     <!--
         <item name="materialButtonStyle">@style/customMaterialButtonStyle</item>
 

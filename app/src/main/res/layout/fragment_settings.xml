@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/button_fragment_margin"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/themeButtonsLayout">
+
+
+        <Button
+            android:id="@+id/greenThemeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
+            android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"
+            android:text="@string/button_stop_now" />
+
+        <Button
+            android:id="@+id/yellowThemeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
+            android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"/>
+
+        <Button
+            android:id="@+id/redThemeButton"
+            style="@style/Widget.AppCompat.Button"
+            android:background="@drawable/color_button_red_selector"
+            android:backgroundTint="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
+            android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"/>
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
