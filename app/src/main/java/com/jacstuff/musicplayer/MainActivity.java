@@ -2,8 +2,6 @@ package com.jacstuff.musicplayer;
 
 import static com.jacstuff.musicplayer.search.AnimatorHelper.createShowAnimatorFor;
 
-import static java.security.AccessController.getContext;
-
 import android.Manifest;
 
 import androidx.activity.OnBackPressedCallback;
@@ -14,13 +12,11 @@ import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,7 +39,6 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.track.Track;
-import com.jacstuff.musicplayer.fragments.SettingsFragment;
 import com.jacstuff.musicplayer.fragments.options.StopOptionsFragment;
 import com.jacstuff.musicplayer.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
@@ -52,7 +47,7 @@ import com.jacstuff.musicplayer.list.SearchResultsListAdapter;
 import com.jacstuff.musicplayer.search.AnimatorHelper;
 import com.jacstuff.musicplayer.search.KeyListenerHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
-import com.jacstuff.musicplayer.theme.ThemeChanger;
+import com.jacstuff.musicplayer.theme.ThemeHelper;
 import com.jacstuff.musicplayer.utils.KeyboardHelper;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
@@ -88,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     private Track selectedSearchResultTrack;
     private KeyboardHelper keyboardHelper;
     private MainViewModel viewModel;
+    private ThemeHelper themeHelper;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -104,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeChanger.onActivityCreateSetTheme(this);
+        themeHelper = new ThemeHelper();
+        themeHelper.assignTheme(this);
         setContentView(R.layout.activity_main);
         setupViewModel();
         keyboardHelper = new KeyboardHelper(this);
@@ -116,32 +113,11 @@ public class MainActivity extends AppCompatActivity {
         setupDismissSearchOnBackPressed();
     }
 
+
     public void onStart(){
         super.onStart();
-        log("Entered onStart()");
-        changeTheme();
+        themeHelper.restartActivityIfDifferentThemeSet(this);
     }
-
-    private String currentThemeKey;
-
-    private void changeTheme() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        String themeKey = prefs.getString("theme_color", "green");
-        if(themeKey.equals(currentThemeKey)){
-            return;
-        }
-        if(currentThemeKey != null){
-            ThemeChanger.changeToTheme(this, themeKey);
-        }
-        currentThemeKey = themeKey;
-    }
-
-
-
-    private void log(String msg){
-        System.out.println("^^^ MainActivity: " + msg);
-    }
-
 
     private void toggleSearch(){
         if(searchView.getVisibility() == View.VISIBLE){
@@ -458,15 +434,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void createSettingsFragment(){
-        String tag = "settings_dialog";
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        removePreviousFragmentTransaction(tag, fragmentTransaction);
-        SettingsFragment settingsFragment = SettingsFragment.newInstance();
-        settingsFragment.show(fragmentTransaction, tag);
-    }
-
-
     private void removePreviousFragmentTransaction(String tag, FragmentTransaction fragmentTransaction){
         Fragment prev = getSupportFragmentManager().findFragmentByTag(tag);
         if (prev != null) {
@@ -722,9 +689,7 @@ public class MainActivity extends AppCompatActivity {
             toggleSearch();
         }
         else if(id == R.id.theme){
-           // createSettingsFragment();
             startSettingsActivity();
-            //changeTheme();
         }
         return super.onOptionsItemSelected(item);
     }
