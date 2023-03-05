@@ -4,12 +4,14 @@
     <color name="colorPrimaryDark">#1b5e20</color>
     <color name="colorAccent">#ffeb3b</color>
     <color name="pressed_color">#66bb6a</color>
+    <color name="default_dialog_background">#2C2C2C</color>
     <!-- custom colors below -->
     <color name="color_accent">#2B712E</color>
     <color name="primary_color">#388E3C</color>
     <color name="primary_color_dark">#1E1E1E</color>
     <color name="list_item_selected">#0F3E1C</color>
-    <color name="list_item_focused">#333539</color>
+    <color name="button_outline">#388E3C</color>
+    <color name="list_item_focused">#212122</color>
     <color name="list_item_unfocused">#f2f7f9</color>
     <color name="background">#030404</color>
     <color name="text">#1CAE23</color>
@@ -28,6 +30,11 @@
     <color name="primary_yellow">#ffeb3b</color>
     <color name="text_yellow">#FDD835</color>
     <color name="color_accent_yellow">#C1A52C</color>
+    <color name="button_outline_yellow">#F6CB10</color>
 
-    <color name="button_outline">#388E3C</color>
+    <color name="primary_red">#600909</color>
+    <color name="text_red">#A32121</color>
+    <color name="color_accent_red">#C12C2C</color>
+    <color name="button_outline_red">#D80000</color>
+
 </resources>

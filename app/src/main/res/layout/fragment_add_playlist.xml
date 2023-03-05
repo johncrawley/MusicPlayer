@@ -3,14 +3,18 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:paddingHorizontal="@dimen/dialog_layout_padding_horizontal"
+    android:background="@color/default_dialog_background"
     android:layout_height="match_parent">
 
+    <!--
+
+        style="@style/customTextInputLayoutStyle"
+    -->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/addPlaylistTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/customTextInputLayoutStyle"
         android:paddingTop="@dimen/input_text_padding_top">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/addPlaylistNameEditText"

@@ -56,7 +56,7 @@
     <string name="delete_playlist_toast_success">Playlist Deleted</string>
 
 
-    <string name="add_playlist_already_exists_error">A playlist with this name already exists</string>
+    <string name="add_playlist_already_exists_error">This name is already in use</string>
     <string name="create_playlist_button_text">Create</string>
     <string name="status_ready">Ready</string>
     <string name="status_error">Error - Unable To Play</string>

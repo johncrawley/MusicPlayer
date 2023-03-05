@@ -41,15 +41,18 @@ public class ThemeHelper {
 
 
     public static void setTheme(Activity activity, String themeKey){
+        int styleId = R.style.AppTheme;
         switch (themeKey){
             case "green":
-                activity.setTheme(R.style.AppTheme);
-                break;
+                styleId = R.style.AppTheme;
             case "yellow":
-                activity.setTheme(R.style.YellowTheme);
+                styleId = R.style.YellowTheme;
                 break;
-            default:
+            case "red":
+                styleId = R.style.RedTheme;
+
         }
+        activity.setTheme(styleId);
     }
 
 

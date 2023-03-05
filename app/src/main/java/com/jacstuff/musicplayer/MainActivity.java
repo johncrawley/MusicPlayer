@@ -411,7 +411,6 @@ public class MainActivity extends AppCompatActivity {
         setupStopLongClick();
         turnShuffleOnButton =  setupImageButton(R.id.turnShuffleOnButton,  ()-> mediaPlayerService.enableShuffle());
         turnShuffleOffButton = setupImageButton(R.id.turnShuffleOffButton, ()-> mediaPlayerService.disableShuffle());
-
     }
 
 
@@ -512,7 +511,6 @@ public class MainActivity extends AppCompatActivity {
                 trackTimeSeekBar.setProgress((int)elapsedTime);
         });
     }
-
 
 
     public void setSeekAndShuffleButtonsVisibility(int numberOfTracks){
@@ -693,6 +691,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     private void startSettingsActivity(){
         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
