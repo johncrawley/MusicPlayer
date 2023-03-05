@@ -92,30 +92,26 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
     public List<Playlist> getAllPlaylists() {
         List<Playlist> playlists = new ArrayList<>();
         String query = "SELECT * FROM " + PlaylistEntry.TABLE_NAME + ";";
-        try {
-            cursor = db.rawQuery(query, null);
+        try(Cursor cursor = db.rawQuery(query, null)){
             while(cursor.moveToNext()){
-                long id = getLong(PlaylistEntry._ID);
-                String name = getString(PlaylistEntry.COL_NAME);
+                long id = getLong(cursor,PlaylistEntry._ID);
+                String name = getString(cursor,PlaylistEntry.COL_NAME);
                 playlists.add(new Playlist(id, name));
             }
         }
         catch(SQLException e){
             e.printStackTrace();
         }
-        finally {
-            cursor.close();
-        }
         return  playlists;
     }
 
 
-    private String getString(String name){
+    private String getString(Cursor cursor, String name){
         return cursor.getString(cursor.getColumnIndexOrThrow(name));
     }
 
 
-    private Long getLong(String name){
+    private Long getLong(Cursor cursor, String name){
         return cursor.getLong(cursor.getColumnIndexOrThrow(name));
     }
 
