@@ -24,6 +24,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private KeyboardHelper keyboardHelper;
     private MainViewModel viewModel;
     private ThemeHelper themeHelper;
+    private boolean hasSearchResultBeenPlayed = false;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -161,10 +163,32 @@ public class MainActivity extends AppCompatActivity {
             searchView.setVisibility(View.GONE);
             searchEditText.setText("");
             clearSearchResults();
+            scrollToPositionIfSearchResultHasBeenPlayed();
         });
         keyboardHelper.hideKeyboard(searchView);
         dismissSearchViewOnBackPressedCallback.setEnabled(false);
         animator.start();
+    }
+
+
+    private void scrollToPositionIfSearchResultHasBeenPlayed(){
+        if(hasSearchResultBeenPlayed && tracksFragment != null){
+            if (mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded()) {
+                deselectCurrentTrackAfterDelay();
+            }
+            else{
+                tracksFragment.scrollToListPosition(selectedSearchResultTrack.getIndex());
+            }
+        }
+        hasSearchResultBeenPlayed = false;
+    }
+
+
+    private void deselectCurrentTrackAfterDelay(){
+        // we need to give the recycler view in tracks fragment time to recreate its layout
+        new Handler(Looper.getMainLooper())
+                .postDelayed(()->tracksFragment.deselectCurrentItemAndNotify(),
+                        300);
     }
 
 
@@ -669,14 +693,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public List<Track> getTracksForSearch(String str){
-        if(mediaPlayerService == null){
-            return Collections.emptyList();
-        }
-        return mediaPlayerService.getTracksForSearch(str);
-    }
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -749,6 +765,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private List<Track> getTracksForSearch(String str){
+        if(mediaPlayerService == null){
+            return Collections.emptyList();
+        }
+        return mediaPlayerService.getTracksForSearch(str);
+    }
+
+
     private void setupSearchViewButtons(){
         addSearchResultButton       = setupButton(R.id.addSelectedButton, this::addSelectedSearchResultToPlaylist);
         playSearchResultButton      = setupButton(R.id.playSelectedButton, this::playSelectedSearchResult);
@@ -788,8 +812,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void playSelectedSearchResult(){
-        if(selectedSearchResultTrack != null){
+        if(selectedSearchResultTrack != null) {
             mediaPlayerService.selectAndPlayTrack(selectedSearchResultTrack);
+            hasSearchResultBeenPlayed = true;
         }
     }
 

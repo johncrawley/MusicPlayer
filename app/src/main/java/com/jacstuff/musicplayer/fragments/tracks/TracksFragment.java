@@ -53,6 +53,14 @@ public class TracksFragment extends Fragment{
     }
 
 
+    public void deselectCurrentItemAndNotify(){
+        if(trackListAdapter != null){
+            trackListAdapter.deselectCurrentlySelectedItemAndNotify();
+        }
+    }
+
+
+
     private MainActivity getMainActivity(){
         return (MainActivity)getActivity();
     }
@@ -121,10 +129,9 @@ public class TracksFragment extends Fragment{
             return;
         }
         trackListAdapter.selectItemAt(index);
-        int calculatedScrollIndex = calculateIndexWithOffset(index);
         //could use: smoothScrollToPosition(calculatedScrollIndex)
         // but it would take too long for large list
-        recyclerView.scrollToPosition(calculatedScrollIndex);
+        recyclerView.scrollToPosition(calculateIndexWithOffset(index));
     }
 
 
@@ -142,12 +149,7 @@ public class TracksFragment extends Fragment{
         if(previousIndex == 0){
             return index;
         }
-        MainActivity mainActivity = getMainActivity();
-        if(mainActivity == null){
-            return 0;
-        }
-        int direction = index > previousIndex ? 1 : -1;
-        int offset =  mainActivity.getResources().getInteger(R.integer.playlist_item_offset) * direction ;
+        int offset = index > previousIndex ? 4 : -4;
         return index + offset;
     }
 
