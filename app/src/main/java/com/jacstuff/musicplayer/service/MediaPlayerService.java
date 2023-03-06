@@ -296,11 +296,8 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     public void selectAndPlayTrack(Track track){
-        selectTrack(track);
+        select(track);
         playlistManager.addToTrackHistory(track);
-        if(currentState == MediaPlayerState.STOPPED){
-            updateViewsEnsurePlayerStoppedAndSchedulePlay();
-        }
         mainActivity.setTrackInfoOnView(currentTrack, 0);
         cancelFutures();
     }
@@ -387,11 +384,11 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
         if(currentState == MediaPlayerState.PAUSED){
             mainActivity.hideTrackSeekBar();
         }
-        selectTrack(currentTrack);
+        select(currentTrack);
     }
 
 
-    private void selectTrack(Track track){
+    private void select(Track track){
         MediaPlayerState oldState = currentState;
         if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
             stop(false);
