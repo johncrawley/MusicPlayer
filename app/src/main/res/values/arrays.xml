@@ -17,6 +17,8 @@
         <item>Blue</item>
         <item>Red</item>
         <item>Grey</item>
+        <item>Magenta</item>
+        <item>Cyan</item>
     </string-array>
 
     <string-array name="theme_color_values">
@@ -25,5 +27,7 @@
         <item>blue</item>
         <item>red</item>
         <item>grey</item>
+        <item>magenta</item>
+        <item>cyan</item>
     </string-array>
 </resources>

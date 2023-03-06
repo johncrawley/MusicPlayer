@@ -3,20 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
+    <item android:id="@+id/search" android:name="search"
+        android:orderInCategory="100" app:showAsAction="ifRoom"
+        android:icon="?android:attr/actionModeWebSearchDrawable"
+        android:title="@string/menu_button_search"/>
 
     <item android:id="@+id/refresh_button" android:name="refresh"
         android:orderInCategory="100" app:showAsAction="never"
         android:icon="@android:drawable/ic_popup_sync"
         android:title="@string/menu_button_refresh"/>
 
-    <item android:id="@+id/search" android:name="search"
-        android:orderInCategory="100" app:showAsAction="ifRoom"
-        android:icon="?android:attr/actionModeWebSearchDrawable"
-        android:title="@string/menu_button_search"/>
-
-    <item android:id="@+id/theme" android:name="theme"
-        android:orderInCategory="100" app:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_edit"
-        android:title="Theme change!"/>
+    <item android:id="@+id/options" android:name="settings"
+        android:orderInCategory="100" app:showAsAction="never"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="@string/menu_button_settings"/>
 
 </menu>

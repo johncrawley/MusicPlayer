@@ -686,7 +686,7 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.search){
             toggleSearch();
         }
-        else if(id == R.id.theme){
+        else if(id == R.id.options){
             startSettingsActivity();
         }
         return super.onOptionsItemSelected(item);

@@ -48,13 +48,68 @@
         <item name="colorAccent">@color/color_accent_red</item>
         <item name="android:textColor">@color/text_red</item>
         <item name="android:buttonTint">@color/primary_red</item>
-        <item name="materialButtonStyle">@style/redMaterialButtonStyle</item>
+        <item name="materialButtonStyle">@style/materialButtonStyleRed</item>
     </style>
 
 
-    <style name="redMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
+    <style name="materialButtonStyleRed" parent="customMaterialOutlineButtonStyle">
         <item name="backgroundColor">@color/color_accent_red</item>
         <item name="strokeColor">@color/button_outline_red</item>
+    </style>
+
+    <style name="BlueTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorAccent">@color/color_accent_blue</item>
+        <item name="android:textColor">@color/text_blue</item>
+        <item name="android:buttonTint">@color/primary_blue</item>
+        <item name="materialButtonStyle">@style/materialButtonStyleBlue</item>
+    </style>
+
+
+    <style name="materialButtonStyleBlue" parent="customMaterialOutlineButtonStyle">
+        <item name="backgroundColor">@color/color_accent_blue</item>
+        <item name="strokeColor">@color/button_outline_blue</item>
+    </style>
+
+    <style name="GreyTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_grey</item>
+        <item name="colorAccent">@color/color_accent_grey</item>
+        <item name="android:textColor">@color/text_grey</item>
+        <item name="android:buttonTint">@color/primary_grey</item>
+        <item name="materialButtonStyle">@style/materialButtonStyleGrey</item>
+    </style>
+
+    <style name="materialButtonStyleGrey" parent="customMaterialOutlineButtonStyle">
+        <item name="backgroundColor">@color/color_accent_grey</item>
+        <item name="strokeColor">@color/button_outline_grey</item>
+    </style>
+
+
+    <style name="MagentaTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_magenta</item>
+        <item name="colorAccent">@color/color_accent_magenta</item>
+        <item name="android:textColor">@color/text_magenta</item>
+        <item name="android:buttonTint">@color/primary_magenta</item>
+        <item name="materialButtonStyle">@style/materialButtonStyleMagenta</item>
+    </style>
+
+    <style name="materialButtonStyleMagenta" parent="customMaterialOutlineButtonStyle">
+        <item name="backgroundColor">@color/color_accent_magenta</item>
+        <item name="strokeColor">@color/button_outline_magenta</item>
+    </style>
+
+
+    <style name="CyanTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_cyan</item>
+        <item name="colorAccent">@color/color_accent_cyan</item>
+        <item name="android:textColor">@color/text_cyan</item>
+        <item name="android:buttonTint">@color/primary_cyan</item>
+        <item name="materialButtonStyle">@style/materialButtonStyleCyan</item>
+    </style>
+
+    <style name="materialButtonStyleCyan" parent="customMaterialOutlineButtonStyle">
+        <item name="backgroundColor">@color/color_accent_cyan</item>
+        <item name="strokeColor">@color/button_outline_cyan</item>
     </style>
 
 

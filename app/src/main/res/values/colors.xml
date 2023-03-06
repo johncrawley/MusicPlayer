@@ -11,7 +11,7 @@
     <color name="primary_color_dark">#1E1E1E</color>
     <color name="list_item_selected">#0F3E1C</color>
     <color name="button_outline">#388E3C</color>
-    <color name="list_item_focused">#212122</color>
+    <color name="list_item_focused">#2A2A2A</color>
     <color name="list_item_unfocused">#f2f7f9</color>
     <color name="background">#030404</color>
     <color name="text">#1CAE23</color>
@@ -27,14 +27,34 @@
     <color name="material_edit_text_hover">#388E3C</color>
     <color name="material_edit_text">#2E7D32</color>
 
-    <color name="primary_yellow">#ffeb3b</color>
-    <color name="text_yellow">#FDD835</color>
+    <color name="primary_yellow">#E8D424</color>
+    <color name="text_yellow">#E8C630</color>
     <color name="color_accent_yellow">#C1A52C</color>
     <color name="button_outline_yellow">#F6CB10</color>
 
-    <color name="primary_red">#600909</color>
+    <color name="primary_red">#9E0E0E</color>
     <color name="text_red">#A32121</color>
     <color name="color_accent_red">#C12C2C</color>
     <color name="button_outline_red">#D80000</color>
+
+    <color name="primary_blue">#047BD6</color>
+    <color name="text_blue">#3F86FF</color>
+    <color name="color_accent_blue">#2C8DC1</color>
+    <color name="button_outline_blue">#0073D8</color>
+
+    <color name="primary_grey">#B8CAD8</color>
+    <color name="text_grey">#CDCDCD</color>
+    <color name="color_accent_grey">#7A7A7A</color>
+    <color name="button_outline_grey">#AEAEAE</color>
+
+    <color name="primary_magenta">#C308D8</color>
+    <color name="text_magenta">#CC3FFF</color>
+    <color name="color_accent_magenta">#942CC1</color>
+    <color name="button_outline_magenta">#A900D8</color>
+
+    <color name="primary_cyan">#12CED5</color>
+    <color name="text_cyan">#3FEFFF</color>
+    <color name="color_accent_cyan">#2CC1C1</color>
+    <color name="button_outline_cyan">#00D1D8</color>
 
 </resources>

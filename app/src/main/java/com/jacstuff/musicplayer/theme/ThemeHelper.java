@@ -9,9 +9,25 @@ import androidx.preference.PreferenceManager;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ThemeHelper {
 
     private String currentThemeKey = "green";
+    private final Map<String, Integer> themeMap;
+
+
+    public ThemeHelper(){
+        themeMap = new HashMap<>();
+        themeMap.put("green", R.style.AppTheme);
+        themeMap.put("yellow", R.style.YellowTheme);
+        themeMap.put("red", R.style.RedTheme);
+        themeMap.put("blue", R.style.BlueTheme);
+        themeMap.put("grey", R.style.GreyTheme);
+        themeMap.put("magenta", R.style.MagentaTheme);
+        themeMap.put("cyan", R.style.CyanTheme);
+    }
 
 
     public void restartActivityIfDifferentThemeSet(MainActivity mainActivity) {
@@ -40,19 +56,11 @@ public class ThemeHelper {
     }
 
 
-    public static void setTheme(Activity activity, String themeKey){
-        int styleId = R.style.AppTheme;
-        switch (themeKey){
-            case "green":
-                styleId = R.style.AppTheme;
-            case "yellow":
-                styleId = R.style.YellowTheme;
-                break;
-            case "red":
-                styleId = R.style.RedTheme;
-
+    public void setTheme(Activity activity, String themeKey){
+        Integer styleId = themeMap.getOrDefault(themeKey, R.style.AppTheme);
+        if(styleId != null){
+            activity.setTheme(styleId);
         }
-        activity.setTheme(styleId);
     }
 
 
