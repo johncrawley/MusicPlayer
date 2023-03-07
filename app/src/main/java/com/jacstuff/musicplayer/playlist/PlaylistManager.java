@@ -12,44 +12,40 @@ import java.util.Set;
 
 public interface PlaylistManager {
 
-    void savePlaylist();
-    Track getNextTrack();
     boolean hasTracksQueued();
-    boolean hasBeenInitialized();
     boolean isUserPlaylistLoaded();
     boolean hasAnyTracks();
+    int getNumberOfTracks();
+    Set<String> getArtists();
+    Map<String, Album> getAlbums();
+    ArrayList<String> getAlbumNames();
+    ArrayList<String> getArtistNames();
+
+    List<Track> getTracks();
+    Track getNextTrack();
     Track getPreviousTrack();
     Track getNextRandomUnPlayedTrack();
     Track selectTrack(int index);
+
     void addToTrackHistory(Track track);
     void addTracksFromStorage(MediaPlayerService mediaPlayerService);
-    List<Track> getTracks();
-    void init();
-    int getCurrentTrackIndex();
-    boolean areAllTracksLoaded();
     void addTrackToQueue(Track track);
+
     void loadPlaylist(Playlist playlist);
     void loadAllTracksPlaylist();
-    void addTrackToCurrentPlaylist(Track track);
-    void addTracksToCurrentPlaylist(List<Track> tracks);
-    void removeTrackFromCurrentPlaylist(Track track);
-    int getNumberOfTracks();
+    void loadTracksFromAlbum(String albumName);
+    void loadTracksFromArtist(String artistName);
+
+    void addTrackToCurrentPlaylist(Track track, PlaylistViewNotifier playlistViewNotifier);
+    void addTracksFromArtistToCurrentPlaylist(String artistName, PlaylistViewNotifier playlistViewNotifier);
+    void addTracksFromAlbumToCurrentPlaylist(String albumName, PlaylistViewNotifier playlistViewNotifier);
+    void removeTrackFromCurrentPlaylist(Track track, PlaylistViewNotifier playlistViewNotifier);
+
     void enableShuffle();
     void disableShuffle();
     boolean isShuffleEnabled();
-    void onDestroy();
-    void addTracksFromArtistToCurrentPlaylist(String artistName);
-    void addTracksFromAlbumToCurrentPlaylist(String albumName);
 
-    Set<String> getArtists();
-    void loadTracksFromAlbum(String albumName);
-    Map<String, Album> getAlbums();
-    ArrayList<String> getAlbumNames();
-    void loadTracksFromArtist(String artistName);
-    ArrayList<String> getArtistNames();
     void onlyDisplayMainArtists(boolean shouldOnlyDisplayMainArtists);
-
     String getTrackNameAt(int position);
-
     void deleteAll();
 }

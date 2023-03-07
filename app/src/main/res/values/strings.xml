@@ -16,6 +16,15 @@
     <string name="track_title_default_text">No Tracks Found</string>
     <string name="playlist_item_offset">3</string>
 
+    <string name="toast_track_added_to_queue">Track Added To Queue</string>
+    <string name="toast_track_added_to_playlist">Track Added To Playlist</string>
+    <string name="toast_track_already_in_playlist">Track Already In Playlist</string>
+    <string name="toast_no_new_tracks_were_added_to_playlist">No New Tracks Were Added To The Playlist</string>
+    <string name="toast_tracks_added_to_playlist">%1$d Tracks Were Added To The Playlist</string>
+    <string name="toast_one_track_added_to_playlist">1 Track Was Added To The Playlist</string>
+    <string name="toast_track_removed_from_playlist">Track Removed From Playlist</string>
+    <string name="toast_track_removed_from_playlist_fail">The track could not be removed from the playlist</string>
+
     <string name="play_button_content_description">Play</string>
     <string name="stop_button_content_description">Stop</string>
     <string name="pause_button_content_description">Pause</string>

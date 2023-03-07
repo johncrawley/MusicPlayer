@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         themeHelper.restartActivityIfDifferentThemeSet(this);
     }
 
+
     private void toggleSearch(){
         if(searchView.getVisibility() == View.VISIBLE){
             hideSearch();
@@ -297,6 +298,31 @@ public class MainActivity extends AppCompatActivity {
 
     public void enqueueTrack(){
         mediaPlayerService.getPlaylistManager().addTrackToQueue(selectedTrack);
+        toast(R.string.toast_track_added_to_queue);
+    }
+
+
+    public void notifyTrackAddedToPlaylist(){
+        toast(R.string.toast_track_added_to_playlist);
+    }
+
+
+    public void notifyTrackAlreadyInPlaylist(){
+        toast(R.string.toast_track_already_in_playlist);
+    }
+
+
+    public void notifyTrackRemovedFromPlaylist(boolean success){
+        toast(success ? R.string.toast_track_removed_from_playlist : R.string.toast_track_removed_from_playlist_fail);
+    }
+
+
+    public void notifyTracksAddedToPlaylist(int numberOfTracks){
+        switch(numberOfTracks){
+            case 0 : toast(R.string.toast_no_new_tracks_were_added_to_playlist); break;
+            case 1 : toast(R.string.toast_one_track_added_to_playlist); break;
+            default : toast(getString(R.string.toast_tracks_added_to_playlist, numberOfTracks));
+        }
     }
 
 
@@ -380,8 +406,18 @@ public class MainActivity extends AppCompatActivity {
     public void displayError(Track track){
         runOnUiThread(()->{
             String errorMessage = getString(R.string.error_playing_track_toast_message, track.getPathname());
-            Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+            toast(errorMessage);
         });
+    }
+
+
+    private void toast(String msg){
+        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
+    }
+
+
+    private void toast(int resId){
+        toast(getString(resId));
     }
 
 

@@ -41,9 +41,10 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private Playlist someArtistPlaylist, someAlbumPlaylist, allTracksPlaylist;
     private Set<Long> defaultPlaylistIds;
     private Playlist currentPlaylist;
-    private boolean isInitialized;
     private final ArrayDeque<Track> queuedTracks;
     private boolean shouldOnlyDisplayMainArtists = true;
+    private Set<String> currentPlaylistFilenames;
+
 
 
     public PlaylistManagerImpl(Context context, TrackLoader trackLoader){
@@ -57,11 +58,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         setupDefaultPlaylists();
         trackHistory = new TrackHistory();
         queuedTracks = new ArrayDeque<>();
-    }
-
-
-    @Override
-    public void onDestroy(){
+        currentPlaylistFilenames = new HashSet<>();
     }
 
 
@@ -156,16 +153,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    public void init(){
-        initTrackList();
-    }
-
-
     private void initTrackList(){
-       // tracks = getSortedTracks(trackRepository.getAllTracks());
         tracks = allTracks;
         assignIndexesToTracks();
-        isInitialized = true;
     }
 
 
@@ -182,12 +172,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    @Override
-    public boolean hasBeenInitialized(){
-        return isInitialized;
-    }
-
-
     public void loadPlaylist(Playlist playlist){
         if(isAlreadyCurrentPlaylist(playlist)){
             return;
@@ -199,6 +183,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         }
         else{
             tracks = playlistItemRepository.getTracksForPlaylistId(playlist.getId());
+            currentPlaylistFilenames = tracks.stream().map(Track::getPathname).collect(Collectors.toSet());
             assignIndexesToTracks();
         }
         setupUnPlayedIndexes();
@@ -213,40 +198,66 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
-    public void addTrackToCurrentPlaylist(Track track) {
+    public void addTrackToCurrentPlaylist(Track track, PlaylistViewNotifier playlistViewNotifier) {
         if(!isUserPlaylistLoaded()){
               return;
+        }
+        if(currentPlaylistFilenames.contains(track.getPathname())){
+            playlistViewNotifier.notifyViewOfTrackAlreadyInPlaylist();
+            return;
         }
         tracks.add(track);
         unPlayedTracks.add(track);
         track.setIndex(tracks.size()-1);
         playlistItemRepository.addPlaylistItem(track, currentPlaylist.getId());
+        playlistViewNotifier.notifyViewOfTrackAddedToPlaylist();
+        currentPlaylistFilenames.add(track.getPathname());
+    }
+
+
+    private void addTracksToCurrentPlaylist(List<Track> additionalTracks, PlaylistViewNotifier playlistViewNotifier) {
+        if(!isUserPlaylistLoaded()){
+            return;
+        }
+        int originalNumberOfTracks = tracks.size();
+        additionalTracks.stream()
+                .filter(this::isTrackNotInCurrentPlaylist)
+                .forEach(this::addNewTrackToPlaylist);
+        int numberOfNewTracks = tracks.size() - originalNumberOfTracks;
+        if(numberOfNewTracks > 0) {
+           assignIndexesToTracks();
+        }
+        playlistViewNotifier.notifyViewOfMultipleTracksAddedToPlaylist(numberOfNewTracks);
+    }
+
+
+    private void addNewTrackToPlaylist(Track track){
+        tracks.add(track);
+        unPlayedTracks.add(track);
+        currentPlaylistFilenames.add(track.getPathname());
+        playlistItemRepository.addPlaylistItem(track, currentPlaylist.getId());
+    }
+
+
+    private boolean isTrackNotInCurrentPlaylist(Track track){
+        return !currentPlaylistFilenames.contains(track.getPathname());
     }
 
 
     @Override
-    public void addTracksToCurrentPlaylist(List<Track> additionalTracks) {
+    public void removeTrackFromCurrentPlaylist(Track track, PlaylistViewNotifier playlistViewNotifier) {
         if(!isUserPlaylistLoaded()){
             return;
         }
-        tracks.addAll(additionalTracks);
-        unPlayedTracks.addAll(additionalTracks);
-        assignIndexesToTracks();
-        for(Track track : additionalTracks){
-            playlistItemRepository.addPlaylistItem(track, currentPlaylist.getId());
-        }
-    }
-
-
-    @Override
-    public void removeTrackFromCurrentPlaylist(Track track) {
-        if(!isUserPlaylistLoaded()){
-            return;
-        }
+        int oldNumberOfTracks = tracks.size();
         tracks.remove(track.getIndex());
         unPlayedTracks.remove(track);
+        currentPlaylistFilenames.remove(track.getPathname());
         assignIndexesToTracks();
         playlistItemRepository.deletePlaylistItem(track.getId());
+        playlistViewNotifier.notifyViewOfTrackRemovedFromPlaylist(oldNumberOfTracks != tracks.size());
+
+
     }
 
 
@@ -309,16 +320,16 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
-    public void addTracksFromArtistToCurrentPlaylist(String artistName) {
+    public void addTracksFromArtistToCurrentPlaylist(String artistName, PlaylistViewNotifier playlistViewNotifier) {
         List<Track> tracks = trackLoader.getTracksForArtist(artistName);
-        addTracksToCurrentPlaylist(getSortedTracks(tracks));
+        addTracksToCurrentPlaylist(getSortedTracks(tracks), playlistViewNotifier);
     }
 
 
     @Override
-    public void addTracksFromAlbumToCurrentPlaylist(String albumName) {
+    public void addTracksFromAlbumToCurrentPlaylist(String albumName, PlaylistViewNotifier playlistViewNotifier) {
         List<Track> tracks = trackLoader.getTracksForAlbum(albumName);
-        addTracksToCurrentPlaylist(getSortedTracks(tracks));
+        addTracksToCurrentPlaylist(getSortedTracks(tracks), playlistViewNotifier);
     }
 
 
@@ -385,12 +396,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    @Override
-    public int getCurrentTrackIndex(){
-        return this.currentIndex;
-    }
-
-
     private Track getNextTrackOnList(){
         if(!attemptSetupOfIndexesIfEmpty()){
             return null;
@@ -426,12 +431,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         attemptSetupOfIndexesIfEmpty();
         trackHistory.add(currentTrack);
         return currentTrack;
-    }
-
-
-    @Override
-    public boolean areAllTracksLoaded(){
-        return currentPlaylist == null || currentPlaylist.getId() == ALL_TRACKS_PLAYLIST_ID;
     }
 
 
@@ -476,7 +475,5 @@ public class PlaylistManagerImpl implements PlaylistManager {
         return tracks;
     }
 
-
-    public void savePlaylist(){}
 
 }

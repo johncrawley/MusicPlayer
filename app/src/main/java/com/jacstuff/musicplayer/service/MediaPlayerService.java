@@ -26,6 +26,8 @@ import com.jacstuff.musicplayer.db.search.TrackFinder;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
+import com.jacstuff.musicplayer.playlist.PlaylistViewNotifier;
+import com.jacstuff.musicplayer.playlist.PlaylistViewNotifierImpl;
 import com.jacstuff.musicplayer.playlist.TrackLoader;
 
 import java.io.IOException;
@@ -78,6 +80,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     private final AtomicBoolean shouldSkipBroadcastReceivedForTrackChange = new AtomicBoolean();
     private final AtomicBoolean isPreparingTrack = new AtomicBoolean();
     private final AtomicBoolean isScanningForTracks = new AtomicBoolean();
+    private PlaylistViewNotifier playlistViewNotifier;
 
 
 
@@ -235,14 +238,14 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    public void addTracksFromAlbumToCurrentPlaylist(String albumName){
-        playlistManager.addTracksFromAlbumToCurrentPlaylist(albumName);
+    public void addTracksFromAristToCurrentPlaylist(String artistName){
+        playlistManager.addTracksFromArtistToCurrentPlaylist(artistName, playlistViewNotifier);
         updateViewTrackList();
     }
 
 
-    public void addTracksFromAristToCurrentPlaylist(String artistName){
-        playlistManager.addTracksFromArtistToCurrentPlaylist(artistName);
+    public void addTracksFromAlbumToCurrentPlaylist(String albumName){
+        playlistManager.addTracksFromAlbumToCurrentPlaylist(albumName, playlistViewNotifier);
         updateViewTrackList();
     }
 
@@ -254,14 +257,14 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     public void addTrackToCurrentPlaylist(Track track){
-        playlistManager.addTrackToCurrentPlaylist(track);
+        playlistManager.addTrackToCurrentPlaylist(track, playlistViewNotifier);
         updateViewTrackList();
         mediaNotificationManager.updateNotification();
     }
 
 
     public void removeTrackFromCurrentPlaylist(Track track){
-        playlistManager.removeTrackFromCurrentPlaylist(track);
+        playlistManager.removeTrackFromCurrentPlaylist(track, playlistViewNotifier);
         updateViewTrackList();
         mediaNotificationManager.updateNotification();
     }
@@ -402,6 +405,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
+        playlistViewNotifier = new PlaylistViewNotifierImpl(mainActivity);
         createPlaylistManagerAndTrackLoader();
         if(!haveTracksBeenLoaded){
             loadTrackDataFromFilesystem();
