@@ -137,6 +137,11 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
+    public void updateArtistView(){
+        mainActivity.updateArtistsList(playlistManager.getArtistNames());
+    }
+
+
     private void ensureATrackIsSelectedIfAvailable(){
         if(currentTrack == null){
             if(playlistManager.hasAnyTracks()){

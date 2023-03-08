@@ -90,6 +90,8 @@
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
+    <string name="min_number_of_tracks_for_main_artist_title">Min. Tracks To Show Artist</string>
+    <string name="min_number_of_tracks_for_main_artist_summary">The minimum number of tracks belonging to an artist for that artist to appear in the artists list.</string>
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>

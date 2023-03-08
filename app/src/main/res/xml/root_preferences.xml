@@ -14,6 +14,13 @@
 
     <PreferenceCategory app:title="@string/lists_header">
 
+        <EditTextPreference
+            app:key="minimumNumberOfTracksForMainArtist"
+            app:title="@string/min_number_of_tracks_for_main_artist_title"
+            app:summary="@string/min_number_of_tracks_for_main_artist_summary"
+            app:defaultValue="1"
+            app:useSimpleSummaryProvider="true" />
+
         <SwitchPreferenceCompat
             app:key="sync"
             app:title="@string/sync_title" />
@@ -27,23 +34,19 @@
 
     </PreferenceCategory>
 
-    <!--
-    <PreferenceCategory app:title="@string/messages_header">
+    <PreferenceCategory app:title="NumberTemp">
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
 
         <ListPreference
             app:defaultValue="reply"
             app:entries="@array/reply_entries"
             app:entryValues="@array/reply_values"
             app:key="reply"
-            app:title="@string/reply_title"
+            app:title="replyStuff"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
+    <!--
     <PreferenceCategory app:title="@string/sync_header">
 
         <SwitchPreferenceCompat

@@ -1,6 +1,8 @@
 package com.jacstuff.musicplayer;
 
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
@@ -29,6 +31,17 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
+            setupNumberPreference();
+        }
+
+        private void setupNumberPreference(){
+            androidx.preference.EditTextPreference editTextPreference = getPreferenceManager().findPreference("minimumNumberOfTracksForMainArtist");
+            assert editTextPreference != null;
+            editTextPreference.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                int maxLengthOfInput = 2;
+                editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLengthOfInput)});
+            });
         }
     }
 
@@ -36,9 +49,8 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            // Respond to the action bar's Up/Home button
-                super.onBackPressed();
-                return true;
+            super.onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

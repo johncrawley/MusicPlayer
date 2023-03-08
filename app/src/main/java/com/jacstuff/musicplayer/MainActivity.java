@@ -116,11 +116,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         themeHelper.restartActivityIfDifferentThemeSet(this);
+        if (mediaPlayerService != null) {
+            mediaPlayerService.updateArtistView();
+        }
     }
-
 
     private void toggleSearch(){
         if(searchView.getVisibility() == View.VISIBLE){

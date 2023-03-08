@@ -2,10 +2,13 @@ package com.jacstuff.musicplayer.playlist;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
 import android.provider.MediaStore;
 
+
+import androidx.preference.PreferenceManager;
 
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.album.Album;
@@ -91,7 +94,7 @@ public class TrackLoader {
             return new ArrayList<>();
         }
         ArrayList<String> names = new ArrayList<>();
-        int minNumberOfTracks = 5;
+        int minNumberOfTracks = getMinimumNumberOfTracksForMainArtist();
         for(String key : artists.keySet()){
             Artist artist = artists.get(key);
             if(artist != null && artist.getTracks().size() > minNumberOfTracks){
@@ -100,6 +103,12 @@ public class TrackLoader {
         }
         Collections.sort(names);
         return new ArrayList<>(names);
+    }
+
+
+    private int getMinimumNumberOfTracksForMainArtist(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return Integer.parseInt(prefs.getString("minimumNumberOfTracksForMainArtist", "1"));
     }
 
 
