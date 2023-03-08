@@ -298,8 +298,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void enqueueTrack(){
-        mediaPlayerService.getPlaylistManager().addTrackToQueue(selectedTrack);
+    public void addSelectedTrackToQueue(){
+        enqueue(selectedTrack);
+    }
+
+
+    private void enqueue(Track track){
+        mediaPlayerService.getPlaylistManager().addTrackToQueue(track);
         toast(R.string.toast_track_added_to_queue);
     }
 
@@ -414,7 +419,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void toast(String msg){
-        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -814,7 +819,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupSearchViewButtons(){
         addSearchResultButton       = setupButton(R.id.addSelectedButton, this::addSelectedSearchResultToPlaylist);
         playSearchResultButton      = setupButton(R.id.playSelectedButton, this::playSelectedSearchResult);
-        enqueueSearchResultButton   = setupButton(R.id.playNextButton, this::addTrackToQueue);
+        enqueueSearchResultButton   = setupButton(R.id.playNextButton, this::addSearchResultToQueue);
     }
 
 
@@ -857,9 +862,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void addTrackToQueue(){
+    private void addSearchResultToQueue(){
         if(selectedSearchResultTrack != null){
-            mediaPlayerService.getPlaylistManager().addTrackToQueue(selectedSearchResultTrack);
+            enqueue(selectedSearchResultTrack);
         }
     }
 

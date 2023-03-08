@@ -61,7 +61,7 @@ public class TrackOptionsDialog extends DialogFragment {
     private void enqueueCurrentTrack(){
         MainActivity mainActivity = getMainActivity();
         if(mainActivity != null){
-            mainActivity.enqueueTrack();
+            mainActivity.addSelectedTrackToQueue();
         }
         dismiss();
     }
