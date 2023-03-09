@@ -57,4 +57,7 @@
     <color name="color_accent_cyan">#2CC1C1</color>
     <color name="button_outline_cyan">#00D1D8</color>
 
+    <color name="settings_text">#9F9F9F</color>
+    <color name="settings_primary_color">#3A983F</color>
+    <color name="settings_color_accent">#3C9C40</color>
 </resources>

@@ -43,7 +43,9 @@ public class SettingsActivity extends AppCompatActivity {
                 editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLengthOfInput)});
             });
         }
+
     }
+
 
 
     @Override
