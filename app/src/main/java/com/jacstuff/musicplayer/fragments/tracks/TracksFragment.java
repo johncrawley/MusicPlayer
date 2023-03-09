@@ -60,7 +60,6 @@ public class TracksFragment extends Fragment{
     }
 
 
-
     private MainActivity getMainActivity(){
         return (MainActivity)getActivity();
     }

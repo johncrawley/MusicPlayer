@@ -5,7 +5,6 @@ import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_PAUSE_P
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_PLAY;
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_NEXT_TRACK;
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_PREVIOUS_TRACK;
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_STOP_PLAYER;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -20,6 +19,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.db.track.Track;
 
 
 public class MediaNotificationManager {
@@ -74,10 +74,19 @@ public class MediaNotificationManager {
 
     void updateNotification() {
         new Handler(Looper.getMainLooper()).post(() -> {
-            Notification notification = createNotification(mediaPlayerService.getCurrentStatus(), mediaPlayerService.getCurrentTrackName());
+            String trackInfo = parseTrackDetails(mediaPlayerService.getCurrentTrack());
+            Notification notification = createNotification(mediaPlayerService.getCurrentStatus(), trackInfo);
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(NOTIFICATION_ID, notification);
         });
+    }
+
+
+    private String parseTrackDetails(Track track){
+        if(track == null){
+            return "";
+        }
+        return track.getArtist() + " - " + track.getTitle();
     }
 
 

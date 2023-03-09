@@ -590,8 +590,8 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    String getCurrentTrackName(){
-        return currentTrack == null ? "" : currentTrack.getTitle();
+    Track getCurrentTrack(){
+        return currentTrack;
     }
 
 

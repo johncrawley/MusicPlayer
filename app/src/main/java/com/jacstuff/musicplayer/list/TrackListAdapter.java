@@ -84,7 +84,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
 
 
     private String getStrOf(Track trackDetails){
-        return trackDetails.getArtist() + " : " +  trackDetails.getTitle();
+        return trackDetails.getArtist() + " - " +  trackDetails.getTitle();
     }
 
 
