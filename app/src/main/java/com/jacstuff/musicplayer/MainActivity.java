@@ -861,6 +861,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void playSelectedSearchResult(){
+        disableViewForAWhile(playSearchResultButton);
         if(selectedSearchResultTrack != null) {
             mediaPlayerService.selectAndPlayTrack(selectedSearchResultTrack);
             hasSearchResultBeenPlayed = true;

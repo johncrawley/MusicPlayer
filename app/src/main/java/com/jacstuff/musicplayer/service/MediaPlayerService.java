@@ -45,7 +45,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     public static final String ACTION_PLAY = "com.j.crawley.music_player.play";
     public static final String ACTION_PAUSE_PLAYER = "com.j.crawley.music_player.pausePlayer";
-    public static final String ACTION_STOP_PLAYER = "com.j.crawley.music_player.stopPlayer";
     public static final String ACTION_REQUEST_STATUS = "com.j.crawley.music_player.requestStatus";
 
     public static final String ACTION_SELECT_PREVIOUS_TRACK = "com.j.crawley.music_player.selectPreviousTrack";
@@ -54,15 +53,11 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     public static final String ACTION_NOTIFY_VIEW_OF_CONNECTING = "com.j.crawley.music_player.notifyViewOfPlay";
     public static final String ACTION_NOTIFY_VIEW_OF_PLAYING = "com.j.crawley.music_player.notifyViewOfPlayInfo";
 
-
     private MediaPlayer mediaPlayer;
     public boolean hasEncounteredError;
-    boolean wasInfoFound = false;
     private MediaNotificationManager mediaNotificationManager;
     private final ScheduledExecutorService executorService;
     Map<BroadcastReceiver, String> broadcastReceiverMap;
-
-
 
     private enum MediaPlayerState { PAUSED, PLAYING, STOPPED, FINISHED}
     private MediaPlayerState currentState = MediaPlayerState.STOPPED;
@@ -83,7 +78,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     private PlaylistViewNotifier playlistViewNotifier;
 
 
-
     public MediaPlayerService() {
         executorService = Executors.newScheduledThreadPool(3);
     }
@@ -100,7 +94,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     public IBinder onBind(Intent intent) {
         return binder;
     }
-
 
 
     private void loadTrackDataFromFilesystem(){
@@ -212,17 +205,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    private void stopRunningMediaPlayer(){
-        currentState = MediaPlayerState.STOPPED;
-        if(mediaPlayer != null){
-            if(mediaPlayer.isPlaying()){
-                mediaPlayer.stop();
-                mediaPlayer.reset();
-            }
-        }
-    }
-
-
     public void seek(int milliseconds){
         if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
             mediaPlayer.seekTo(milliseconds);
@@ -312,7 +294,8 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     public void selectAndPlayTrack(Track track){
-        select(track);
+        currentTrack = track;
+        updateViewsEnsurePlayerStoppedAndSchedulePlay();
         playlistManager.addToTrackHistory(track);
         mainActivity.setTrackInfoOnView(currentTrack, 0);
         cancelFutures();
@@ -427,7 +410,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
         }
         updateViews();
     }
-
 
 
     private void createPlaylistManagerAndTrackLoader(){
@@ -611,8 +593,19 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     private void updateViewsEnsurePlayerStoppedAndSchedulePlay() {
         updateViewsForConnecting();
         stopRunningMediaPlayer();
+        stopUpdatingElapsedTimeOnView();
+        elapsedTime = 0;
         shouldNextTrackPlayAfterCurrentTrackEnds = true;
         executorService.schedule(this::startTrack, 1, TimeUnit.MILLISECONDS);
+    }
+
+
+    private void stopRunningMediaPlayer(){
+        if(mediaPlayer != null && (mediaPlayer.isPlaying() || currentState == MediaPlayerState.PAUSED)){
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+        }
+        currentState = MediaPlayerState.STOPPED;
     }
 
 
@@ -622,7 +615,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
             isPreparingTrack.set(true);
             stopPlayer();
             createMediaPlayer();
-            setCpuWakeLock();
             mediaPlayer.setDataSource(currentTrack.getPathname());
             mediaPlayer.setOnPreparedListener(this);
             mediaPlayer.prepare();
@@ -642,12 +634,12 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
+        setCpuWakeLock();
         mediaPlayer.start();
     }
 
 
     private void onError(){
-        log("entered onError()");
         currentState = MediaPlayerState.STOPPED;
         mainActivity.notifyMediaPlayerStopped();
         releaseAndResetMediaPlayer();
@@ -666,7 +658,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     private void updateViewsForConnecting(){
         sendBroadcast(ACTION_NOTIFY_VIEW_OF_CONNECTING);
-        wasInfoFound = false;
         mediaNotificationManager.updateNotification();
     }
 
@@ -696,14 +687,12 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     private void stopPlayer(){
         releaseAndResetMediaPlayer();
-        wasInfoFound = false;
         mediaNotificationManager.updateNotification();
     }
 
 
     public void pause(){
         pauseMediaPlayer();
-        wasInfoFound = false;
         mediaNotificationManager.updateNotification();
         mainActivity.notifyMediaPlayerPaused();
         cancelFutures();
