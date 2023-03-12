@@ -69,7 +69,7 @@ public class TrackLoader {
     }
 
 
-    public ArrayList<String> getAlbumNames(){
+    public ArrayList<String> getAllAlbumNames(){
         if(albums == null){
             return new ArrayList<>();
         }
@@ -154,6 +154,7 @@ public class TrackLoader {
         }
     }
 
+
     public void rebuildTables(){
      //   trackRepository.recreateTracksTables();
     }
@@ -230,6 +231,7 @@ public class TrackLoader {
         tracks.add(track);
         addToAlbum(track, albumName, artistName);
         addToArtist(track, artistName);
+        addAlbumToArtist(albumName, artistName);
     }
 
 
@@ -244,6 +246,15 @@ public class TrackLoader {
         Artist artist = new Artist(artistCount++, artistName);
         artist.addTrack(track);
         artists.put(artistName, artist);
+    }
+
+
+    private void addAlbumToArtist(String albumName, String artistName){
+       Artist artist = artists.get(artistName);
+       if(artist == null){
+           return;
+       }
+       artist.addAlbumName(albumName);
     }
 
 

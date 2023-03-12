@@ -37,7 +37,6 @@ public class MediaNotificationManager {
     }
 
 
-
     Notification createNotification(String heading, String channelName){
         final NotificationCompat.Builder notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(heading)

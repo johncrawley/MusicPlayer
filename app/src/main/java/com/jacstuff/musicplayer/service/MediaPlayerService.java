@@ -142,6 +142,12 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
+    private void updateAlbumsView(){
+        mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
+    }
+
+
+
     private void ensureATrackIsSelectedIfAvailable(){
         if(currentTrack == null){
             if(playlistManager.hasAnyTracks()){
@@ -234,6 +240,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     public void loadTracksFromArtist(String artistName){
         playlistManager.loadTracksFromArtist(artistName);
         updateViewTrackListAndDeselectList();
+        updateAlbumsView();
     }
 
 
@@ -258,6 +265,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     public void loadPlaylist(Playlist playlist){
         playlistManager.loadPlaylist(playlist);
         updateViewTrackListAndDeselectList();
+        updateAlbumsView();
     }
 
 

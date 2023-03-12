@@ -41,6 +41,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private Playlist someArtistPlaylist, someAlbumPlaylist, allTracksPlaylist;
     private Set<Long> defaultPlaylistIds;
     private Playlist currentPlaylist;
+    private Artist currentArtist;
     private final ArrayDeque<Track> queuedTracks;
     private boolean shouldOnlyDisplayMainArtists = true;
     private Set<String> currentPlaylistFilenames;
@@ -112,7 +113,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public ArrayList<String> getAlbumNames(){
-        return trackLoader.getAlbumNames();
+        return currentArtist == null ?
+                trackLoader.getAllAlbumNames() : currentArtist.getAlbumNames();
     }
 
 
@@ -189,6 +191,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         setupUnPlayedIndexes();
         trackHistory.reset();
         currentIndex = -1;
+        currentArtist = null;
     }
 
 
@@ -256,8 +259,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         assignIndexesToTracks();
         playlistItemRepository.deletePlaylistItem(track.getId());
         playlistViewNotifier.notifyViewOfTrackRemovedFromPlaylist(oldNumberOfTracks != tracks.size());
-
-
     }
 
 
@@ -273,10 +274,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-
     private List<Track> getSortedTracks(List<Track> list){
         if(list == null){
-            log("getSortedTracks() list is null, returning empty list");
             return Collections.emptyList();
         }
         return list.stream().sorted(Comparator.comparing(Track::getOrderedString)).collect(Collectors.toList());
@@ -288,14 +287,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(artists == null){
             return;
         }
-        Artist savedArtist = artists.get(artistName);
-        if(savedArtist == null){
+        currentArtist = artists.get(artistName);
+        if(currentArtist == null){
             log("saved artist is null!");
             return;
         }
-
-        tracks = getSortedTracks(trackLoader.getTracksForArtist(artistName));
-        log("artist has " + tracks.size() + " number of tracks");
+        tracks = currentArtist.getTracks();
         assignIndexesToTracks();
         setupQueue();
         currentPlaylist = someArtistPlaylist;
@@ -471,7 +468,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public List<Track> getTracks(){
-        log("Entered getTracks() tracks size: " + tracks.size());
         return tracks;
     }
 

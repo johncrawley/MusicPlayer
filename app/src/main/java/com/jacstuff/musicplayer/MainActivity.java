@@ -119,10 +119,16 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         themeHelper.restartActivityIfDifferentThemeSet(this);
+        updateArtistsListInCaseMinTracksSettingHasChanged();
+    }
+
+
+    private void updateArtistsListInCaseMinTracksSettingHasChanged(){
         if (mediaPlayerService != null) {
             mediaPlayerService.updateArtistView();
         }
     }
+
 
     private void toggleSearch(){
         if(searchView.getVisibility() == View.VISIBLE){
