@@ -12,6 +12,9 @@ import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -284,6 +287,19 @@ public class MainActivity extends AppCompatActivity {
     public void stopTrack(){
         mediaPlayerService.stop();
         resetElapsedTime();
+    }
+
+    public void setCoverArt(Bitmap coverArtBitmap){
+        runOnUiThread(()->
+            findViewById(R.id.buttonLayout).setBackground(new BitmapDrawable(getApplicationContext().getResources(), coverArtBitmap))
+        );
+    }
+
+
+    public void setNoCoverArt(){
+        runOnUiThread(()->
+                findViewById(R.id.buttonLayout).setBackgroundColor(Color.parseColor("#aaaaaa"))
+        );
     }
 
 

@@ -11,7 +11,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -412,6 +416,22 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
+    private void setCoverArt(Track track){
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+        mediaMetadataRetriever.setDataSource(track.getPathname());
+        byte[] coverArt = mediaMetadataRetriever.getEmbeddedPicture();
+
+        if (coverArt != null) {
+            log("cover art was not null!");
+            Bitmap coverArtBitmap = BitmapFactory.decodeByteArray(coverArt, 0, coverArt.length);
+            mainActivity.setCoverArt(coverArtBitmap);
+            return;
+        }
+        log("setCoverArt() artwork was null!");
+        mainActivity.setNoCoverArt();
+    }
+
+
     private void createPlaylistManagerAndTrackLoader(){
         if(playlistManager == null) {
             trackLoader = new TrackLoader(getApplicationContext());
@@ -615,6 +635,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
             isPreparingTrack.set(true);
             stopPlayer();
             createMediaPlayer();
+            setCoverArt(currentTrack);
             mediaPlayer.setDataSource(currentTrack.getPathname());
             mediaPlayer.setOnPreparedListener(this);
             mediaPlayer.prepare();
