@@ -447,6 +447,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     private void updateViews(){
         if(currentTrack != null){
             mainActivity.setTrackInfoOnView(currentTrack, 0);
+            mainActivity.setElapsedTime(elapsedTime);
             mainActivity.setAlbumArt(currentAlbumArt);
         }
         updateListViews();
