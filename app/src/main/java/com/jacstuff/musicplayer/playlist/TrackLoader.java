@@ -169,6 +169,15 @@ public class TrackLoader {
     }
 
 
+    private Cursor createCursorForAlbumTracks(){
+        String[] projection = createProjection();
+        String selection = null;
+        String[] selectionArgs = null;
+        String sortOrder = MediaStore.Audio.Media.DEFAULT_SORT_ORDER + " ASC";
+        return context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection, selection, selectionArgs, sortOrder);
+    }
+
+
     private String[] createProjection() {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return new String[]{

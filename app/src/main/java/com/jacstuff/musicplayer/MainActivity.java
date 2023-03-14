@@ -13,7 +13,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
@@ -36,6 +35,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView trackTime, trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton, pauseButton, stopButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton;
     private Button addSearchResultButton, enqueueSearchResultButton, playSearchResultButton;
+    private ImageView albumArtImageView;
     private SeekBar trackTimeSeekBar;
     private boolean isTrackTimeSeekBarHeld = false;
     private EditText searchEditText;
@@ -289,17 +290,15 @@ public class MainActivity extends AppCompatActivity {
         resetElapsedTime();
     }
 
-    public void setCoverArt(Bitmap coverArtBitmap){
-        runOnUiThread(()->
-            findViewById(R.id.buttonLayout).setBackground(new BitmapDrawable(getApplicationContext().getResources(), coverArtBitmap))
-        );
-    }
 
-
-    public void setNoCoverArt(){
-        runOnUiThread(()->
-                findViewById(R.id.buttonLayout).setBackgroundColor(Color.parseColor("#aaaaaa"))
-        );
+    public void setAlbumArt(Bitmap coverArtBitmap){
+        runOnUiThread(()-> {
+            if (coverArtBitmap != null) {
+                albumArtImageView.setImageDrawable(new BitmapDrawable(getApplicationContext().getResources(), coverArtBitmap));
+                return;
+            }
+            albumArtImageView.setImageResource(R.drawable.album_art_empty);
+        });
     }
 
 
@@ -487,6 +486,7 @@ public class MainActivity extends AppCompatActivity {
         trackTitle = findViewById(R.id.trackTitle);
         trackAlbum = findViewById(R.id.albumTextView);
         trackArtist = findViewById(R.id.artistTextView);
+        albumArtImageView = findViewById(R.id.albumArtImageView);
     }
 
 

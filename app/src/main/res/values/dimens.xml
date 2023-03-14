@@ -10,9 +10,9 @@
     <dimen name="button_panel_margin_bottom">0dp</dimen>
     <dimen name="horizontal_divider_side_margin">12dp</dimen>
     <dimen name="playlist_list_view_horizontal_margin">2dp</dimen>
-    <dimen name="track_name_text_size">24sp</dimen>
-    <dimen name="artist_text_size">20sp</dimen>
-    <dimen name="album_text_size">20sp</dimen>
+    <dimen name="track_name_text_size">16sp</dimen>
+    <dimen name="artist_text_size">14sp</dimen>
+    <dimen name="album_text_size">14sp</dimen>
     <dimen name="track_time_text_size">33sp</dimen>
     <dimen name="track_time_margin_bottom">12dp</dimen>
     <dimen name="pager_top_margin">1dp</dimen>
@@ -24,6 +24,7 @@
     <dimen name="list_button_margin_vertical">2dp</dimen>
     <dimen name="dialog_option_button_margin_horizontal">10dp</dimen>
     <dimen name="dialog_option_button_margin_vertical">4dp</dimen>
+    <dimen name="album_art_padding">12dp</dimen>
     <dimen name="list_margin_top">0dp</dimen>
     <dimen name="list_margin_bottom">0dp</dimen>
 </resources>

@@ -58,6 +58,9 @@
     <string name="button_track_options_remove_from_playlist">Remove From Playlist</string>
 
 
+    <string name="album_art_content_description">Album Art</string>
+
+
     <string name="button_stop_now">Stop Now</string>
     <string name="button_stop_after_current_track">Stop After Current Track</string>
     <string name="button_stop_in_three_minutes">Stop In Three Minutes</string>

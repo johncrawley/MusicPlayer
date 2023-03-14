@@ -15,7 +15,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -80,6 +79,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     private final AtomicBoolean isPreparingTrack = new AtomicBoolean();
     private final AtomicBoolean isScanningForTracks = new AtomicBoolean();
     private PlaylistViewNotifier playlistViewNotifier;
+    private Bitmap currentAlbumArt;
 
 
     public MediaPlayerService() {
@@ -417,18 +417,22 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     private void setCoverArt(Track track){
-        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-        mediaMetadataRetriever.setDataSource(track.getPathname());
-        byte[] coverArt = mediaMetadataRetriever.getEmbeddedPicture();
-
-        if (coverArt != null) {
-            log("cover art was not null!");
-            Bitmap coverArtBitmap = BitmapFactory.decodeByteArray(coverArt, 0, coverArt.length);
-            mainActivity.setCoverArt(coverArtBitmap);
-            return;
+        try(MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever()){
+            mediaMetadataRetriever.setDataSource(track.getPathname());
+            currentAlbumArt = retrieveAlbumArt(mediaMetadataRetriever);
+            mainActivity.setAlbumArt(currentAlbumArt);
+        }catch (IOException e){
+            e.printStackTrace();
         }
-        log("setCoverArt() artwork was null!");
-        mainActivity.setNoCoverArt();
+    }
+
+
+    private Bitmap retrieveAlbumArt(MediaMetadataRetriever mediaMetadataRetriever){
+        byte[] coverArt = mediaMetadataRetriever.getEmbeddedPicture();
+        if (coverArt != null) {
+            return BitmapFactory.decodeByteArray(coverArt, 0, coverArt.length);
+        }
+        return null;
     }
 
 
@@ -443,6 +447,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     private void updateViews(){
         if(currentTrack != null){
             mainActivity.setTrackInfoOnView(currentTrack, 0);
+            mainActivity.setAlbumArt(currentAlbumArt);
         }
         updateListViews();
     }
