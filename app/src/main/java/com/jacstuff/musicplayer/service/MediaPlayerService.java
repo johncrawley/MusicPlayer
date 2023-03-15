@@ -383,6 +383,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
             handleNullPathname();
             return;
         }
+        setCoverArt(track);
         mainActivity.setTrackInfoOnView(currentTrack, 0);
         if(currentState == MediaPlayerState.PAUSED){
             mainActivity.hideTrackSeekBar();
@@ -641,7 +642,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
             isPreparingTrack.set(true);
             stopPlayer();
             createMediaPlayer();
-            setCoverArt(currentTrack);
             mediaPlayer.setDataSource(currentTrack.getPathname());
             mediaPlayer.setOnPreparedListener(this);
             mediaPlayer.prepare();
