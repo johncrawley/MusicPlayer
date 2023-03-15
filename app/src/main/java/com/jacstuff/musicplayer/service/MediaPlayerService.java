@@ -299,6 +299,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     public void selectAndPlayTrack(Track track){
         currentTrack = track;
+        assignAlbumArt(track);
         updateViewsEnsurePlayerStoppedAndSchedulePlay();
         playlistManager.addToTrackHistory(track);
         mainActivity.setTrackInfoOnView(currentTrack, 0);
@@ -383,7 +384,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
             handleNullPathname();
             return;
         }
-        setCoverArt(track);
+        assignAlbumArt(track);
         mainActivity.setTrackInfoOnView(currentTrack, 0);
         if(currentState == MediaPlayerState.PAUSED){
             mainActivity.hideTrackSeekBar();
@@ -417,7 +418,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    private void setCoverArt(Track track){
+    private void assignAlbumArt(Track track){
         try(MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever()){
             mediaMetadataRetriever.setDataSource(track.getPathname());
             currentAlbumArt = retrieveAlbumArt(mediaMetadataRetriever);
@@ -609,6 +610,11 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     Track getCurrentTrack(){
         return currentTrack;
+    }
+
+
+    Bitmap getAlbumArt(){
+        return currentAlbumArt;
     }
 
 

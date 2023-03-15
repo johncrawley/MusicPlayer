@@ -12,6 +12,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -28,7 +30,7 @@ public class MediaNotificationManager {
     private final MediaPlayerService mediaPlayerService;
     final static int NOTIFICATION_ID = 1001;
     private PendingIntent pendingIntent;
-    final static String NOTIFICATION_CHANNEL_ID = "com.jcrawley.webradio-notification";
+    final static String NOTIFICATION_CHANNEL_ID = "com.jcrawley.musicplayer-notification";
 
 
     MediaNotificationManager(Context context, MediaPlayerService mediaPlayerService){
@@ -38,18 +40,21 @@ public class MediaNotificationManager {
 
 
     Notification createNotification(String heading, String channelName){
+
+
         final NotificationCompat.Builder notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(heading)
                 .setContentText(channelName)
                 .setSilent(true)
-                .setSmallIcon(R.drawable.recycler_bg_selector)
                 .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
                 .setSmallIcon(R.drawable.ic_baseline_music_note_24)
+                .setLargeIcon(createLargeIconBitmap())
                 .setNumber(-1)
                 .setOnlyAlertOnce(true)
                 .setContentIntent(pendingIntent)
                 .setShowWhen(false)
                 .setOngoing(true);
+
         addPreviousButtonTo(notification);
         addPlayButtonTo(notification);
         //addStopButtonTo(notification);
@@ -58,10 +63,32 @@ public class MediaNotificationManager {
         return notification.build();
     }
 
+
+    private Bitmap createLargeIconBitmap(){
+        if (mediaPlayerService.getAlbumArt() != null){
+            return createScaledBitmapForLargeIcon(mediaPlayerService.getAlbumArt());
+        }
+        if(context == null){
+            return null;
+        }
+       Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.album_art_empty);
+        if(bitmap == null){
+            return null;
+        }
+        return createScaledBitmapForLargeIcon(bitmap);
+    }
+
+
+    private Bitmap createScaledBitmapForLargeIcon(Bitmap bitmap){
+        return Bitmap.createScaledBitmap(bitmap, 128, 128, false);
+    }
+
+
     void init(){
         setupNotificationChannel();
         setupNotificationClickForActivity();
     }
+
 
     void setupNotificationClickForActivity(){
         Intent resultIntent = new Intent(context, MainActivity.class);
