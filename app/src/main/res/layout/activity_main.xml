@@ -29,4 +29,12 @@
         android:layout_width="match_parent" />
 
 
+    <include layout="@layout/add_track_to_playlist"
+        android:id="@+id/addTrackToPlaylistView"
+        android:visibility="gone"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+
 </LinearLayout>

@@ -42,8 +42,11 @@ import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
+import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
+import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.db.track.Track;
 import com.jacstuff.musicplayer.fragments.options.StopOptionsFragment;
+import com.jacstuff.musicplayer.fragments.playlist.PlaylistRecyclerAdapter;
 import com.jacstuff.musicplayer.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.fragments.TabsViewStateAdapter;
@@ -82,14 +85,19 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView searchResultsRecyclerView;
     private SearchResultsListAdapter searchResultsListAdapter;
     private TabLayout tabLayout;
-    private View searchView;
+    private View searchView, addTrackToPlaylistView;
     private OnBackPressedCallback dismissSearchViewOnBackPressedCallback;
+    private OnBackPressedCallback dismissAddTrackToPlaylistViewOnBackPressedCallback;
     private Track selectedTrack;
     private Track selectedSearchResultTrack;
     private KeyboardHelper keyboardHelper;
     private MainViewModel viewModel;
     private ThemeHelper themeHelper;
     private boolean hasSearchResultBeenPlayed = false;
+
+    private PlaylistRecyclerAdapter playlistRecyclerAdapter;
+    private RecyclerView addTrackToPlaylistRecyclerView;
+    private PlaylistRepository playlistRepository;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -116,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         startMediaPlayerService();
         setupSearchView();
+        setupAddTrackToPlaylistView();
         setupDismissSearchOnBackPressed();
     }
 
@@ -154,6 +163,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void setupDismissAddTrackToPlaylistViewOnBackPressed(){
+        dismissAddTrackToPlaylistViewOnBackPressedCallback = new OnBackPressedCallback(false) {
+            @Override
+            public void handleOnBackPressed() {
+                hideAddTrackToPlaylistView();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, dismissAddTrackToPlaylistViewOnBackPressedCallback);
+    }
+
+
     public boolean isUserPlaylistLoaded(){
         return mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
     }
@@ -164,6 +184,25 @@ public class MainActivity extends AppCompatActivity {
         Animator animator = createShowAnimatorFor(searchView, ()-> keyboardHelper.showKeyboardAndFocusOn(searchEditText));
         searchView.setVisibility(View.VISIBLE);
         dismissSearchViewOnBackPressedCallback.setEnabled(true);
+        animator.start();
+    }
+
+
+    public void showAddTrackToPlaylistView(){
+        hideAllSearchResultsButtons();
+        Animator animator = createShowAnimatorFor(addTrackToPlaylistView, ()-> {});
+        addTrackToPlaylistView.setVisibility(View.VISIBLE);
+        dismissAddTrackToPlaylistViewOnBackPressedCallback.setEnabled(true);
+        animator.start();
+    }
+
+    private void hideAddTrackToPlaylistView(){
+        if(addTrackToPlaylistView.getVisibility() != View.VISIBLE){
+            return;
+        }
+        Animator animator = AnimatorHelper.createHideAnimatorFor(addTrackToPlaylistView, ()->
+            addTrackToPlaylistView.setVisibility(View.GONE));
+        dismissSearchViewOnBackPressedCallback.setEnabled(false);
         animator.start();
     }
 
@@ -787,13 +826,31 @@ public class MainActivity extends AppCompatActivity {
 
     public void setupSearchView() {
         searchResultsRecyclerView = findViewById(R.id.searchResultsRecyclerView);
-        setupRecyclerView(Collections.emptyList());
+        setupSearchRecyclerView(Collections.emptyList());
         setupSearchKeyListener();
         setupSearchViewButtons();
     }
 
 
-    private void setupRecyclerView(List<Track> tracks){
+    public void setupAddTrackToPlaylistView() {
+        addTrackToPlaylistView = findViewById(R.id.addTrackToPlaylistView);
+        playlistRepository = new PlaylistRepositoryImpl(getApplicationContext());
+        addTrackToPlaylistRecyclerView = findViewById(R.id.addTrackToPlaylistRecyclerView);
+        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(playlistRepository.getAllPlaylists(), this::addTrackToPlaylist);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        addTrackToPlaylistRecyclerView.setLayoutManager(layoutManager);
+        addTrackToPlaylistRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        addTrackToPlaylistRecyclerView.setAdapter(playlistRecyclerAdapter);
+    }
+
+
+    private void addTrackToPlaylist(Playlist playlist){
+
+    }
+
+
+    private void setupSearchRecyclerView(List<Track> tracks){
         if(tracks == null){
             return;
         }
