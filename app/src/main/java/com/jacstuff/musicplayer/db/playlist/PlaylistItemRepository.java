@@ -11,7 +11,8 @@ import com.jacstuff.musicplayer.db.track.Track;
 import java.util.List;
 
 public interface PlaylistItemRepository {
-    void addPlaylistItem(Track track, long playlistId);
+    boolean addPlaylistItem(Track track, long playlistId);
+    boolean isTrackAlreadyInPlaylist(Track track, long playlistId);
     void deletePlaylistItem(long  trackId);
     List<Track> getTracksForPlaylistId(long playlistId);
     void deleteAllPlaylistItems(long playlistId);

@@ -37,6 +37,7 @@ public interface PlaylistManager {
     void loadTracksFromArtist(String artistName);
 
     void addTrackToCurrentPlaylist(Track track, PlaylistViewNotifier playlistViewNotifier);
+    void addTrackToPlaylist(Track track, Playlist playlist, PlaylistViewNotifier playlistViewNotifier);
     void addTracksFromArtistToCurrentPlaylist(String artistName, PlaylistViewNotifier playlistViewNotifier);
     void addTracksFromAlbumToCurrentPlaylist(String albumName, PlaylistViewNotifier playlistViewNotifier);
     void removeTrackFromCurrentPlaylist(Track track, PlaylistViewNotifier playlistViewNotifier);

@@ -261,6 +261,12 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
         mediaNotificationManager.updateNotification();
     }
 
+    public void addTrackToPlaylist(Track track, Playlist playlist){
+        playlistManager.addTrackToPlaylist(track, playlist, playlistViewNotifier);
+        updateViewTrackList();
+        mediaNotificationManager.updateNotification();
+    }
+
 
     public void removeTrackFromCurrentPlaylist(Track track){
         playlistManager.removeTrackFromCurrentPlaylist(track, playlistViewNotifier);

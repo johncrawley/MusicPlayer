@@ -203,7 +203,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     @Override
     public void addTrackToCurrentPlaylist(Track track, PlaylistViewNotifier playlistViewNotifier) {
         if(!isUserPlaylistLoaded()){
-              return;
+            return;
         }
         if(currentPlaylistFilenames.contains(track.getPathname())){
             playlistViewNotifier.notifyViewOfTrackAlreadyInPlaylist();
@@ -216,6 +216,25 @@ public class PlaylistManagerImpl implements PlaylistManager {
         playlistViewNotifier.notifyViewOfTrackAddedToPlaylist();
         currentPlaylistFilenames.add(track.getPathname());
     }
+
+    @Override
+    public void addTrackToPlaylist(Track track, Playlist playlist, PlaylistViewNotifier playlistViewNotifier) {
+        if(playlist == null){
+            return;
+        }
+        long playlistId = playlist.getId();
+        if(playlistId == currentPlaylist.getId()){
+            addTrackToCurrentPlaylist(track, playlistViewNotifier);
+        }
+
+        if(playlistItemRepository.isTrackAlreadyInPlaylist(track, playlistId)){
+            playlistViewNotifier.notifyViewOfTrackAlreadyInPlaylist();
+            return;
+        }
+        playlistItemRepository.addPlaylistItem(track, playlistId);
+        playlistViewNotifier.notifyViewOfTrackAddedToPlaylist();
+    }
+
 
 
     private void addTracksToCurrentPlaylist(List<Track> additionalTracks, PlaylistViewNotifier playlistViewNotifier) {

@@ -38,6 +38,7 @@ public class TrackOptionsDialog extends DialogFragment {
 
     private void setupButtons(View parentView){
         setupButton(parentView, R.id.enqueueTrackButton, this::enqueueCurrentTrack);
+        setupButton(parentView, R.id.addTrackToPlaylistButton, this::showAddTrackToPlaylistDialog);
         Button removeTrackButton = setupButton(parentView, R.id.removeFromPlaylistButton, this::removeSelectedTrackFromPlaylist);
         setupVisibilityFor(removeTrackButton);
     }
@@ -62,6 +63,15 @@ public class TrackOptionsDialog extends DialogFragment {
         MainActivity mainActivity = getMainActivity();
         if(mainActivity != null){
             mainActivity.addSelectedTrackToQueue();
+        }
+        dismiss();
+    }
+
+
+    private void showAddTrackToPlaylistDialog(){
+        MainActivity mainActivity = getMainActivity();
+        if(mainActivity != null){
+            mainActivity.showAddTrackToPlaylistView();
         }
         dismiss();
     }

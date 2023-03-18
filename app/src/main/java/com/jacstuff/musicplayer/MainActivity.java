@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         setupSearchView();
         setupAddTrackToPlaylistView();
         setupDismissSearchOnBackPressed();
+        setupDismissAddTrackToPlaylistViewOnBackPressed();
     }
 
 
@@ -834,7 +835,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setupAddTrackToPlaylistView() {
         addTrackToPlaylistView = findViewById(R.id.addTrackToPlaylistView);
-        playlistRepository = new PlaylistRepositoryImpl(getApplicationContext());
+        playlistRepository = new PlaylistRepositoryImpl(MainActivity.this);
         addTrackToPlaylistRecyclerView = findViewById(R.id.addTrackToPlaylistRecyclerView);
         playlistRecyclerAdapter = new PlaylistRecyclerAdapter(playlistRepository.getAllPlaylists(), this::addTrackToPlaylist);
 
@@ -846,7 +847,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void addTrackToPlaylist(Playlist playlist){
-
+        mediaPlayerService.addTrackToPlaylist(selectedTrack, playlist);
     }
 
 

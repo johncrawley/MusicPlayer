@@ -5,6 +5,7 @@ import static com.jacstuff.musicplayer.db.DbContract.PlaylistItemsEntry.*;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 
 import com.jacstuff.musicplayer.db.AbstractRepository;
@@ -24,10 +25,31 @@ public class PlaylistItemRepositoryImpl extends AbstractRepository implements Pl
 
 
     @Override
-    public void addPlaylistItem(Track track, long playlistId) {
-        addValuesToTable(db,
+    public boolean addPlaylistItem(Track track, long playlistId) {
+
+       return -1 != addValuesToTable(db,
                 DbContract.PlaylistItemsEntry.TABLE_NAME,
                 createTrackContentValuesFor(track, playlistId));
+    }
+
+
+    @Override
+    public boolean isTrackAlreadyInPlaylist(Track track, long playlistId) {
+        String sql = "SELECT EXISTS (SELECT NULL FROM " + TABLE_NAME
+                + " WHERE " + COL_PATH + " = " + inQuotes(track.getPathname())
+                + " AND  " + COL_PLAYLIST_ID + " = "  + playlistId
+                +  " LIMIT 1);";
+
+        Cursor cursor = db.rawQuery(sql, null);
+        cursor.moveToFirst();
+        int result = cursor.getInt(0);
+        cursor.close();
+        return result == 1;
+    }
+
+
+    public String inQuotes(String str){
+        return "'" + str + "'";
     }
 
 

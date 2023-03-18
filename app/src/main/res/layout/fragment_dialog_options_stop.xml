@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/button_fragment_margin"
     android:gravity="center"
+    android:background="@color/default_dialog_background"
     android:orientation="vertical">
 
 
