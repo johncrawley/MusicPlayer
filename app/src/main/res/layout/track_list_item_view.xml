@@ -5,9 +5,9 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/row_pad_v"
+    android:paddingBottom="@dimen/track_list_item_row_padding_vertical"
     android:background="@drawable/recycler_bg_selector"
-    android:paddingTop="@dimen/row_pad_v">
+    android:paddingTop="@dimen/track_list_item_row_padding_vertical">
 
 
     <TextView
