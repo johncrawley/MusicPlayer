@@ -72,7 +72,7 @@ public class TracksFragment extends Fragment{
             return;
         }
         refreshTrackList(updatedTracks);
-        scrollToListPosition(currentTrackIndex);
+        scrollToAndSelectListPosition(currentTrackIndex);
     }
 
 
@@ -123,7 +123,7 @@ public class TracksFragment extends Fragment{
     }
 
 
-    public void scrollToListPosition(int index){
+    public void scrollToAndSelectListPosition(int index){
         if(trackListAdapter == null){
             return;
         }

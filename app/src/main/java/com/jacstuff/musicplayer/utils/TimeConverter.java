@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer;
+package com.jacstuff.musicplayer.utils;
 
 import android.annotation.SuppressLint;
 

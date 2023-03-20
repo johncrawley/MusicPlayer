@@ -42,6 +42,8 @@ public interface PlaylistManager {
     void addTracksFromAlbumToCurrentPlaylist(String albumName, PlaylistViewNotifier playlistViewNotifier);
     void removeTrackFromCurrentPlaylist(Track track, PlaylistViewNotifier playlistViewNotifier);
 
+    int getCurrentIndexOf(Track track);
+
     void enableShuffle();
     void disableShuffle();
     boolean isShuffleEnabled();

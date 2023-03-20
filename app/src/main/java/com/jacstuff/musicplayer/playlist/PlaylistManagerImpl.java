@@ -14,6 +14,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private final ArrayDeque<Track> queuedTracks;
     private boolean shouldOnlyDisplayMainArtists = true;
     private Set<String> currentPlaylistFilenames;
-
+    private Map<String, Integer> trackPathsToIndexesMap;
+    private Map<String, Integer> allTracksPathsToIndexesMap;
 
 
     public PlaylistManagerImpl(Context context, TrackLoader trackLoader){
@@ -60,6 +62,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         trackHistory = new TrackHistory();
         queuedTracks = new ArrayDeque<>();
         currentPlaylistFilenames = new HashSet<>();
+        trackPathsToIndexesMap = new HashMap<>();
     }
 
 
@@ -211,11 +214,19 @@ public class PlaylistManagerImpl implements PlaylistManager {
         }
         tracks.add(track);
         unPlayedTracks.add(track);
-        track.setIndex(tracks.size()-1);
+        setIndexForAddedTrack(track);
         playlistItemRepository.addPlaylistItem(track, currentPlaylist.getId());
         playlistViewNotifier.notifyViewOfTrackAddedToPlaylist();
         currentPlaylistFilenames.add(track.getPathname());
     }
+
+
+    private void setIndexForAddedTrack(Track track){
+        int index = tracks.size() - 1;
+        track.setIndex(index);
+        trackPathsToIndexesMap.put(track.getPathname(), index);
+    }
+
 
     @Override
     public void addTrackToPlaylist(Track track, Playlist playlist, PlaylistViewNotifier playlistViewNotifier) {
@@ -282,14 +293,35 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
+    public int getCurrentIndexOf(Track track) {
+        Integer index = trackPathsToIndexesMap.getOrDefault(track.getPathname(), -1);
+        return index == null ? -1 : index;
+    }
+
+
+    @Override
     public void loadAllTracksPlaylist(){
-        if(allTracks == null){
-            initTrackList();
-        }
+        initAllTracks();
+        setAllTracksIndexes();
         setupUnPlayedIndexes();
         trackHistory.reset();
         currentPlaylist = allTracksPlaylist;
         tracks = new ArrayList<>(allTracks);
+    }
+
+
+    private void initAllTracks(){
+        if(allTracks == null){
+            initTrackList();
+        }
+    }
+
+
+    private void setAllTracksIndexes(){
+        if(allTracksPathsToIndexesMap == null){
+            assignIndexesToAllTracks();
+        }
+        trackPathsToIndexesMap = allTracksPathsToIndexesMap;
     }
 
 
@@ -357,9 +389,24 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void assignIndexesToTracks(){
+        trackPathsToIndexesMap = new HashMap<>();
         for(int i = 0; i< tracks.size(); i++){
-            tracks.get(i).setIndex(i);
+            assignIndexToTrack(tracks.get(i), i);
         }
+    }
+
+
+    private void assignIndexesToAllTracks(){
+        allTracksPathsToIndexesMap = new HashMap<>();
+        for(int i = 0; i< tracks.size(); i++){
+            allTracksPathsToIndexesMap.put(tracks.get(i).getPathname(), i);
+        }
+    }
+
+
+    private void assignIndexToTrack(Track track, int index){
+        track.setIndex(index);
+        trackPathsToIndexesMap.put(track.getPathname(), index);
     }
 
 

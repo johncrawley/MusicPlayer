@@ -325,6 +325,11 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     private void loadNext(){
+        loadTrack(playlistManager.getNextTrack());
+    }
+
+
+    private void loadNextOLD(){
         Track nextTrack = playlistManager.getNextTrack();
         if(playlistManager.hasTracksQueued()){
             loadTrackDeselectCurrentTrack(nextTrack);
@@ -345,8 +350,19 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
             return;
         }
         assignTrack(track);
-        mainActivity.scrollToPosition(track.getIndex());
+        scrollToPositionOf(track);
         mediaNotificationManager.updateNotification();
+    }
+
+
+    private void scrollToPositionOf(Track track){
+        int trackIndexOnCurrentPlaylist = playlistManager.getCurrentIndexOf(track);
+        if(trackIndexOnCurrentPlaylist == - 1){
+            mainActivity.deselectCurrentTrack();
+        }
+        else {
+            mainActivity.scrollToAndSelectPosition(trackIndexOnCurrentPlaylist);
+        }
     }
 
 

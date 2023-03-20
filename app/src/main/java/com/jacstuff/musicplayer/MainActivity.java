@@ -51,11 +51,13 @@ import com.jacstuff.musicplayer.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.fragments.TabsViewStateAdapter;
 import com.jacstuff.musicplayer.list.SearchResultsListAdapter;
+import com.jacstuff.musicplayer.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.search.AnimatorHelper;
 import com.jacstuff.musicplayer.search.KeyListenerHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.theme.ThemeHelper;
 import com.jacstuff.musicplayer.utils.KeyboardHelper;
+import com.jacstuff.musicplayer.utils.TimeConverter;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 
@@ -225,12 +227,22 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void scrollToPositionIfSearchResultHasBeenPlayed(){
+        PlaylistManager playlistManager = mediaPlayerService.getPlaylistManager();
+        if(playlistManager == null){
+            return;
+        }
         if(hasSearchResultBeenPlayed && tracksFragment != null){
-            if (mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded()) {
-                deselectCurrentTrackAfterDelay();
+            if (playlistManager.isUserPlaylistLoaded()) {
+                int index = playlistManager.getCurrentIndexOf(selectedSearchResultTrack);
+                if(index != -1){
+                    tracksFragment.scrollToAndSelectListPosition(index);
+                }
+                else{
+                    deselectCurrentTrackAfterDelay();
+                }
             }
             else{
-                tracksFragment.scrollToListPosition(selectedSearchResultTrack.getIndex());
+                tracksFragment.scrollToAndSelectListPosition(selectedSearchResultTrack.getIndex());
             }
         }
         hasSearchResultBeenPlayed = false;
@@ -637,7 +649,7 @@ public class MainActivity extends AppCompatActivity {
                 trackAlbum.setText(track.getAlbum());
                 trackArtist.setText(track.getArtist());
                 setTrackTimeInfo(elapsedTime, track.getDuration());
-                trackTimeSeekBar.setProgress((int)elapsedTime);
+                trackTimeSeekBar.setProgress(elapsedTime);
         });
     }
 
@@ -657,10 +669,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void scrollToPosition(int index){
+    public void scrollToAndSelectPosition(int index){
        runOnUiThread(()-> {
            if(tracksFragment != null){
-               tracksFragment.scrollToListPosition(index);
+               tracksFragment.scrollToAndSelectListPosition(index);
            }
        });
     }
