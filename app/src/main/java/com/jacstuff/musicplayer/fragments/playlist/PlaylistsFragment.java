@@ -93,7 +93,9 @@ public class PlaylistsFragment extends Fragment {
 
     private void setupPlaylistRecyclerView(View parentView){
         recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
-        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(getAllPlaylists(), this::showOrHideButtonsOnPlaylistItemSelected);
+        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(getAllPlaylists(),
+                this::showOrHideButtonsOnPlaylistItemSelected,
+                this::startPlaylistOptionsFragment);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -102,8 +104,8 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-    private void showOrHideButtonsOnPlaylistItemSelected(Playlist p){
-        if(p.getId().equals(PlaylistManagerImpl.ALL_TRACKS_PLAYLIST_ID)){
+    private void showOrHideButtonsOnPlaylistItemSelected(Playlist playlist){
+        if(playlist.getId().equals(PlaylistManagerImpl.ALL_TRACKS_PLAYLIST_ID)){
             removePlaylistButton.setVisibility(View.INVISIBLE);
         }
         else{
@@ -133,6 +135,19 @@ public class PlaylistsFragment extends Fragment {
         removePreviousFragmentTransaction(fragmentManager,tag, fragmentTransaction);
         AddPlaylistFragment addPlaylistFragment = AddPlaylistFragment.newInstance();
         addPlaylistFragment.show(fragmentTransaction, tag);
+    }
+
+
+    private void startPlaylistOptionsFragment(Playlist playlist){
+        String tag = "playlist_options";
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if(fragmentManager == null){
+            return;
+        }
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        removePreviousFragmentTransaction(fragmentManager,tag, fragmentTransaction);
+        PlaylistOptionsFragment playlistOptionsFragment = PlaylistOptionsFragment.newInstance();
+        playlistOptionsFragment.show(fragmentTransaction, tag);
     }
 
 

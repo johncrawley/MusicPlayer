@@ -22,7 +22,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
-    private final Consumer<Playlist> onItemClickConsumer;
+    private final Consumer<Playlist> onItemClickConsumer, onItemLongClickConsumer;
     private Playlist selectedPlaylist;
 
 
@@ -43,13 +43,28 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
                 currentlySelectedView.setSelected(true);
                 onItemClickConsumer.accept(selectedPlaylist);
             });
+
+            view.setOnLongClickListener( v -> {
+                onItemLongClickConsumer.accept(selectedPlaylist);
+                return false;
+            });
         }
+    }
+
+
+    public PlaylistRecyclerAdapter(List<Playlist> playlists,
+                                   Consumer<Playlist> onItemClickConsumer,
+                                   Consumer<Playlist> onItemLongClickConsumer){
+        this.playlists = new ArrayList<>(playlists);
+        this.onItemClickConsumer = onItemClickConsumer;
+        this.onItemLongClickConsumer = onItemLongClickConsumer;
     }
 
 
     public PlaylistRecyclerAdapter(List<Playlist> playlists, Consumer<Playlist> onItemClickConsumer){
         this.playlists = new ArrayList<>(playlists);
         this.onItemClickConsumer = onItemClickConsumer;
+        this.onItemLongClickConsumer = playlist -> {};
     }
 
 
