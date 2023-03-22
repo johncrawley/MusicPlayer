@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.fragments.StringListAdapter;
+import com.jacstuff.musicplayer.fragments.playlist.PlaylistOptionsFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.utils.ButtonMaker;
 
@@ -25,7 +29,6 @@ public class ArtistsFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private StringListAdapter listAdapter;
-    private int previousIndex = 0;
     private View parentView;
     private Button loadTracksFromArtistButton, addTracksToPlaylistButton;
 
@@ -106,10 +109,42 @@ public class ArtistsFragment extends Fragment {
         if(this.parentView == null ||artists == null){
             return;
         }
-        listAdapter = new StringListAdapter(artists, this::setButtonsVisibility);
+        listAdapter = new StringListAdapter(artists, this::setButtonsVisibility, this::showOptionsDialog);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);
+    }
+
+
+    private void showOptionsDialog(String artistName){
+        String tag = "artist_options";
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if(fragmentManager == null){
+            return;
+        }
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        removePreviousFragmentTransaction(fragmentManager,tag, fragmentTransaction);
+        ArtistOptionsFragment artistOptionsFragment = ArtistOptionsFragment.newInstance();
+        artistOptionsFragment.show(fragmentTransaction, tag);
+
+    }
+
+
+    private FragmentManager getSupportFragmentManager(){
+        FragmentActivity activity = getActivity();
+        if(activity == null){
+            return null;
+        }
+        return activity.getSupportFragmentManager();
+    }
+
+
+    private void removePreviousFragmentTransaction(FragmentManager fragmentManager, String tag, FragmentTransaction fragmentTransaction){
+        Fragment prev = fragmentManager.findFragmentByTag(tag);
+        if (prev != null) {
+            fragmentTransaction.remove(prev);
+        }
+        fragmentTransaction.addToBackStack(null);
     }
 
 

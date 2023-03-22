@@ -20,7 +20,7 @@ public class StringListAdapter extends RecyclerView.Adapter<com.jacstuff.musicpl
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
-    private final Consumer<String> clickConsumer;
+    private final Consumer<String> clickConsumer, longClickConsumer;
     private String currentItem;
 
 
@@ -41,6 +41,11 @@ public class StringListAdapter extends RecyclerView.Adapter<com.jacstuff.musicpl
                 selectedPosition = RecyclerView.NO_POSITION;
                 clickConsumer.accept(currentItem);
             });
+
+            view.setOnLongClickListener(v -> {
+                longClickConsumer.accept(currentItem);
+                return false;
+            });
         }
     }
 
@@ -50,9 +55,15 @@ public class StringListAdapter extends RecyclerView.Adapter<com.jacstuff.musicpl
     }
 
 
-    public StringListAdapter(List<String> items, Consumer<String> clickConsumer){
+    public StringListAdapter(List<String> items, Consumer<String> clickConsumer, Consumer<String> longClickConsumer){
         this.items = new ArrayList<>(items);
         this.clickConsumer = clickConsumer;
+        this.longClickConsumer = longClickConsumer;
+    }
+
+
+    public StringListAdapter(List<String> items, Consumer<String> clickConsumer){
+        this(items, clickConsumer, s-> {});
     }
 
 

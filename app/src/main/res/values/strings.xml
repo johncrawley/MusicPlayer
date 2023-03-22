@@ -61,6 +61,8 @@
     <string name="button_playlist_options_load">Load</string>
     <string name="button_playlist_options_remove">Remove</string>
     <string name="button_playlist_options_new">New</string>
+    <string name="button_artist_options_load">Load</string>
+    <string name="button_artist_options_add_tracks_to_playlist">Add To Playlist</string>
 
     <string name="album_art_content_description">Album Art</string>
 
