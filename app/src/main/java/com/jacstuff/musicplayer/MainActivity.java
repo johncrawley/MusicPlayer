@@ -13,7 +13,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -35,7 +34,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +54,7 @@ import com.jacstuff.musicplayer.search.AnimatorHelper;
 import com.jacstuff.musicplayer.search.KeyListenerHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.theme.ThemeHelper;
+import com.jacstuff.musicplayer.utils.AlbumArtHelper;
 import com.jacstuff.musicplayer.utils.KeyboardHelper;
 import com.jacstuff.musicplayer.utils.TimeConverter;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
@@ -77,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView trackTime, trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton, pauseButton, stopButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton;
     private Button addSearchResultButton, enqueueSearchResultButton, playSearchResultButton;
-    private ImageView albumArtImageView;
     private SeekBar trackTimeSeekBar;
     private boolean isTrackTimeSeekBarHeld = false;
     private EditText searchEditText;
@@ -96,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel viewModel;
     private ThemeHelper themeHelper;
     private boolean hasSearchResultBeenPlayed = false;
+    AlbumArtHelper albumArtHelper;
 
     private PlaylistRecyclerAdapter playlistRecyclerAdapter;
     private RecyclerView addTrackToPlaylistRecyclerView;
@@ -122,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         setupViewModel();
         keyboardHelper = new KeyboardHelper(this);
         setupViews();
+        albumArtHelper = new AlbumArtHelper(this);
         setupTabLayout();
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         startMediaPlayerService();
@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public List<String> getAlbumNames(){
-        if(mediaPlayerService == null || mediaPlayerService.getPlaylistManager() == null){
+        if(isPlaylistManagerUnavailable()){
             return Collections.emptyList();
         }
         return mediaPlayerService.getPlaylistManager().getAlbumNames();
@@ -266,10 +266,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     public List<String> getArtistNames(){
-        if(mediaPlayerService == null || mediaPlayerService.getPlaylistManager() == null){
+        if(isPlaylistManagerUnavailable()){
             return Collections.emptyList();
         }
         return mediaPlayerService.getPlaylistManager().getArtistNames();
+    }
+
+
+    private boolean isPlaylistManagerUnavailable(){
+        return mediaPlayerService == null || mediaPlayerService.getPlaylistManager() == null;
     }
 
 
@@ -344,13 +349,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void setAlbumArt(Bitmap coverArtBitmap){
-        runOnUiThread(()-> {
-            if (coverArtBitmap != null) {
-                albumArtImageView.setImageDrawable(new BitmapDrawable(getApplicationContext().getResources(), coverArtBitmap));
-                return;
-            }
-            albumArtImageView.setImageResource(R.drawable.album_art_empty);
-        });
+        albumArtHelper.changeAlbumArtTo(coverArtBitmap);
     }
 
 
@@ -538,7 +537,6 @@ public class MainActivity extends AppCompatActivity {
         trackTitle = findViewById(R.id.trackTitle);
         trackAlbum = findViewById(R.id.albumTextView);
         trackArtist = findViewById(R.id.artistTextView);
-        albumArtImageView = findViewById(R.id.albumArtImageView);
     }
 
 
