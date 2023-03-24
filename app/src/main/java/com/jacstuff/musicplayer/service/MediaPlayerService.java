@@ -431,6 +431,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
         this.mainActivity = mainActivity;
         playlistViewNotifier = new PlaylistViewNotifierImpl(mainActivity);
         createPlaylistManagerAndTrackLoader();
+        mainActivity.initAlbumArt();
         if(!haveTracksBeenLoaded){
             loadTrackDataFromFilesystem();
             haveTracksBeenLoaded = true;
@@ -635,7 +636,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    Bitmap getAlbumArt(){
+    public Bitmap getAlbumArt(){
         return currentAlbumArt;
     }
 

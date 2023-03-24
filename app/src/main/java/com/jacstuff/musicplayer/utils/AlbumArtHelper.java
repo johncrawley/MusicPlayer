@@ -6,8 +6,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import androidx.fragment.app.FragmentTransaction;
+
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.fragments.albumart.AlbumArtDialog;
 
 public class AlbumArtHelper {
 
@@ -17,7 +20,10 @@ public class AlbumArtHelper {
 
     public AlbumArtHelper(MainActivity mainActivity){
         this.mainActivity = mainActivity;
+        currentAlbumArt = mainActivity.getMediaPlayerService().getAlbumArt();
         this.albumArtImageView = mainActivity.findViewById(R.id.albumArtImageView);
+        assignAlbumArt(albumArtImageView, currentAlbumArt);
+        setupAlbumViewClick();
     }
 
 
@@ -26,8 +32,38 @@ public class AlbumArtHelper {
             if (isCurrentCoverTheSame(updatedAlbumArt)) {
                 return;
             }
-            changeImageTo(updatedAlbumArt);
+            changeImageTo(albumArtImageView, updatedAlbumArt);
         });
+    }
+
+
+    public void changeAlbumArtToCurrent(ImageView imageView){
+        if(currentAlbumArt == null){
+            return;
+        }
+        changeImageTo(imageView, currentAlbumArt);
+    }
+
+
+    public void changeAlbumArtTo(ImageView imageView, Bitmap updatedAlbumArt){
+        if(updatedAlbumArt == null){
+            return;
+        }
+        changeImageTo(imageView, updatedAlbumArt);
+    }
+
+
+    private void setupAlbumViewClick(){
+        albumArtImageView.setOnClickListener(v->startAlbumArtDialog());
+    }
+
+    private void startAlbumArtDialog(){
+        if(currentAlbumArt == null){
+            return;
+        }
+        String tag = "show_large_album_art_dialog";
+        FragmentTransaction fragmentTransaction = FragmentHelper.createTransaction(mainActivity, tag);
+        AlbumArtDialog.newInstance().show(fragmentTransaction, tag);
     }
 
 
@@ -45,19 +81,19 @@ public class AlbumArtHelper {
     }
 
 
-    private void changeImageTo(Bitmap updatedAlbumArt){
+    private void changeImageTo(ImageView imageView, Bitmap updatedAlbumArt){
         currentAlbumArt = updatedAlbumArt;
         Animation fadeOut = AnimationUtils.loadAnimation(mainActivity, R.anim.fade_out);
-        albumArtImageView.startAnimation(fadeOut);
+        imageView.startAnimation(fadeOut);
 
         fadeOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {}
             @Override
             public void onAnimationEnd(Animation animation) {
-                assignAlbumArt(updatedAlbumArt);
+                assignAlbumArt(imageView, updatedAlbumArt);
                 Animation fadeIn = AnimationUtils.loadAnimation(mainActivity, R.anim.fade_in);
-                albumArtImageView.startAnimation(fadeIn);
+                imageView.startAnimation(fadeIn);
             }
             @Override
             public void onAnimationRepeat(Animation animation) {}
@@ -65,14 +101,15 @@ public class AlbumArtHelper {
     }
 
 
-    private void assignAlbumArt(Bitmap updatedAlbumArt){
+    private void assignAlbumArt(ImageView imageView, Bitmap updatedAlbumArt){
         if (updatedAlbumArt != null) {
-            albumArtImageView.setImageDrawable(new BitmapDrawable(mainActivity.getResources(), updatedAlbumArt));
+            imageView.setImageDrawable(new BitmapDrawable(mainActivity.getResources(), updatedAlbumArt));
             return;
         }
         albumArtImageView.setImageResource(R.drawable.album_art_empty);
 
     }
+
 
 
 

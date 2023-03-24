@@ -15,7 +15,6 @@ import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -43,6 +42,7 @@ import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.fragments.albumart.AlbumArtDialog;
 import com.jacstuff.musicplayer.fragments.options.StopOptionsFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistRecyclerAdapter;
 import com.jacstuff.musicplayer.fragments.tracks.TracksFragment;
@@ -55,6 +55,7 @@ import com.jacstuff.musicplayer.search.KeyListenerHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.theme.ThemeHelper;
 import com.jacstuff.musicplayer.utils.AlbumArtHelper;
+import com.jacstuff.musicplayer.utils.FragmentHelper;
 import com.jacstuff.musicplayer.utils.KeyboardHelper;
 import com.jacstuff.musicplayer.utils.TimeConverter;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
@@ -115,13 +116,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        themeHelper = new ThemeHelper();
-        themeHelper.assignTheme(this);
+        assignTheme();
         setContentView(R.layout.activity_main);
         setupViewModel();
         keyboardHelper = new KeyboardHelper(this);
         setupViews();
-        albumArtHelper = new AlbumArtHelper(this);
         setupTabLayout();
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         startMediaPlayerService();
@@ -132,10 +131,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void assignTheme(){
+        themeHelper = new ThemeHelper();
+        themeHelper.assignTheme(this);
+    }
+
+
     public void onStart() {
         super.onStart();
         themeHelper.restartActivityIfDifferentThemeSet(this);
         updateArtistsListInCaseMinTracksSettingHasChanged();
+    }
+
+
+    public AlbumArtHelper getAlbumArtHelper(){
+        return this.albumArtHelper;
     }
 
 
@@ -348,8 +358,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void initAlbumArt(){
+        albumArtHelper = new AlbumArtHelper(this);
+    }
+
     public void setAlbumArt(Bitmap coverArtBitmap){
         albumArtHelper.changeAlbumArtTo(coverArtBitmap);
+        notifyAlbumArtFragment(coverArtBitmap);
+    }
+
+
+
+    private void notifyAlbumArtFragment(Bitmap bitmap){
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AlbumArtDialog.BUNDLE_KEY_BITMAP_UPDATE, bitmap);
+        runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(AlbumArtDialog.SEND_BITMAP_TO_ALBUM_ART_FRAGMENT, bundle));
     }
 
 
@@ -565,19 +588,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void createStopOptionsFragment(){
         String tag = "stop_options_dialog";
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        removePreviousFragmentTransaction(tag, fragmentTransaction);
-        StopOptionsFragment stopOptionsFragment = StopOptionsFragment.newInstance();
-        stopOptionsFragment.show(fragmentTransaction, tag);
-    }
-
-
-    private void removePreviousFragmentTransaction(String tag, FragmentTransaction fragmentTransaction){
-        Fragment prev = getSupportFragmentManager().findFragmentByTag(tag);
-        if (prev != null) {
-            fragmentTransaction.remove(prev);
-        }
-        fragmentTransaction.addToBackStack(null);
+        FragmentTransaction fragmentTransaction = FragmentHelper.createTransaction(this, tag);
+        StopOptionsFragment.newInstance().show(fragmentTransaction, tag);
     }
 
 
@@ -725,16 +737,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void updateAlbumsList(ArrayList<String> albums){
-        Bundle bundle = new Bundle();
-        bundle.putStringArrayList(BUNDLE_KEY_ALBUM_UPDATES, albums);
-        runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(SEND_ALBUMS_TO_FRAGMENT, bundle));
+        sendArrayListToFragment(SEND_ALBUMS_TO_FRAGMENT, BUNDLE_KEY_ALBUM_UPDATES, albums);
     }
 
 
     public void updateArtistsList(ArrayList<String> artists){
+        sendArrayListToFragment(SEND_ARTISTS_TO_FRAGMENT, BUNDLE_KEY_ARTIST_UPDATES, artists);
+    }
+
+
+    private void sendArrayListToFragment(String requestKey, String itemKey, ArrayList<String> arrayList){
         Bundle bundle = new Bundle();
-        bundle.putStringArrayList(BUNDLE_KEY_ARTIST_UPDATES, artists);
-        runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(SEND_ARTISTS_TO_FRAGMENT, bundle));
+        bundle.putStringArrayList(itemKey, arrayList);
+        runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(requestKey, bundle));
     }
 
 
