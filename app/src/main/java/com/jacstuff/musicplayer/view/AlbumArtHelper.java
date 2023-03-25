@@ -1,29 +1,71 @@
-package com.jacstuff.musicplayer.utils;
+package com.jacstuff.musicplayer.view;
 
+import static com.jacstuff.musicplayer.search.AnimatorHelper.createShowAnimatorFor;
+
+import android.animation.Animator;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.fragments.albumart.AlbumArtDialog;
+import com.jacstuff.musicplayer.search.AnimatorHelper;
+import com.jacstuff.musicplayer.utils.FragmentHelper;
 
 public class AlbumArtHelper {
 
     private final MainActivity mainActivity;
-    private final ImageView albumArtImageView;
+    private final ImageView albumArtImageView, albumArtLargeImageView;
     private Bitmap currentAlbumArt;
+    private OnBackPressedCallback dismissAlbumArtLargeViewOnBackPressedCallback;
+    private final View albumArtLargeView;
+
 
     public AlbumArtHelper(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         currentAlbumArt = mainActivity.getMediaPlayerService().getAlbumArt();
         this.albumArtImageView = mainActivity.findViewById(R.id.albumArtImageView);
+        this.albumArtLargeView = mainActivity.findViewById(R.id.albumArtLargeView);
+        albumArtLargeImageView = mainActivity.findViewById(R.id.albumArtLargeImageView);
         assignAlbumArt(albumArtImageView, currentAlbumArt);
         setupAlbumViewClick();
+        setupDismissSearchOnBackPressed();
+    }
+
+
+    private void setupDismissSearchOnBackPressed(){
+        dismissAlbumArtLargeViewOnBackPressedCallback = new OnBackPressedCallback(false) {
+            @Override
+            public void handleOnBackPressed() {
+                hideAlbumArtLargeView();
+            }
+        };
+        mainActivity.getOnBackPressedDispatcher().addCallback(mainActivity, dismissAlbumArtLargeViewOnBackPressedCallback);
+    }
+
+
+    private void hideAlbumArtLargeView(){
+        if(albumArtLargeView.getVisibility() != View.VISIBLE){
+            return;
+        }
+        Animator animator = AnimatorHelper.createHideAnimatorFor(albumArtLargeView, ()-> albumArtLargeView.setVisibility(View.GONE));
+        dismissAlbumArtLargeViewOnBackPressedCallback.setEnabled(false);
+        animator.start();
+    }
+
+
+    private void showAlbumArtLargeView(){
+        Animator animator = createShowAnimatorFor(albumArtLargeView, ()-> {});
+        albumArtLargeView.setVisibility(View.VISIBLE);
+        dismissAlbumArtLargeViewOnBackPressedCallback.setEnabled(true);
+        animator.start();
     }
 
 
@@ -33,14 +75,12 @@ public class AlbumArtHelper {
                 return;
             }
             changeImageTo(albumArtImageView, updatedAlbumArt);
+            changeImageTo(albumArtLargeImageView, updatedAlbumArt);
         });
     }
 
 
     public void changeAlbumArtToCurrent(ImageView imageView){
-        if(currentAlbumArt == null){
-            return;
-        }
         changeImageTo(imageView, currentAlbumArt);
     }
 
@@ -54,8 +94,9 @@ public class AlbumArtHelper {
 
 
     private void setupAlbumViewClick(){
-        albumArtImageView.setOnClickListener(v->startAlbumArtDialog());
+        albumArtImageView.setOnClickListener(v-> showAlbumArtLargeView());
     }
+
 
     private void startAlbumArtDialog(){
         if(currentAlbumArt == null){

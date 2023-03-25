@@ -31,10 +31,7 @@ public class AnimatorHelper {
             @Override public void onAnimationStart(@NonNull Animator animator) {}
             @Override public void onAnimationCancel(@NonNull Animator animator) {}
             @Override public void onAnimationRepeat(@NonNull Animator animator) {}
-            @Override
-            public void onAnimationEnd(@NonNull Animator animator) {
-                onFinish.run();
-            }
+            @Override public void onAnimationEnd(@NonNull Animator animator) { onFinish.run();}
         });
         return animator;
 

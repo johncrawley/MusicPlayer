@@ -54,7 +54,7 @@ import com.jacstuff.musicplayer.search.AnimatorHelper;
 import com.jacstuff.musicplayer.search.KeyListenerHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.theme.ThemeHelper;
-import com.jacstuff.musicplayer.utils.AlbumArtHelper;
+import com.jacstuff.musicplayer.view.AlbumArtHelper;
 import com.jacstuff.musicplayer.utils.FragmentHelper;
 import com.jacstuff.musicplayer.utils.KeyboardHelper;
 import com.jacstuff.musicplayer.utils.TimeConverter;

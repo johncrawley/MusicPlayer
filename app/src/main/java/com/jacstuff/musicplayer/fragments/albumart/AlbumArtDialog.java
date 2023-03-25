@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import androidx.fragment.app.DialogFragment;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.utils.AlbumArtHelper;
+import com.jacstuff.musicplayer.view.AlbumArtHelper;
 
 public class AlbumArtDialog extends DialogFragment {
 
