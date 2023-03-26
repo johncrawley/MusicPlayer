@@ -407,6 +407,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
             return;
         }
         assignAlbumArt(track);
+        mediaNotificationManager.updateNotification();
         mainActivity.setTrackInfoOnView(currentTrack, 0);
         if(currentState == MediaPlayerState.PAUSED){
             mainActivity.hideTrackSeekBar();
