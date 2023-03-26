@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.utils;
+package com.jacstuff.musicplayer.view.utils;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;

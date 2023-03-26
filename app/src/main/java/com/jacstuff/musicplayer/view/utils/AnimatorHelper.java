@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.search;
+package com.jacstuff.musicplayer.view.utils;
 
 import android.animation.Animator;
 import android.view.View;

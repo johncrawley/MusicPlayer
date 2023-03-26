@@ -1,6 +1,6 @@
 package com.jacstuff.musicplayer;
 
-import static com.jacstuff.musicplayer.search.AnimatorHelper.createShowAnimatorFor;
+import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.createShowAnimatorFor;
 
 import android.Manifest;
 
@@ -50,14 +50,14 @@ import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.fragments.TabsViewStateAdapter;
 import com.jacstuff.musicplayer.list.SearchResultsListAdapter;
 import com.jacstuff.musicplayer.playlist.PlaylistManager;
-import com.jacstuff.musicplayer.search.AnimatorHelper;
-import com.jacstuff.musicplayer.search.KeyListenerHelper;
+import com.jacstuff.musicplayer.view.utils.AnimatorHelper;
+import com.jacstuff.musicplayer.view.search.KeyListenerHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.theme.ThemeHelper;
-import com.jacstuff.musicplayer.view.AlbumArtHelper;
-import com.jacstuff.musicplayer.utils.FragmentHelper;
-import com.jacstuff.musicplayer.utils.KeyboardHelper;
-import com.jacstuff.musicplayer.utils.TimeConverter;
+import com.jacstuff.musicplayer.view.art.AlbumArtHelper;
+import com.jacstuff.musicplayer.view.utils.FragmentHelper;
+import com.jacstuff.musicplayer.view.utils.KeyboardHelper;
+import com.jacstuff.musicplayer.view.utils.TimeConverter;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
 import com.jacstuff.musicplayer.viewmodel.MainViewModel;
 

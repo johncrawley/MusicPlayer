@@ -16,7 +16,7 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
-import com.jacstuff.musicplayer.utils.KeyboardHelper;
+import com.jacstuff.musicplayer.view.utils.KeyboardHelper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

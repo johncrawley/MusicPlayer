@@ -15,7 +15,7 @@ import com.jacstuff.musicplayer.db.playlist.Playlist;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
-import com.jacstuff.musicplayer.utils.ButtonMaker;
+import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.utils;
+package com.jacstuff.musicplayer.view.utils;
 
 import android.app.Activity;
 import android.content.Context;

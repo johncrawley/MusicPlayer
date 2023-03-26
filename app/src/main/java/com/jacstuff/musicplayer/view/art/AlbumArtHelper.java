@@ -1,6 +1,6 @@
-package com.jacstuff.musicplayer.view;
+package com.jacstuff.musicplayer.view.art;
 
-import static com.jacstuff.musicplayer.search.AnimatorHelper.createShowAnimatorFor;
+import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.createShowAnimatorFor;
 
 import android.animation.Animator;
 import android.graphics.Bitmap;
@@ -16,8 +16,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.fragments.albumart.AlbumArtDialog;
-import com.jacstuff.musicplayer.search.AnimatorHelper;
-import com.jacstuff.musicplayer.utils.FragmentHelper;
+import com.jacstuff.musicplayer.view.utils.AnimatorHelper;
+import com.jacstuff.musicplayer.view.utils.FragmentHelper;
 
 public class AlbumArtHelper {
 
@@ -26,6 +26,7 @@ public class AlbumArtHelper {
     private Bitmap currentAlbumArt;
     private OnBackPressedCallback dismissAlbumArtLargeViewOnBackPressedCallback;
     private final View albumArtLargeView;
+    private boolean isLargeAlbumArtVisible;
 
 
     public AlbumArtHelper(MainActivity mainActivity){
@@ -36,37 +37,41 @@ public class AlbumArtHelper {
         albumArtLargeImageView = mainActivity.findViewById(R.id.albumArtLargeImageView);
         assignAlbumArt(albumArtImageView, currentAlbumArt);
         setupAlbumViewClick();
-        setupDismissSearchOnBackPressed();
+        setupDismissLargeAlbumArtOnBackPressed();
     }
 
 
-    private void setupDismissSearchOnBackPressed(){
+    private void setupDismissLargeAlbumArtOnBackPressed(){
         dismissAlbumArtLargeViewOnBackPressedCallback = new OnBackPressedCallback(false) {
             @Override
             public void handleOnBackPressed() {
-                hideAlbumArtLargeView();
+                hideLargeAlbumArt();
             }
         };
         mainActivity.getOnBackPressedDispatcher().addCallback(mainActivity, dismissAlbumArtLargeViewOnBackPressedCallback);
     }
 
 
-    private void hideAlbumArtLargeView(){
-        if(albumArtLargeView.getVisibility() != View.VISIBLE){
-            return;
-        }
-        Animator animator = AnimatorHelper.createHideAnimatorFor(albumArtLargeView, ()-> albumArtLargeView.setVisibility(View.GONE));
-        dismissAlbumArtLargeViewOnBackPressedCallback.setEnabled(false);
-        animator.start();
-    }
-
-
-    private void showAlbumArtLargeView(){
-        Animator animator = createShowAnimatorFor(albumArtLargeView, ()-> {});
+    private void showLargeAlbumArt(){
+        Animator animator = createShowAnimatorFor(albumArtLargeView, ()-> {isLargeAlbumArtVisible = true;});
         albumArtLargeView.setVisibility(View.VISIBLE);
         dismissAlbumArtLargeViewOnBackPressedCallback.setEnabled(true);
         animator.start();
     }
+
+
+    private void hideLargeAlbumArt(){
+        if(albumArtLargeView.getVisibility() != View.VISIBLE){
+            return;
+        }
+        Animator animator = AnimatorHelper.createHideAnimatorFor(albumArtLargeView, ()-> {
+            albumArtLargeView.setVisibility(View.GONE);
+            isLargeAlbumArtVisible = false;
+        });
+        dismissAlbumArtLargeViewOnBackPressedCallback.setEnabled(false);
+        animator.start();
+    }
+
 
 
     public void changeAlbumArtTo(Bitmap updatedAlbumArt){
@@ -74,37 +79,19 @@ public class AlbumArtHelper {
             if (isCurrentCoverTheSame(updatedAlbumArt)) {
                 return;
             }
-            changeImageTo(albumArtImageView, updatedAlbumArt);
-            changeImageTo(albumArtLargeImageView, updatedAlbumArt);
+            changeImageTo(albumArtImageView, updatedAlbumArt, !isLargeAlbumArtVisible);
+            changeImageTo(albumArtLargeImageView, updatedAlbumArt, isLargeAlbumArtVisible);
         });
     }
 
 
     public void changeAlbumArtToCurrent(ImageView imageView){
-        changeImageTo(imageView, currentAlbumArt);
-    }
-
-
-    public void changeAlbumArtTo(ImageView imageView, Bitmap updatedAlbumArt){
-        if(updatedAlbumArt == null){
-            return;
-        }
-        changeImageTo(imageView, updatedAlbumArt);
+        changeImageTo(imageView, currentAlbumArt, true);
     }
 
 
     private void setupAlbumViewClick(){
-        albumArtImageView.setOnClickListener(v-> showAlbumArtLargeView());
-    }
-
-
-    private void startAlbumArtDialog(){
-        if(currentAlbumArt == null){
-            return;
-        }
-        String tag = "show_large_album_art_dialog";
-        FragmentTransaction fragmentTransaction = FragmentHelper.createTransaction(mainActivity, tag);
-        AlbumArtDialog.newInstance().show(fragmentTransaction, tag);
+        albumArtImageView.setOnClickListener(v-> showLargeAlbumArt());
     }
 
 
@@ -122,22 +109,28 @@ public class AlbumArtHelper {
     }
 
 
-    private void changeImageTo(ImageView imageView, Bitmap updatedAlbumArt){
+    private void changeImageTo(ImageView imageView, Bitmap updatedAlbumArt, boolean shouldAnimate){
         currentAlbumArt = updatedAlbumArt;
+        if(shouldAnimate){
+            fadeToNewArt(imageView, updatedAlbumArt);
+            return;
+        }
+        assignAlbumArt(imageView, updatedAlbumArt);
+    }
+
+
+    private void fadeToNewArt(ImageView imageView, Bitmap updatedAlbumArt){
         Animation fadeOut = AnimationUtils.loadAnimation(mainActivity, R.anim.fade_out);
         imageView.startAnimation(fadeOut);
 
         fadeOut.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {}
-            @Override
-            public void onAnimationEnd(Animation animation) {
+            @Override  public void onAnimationStart(Animation animation) {}
+            @Override  public void onAnimationRepeat(Animation animation) {}
+            @Override  public void onAnimationEnd(Animation animation) {
                 assignAlbumArt(imageView, updatedAlbumArt);
                 Animation fadeIn = AnimationUtils.loadAnimation(mainActivity, R.anim.fade_in);
                 imageView.startAnimation(fadeIn);
             }
-            @Override
-            public void onAnimationRepeat(Animation animation) {}
         });
     }
 
@@ -148,7 +141,6 @@ public class AlbumArtHelper {
             return;
         }
         albumArtImageView.setImageResource(R.drawable.album_art_empty);
-
     }
 
 

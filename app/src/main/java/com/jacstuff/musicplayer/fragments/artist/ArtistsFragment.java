@@ -18,9 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.fragments.StringListAdapter;
-import com.jacstuff.musicplayer.fragments.playlist.PlaylistOptionsFragment;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
-import com.jacstuff.musicplayer.utils.ButtonMaker;
+import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.ArrayList;
 import java.util.List;

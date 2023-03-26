@@ -15,16 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.db.album.Album;
-import com.jacstuff.musicplayer.db.album.AlbumRepository;
-import com.jacstuff.musicplayer.db.artist.Artist;
 import com.jacstuff.musicplayer.fragments.StringListAdapter;
 import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
-import com.jacstuff.musicplayer.utils.ButtonMaker;
+import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AlbumsFragment extends Fragment {
 

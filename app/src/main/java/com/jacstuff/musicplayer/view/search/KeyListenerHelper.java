@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.search;
+package com.jacstuff.musicplayer.view.search;
 
 import android.text.Editable;
 import android.text.TextWatcher;
