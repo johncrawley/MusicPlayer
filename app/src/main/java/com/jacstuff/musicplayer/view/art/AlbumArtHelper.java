@@ -11,13 +11,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.fragments.albumart.AlbumArtDialog;
 import com.jacstuff.musicplayer.view.utils.AnimatorHelper;
-import com.jacstuff.musicplayer.view.utils.FragmentHelper;
 
 public class AlbumArtHelper {
 
@@ -27,7 +24,6 @@ public class AlbumArtHelper {
     private OnBackPressedCallback dismissAlbumArtLargeViewOnBackPressedCallback;
     private final View albumArtLargeView;
     private boolean isLargeAlbumArtVisible;
-
 
     public AlbumArtHelper(MainActivity mainActivity){
         this.mainActivity = mainActivity;
@@ -73,7 +69,6 @@ public class AlbumArtHelper {
     }
 
 
-
     public void changeAlbumArtTo(Bitmap updatedAlbumArt){
         mainActivity.runOnUiThread(()-> {
             if (isCurrentCoverTheSame(updatedAlbumArt)) {
@@ -81,17 +76,14 @@ public class AlbumArtHelper {
             }
             changeImageTo(albumArtImageView, updatedAlbumArt, !isLargeAlbumArtVisible);
             changeImageTo(albumArtLargeImageView, updatedAlbumArt, isLargeAlbumArtVisible);
+            currentAlbumArt = updatedAlbumArt;
         });
-    }
-
-
-    public void changeAlbumArtToCurrent(ImageView imageView){
-        changeImageTo(imageView, currentAlbumArt, true);
     }
 
 
     private void setupAlbumViewClick(){
         albumArtImageView.setOnClickListener(v-> showLargeAlbumArt());
+        albumArtLargeImageView.setOnClickListener(v -> hideLargeAlbumArt());
     }
 
 
@@ -99,10 +91,7 @@ public class AlbumArtHelper {
         if(currentAlbumArt == null && updatedAlbumArt == null){
             return true;
         }
-        if(currentAlbumArt == null){
-            return false;
-        }
-        if(updatedAlbumArt == null){
+        if(currentAlbumArt == null || updatedAlbumArt == null){
             return false;
         }
         return currentAlbumArt.sameAs(updatedAlbumArt);
@@ -110,7 +99,6 @@ public class AlbumArtHelper {
 
 
     private void changeImageTo(ImageView imageView, Bitmap updatedAlbumArt, boolean shouldAnimate){
-        currentAlbumArt = updatedAlbumArt;
         if(shouldAnimate){
             fadeToNewArt(imageView, updatedAlbumArt);
             return;
@@ -140,10 +128,8 @@ public class AlbumArtHelper {
             imageView.setImageDrawable(new BitmapDrawable(mainActivity.getResources(), updatedAlbumArt));
             return;
         }
-        albumArtImageView.setImageResource(R.drawable.album_art_empty);
+        imageView.setImageResource(R.drawable.album_art_empty);
     }
-
-
 
 
 

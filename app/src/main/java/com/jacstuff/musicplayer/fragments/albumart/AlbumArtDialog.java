@@ -49,6 +49,7 @@ public class AlbumArtDialog extends DialogFragment {
 
 
     private void assignAlbumArt(MainActivity mainActivity, View parentView){
+        /*
         ImageView albumArtLargeImageView = parentView.findViewById(R.id.albumArtLargeImageView);
         AlbumArtHelper albumArtHelper = mainActivity.getAlbumArtHelper();
         if(albumArtHelper == null){
@@ -58,6 +59,8 @@ public class AlbumArtDialog extends DialogFragment {
             albumArtHelper.changeAlbumArtToCurrent(albumArtLargeImageView);
             albumArtLargeImageView.setVisibility(View.VISIBLE);
         }
+
+         */
     }
 
 
