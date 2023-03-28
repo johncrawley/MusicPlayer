@@ -325,17 +325,12 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     private void loadNext(){
-        loadTrack(playlistManager.getNextTrack());
-    }
-
-
-    private void loadNextOLD(){
-        Track nextTrack = playlistManager.getNextTrack();
-        if(playlistManager.hasTracksQueued()){
-            loadTrackDeselectCurrentTrack(nextTrack);
+        Track track = playlistManager.getNextTrack();
+        if(track == null){
+            loadTrack(currentTrack);
             return;
         }
-        loadTrack(nextTrack);
+        loadTrack(playlistManager.getNextTrack());
     }
 
 

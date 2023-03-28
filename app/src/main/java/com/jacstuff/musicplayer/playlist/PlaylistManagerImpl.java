@@ -460,7 +460,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private Track getNextTrackOnList(){
-        if(!attemptSetupOfIndexesIfEmpty()){
+        if(!attemptSetupOfIndexesIfEmpty() || tracks.isEmpty()){
             return null;
         }
         currentIndex = currentIndex >= tracks.size() -1 ? 0 : currentIndex + 1;
