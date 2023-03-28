@@ -21,7 +21,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
 
-
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.db.playlist.Playlist;
@@ -287,14 +286,14 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    private void updateViewTrackList(){
+    private void updateViewTrackList() {
         int currentTrackIndex = currentTrack == null ? -1 : currentTrack.getIndex();
-        mainActivity.updateTracksList(playlistManager.getTracks(), currentTrackIndex);
+        mainActivity.updateTracksList(playlistManager.getTracks(), currentTrack, currentTrackIndex);
     }
 
 
     private void updateViewTrackListAndDeselectList(){
-        mainActivity.updateTracksList(playlistManager.getTracks(), -1);
+        mainActivity.updateTracksList(playlistManager.getTracks(), currentTrack,-1);
     }
 
 
@@ -627,7 +626,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    Track getCurrentTrack(){
+    public Track getCurrentTrack(){
         return currentTrack;
     }
 

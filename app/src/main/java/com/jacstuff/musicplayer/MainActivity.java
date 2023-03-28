@@ -443,7 +443,7 @@ public class MainActivity extends AppCompatActivity {
             return Collections.emptyList();
         }
         List<Track> tracks = mediaPlayerService.getTrackList();
-        updateViews(tracks);
+        updateViews(tracks, mediaPlayerService.getCurrentTrack());
        return tracks;
     }
 
@@ -718,11 +718,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
+    public void updateTracksList(List<Track> updatedTracks, Track currentTrack, int currentTrackIndex){
         runOnUiThread(()-> {
             if(tracksFragment != null) {
                 tracksFragment.updateTracksList(updatedTracks, currentTrackIndex);
-                updateViews(updatedTracks);
+                updateViews(updatedTracks, currentTrack);
             }
         });
     }
@@ -768,8 +768,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void updateViews(List<Track> updatedTracks){
-        if(updatedTracks.isEmpty()){
+    private void updateViews(List<Track> updatedTracks, Track currentTrack){
+        if(updatedTracks.isEmpty() && currentTrack == null){
             setVisibilityOnPlayerViews(View.INVISIBLE);
             return;
         }
