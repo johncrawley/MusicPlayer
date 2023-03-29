@@ -5,6 +5,7 @@ import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.createShowAnima
 import android.Manifest;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
@@ -13,6 +14,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentTransaction;
@@ -38,28 +40,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
-import com.jacstuff.musicplayer.db.playlist.Playlist;
-import com.jacstuff.musicplayer.db.playlist.PlaylistRepository;
-import com.jacstuff.musicplayer.db.playlist.PlaylistRepositoryImpl;
-import com.jacstuff.musicplayer.db.track.Track;
-import com.jacstuff.musicplayer.fragments.albumart.AlbumArtDialog;
-import com.jacstuff.musicplayer.fragments.options.StopOptionsFragment;
-import com.jacstuff.musicplayer.fragments.playlist.PlaylistRecyclerAdapter;
-import com.jacstuff.musicplayer.fragments.tracks.TracksFragment;
-import com.jacstuff.musicplayer.fragments.playlist.PlaylistsFragment;
-import com.jacstuff.musicplayer.fragments.TabsViewStateAdapter;
-import com.jacstuff.musicplayer.list.SearchResultsListAdapter;
-import com.jacstuff.musicplayer.playlist.PlaylistManager;
+import com.jacstuff.musicplayer.service.db.playlist.Playlist;
+import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
+import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
+import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.view.fragments.albumart.AlbumArtDialog;
+import com.jacstuff.musicplayer.view.fragments.options.StopOptionsFragment;
+import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistRecyclerAdapter;
+import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
+import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
+import com.jacstuff.musicplayer.view.tab.TabsViewStateAdapter;
+import com.jacstuff.musicplayer.view.list.SearchResultsListAdapter;
+import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.utils.AnimatorHelper;
 import com.jacstuff.musicplayer.view.search.KeyListenerHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
-import com.jacstuff.musicplayer.theme.ThemeHelper;
+import com.jacstuff.musicplayer.view.utils.ThemeHelper;
 import com.jacstuff.musicplayer.view.art.AlbumArtHelper;
 import com.jacstuff.musicplayer.view.utils.FragmentHelper;
 import com.jacstuff.musicplayer.view.utils.KeyboardHelper;
 import com.jacstuff.musicplayer.view.utils.TimeConverter;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
-import com.jacstuff.musicplayer.viewmodel.MainViewModel;
+import com.jacstuff.musicplayer.view.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -122,12 +124,26 @@ public class MainActivity extends AppCompatActivity {
         keyboardHelper = new KeyboardHelper(this);
         setupViews();
         setupTabLayout();
-        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
+        requestPermissions();
         startMediaPlayerService();
         setupSearchView();
         setupAddTrackToPlaylistView();
         setupDismissSearchOnBackPressed();
         setupDismissAddTrackToPlaylistViewOnBackPressed();
+    }
+
+
+    private void requestPermissions(){
+        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPostNotificationPermission();
+        }
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    private void requestPostNotificationPermission(){
+        requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 3);
     }
 
 

@@ -6,14 +6,17 @@ import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_PLAY;
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_NEXT_TRACK;
 import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_PREVIOUS_TRACK;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -21,7 +24,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.db.track.Track;
+import com.jacstuff.musicplayer.service.db.track.Track;
 
 
 public class MediaNotificationManager {
@@ -99,12 +102,24 @@ public class MediaNotificationManager {
 
 
     void updateNotification() {
+        if(!isPostNotificationsPermitted()){
+            return;
+        }
         new Handler(Looper.getMainLooper()).post(() -> {
             String trackInfo = parseTrackDetails(mediaPlayerService.getCurrentTrack());
             Notification notification = createNotification(mediaPlayerService.getCurrentStatus(), trackInfo);
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(NOTIFICATION_ID, notification);
         });
+    }
+
+
+    private boolean isPostNotificationsPermitted(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            String requiredPermission = Manifest.permission.POST_NOTIFICATIONS;
+            return context.checkCallingOrSelfPermission(requiredPermission) == PackageManager.PERMISSION_GRANTED;
+        }
+        return true;
     }
 
 

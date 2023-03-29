@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
-import com.jacstuff.musicplayer.viewmodel.MainViewModel;
+import com.jacstuff.musicplayer.view.viewmodel.MainViewModel;
 
 public class TabHelper {
 

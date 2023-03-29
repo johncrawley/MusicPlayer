@@ -23,14 +23,14 @@ import android.os.PowerManager;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.db.playlist.Playlist;
-import com.jacstuff.musicplayer.db.search.TrackFinder;
-import com.jacstuff.musicplayer.db.track.Track;
-import com.jacstuff.musicplayer.playlist.PlaylistManager;
-import com.jacstuff.musicplayer.playlist.PlaylistManagerImpl;
-import com.jacstuff.musicplayer.playlist.PlaylistViewNotifier;
-import com.jacstuff.musicplayer.playlist.PlaylistViewNotifierImpl;
-import com.jacstuff.musicplayer.playlist.TrackLoader;
+import com.jacstuff.musicplayer.service.db.playlist.Playlist;
+import com.jacstuff.musicplayer.service.db.search.TrackFinder;
+import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
+import com.jacstuff.musicplayer.service.playlist.PlaylistManagerImpl;
+import com.jacstuff.musicplayer.service.playlist.PlaylistViewNotifier;
+import com.jacstuff.musicplayer.service.playlist.PlaylistViewNotifierImpl;
+import com.jacstuff.musicplayer.service.playlist.TrackLoader;
 
 import java.io.IOException;
 import java.util.Collections;
