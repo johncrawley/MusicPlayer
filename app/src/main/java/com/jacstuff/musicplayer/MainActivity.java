@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel viewModel;
     private ThemeHelper themeHelper;
     private boolean hasSearchResultBeenPlayed = false;
-    AlbumArtHelper albumArtHelper;
+    private AlbumArtHelper albumArtHelper;
 
     private PlaylistRecyclerAdapter playlistRecyclerAdapter;
     private RecyclerView addTrackToPlaylistRecyclerView;
@@ -160,8 +160,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public AlbumArtHelper getAlbumArtHelper(){
-        return this.albumArtHelper;
+    public MainViewModel getViewModel(){
+        return viewModel;
     }
 
 

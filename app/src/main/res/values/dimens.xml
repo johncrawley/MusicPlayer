@@ -31,7 +31,7 @@
     <dimen name="list_button_margin_vertical">2dp</dimen>
     <dimen name="dialog_option_button_margin_horizontal">10dp</dimen>
     <dimen name="dialog_option_button_margin_vertical">4dp</dimen>
-    <dimen name="album_art_padding">4dp</dimen>
+    <dimen name="album_art_padding">2dp</dimen>
     <dimen name="album_art_padding_top">34dp</dimen>
     <dimen name="album_art_padding_bottom">52dp</dimen>
     <dimen name="list_margin_top">0dp</dimen>

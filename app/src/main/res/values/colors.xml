@@ -12,6 +12,7 @@
     <color name="list_item_selected">#0F3E1C</color>
     <color name="button_outline">#388E3C</color>
     <color name="list_item_focused">#2A2A2A</color>
+    <color name="album_art_border">#2A2A2A</color>
     <color name="list_item_unfocused">#f2f7f9</color>
     <color name="background">#030404</color>
     <color name="text">#1CAE23</color>

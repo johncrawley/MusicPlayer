@@ -15,23 +15,24 @@ import androidx.activity.OnBackPressedCallback;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.view.utils.AnimatorHelper;
+import com.jacstuff.musicplayer.view.viewmodel.MainViewModel;
 
 public class AlbumArtHelper {
 
     private final MainActivity mainActivity;
     private final ImageView albumArtImageView, albumArtLargeImageView;
-    private Bitmap currentAlbumArt;
     private OnBackPressedCallback dismissAlbumArtLargeViewOnBackPressedCallback;
     private final View albumArtLargeView;
-    private boolean isLargeAlbumArtVisible;
+    private final MainViewModel viewModel;
 
     public AlbumArtHelper(MainActivity mainActivity){
         this.mainActivity = mainActivity;
-        currentAlbumArt = mainActivity.getMediaPlayerService().getAlbumArt();
+        viewModel = mainActivity.getViewModel();
+        viewModel.currentAlbumArt = mainActivity.getMediaPlayerService().getAlbumArt();
         this.albumArtImageView = mainActivity.findViewById(R.id.albumArtImageView);
         this.albumArtLargeView = mainActivity.findViewById(R.id.albumArtLargeView);
         albumArtLargeImageView = mainActivity.findViewById(R.id.albumArtLargeImageView);
-        assignAlbumArt(albumArtImageView, currentAlbumArt);
+        assignCurrentArtToImageViews();
         setupAlbumViewClick();
         setupDismissLargeAlbumArtOnBackPressed();
     }
@@ -48,8 +49,14 @@ public class AlbumArtHelper {
     }
 
 
+    private void assignCurrentArtToImageViews(){
+        assignAlbumArt(albumArtImageView, viewModel.currentAlbumArt);
+        assignAlbumArt(albumArtLargeImageView, viewModel.currentAlbumArt);
+    }
+
+
     private void showLargeAlbumArt(){
-        Animator animator = createShowAnimatorFor(albumArtLargeView, ()-> {isLargeAlbumArtVisible = true;});
+        Animator animator = createShowAnimatorFor(albumArtLargeView, ()-> {});
         albumArtLargeView.setVisibility(View.VISIBLE);
         dismissAlbumArtLargeViewOnBackPressedCallback.setEnabled(true);
         animator.start();
@@ -62,7 +69,6 @@ public class AlbumArtHelper {
         }
         Animator animator = AnimatorHelper.createHideAnimatorFor(albumArtLargeView, ()-> {
             albumArtLargeView.setVisibility(View.GONE);
-            isLargeAlbumArtVisible = false;
         });
         dismissAlbumArtLargeViewOnBackPressedCallback.setEnabled(false);
         animator.start();
@@ -74,9 +80,10 @@ public class AlbumArtHelper {
             if (isCurrentCoverTheSame(updatedAlbumArt)) {
                 return;
             }
+            boolean isLargeAlbumArtVisible = albumArtLargeView.getVisibility() == View.VISIBLE;
             changeImageTo(albumArtImageView, updatedAlbumArt, !isLargeAlbumArtVisible);
             changeImageTo(albumArtLargeImageView, updatedAlbumArt, isLargeAlbumArtVisible);
-            currentAlbumArt = updatedAlbumArt;
+            viewModel.currentAlbumArt = updatedAlbumArt;
         });
     }
 
@@ -88,13 +95,13 @@ public class AlbumArtHelper {
 
 
     private boolean isCurrentCoverTheSame(Bitmap updatedAlbumArt){
-        if(currentAlbumArt == null && updatedAlbumArt == null){
+        if(viewModel.currentAlbumArt == null && updatedAlbumArt == null){
             return true;
         }
-        if(currentAlbumArt == null || updatedAlbumArt == null){
+        if(viewModel.currentAlbumArt == null || updatedAlbumArt == null){
             return false;
         }
-        return currentAlbumArt.sameAs(updatedAlbumArt);
+        return viewModel.currentAlbumArt.sameAs(updatedAlbumArt);
     }
 
 
