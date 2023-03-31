@@ -44,7 +44,6 @@ import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.service.db.track.Track;
-import com.jacstuff.musicplayer.view.fragments.albumart.AlbumArtDialog;
 import com.jacstuff.musicplayer.view.fragments.options.StopOptionsFragment;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistRecyclerAdapter;
 import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
@@ -380,15 +379,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void setAlbumArt(Bitmap coverArtBitmap){
         albumArtHelper.changeAlbumArtTo(coverArtBitmap);
-        notifyAlbumArtFragment(coverArtBitmap);
-    }
-
-
-
-    private void notifyAlbumArtFragment(Bitmap bitmap){
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(AlbumArtDialog.BUNDLE_KEY_BITMAP_UPDATE, bitmap);
-        runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(AlbumArtDialog.SEND_BITMAP_TO_ALBUM_ART_FRAGMENT, bundle));
     }
 
 

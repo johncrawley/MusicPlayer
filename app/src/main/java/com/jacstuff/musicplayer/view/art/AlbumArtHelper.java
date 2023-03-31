@@ -67,9 +67,8 @@ public class AlbumArtHelper {
         if(albumArtLargeView.getVisibility() != View.VISIBLE){
             return;
         }
-        Animator animator = AnimatorHelper.createHideAnimatorFor(albumArtLargeView, ()-> {
-            albumArtLargeView.setVisibility(View.GONE);
-        });
+        Animator animator = AnimatorHelper.createHideAnimatorFor(albumArtLargeView,
+                ()-> albumArtLargeView.setVisibility(View.GONE));
         dismissAlbumArtLargeViewOnBackPressedCallback.setEnabled(false);
         animator.start();
     }
