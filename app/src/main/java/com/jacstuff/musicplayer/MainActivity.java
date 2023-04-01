@@ -1,14 +1,11 @@
 package com.jacstuff.musicplayer;
 
-import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.createShowAnimatorFor;
-
 import android.Manifest;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.animation.Animator;
+
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -18,9 +15,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
@@ -38,17 +32,14 @@ import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
-import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
-import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.options.StopOptionsFragment;
-import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistRecyclerAdapter;
 import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
+import com.jacstuff.musicplayer.view.playlist.AddTrackToPlaylistViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
 import com.jacstuff.musicplayer.view.tab.TabsViewStateAdapter;
-import com.jacstuff.musicplayer.view.utils.AnimatorHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.utils.ThemeHelper;
 import com.jacstuff.musicplayer.view.art.AlbumArtHelper;
@@ -78,13 +69,12 @@ public class MainActivity extends AppCompatActivity {
     private TracksFragment tracksFragment;
     private ViewGroup playerButtonPanel;
     private TabLayout tabLayout;
-    private View addTrackToPlaylistView;
-    private OnBackPressedCallback dismissAddTrackToPlaylistViewOnBackPressedCallback;
     private Track selectedTrack;
     private SearchViewHelper searchViewHelper;
     private MainViewModel viewModel;
     private ThemeHelper themeHelper;
     private AlbumArtHelper albumArtHelper;
+    private AddTrackToPlaylistViewHelper addTrackToPlaylistViewHelper;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -110,8 +100,7 @@ public class MainActivity extends AppCompatActivity {
         setupTabLayout();
         requestPermissions();
         startMediaPlayerService();
-        setupAddTrackToPlaylistView();
-        setupDismissAddTrackToPlaylistViewOnBackPressed();
+        addTrackToPlaylistViewHelper = new AddTrackToPlaylistViewHelper(this);
     }
 
 
@@ -120,6 +109,11 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPostNotificationPermission();
         }
+    }
+
+
+    public void showAddTrackToPlaylistView(){
+        addTrackToPlaylistViewHelper.showAddTrackToPlaylistView();
     }
 
 
@@ -154,40 +148,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setupDismissAddTrackToPlaylistViewOnBackPressed(){
-        dismissAddTrackToPlaylistViewOnBackPressedCallback = new OnBackPressedCallback(false) {
-            @Override
-            public void handleOnBackPressed() {
-                hideAddTrackToPlaylistView();
-            }
-        };
-        getOnBackPressedDispatcher().addCallback(this, dismissAddTrackToPlaylistViewOnBackPressedCallback);
-    }
-
-
     public boolean isUserPlaylistLoaded(){
         return mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
     }
 
-
-    public void showAddTrackToPlaylistView(){
-        searchViewHelper.hideAllSearchResultsButtons();
-        Animator animator = createShowAnimatorFor(addTrackToPlaylistView, ()-> {});
-        addTrackToPlaylistView.setVisibility(View.VISIBLE);
-        dismissAddTrackToPlaylistViewOnBackPressedCallback.setEnabled(true);
-        animator.start();
-    }
-
-
-    private void hideAddTrackToPlaylistView(){
-        if(addTrackToPlaylistView.getVisibility() != View.VISIBLE){
-            return;
-        }
-        Animator animator = AnimatorHelper.createHideAnimatorFor(addTrackToPlaylistView, ()->
-            addTrackToPlaylistView.setVisibility(View.GONE));
-        dismissAddTrackToPlaylistViewOnBackPressedCallback.setEnabled(false);
-        animator.start();
-    }
 
 
     public void deselectCurrentTrackAfterDelay(){
@@ -195,6 +159,11 @@ public class MainActivity extends AppCompatActivity {
         new Handler(Looper.getMainLooper())
                 .postDelayed(()->tracksFragment.deselectCurrentItemAndNotify(),
                         300);
+    }
+
+
+    public SearchViewHelper getSearchViewHelper(){
+        return searchViewHelper;
     }
 
 
@@ -782,21 +751,7 @@ public class MainActivity extends AppCompatActivity {
        }
     }
 
-
-    public void setupAddTrackToPlaylistView() {
-        addTrackToPlaylistView = findViewById(R.id.addTrackToPlaylistView);
-        PlaylistRepository playlistRepository = new PlaylistRepositoryImpl(MainActivity.this);
-        RecyclerView addTrackToPlaylistRecyclerView = findViewById(R.id.addTrackToPlaylistRecyclerView);
-        PlaylistRecyclerAdapter playlistRecyclerAdapter = new PlaylistRecyclerAdapter(playlistRepository.getAllPlaylists(), this::addTrackToPlaylist);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        addTrackToPlaylistRecyclerView.setLayoutManager(layoutManager);
-        addTrackToPlaylistRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        addTrackToPlaylistRecyclerView.setAdapter(playlistRecyclerAdapter);
-    }
-
-
-    private void addTrackToPlaylist(Playlist playlist){
+    public void addTrackToPlaylist(Playlist playlist){
         mediaPlayerService.addTrackToPlaylist(selectedTrack, playlist);
     }
 
