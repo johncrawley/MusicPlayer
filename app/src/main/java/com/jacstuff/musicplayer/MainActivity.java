@@ -5,7 +5,6 @@ import android.Manifest;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -13,7 +12,6 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -24,32 +22,25 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
-import com.jacstuff.musicplayer.view.fragments.options.StopOptionsFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
+import com.jacstuff.musicplayer.view.player.PlayerViewHelper;
 import com.jacstuff.musicplayer.view.playlist.AddTrackToPlaylistViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
 import com.jacstuff.musicplayer.view.tab.TabsViewStateAdapter;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.utils.ThemeHelper;
 import com.jacstuff.musicplayer.view.art.AlbumArtHelper;
-import com.jacstuff.musicplayer.view.utils.FragmentHelper;
-import com.jacstuff.musicplayer.view.utils.TimeConverter;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
 import com.jacstuff.musicplayer.view.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,13 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String SEND_ARTISTS_TO_FRAGMENT = "send_artists_to_fragment";
     private TabsViewStateAdapter tabsViewStateAdapter;
     private MediaPlayerService mediaPlayerService;
-    private TextView trackTime, trackTitle, trackAlbum, trackArtist;
-    private ImageButton playButton, pauseButton, stopButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton;
-    private SeekBar trackTimeSeekBar;
-    private boolean isTrackTimeSeekBarHeld = false;
-    private String totalTrackTime = "0:00";
     private TracksFragment tracksFragment;
-    private ViewGroup playerButtonPanel;
     private TabLayout tabLayout;
     private Track selectedTrack;
     private SearchViewHelper searchViewHelper;
@@ -75,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private ThemeHelper themeHelper;
     private AlbumArtHelper albumArtHelper;
     private AddTrackToPlaylistViewHelper addTrackToPlaylistViewHelper;
+    private PlayerViewHelper playerViewHelper;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -85,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayerService.setActivity(MainActivity.this);
             searchViewHelper = new SearchViewHelper(MainActivity.this);
             searchViewHelper.setMediaPlayerService(mediaPlayerService);
+            playerViewHelper = new PlayerViewHelper(MainActivity.this, mediaPlayerService);
         }
         @Override public void onServiceDisconnected(ComponentName arg0) {}
     };
@@ -96,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
         assignTheme();
         setContentView(R.layout.activity_main);
         setupViewModel();
-        setupViews();
         setupTabLayout();
         requestPermissions();
         startMediaPlayerService();
@@ -153,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     public void deselectCurrentTrackAfterDelay(){
         // we need to give the recycler view in tracks fragment time to recreate its layout
         new Handler(Looper.getMainLooper())
@@ -194,63 +179,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setupTrackTimeSeekBar(){
-        trackTimeSeekBar = findViewById(R.id.trackTimeSeekBar);
-        trackTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                if(isTrackTimeSeekBarHeld) {
-                    setElapsedTimeOnView(TimeConverter.convert(seekBar.getProgress()));
-                }
-            }
+    public void nextTrack(){ playerViewHelper.nextTrack(); }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                isTrackTimeSeekBarHeld = true;
-                setPlayerControlsEnabled(false);
-            }
+    public void previousTrack(){ playerViewHelper.previousTrack(); }
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                int progress = Math.min(seekBar.getMax() - 500, seekBar.getProgress());
-                mediaPlayerService.seek(progress);
-                isTrackTimeSeekBarHeld = false;
-                setPlayerControlsEnabled(true);
-            }
-        });
-    }
-
-
-    private void setPlayerControlsEnabled(boolean isEnabled){
-        List<View> controls = Arrays.asList(stopButton, playButton, pauseButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton);
-        for(View control : controls){
-            control.setEnabled(isEnabled);
-        }
-    }
-
-
-    public void nextTrack(){
-        disableViewForAWhile(nextTrackButton);
-        mediaPlayerService.loadNextTrack();
-    }
-
-
-    public void previousTrack(){
-        disableViewForAWhile(previousTrackButton);
-        mediaPlayerService.loadPreviousTrack();
-    }
-
+    public void pauseTrack() { playerViewHelper.pauseTrack(); }
 
     public void playTrack() {
         mediaPlayerService.playTrack();
     }
-
-
-    public void pauseTrack() {
-        disableViewForAWhile(playButton, 300);
-        mediaPlayerService.pause();
-    }
-
 
     public void stopTrack(){
         mediaPlayerService.stop();
@@ -258,9 +195,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void hidePlayerViews(){ playerViewHelper.setVisibilityOnPlayerViews(View.INVISIBLE);}
+
+
+    public void showPlayerViews(){
+        playerViewHelper.setVisibilityOnPlayerViews(View.VISIBLE);
+    }
+
+
+    public void setBlankTrackInfo(){ playerViewHelper.setBlankTrackInfo();}
+
+
+    public void notifyMediaPlayerStopped(){ playerViewHelper.notifyMediaPlayerStopped();}
+
+
+    public void hideTrackSeekBar(){ playerViewHelper.hideTrackSeekBar();}
+
+
+    public void notifyMediaPlayerPaused(){ playerViewHelper.notifyMediaPlayerPaused();}
+
+
+    public void notifyShuffleEnabled(){ playerViewHelper.notifyShuffleEnabled(); }
+
+
+    public void notifyShuffleDisabled(){ playerViewHelper.notifyShuffleDisabled(); }
+
+
+    public void notifyMediaPlayerPlaying(){playerViewHelper.notifyMediaPlayerPlaying(); }
+
+
+    public void setTrackInfoOnView(final Track track, int elapsedTime){ playerViewHelper.setTrackInfoOnView(track, elapsedTime); }
+
+
     public void initAlbumArt(){
         albumArtHelper = new AlbumArtHelper(this);
     }
+
 
     public void setAlbumArt(Bitmap coverArtBitmap){
         albumArtHelper.changeAlbumArtTo(coverArtBitmap);
@@ -346,43 +316,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setupViews(){
-        setupPlayerButtonPanelViews();
-        assignTrackInfoViews();
-        setupTrackTimeSeekBar();
-        resetElapsedTime();
-    }
-
-
     public void resetElapsedTime(){
-        setElapsedTime("0:00");
+        playerViewHelper.resetElapsedTime();
     }
 
 
     public void setElapsedTime(long elapsedMilliseconds){
-        setElapsedTime(TimeConverter.convert(elapsedMilliseconds));
-        runOnUiThread(()->{
-            if(!isTrackTimeSeekBarHeld){
-                trackTimeSeekBar.setProgress((int)elapsedMilliseconds);
-            }
-        });
-    }
-
-
-    public void setElapsedTime(String elapsedTime){
-        if(!isTrackTimeSeekBarHeld){
-            setElapsedTimeOnView(elapsedTime);
-        }
-    }
-
-
-    private void setElapsedTimeOnView(String elapsedTime){
-        runOnUiThread(()->{
-            if(trackTime != null){
-                String time = elapsedTime + " / " + totalTrackTime;
-                trackTime.setText(time);
-            }
-        });
+        playerViewHelper.setElapsedTime(elapsedMilliseconds);
     }
 
 
@@ -413,154 +353,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void hidePlayerViews(){
-        setVisibilityOnPlayerViews(View.INVISIBLE);
-    }
-
-
-    public void showPlayerViews(){
-        setVisibilityOnPlayerViews(View.VISIBLE);
-    }
-
-
-    public void setVisibilityOnPlayerViews(int visibility){
-        trackTitle.setVisibility(visibility);
-        trackAlbum.setVisibility(visibility);
-        trackArtist.setVisibility(visibility);
-        trackTime.setVisibility(visibility);
-        playerButtonPanel.setVisibility(visibility);
-    }
-
-
-    private void setTrackTimeInfo(int elapsedTime, long trackDuration){
-        this.totalTrackTime = TimeConverter.convert(trackDuration);
-        trackTimeSeekBar.setMax((int)trackDuration);
-        setElapsedTime(TimeConverter.convert(elapsedTime));
-    }
-
-
-    private void assignTrackInfoViews(){
-        trackTime = findViewById(R.id.trackTime);
-        trackTitle = findViewById(R.id.trackTitle);
-        trackAlbum = findViewById(R.id.albumTextView);
-        trackArtist = findViewById(R.id.artistTextView);
-    }
-
-
-    private void setupPlayerButtonPanelViews(){
-        playerButtonPanel = findViewById(R.id.buttonLayout);
-        previousTrackButton = setupImageButton(R.id.previousTrackButton, this::previousTrack);
-        nextTrackButton     = setupImageButton(R.id.nextTrackButton, this::nextTrack);
-        playButton  = setupImageButton(R.id.playButton, this::playTrack);
-        pauseButton = setupImageButton(R.id.pauseButton, this::pauseTrack);
-        stopButton  = setupImageButton(R.id.stopButton, this:: stopTrack);
-        setupStopLongClick();
-        turnShuffleOnButton =  setupImageButton(R.id.turnShuffleOnButton,  ()-> mediaPlayerService.enableShuffle());
-        turnShuffleOffButton = setupImageButton(R.id.turnShuffleOffButton, ()-> mediaPlayerService.disableShuffle());
-    }
-
-
-    private void setupStopLongClick(){
-        stopButton.setOnLongClickListener((View v)->{
-            if(mediaPlayerService.isPlaying()){
-                createStopOptionsFragment();
-            }
-            return true;
-        });
-    }
-
-
-    private void createStopOptionsFragment(){
-        String tag = "stop_options_dialog";
-        FragmentTransaction fragmentTransaction = FragmentHelper.createTransaction(this, tag);
-        StopOptionsFragment.newInstance().show(fragmentTransaction, tag);
-    }
-
-
-    public void setBlankTrackInfo(){
-        runOnUiThread(()-> trackTitle.setText(""));
-    }
-
-
-    public void notifyMediaPlayerStopped(){
-        runOnUiThread(()->{
-            playButton.setVisibility(View.VISIBLE);
-            pauseButton.setVisibility(View.GONE);
-            trackTimeSeekBar.setProgress(0);
-            trackTimeSeekBar.setVisibility(View.INVISIBLE);
-        });
-    }
-
-
-    public void hideTrackSeekBar(){
-        trackTimeSeekBar.setVisibility(View.INVISIBLE);
-    }
-
-
-    public void notifyMediaPlayerPaused(){
-        runOnUiThread(()->{
-            playButton.setVisibility(View.VISIBLE);
-            pauseButton.setVisibility(View.GONE);
-        });
-    }
-
-
-    public void notifyShuffleEnabled(){
-        turnShuffleOnButton.setVisibility(View.GONE);
-        turnShuffleOffButton.setVisibility(View.VISIBLE);
-    }
-
-
-    public void notifyShuffleDisabled(){
-        turnShuffleOnButton.setVisibility(View.VISIBLE);
-        turnShuffleOffButton.setVisibility(View.GONE);
-    }
-
-
-    private void setShuffleButtonsVisibility(){
-        if(mediaPlayerService.isShuffleEnabled()){
-            notifyShuffleEnabled();
-            return;
-        }
-        notifyShuffleDisabled();
-    }
-
-
-    public void notifyMediaPlayerPlaying(){
-        runOnUiThread(()->{
-            playButton.setVisibility(View.GONE);
-            pauseButton.setVisibility(View.VISIBLE);
-            trackTimeSeekBar.setVisibility(View.VISIBLE);
-        });
-    }
-
-
-    public void setTrackInfoOnView(final Track track, int elapsedTime){
-        runOnUiThread(()-> {
-                playerButtonPanel.setVisibility(View.VISIBLE);
-                String titleText = track.getTitle();
-                trackTitle.setText(titleText.isEmpty()? getString(R.string.no_tracks_found) : titleText);
-                trackAlbum.setText(track.getAlbum());
-                trackArtist.setText(track.getArtist());
-                setTrackTimeInfo(elapsedTime, track.getDuration());
-                trackTimeSeekBar.setProgress(elapsedTime);
-        });
-    }
-
-
-    public void setSeekAndShuffleButtonsVisibility(int numberOfTracks){
-        if(numberOfTracks < 2){
-            nextTrackButton.setVisibility(View.INVISIBLE);
-            previousTrackButton.setVisibility(View.INVISIBLE);
-            turnShuffleOffButton.setVisibility(View.GONE);
-            turnShuffleOnButton.setVisibility(View.GONE);
-        }
-        else{
-            nextTrackButton.setVisibility(View.VISIBLE);
-            previousTrackButton.setVisibility(View.VISIBLE);
-            setShuffleButtonsVisibility();
-        }
-    }
 
 
     public void scrollToAndSelectPosition(int index){
@@ -653,26 +445,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void updateViews(List<Track> updatedTracks, Track currentTrack){
-        if(updatedTracks.isEmpty() && currentTrack == null){
-            setVisibilityOnPlayerViews(View.INVISIBLE);
-            return;
-        }
-        setVisibilityOnPlayerViews(View.VISIBLE);
-        setSeekAndShuffleButtonsVisibility(updatedTracks.size());
-        setPlayPauseAndTrackSeekBarVisibility();
-    }
-
-
-    private void setPlayPauseAndTrackSeekBarVisibility(){
-        if(mediaPlayerService.isPlaying()){
-            playButton.setVisibility(View.GONE);
-            pauseButton.setVisibility(View.VISIBLE);
-            trackTimeSeekBar.setVisibility(View.VISIBLE);
-            return;
-        }
-        playButton.setVisibility(View.VISIBLE);
-        pauseButton.setVisibility(View.GONE);
-        trackTimeSeekBar.setVisibility(View.INVISIBLE);
+        playerViewHelper.updateViews(updatedTracks.size(), currentTrack == null);
     }
 
 
@@ -751,6 +524,7 @@ public class MainActivity extends AppCompatActivity {
        }
     }
 
+
     public void addTrackToPlaylist(Playlist playlist){
         mediaPlayerService.addTrackToPlaylist(selectedTrack, playlist);
     }
@@ -761,12 +535,5 @@ public class MainActivity extends AppCompatActivity {
         if(shouldSwitchToTracksTab){
             switchToTracksTab();
         }
-    }
-
-
-    private ImageButton setupImageButton(int buttonId, Runnable runnable){
-        ImageButton button = findViewById(buttonId);
-        button.setOnClickListener((View v)-> runnable.run());
-        return button;
     }
 }
