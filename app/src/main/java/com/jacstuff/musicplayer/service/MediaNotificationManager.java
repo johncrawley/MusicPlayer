@@ -74,11 +74,16 @@ public class MediaNotificationManager {
         if(context == null){
             return null;
         }
-       Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.album_art_empty);
-        if(bitmap == null){
+        try{
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.album_art_empty);
+            if(bitmap == null){
+                return null;
+            }
+            return createScaledBitmapForLargeIcon(bitmap);
+        }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
-        return createScaledBitmapForLargeIcon(bitmap);
     }
 
 

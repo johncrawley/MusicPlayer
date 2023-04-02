@@ -278,7 +278,7 @@ public class TrackLoader {
 
 
     private int getTrackNumber(Cursor cursor){
-        int trackNumber = 0;
+        int trackNumber = 1000;
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             trackNumber = getIntValueFrom(cursor, MediaStore.Audio.Media.CD_TRACK_NUMBER);
         }

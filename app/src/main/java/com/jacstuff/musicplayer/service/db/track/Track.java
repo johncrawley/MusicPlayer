@@ -49,7 +49,7 @@ public class Track {
 
 
     private void createSearchStr(){
-        searchStr = artist + "-" + album + "-" + title;
+        searchStr = artist + " " + album + " " + title;
         searchStr = searchStr.toLowerCase();
     }
 
