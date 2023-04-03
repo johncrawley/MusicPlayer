@@ -336,23 +336,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void displayError(Track track){
-        runOnUiThread(()->{
-            String errorMessage = getString(R.string.error_playing_track_toast_message, track.getPathname());
-            toast(errorMessage);
-        });
+        String errorMessage = getString(R.string.error_playing_track_toast_message, track.getPathname());
+        toast(errorMessage);
     }
 
+    public void toastFileDoesNotExistError(Track track){
+        String errorMessage = getString(R.string.error_loading_track_toast_message, track.getPathname());
+        toast(errorMessage);
+    }
 
     private void toast(String msg){
-        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+        runOnUiThread(()-> {
+            Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+        });
     }
 
 
     private void toast(int resId){
         toast(getString(resId));
     }
-
-
 
 
     public void scrollToAndSelectPosition(int index){

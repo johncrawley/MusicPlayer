@@ -204,7 +204,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
                 mainActivity.notifyMediaPlayerStopped();
             }
         }
-        cancelFutures();
+        cancelScheduledStoppageOfTrack();
     }
 
 
@@ -215,7 +215,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    private void cancelFutures(){
+    private void cancelScheduledStoppageOfTrack(){
         if(stopTrackFuture != null) {
             stopTrackFuture.cancel(false);
         }
@@ -303,12 +303,15 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     public void selectAndPlayTrack(Track track){
+        cancelScheduledStoppageOfTrack();
         currentTrack = track;
         assignAlbumArt(track);
+        if(hasEncounteredError){
+            return;
+        }
         updateViewsEnsurePlayerStoppedAndSchedulePlay();
         playlistManager.addToTrackHistory(track);
         mainActivity.setTrackInfoOnView(currentTrack, 0);
-        cancelFutures();
     }
 
 
@@ -319,7 +322,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     public void loadNextTrack(){
         loadNext();
-        cancelFutures();
+        cancelScheduledStoppageOfTrack();
     }
 
 
@@ -331,7 +334,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     public void loadPreviousTrack(){
         loadTrack(playlistManager.getPreviousTrack());
-        cancelFutures();
+        cancelScheduledStoppageOfTrack();
     }
 
 
@@ -397,12 +400,20 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
             return;
         }
         assignAlbumArt(track);
+        if(hasEncounteredError){
+            return;
+        }
+        updateViewsOnTrackAssigned();
+        select(currentTrack);
+    }
+
+
+    private void updateViewsOnTrackAssigned(){
         mediaNotificationManager.updateNotification();
         mainActivity.setTrackInfoOnView(currentTrack, 0);
         if(currentState == MediaPlayerState.PAUSED){
             mainActivity.hideTrackSeekBar();
         }
-        select(currentTrack);
     }
 
 
@@ -439,6 +450,10 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
             mainActivity.setAlbumArt(currentAlbumArt);
         }catch (IOException e){
             e.printStackTrace();
+        }
+        catch(IllegalArgumentException e){
+            hasEncounteredError = true;
+            mainActivity.toastFileDoesNotExistError(track);
         }
     }
 
@@ -742,7 +757,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
         pauseMediaPlayer();
         mediaNotificationManager.updateNotification();
         mainActivity.notifyMediaPlayerPaused();
-        cancelFutures();
+        cancelScheduledStoppageOfTrack();
     }
 
 

@@ -9,6 +9,7 @@
     <string name="playlist_refreshed_one_new_track">Playlist Refreshed (1 New)</string>
     <string name="no_tracks_found">No tracks found!</string>
     <string name="error_playing_track_toast_message">Unable to play the track at %1$s</string>
+    <string name="error_loading_track_toast_message">Unable to load the track at %1$s</string>
     <string name="elapsed_time_label">Elapsed Time</string>
     <string name="artist_label">Artist</string>
     <string name="album_label">Album</string>
