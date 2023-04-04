@@ -24,16 +24,10 @@ import android.os.PowerManager;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
-import com.jacstuff.musicplayer.service.db.search.TrackFinder;
 import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
-import com.jacstuff.musicplayer.service.playlist.PlaylistManagerImpl;
-import com.jacstuff.musicplayer.service.playlist.PlaylistViewNotifier;
-import com.jacstuff.musicplayer.service.playlist.PlaylistViewNotifierImpl;
-import com.jacstuff.musicplayer.service.playlist.TrackLoader;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,18 +64,16 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     private boolean shouldNextTrackPlayAfterCurrentTrackEnds = true;
     private ScheduledFuture<?> updateElapsedTimeFuture;
     private int elapsedTime;
-    private TrackFinder trackFinder;
     private ScheduledFuture<?> stopTrackFuture;
-    private TrackLoader trackLoader;
     private boolean haveTracksBeenLoaded;
     private final AtomicBoolean shouldSkipBroadcastReceivedForTrackChange = new AtomicBoolean();
     private final AtomicBoolean isPreparingTrack = new AtomicBoolean();
-    private final AtomicBoolean isScanningForTracks = new AtomicBoolean();
-    private PlaylistViewNotifier playlistViewNotifier;
     private Bitmap currentAlbumArt;
+    private final PlaylistHelper playlistHelper;
 
 
     public MediaPlayerService() {
+        playlistHelper = new PlaylistHelper(this);
         executorService = Executors.newScheduledThreadPool(3);
     }
 
@@ -99,34 +91,12 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    private void loadTrackDataFromFilesystem(){
-        isScanningForTracks.set(true);
-        executorService.execute(()->{
-            playlistManager.addTracksFromStorage(this);
-            playlistManager.loadAllTracksPlaylist();
-            updateListViews();
-            ensureATrackIsSelectedIfAvailable();
-            isScanningForTracks.set(false);
-        });
+    public void refreshTrackDataFromFilesystem() {
+        playlistHelper.refreshTrackDataFromFilesystem();
     }
 
 
-    public void refreshTrackDataFromFilesystem(){
-        if(isScanningForTracks.get()){
-            return;
-        }
-        isScanningForTracks.set(true);
-        executorService.execute(()->{
-            playlistManager.addTracksFromStorage(this);
-            updateListViews();
-            initTrackFinder();
-            trackFinder.initCache();
-            isScanningForTracks.set(false);
-        });
-    }
-
-
-    private void updateListViews(){
+    public void updateListViews(){
         updateViewTrackList();
         mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
         mainActivity.updateArtistsList(playlistManager.getArtistNames());
@@ -138,13 +108,12 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    private void updateAlbumsView(){
+    public void updateAlbumsView(){
         mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
     }
 
 
-
-    private void ensureATrackIsSelectedIfAvailable(){
+    public void setCurrentTrackAndUpdatePlayerViewVisibility(){
         if(currentTrack == null){
             if(playlistManager.hasAnyTracks()){
                 loadNextTrack();
@@ -159,10 +128,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    public List<Track> getTracksForSearch(String str){
-        initTrackFinder();
-        return trackFinder == null ? Collections.emptyList() : trackFinder.searchFor(str);
-    }
+    public List<Track> getTracksForSearch(String str){ return playlistHelper.searchForTracks(str);}
 
 
     private void handleNullPathname(){
@@ -222,63 +188,22 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    public void loadTracksFromArtist(String artistName){
-        playlistManager.loadTracksFromArtist(artistName);
-        updateViewTrackListAndDeselectList();
-        updateAlbumsView();
-    }
+    public void loadTracksFromArtist(String artistName){ playlistHelper.loadTracksFromArtist(artistName);}
 
+    public void loadTracksFromAlbum(String albumName){ playlistHelper.loadTracksFromAlbum(albumName);  }
 
-    public void loadTracksFromAlbum(String albumName){
-        playlistManager.loadTracksFromAlbum(albumName);
-        updateViewTrackListAndDeselectList();
-    }
+    public void addTracksFromAristToCurrentPlaylist(String artistName){ playlistHelper.addTracksFromAristToCurrentPlaylist(artistName); }
 
+    public void addTracksFromAlbumToCurrentPlaylist(String albumName){ playlistHelper.addTracksFromAlbumToCurrentPlaylist( albumName); }
 
-    public void addTracksFromAristToCurrentPlaylist(String artistName){
-        playlistManager.addTracksFromArtistToCurrentPlaylist(artistName, playlistViewNotifier);
-        updateViewTrackList();
-    }
+    public void loadPlaylist(Playlist playlist){ playlistHelper.loadPlaylist(playlist);}
 
+    public void addTrackToCurrentPlaylist(Track track){ playlistHelper.addTrackToCurrentPlaylist(track);}
 
-    public void addTracksFromAlbumToCurrentPlaylist(String albumName){
-        playlistManager.addTracksFromAlbumToCurrentPlaylist(albumName, playlistViewNotifier);
-        updateViewTrackList();
-    }
+    public void addTrackToPlaylist(Track track, Playlist playlist){ playlistHelper.addTrackToPlaylist(track, playlist);}
 
+    public void removeTrackFromCurrentPlaylist(Track track){ playlistHelper.removeTrackFromCurrentPlaylist(track);}
 
-    public void loadPlaylist(Playlist playlist){
-        playlistManager.loadPlaylist(playlist);
-        updateViewTrackListAndDeselectList();
-        updateAlbumsView();
-    }
-
-
-    public void addTrackToCurrentPlaylist(Track track){
-        playlistManager.addTrackToCurrentPlaylist(track, playlistViewNotifier);
-        updateViewTrackList();
-        mediaNotificationManager.updateNotification();
-    }
-
-    public void addTrackToPlaylist(Track track, Playlist playlist){
-        playlistManager.addTrackToPlaylist(track, playlist, playlistViewNotifier);
-        updateViewTrackList();
-        mediaNotificationManager.updateNotification();
-    }
-
-
-    public void removeTrackFromCurrentPlaylist(Track track){
-        playlistManager.removeTrackFromCurrentPlaylist(track, playlistViewNotifier);
-        updateViewTrackList();
-        mediaNotificationManager.updateNotification();
-    }
-
-
-    private void initTrackFinder(){
-        if(trackFinder == null){
-            trackFinder =  new TrackFinder(trackLoader);
-        }
-    }
 
 
     public PlaylistManager getPlaylistManager(){
@@ -286,13 +211,13 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    private void updateViewTrackList() {
+    public void updateViewTrackList() {
         int currentTrackIndex = currentTrack == null ? -1 : currentTrack.getIndex();
         mainActivity.updateTracksList(playlistManager.getTracks(), currentTrack, currentTrackIndex);
     }
 
 
-    private void updateViewTrackListAndDeselectList(){
+    public void updateViewTrackListAndDeselectList(){
         mainActivity.updateTracksList(playlistManager.getTracks(), currentTrack,-1);
     }
 
@@ -312,6 +237,11 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
         updateViewsEnsurePlayerStoppedAndSchedulePlay();
         playlistManager.addToTrackHistory(track);
         mainActivity.setTrackInfoOnView(currentTrack, 0);
+    }
+
+
+    public MediaNotificationManager getNotificationManager(){
+        return mediaNotificationManager;
     }
 
 
@@ -356,13 +286,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
         else {
             mainActivity.scrollToAndSelectPosition(trackIndexOnCurrentPlaylist);
         }
-    }
-
-
-    private void loadTrackDeselectCurrentTrack(Track track){
-        assignTrack(track);
-        mainActivity.deselectCurrentTrack();
-        mediaNotificationManager.updateNotification();
     }
 
 
@@ -431,15 +354,8 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
-        playlistViewNotifier = new PlaylistViewNotifierImpl(mainActivity);
-        createPlaylistManagerAndTrackLoader();
+        playlistHelper.onSetActivity(mainActivity);
         mainActivity.initAlbumArt();
-        if(!haveTracksBeenLoaded){
-            loadTrackDataFromFilesystem();
-            haveTracksBeenLoaded = true;
-            return;
-        }
-        updateViews();
     }
 
 
@@ -467,15 +383,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    private void createPlaylistManagerAndTrackLoader(){
-        if(playlistManager == null) {
-            trackLoader = new TrackLoader(getApplicationContext());
-            playlistManager = new PlaylistManagerImpl(mainActivity.getApplicationContext(), trackLoader);
-        }
-    }
-
-
-    private void updateViews(){
+    public void updateViews(){
         if(currentTrack != null){
             mainActivity.setTrackInfoOnView(currentTrack, 0);
             mainActivity.setElapsedTime(elapsedTime);

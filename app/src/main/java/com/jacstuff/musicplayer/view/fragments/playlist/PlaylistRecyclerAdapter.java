@@ -79,11 +79,6 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     }
 
 
-    public int getSelectedPosition(){
-        return selectedPosition;
-    }
-
-
     public void select(View view){
        // int index = Math.max(Math.min(position, playlists.size()-1), 0);
         changePositionTo(0);
@@ -97,11 +92,6 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     public PlaylistRecyclerAdapter.PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.track_list_item_view, parent,false);
         return new PlaylistViewHolder(view);
-    }
-
-
-    private String getStrOf(Track trackDetails){
-        return trackDetails.getArtist() + " : " +  trackDetails.getTitle();
     }
 
 
