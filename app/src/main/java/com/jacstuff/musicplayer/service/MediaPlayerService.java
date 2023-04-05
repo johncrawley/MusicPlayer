@@ -58,14 +58,12 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     private enum MediaPlayerState { PAUSED, PLAYING, STOPPED, FINISHED}
     private MediaPlayerState currentState = MediaPlayerState.STOPPED;
     private MainActivity mainActivity;
-    private PlaylistManager playlistManager;
     private final IBinder binder = new LocalBinder();
     private Track currentTrack;
     private boolean shouldNextTrackPlayAfterCurrentTrackEnds = true;
     private ScheduledFuture<?> updateElapsedTimeFuture;
     private int elapsedTime;
     private ScheduledFuture<?> stopTrackFuture;
-    private boolean haveTracksBeenLoaded;
     private final AtomicBoolean shouldSkipBroadcastReceivedForTrackChange = new AtomicBoolean();
     private final AtomicBoolean isPreparingTrack = new AtomicBoolean();
     private Bitmap currentAlbumArt;
@@ -96,35 +94,33 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    public void updateListViews(){
-        updateViewTrackList();
+    public void updateListViews(PlaylistManager playlistManager){
+        updateViewTrackList(playlistManager);
         mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
         mainActivity.updateArtistsList(playlistManager.getArtistNames());
     }
 
 
     public void updateArtistView(){
-        mainActivity.updateArtistsList(playlistManager.getArtistNames());
+        mainActivity.updateArtistsList(getPlaylistManager().getArtistNames());
     }
 
 
     public void updateAlbumsView(){
-        mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
+        mainActivity.updateAlbumsList(getPlaylistManager().getAlbumNames());
     }
 
 
     public void setCurrentTrackAndUpdatePlayerViewVisibility(){
-        if(currentTrack == null){
-            if(playlistManager.hasAnyTracks()){
-                loadNextTrack();
-            }
-            else{
-                mainActivity.hidePlayerViews();
-            }
-        }
-        else{
+        if(currentTrack != null){
             mainActivity.showPlayerViews();
+            return;
         }
+        if(getPlaylistManager().hasAnyTracks()){
+            loadNextTrack();
+            return;
+        }
+        mainActivity.hidePlayerViews();
     }
 
 
@@ -204,26 +200,23 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     public void removeTrackFromCurrentPlaylist(Track track){ playlistHelper.removeTrackFromCurrentPlaylist(track);}
 
+    public PlaylistManager getPlaylistManager(){return playlistHelper.getPlaylistManager();}
 
 
-    public PlaylistManager getPlaylistManager(){
-        return playlistManager;
-    }
 
-
-    public void updateViewTrackList() {
+    public void updateViewTrackList(PlaylistManager playlistManager) {
         int currentTrackIndex = currentTrack == null ? -1 : currentTrack.getIndex();
         mainActivity.updateTracksList(playlistManager.getTracks(), currentTrack, currentTrackIndex);
     }
 
 
-    public void updateViewTrackListAndDeselectList(){
+    public void updateViewTrackListAndDeselectList(PlaylistManager playlistManager){
         mainActivity.updateTracksList(playlistManager.getTracks(), currentTrack,-1);
     }
 
 
     public List<Track> getTrackList(){
-        return playlistManager.getTracks();
+        return getPlaylistManager().getTracks();
     }
 
 
@@ -235,18 +228,13 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
             return;
         }
         updateViewsEnsurePlayerStoppedAndSchedulePlay();
-        playlistManager.addToTrackHistory(track);
+        getPlaylistManager().addToTrackHistory(track);
         mainActivity.setTrackInfoOnView(currentTrack, 0);
     }
 
 
-    public MediaNotificationManager getNotificationManager(){
-        return mediaNotificationManager;
-    }
-
-
     public void selectTrack(int index){
-        assignTrack(playlistManager.selectTrack(index));
+        assignTrack(getPlaylistManager().selectTrack(index));
     }
 
 
@@ -257,13 +245,13 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     private void loadNext(){
-        Track track = playlistManager.getNextTrack();
+        Track track = getPlaylistManager().getNextTrack();
         loadTrack(track == null ? currentTrack : track);
     }
 
 
     public void loadPreviousTrack(){
-        loadTrack(playlistManager.getPreviousTrack());
+        loadTrack(getPlaylistManager().getPreviousTrack());
         cancelScheduledStoppageOfTrack();
     }
 
@@ -279,7 +267,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     private void scrollToPositionOf(Track track){
-        int trackIndexOnCurrentPlaylist = playlistManager.getCurrentIndexOf(track);
+        int trackIndexOnCurrentPlaylist = getPlaylistManager().getCurrentIndexOf(track);
         if(trackIndexOnCurrentPlaylist == - 1){
             mainActivity.deselectCurrentTrack();
         }
@@ -297,12 +285,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     public void stopPlayingInThreeMinutes(){
-        stopPlayingInMinutes(3);
-    }
-
-
-    private void stopPlayingInMinutes(int minutes){
-      stopTrackFuture = executorService.schedule( this::stopAndResetTime, minutes, TimeUnit.SECONDS);
+        stopTrackFuture = executorService.schedule( this::stopAndResetTime, 3, TimeUnit.SECONDS);
     }
 
 
@@ -383,13 +366,13 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    public void updateViews(){
+    public void updateViews(PlaylistManager playlistManager){
         if(currentTrack != null){
             mainActivity.setTrackInfoOnView(currentTrack, 0);
             mainActivity.setElapsedTime(elapsedTime);
             mainActivity.setAlbumArt(currentAlbumArt);
         }
-        updateListViews();
+        updateListViews(playlistManager);
     }
 
 
@@ -404,6 +387,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
         createMediaPlayer();
         setupBroadcastReceivers();
         mediaNotificationManager = new MediaNotificationManager(getApplicationContext(), this);
+        playlistHelper.setMediaNotificationManager(mediaNotificationManager);
         moveToForeground();
     }
 
@@ -450,18 +434,18 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     public void enableShuffle(){
-        playlistManager.enableShuffle();
+        getPlaylistManager().enableShuffle();
         mainActivity.notifyShuffleEnabled();
     }
 
 
     public boolean isShuffleEnabled(){
-        return playlistManager.isShuffleEnabled();
+        return getPlaylistManager().isShuffleEnabled();
     }
 
 
     public void disableShuffle(){
-        playlistManager.disableShuffle();
+        getPlaylistManager().disableShuffle();
         mainActivity.notifyShuffleDisabled();
     }
 
@@ -472,10 +456,11 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
+
     private void setupBroadcastReceiversMap(){
         broadcastReceiverMap = new HashMap<>();
         broadcastReceiverMap.put(serviceReceiverForPlay, ACTION_PLAY);
-        broadcastReceiverMap.put(serviceReceiverForRequestStatus,       ACTION_REQUEST_STATUS);
+        broadcastReceiverMap.put(serviceReceiverForRequestStatus, ACTION_REQUEST_STATUS);
         broadcastReceiverMap.put(serviceReceiverForPause, ACTION_PAUSE_PLAYER);
         broadcastReceiverMap.put(serviceReceiverForNext, ACTION_SELECT_NEXT_TRACK);
         broadcastReceiverMap.put(serviceReceiverForPrevious, ACTION_SELECT_PREVIOUS_TRACK);
@@ -512,7 +497,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     int getTrackCount(){
-        return playlistManager == null ? 0 : playlistManager.getNumberOfTracks();
+        return playlistHelper.getTrackCount();
     }
 
 

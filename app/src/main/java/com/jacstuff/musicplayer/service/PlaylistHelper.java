@@ -1,7 +1,5 @@
 package com.jacstuff.musicplayer.service;
 
-import android.app.NotificationManager;
-
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.search.TrackFinder;
@@ -20,11 +18,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PlaylistHelper {
 
-    private AtomicBoolean isScanningForTracks;
+    private final AtomicBoolean isScanningForTracks = new AtomicBoolean();
     private PlaylistManager playlistManager;
     private final ScheduledExecutorService executorService;
     private final MediaPlayerService mediaPlayerService;
-    private final MediaNotificationManager mediaNotificationManager;
+    private MediaNotificationManager mediaNotificationManager;
     private PlaylistViewNotifier playlistViewNotifier;
     private boolean haveTracksBeenLoaded;
     private TrackLoader trackLoader;
@@ -32,17 +30,19 @@ public class PlaylistHelper {
 
     public PlaylistHelper(MediaPlayerService mediaPlayerService){
         this.mediaPlayerService = mediaPlayerService;
-        this.mediaNotificationManager = mediaPlayerService.getNotificationManager();
         executorService = Executors.newScheduledThreadPool(3);
     }
 
+    public void setMediaNotificationManager(MediaNotificationManager mediaNotificationManager){
+        this.mediaNotificationManager = mediaNotificationManager;
+    }
 
     public void loadTrackDataFromFilesystem(){
         isScanningForTracks.set(true);
         executorService.execute(()->{
             playlistManager.addTracksFromStorage(mediaPlayerService);
             playlistManager.loadAllTracksPlaylist();
-            mediaPlayerService.updateListViews();
+            mediaPlayerService.updateListViews(playlistManager);
             mediaPlayerService.setCurrentTrackAndUpdatePlayerViewVisibility();
             isScanningForTracks.set(false);
         });
@@ -70,7 +70,7 @@ public class PlaylistHelper {
             haveTracksBeenLoaded = true;
             return;
         }
-        mediaPlayerService.updateViews();
+        mediaPlayerService.updateViews(playlistManager);
     }
 
 
@@ -89,7 +89,7 @@ public class PlaylistHelper {
         isScanningForTracks.set(true);
         executorService.execute(()->{
             playlistManager.addTracksFromStorage( mediaPlayerService);
-            mediaPlayerService.updateListViews();
+            mediaPlayerService.updateListViews(playlistManager);
             initTrackFinder();
             trackFinder.initCache();
             isScanningForTracks.set(false);
@@ -99,54 +99,61 @@ public class PlaylistHelper {
 
     public void loadTracksFromArtist(String artistName){
         playlistManager.loadTracksFromArtist(artistName);
-        mediaPlayerService.updateViewTrackListAndDeselectList();
+        mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
         mediaPlayerService.updateAlbumsView();
     }
 
 
     public void loadTracksFromAlbum(String albumName){
         playlistManager.loadTracksFromAlbum(albumName);
-        mediaPlayerService.updateViewTrackListAndDeselectList();
+        mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
     }
 
 
     public void addTracksFromAristToCurrentPlaylist(String artistName){
         playlistManager.addTracksFromArtistToCurrentPlaylist(artistName, playlistViewNotifier);
-        mediaPlayerService.updateViewTrackList();
+        mediaPlayerService.updateViewTrackList(playlistManager);
     }
 
 
     public void addTracksFromAlbumToCurrentPlaylist(String albumName){
         playlistManager.addTracksFromAlbumToCurrentPlaylist(albumName, playlistViewNotifier);
-        mediaPlayerService.updateViewTrackList();
+        mediaPlayerService.updateViewTrackList(playlistManager);
     }
 
 
     public void loadPlaylist(Playlist playlist){
         playlistManager.loadPlaylist(playlist);
-        mediaPlayerService.updateViewTrackListAndDeselectList();
+        mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
         mediaPlayerService.updateAlbumsView();
     }
 
+    public PlaylistManager getPlaylistManager(){
+        return playlistManager;
+    }
 
     public void addTrackToCurrentPlaylist(Track track){
         playlistManager.addTrackToCurrentPlaylist(track, playlistViewNotifier);
-        mediaPlayerService.updateViewTrackList();
+        mediaPlayerService.updateViewTrackList(playlistManager);
         mediaNotificationManager.updateNotification();
     }
 
     public void addTrackToPlaylist(Track track, Playlist playlist){
         playlistManager.addTrackToPlaylist(track, playlist, playlistViewNotifier);
-        mediaPlayerService.updateViewTrackList();
+        mediaPlayerService.updateViewTrackList(playlistManager);
         mediaNotificationManager.updateNotification();
     }
 
 
     public void removeTrackFromCurrentPlaylist(Track track){
         playlistManager.removeTrackFromCurrentPlaylist(track, playlistViewNotifier);
-        mediaPlayerService.updateViewTrackList();
+        mediaPlayerService.updateViewTrackList(playlistManager);
         mediaNotificationManager.updateNotification();
     }
 
+
+    public int getTrackCount(){
+       return playlistManager == null ? 0 : playlistManager.getNumberOfTracks();
+    }
 
 }
