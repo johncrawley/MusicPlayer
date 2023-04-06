@@ -229,7 +229,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
         }
         updateViewsEnsurePlayerStoppedAndSchedulePlay();
         getPlaylistManager().addToTrackHistory(track);
-        mainActivity.setTrackInfoOnView(currentTrack, 0);
+        mainActivity.setTrackDetails(currentTrack, 0);
     }
 
 
@@ -316,7 +316,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     private void updateViewsOnTrackAssigned(){
         mediaNotificationManager.updateNotification();
-        mainActivity.setTrackInfoOnView(currentTrack, 0);
+        mainActivity.setTrackDetails(currentTrack, 0);
         if(currentState == MediaPlayerState.PAUSED){
             mainActivity.hideTrackSeekBar();
         }
@@ -338,7 +338,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         playlistHelper.onSetActivity(mainActivity);
-        mainActivity.initAlbumArt();
     }
 
 
@@ -368,7 +367,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     public void updateViews(PlaylistManager playlistManager){
         if(currentTrack != null){
-            mainActivity.setTrackInfoOnView(currentTrack, 0);
+            mainActivity.setTrackDetails(currentTrack, 0);
             mainActivity.setElapsedTime(elapsedTime);
             mainActivity.setAlbumArt(currentAlbumArt);
         }

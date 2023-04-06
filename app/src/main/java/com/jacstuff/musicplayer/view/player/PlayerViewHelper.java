@@ -31,19 +31,21 @@ public class PlayerViewHelper {
     private ViewGroup playerButtonPanel;
 
     private final MainActivity mainActivity;
-    private final MediaPlayerService mediaPlayerService;
+    private MediaPlayerService mediaPlayerService;
 
 
-    public PlayerViewHelper(MainActivity mainActivity, MediaPlayerService mediaPlayerService){
+    public PlayerViewHelper(MainActivity mainActivity){
         this.mainActivity = mainActivity;
+    }
+
+    public void setMediaPlayerService(MediaPlayerService mediaPlayerService){
         this.mediaPlayerService = mediaPlayerService;
-        setupViews();
     }
 
 
-    private void setupViews(){
+    public void setupViews(){
         setupPlayerButtonPanelViews();
-        assignTrackInfoViews();
+        initTrackDetailViews();
         setupTrackTimeSeekBar();
         resetElapsedTime();
     }
@@ -99,7 +101,7 @@ public class PlayerViewHelper {
     }
 
 
-    public void setTrackInfoOnView(final Track track, int elapsedTime){
+    public void setTrackDetails(final Track track, int elapsedTime){
         mainActivity.runOnUiThread(()-> {
             playerButtonPanel.setVisibility(View.VISIBLE);
             String titleText = track.getTitle();
@@ -181,7 +183,7 @@ public class PlayerViewHelper {
     }
 
 
-    private void assignTrackInfoViews(){
+    private void initTrackDetailViews(){
         trackTime = mainActivity.findViewById(R.id.trackTime);
         trackTitle =  mainActivity.findViewById(R.id.trackTitle);
         trackAlbum =  mainActivity.findViewById(R.id.albumTextView);

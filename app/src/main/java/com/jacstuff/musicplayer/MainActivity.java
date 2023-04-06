@@ -68,10 +68,12 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName className, IBinder service) {
             MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
             mediaPlayerService = binder.getService();
+            initPlayerViewHelper();
+            playerViewHelper.setMediaPlayerService(mediaPlayerService);
+            playerViewHelper.setupViews();
             mediaPlayerService.setActivity(MainActivity.this);
             searchViewHelper = new SearchViewHelper(MainActivity.this);
             searchViewHelper.setMediaPlayerService(mediaPlayerService);
-            playerViewHelper = new PlayerViewHelper(MainActivity.this, mediaPlayerService);
         }
         @Override public void onServiceDisconnected(ComponentName arg0) {}
     };
@@ -87,6 +89,14 @@ public class MainActivity extends AppCompatActivity {
         requestPermissions();
         startMediaPlayerService();
         addTrackToPlaylistViewHelper = new AddTrackToPlaylistViewHelper(this);
+        initPlayerViewHelper();
+    }
+
+
+    private void initPlayerViewHelper(){
+        if(playerViewHelper == null){
+            playerViewHelper = new PlayerViewHelper(this);
+        }
     }
 
 
@@ -224,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
     public void notifyMediaPlayerPlaying(){playerViewHelper.notifyMediaPlayerPlaying(); }
 
 
-    public void setTrackInfoOnView(final Track track, int elapsedTime){ playerViewHelper.setTrackInfoOnView(track, elapsedTime); }
+    public void setTrackDetails(final Track track, int elapsedTime){ playerViewHelper.setTrackDetails(track, elapsedTime); }
 
 
     public void initAlbumArt(){

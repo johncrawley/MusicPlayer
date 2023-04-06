@@ -70,6 +70,7 @@ public class PlaylistHelper {
             haveTracksBeenLoaded = true;
             return;
         }
+        mainActivity.initAlbumArt();
         mediaPlayerService.updateViews(playlistManager);
     }
 
