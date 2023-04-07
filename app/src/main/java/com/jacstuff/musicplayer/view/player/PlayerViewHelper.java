@@ -38,8 +38,10 @@ public class PlayerViewHelper {
         this.mainActivity = mainActivity;
     }
 
+
     public void setMediaPlayerService(MediaPlayerService mediaPlayerService){
         this.mediaPlayerService = mediaPlayerService;
+        setupShuffleButtons(mediaPlayerService);
     }
 
 
@@ -198,13 +200,17 @@ public class PlayerViewHelper {
         playButton  = setupImageButton(R.id.playButton, mainActivity::playTrack);
         pauseButton = setupImageButton(R.id.pauseButton, mainActivity::pauseTrack);
         stopButton  = setupImageButton(R.id.stopButton, mainActivity:: stopTrack);
-        setupStopLongClick();
+        setupLongClickListenerOnStopButton();
+    }
+
+
+    private void setupShuffleButtons(MediaPlayerService mediaPlayerService){
         turnShuffleOnButton =  setupImageButton(R.id.turnShuffleOnButton, mediaPlayerService::enableShuffle);
         turnShuffleOffButton = setupImageButton(R.id.turnShuffleOffButton, mediaPlayerService::disableShuffle);
     }
 
 
-    private void setupStopLongClick(){
+    private void setupLongClickListenerOnStopButton(){
         stopButton.setOnLongClickListener((View v)->{
             if(mediaPlayerService.isPlaying()){
                 createStopOptionsFragment();

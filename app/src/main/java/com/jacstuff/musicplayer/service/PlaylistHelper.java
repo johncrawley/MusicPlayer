@@ -37,17 +37,6 @@ public class PlaylistHelper {
         this.mediaNotificationManager = mediaNotificationManager;
     }
 
-    public void loadTrackDataFromFilesystem(){
-        isScanningForTracks.set(true);
-        executorService.execute(()->{
-            playlistManager.addTracksFromStorage(mediaPlayerService);
-            playlistManager.loadAllTracksPlaylist();
-            mediaPlayerService.updateListViews(playlistManager);
-            mediaPlayerService.setCurrentTrackAndUpdatePlayerViewVisibility();
-            isScanningForTracks.set(false);
-        });
-    }
-
 
     private void initTrackFinder(){
         if(trackFinder == null){
@@ -70,8 +59,19 @@ public class PlaylistHelper {
             haveTracksBeenLoaded = true;
             return;
         }
-        mainActivity.initAlbumArt();
         mediaPlayerService.updateViews(playlistManager);
+    }
+
+
+    public void loadTrackDataFromFilesystem(){
+        isScanningForTracks.set(true);
+        executorService.execute(()->{
+            playlistManager.addTracksFromStorage(mediaPlayerService);
+            playlistManager.loadAllTracksPlaylist();
+            mediaPlayerService.updateListViews(playlistManager);
+            mediaPlayerService.setCurrentTrackAndUpdatePlayerViewVisibility();
+            isScanningForTracks.set(false);
+        });
     }
 
 

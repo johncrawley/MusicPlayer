@@ -68,9 +68,8 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName className, IBinder service) {
             MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
             mediaPlayerService = binder.getService();
-            initPlayerViewHelper();
             playerViewHelper.setMediaPlayerService(mediaPlayerService);
-            playerViewHelper.setupViews();
+            albumArtHelper = new AlbumArtHelper(MainActivity.this);
             mediaPlayerService.setActivity(MainActivity.this);
             searchViewHelper = new SearchViewHelper(MainActivity.this);
             searchViewHelper.setMediaPlayerService(mediaPlayerService);
@@ -87,9 +86,10 @@ public class MainActivity extends AppCompatActivity {
         setupViewModel();
         setupTabLayout();
         requestPermissions();
+        initPlayerViewHelper();
         startMediaPlayerService();
         addTrackToPlaylistViewHelper = new AddTrackToPlaylistViewHelper(this);
-        initPlayerViewHelper();
+
     }
 
 
@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         if(playerViewHelper == null){
             playerViewHelper = new PlayerViewHelper(this);
         }
+        playerViewHelper.setupViews();
     }
 
 
@@ -237,11 +238,6 @@ public class MainActivity extends AppCompatActivity {
     public void setTrackDetails(final Track track, int elapsedTime){ playerViewHelper.setTrackDetails(track, elapsedTime); }
 
 
-    public void initAlbumArt(){
-        albumArtHelper = new AlbumArtHelper(this);
-    }
-
-
     public void setAlbumArt(Bitmap coverArtBitmap){
         albumArtHelper.changeAlbumArtTo(coverArtBitmap);
     }
@@ -350,15 +346,15 @@ public class MainActivity extends AppCompatActivity {
         toast(errorMessage);
     }
 
+
     public void toastFileDoesNotExistError(Track track){
         String errorMessage = getString(R.string.error_loading_track_toast_message, track.getPathname());
         toast(errorMessage);
     }
 
+
     private void toast(String msg){
-        runOnUiThread(()-> {
-            Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-        });
+        runOnUiThread(()-> Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show());
     }
 
 
