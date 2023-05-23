@@ -12,14 +12,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.PowerManager;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
@@ -27,17 +23,12 @@ import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class MediaPlayerService extends Service implements MediaPlayer.OnPreparedListener{
+public class MediaPlayerService extends Service{
 
     public static final String ACTION_PLAY = "com.j.crawley.music_player.play";
     public static final String ACTION_PAUSE_PLAYER = "com.j.crawley.music_player.pausePlayer";
@@ -49,30 +40,19 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     public static final String ACTION_NOTIFY_VIEW_OF_CONNECTING = "com.j.crawley.music_player.notifyViewOfPlay";
     public static final String ACTION_NOTIFY_VIEW_OF_PLAYING = "com.j.crawley.music_player.notifyViewOfPlayInfo";
 
-    private MediaPlayer mediaPlayer;
-    public boolean hasEncounteredError;
     private MediaNotificationManager mediaNotificationManager;
-    private final ScheduledExecutorService executorService;
     Map<BroadcastReceiver, String> broadcastReceiverMap;
+    private final AtomicBoolean shouldSkipBroadcastReceivedForTrackChange = new AtomicBoolean();
 
-    private enum MediaPlayerState { PAUSED, PLAYING, STOPPED, FINISHED}
-    private MediaPlayerState currentState = MediaPlayerState.STOPPED;
     private MainActivity mainActivity;
     private final IBinder binder = new LocalBinder();
-    private Track currentTrack;
-    private boolean shouldNextTrackPlayAfterCurrentTrackEnds = true;
-    private ScheduledFuture<?> updateElapsedTimeFuture;
-    private int elapsedTime;
-    private ScheduledFuture<?> stopTrackFuture;
-    private final AtomicBoolean shouldSkipBroadcastReceivedForTrackChange = new AtomicBoolean();
-    private final AtomicBoolean isPreparingTrack = new AtomicBoolean();
-    private Bitmap currentAlbumArt;
     private final PlaylistHelper playlistHelper;
+    private final MediaPlayerHelper mediaPlayerHelper;
 
 
     public MediaPlayerService() {
         playlistHelper = new PlaylistHelper(this);
-        executorService = Executors.newScheduledThreadPool(3);
+        mediaPlayerHelper = new MediaPlayerHelper(this);
     }
 
 
@@ -80,6 +60,11 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
         public MediaPlayerService getService() {
             return MediaPlayerService.this;
         }
+    }
+
+
+    void notifyMainViewOfMediaPlayerPlaying(){
+        mainActivity.notifyMediaPlayerPlaying();
     }
 
 
@@ -101,6 +86,10 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
+    void displayErrorOnMainView(Track track){
+        mainActivity.displayError(track);
+    }
+
     public void updateArtistView(){
         mainActivity.updateArtistsList(getPlaylistManager().getArtistNames());
     }
@@ -112,7 +101,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     public void setCurrentTrackAndUpdatePlayerViewVisibility(){
-        if(currentTrack != null){
+        if(mediaPlayerHelper.getCurrentTrack() != null){
             mainActivity.showPlayerViews();
             return;
         }
@@ -127,11 +116,8 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     public List<Track> getTracksForSearch(String str){ return playlistHelper.searchForTracks(str);}
 
 
-    private void handleNullPathname(){
-        if(currentTrack.getPathname() == null){
-            mainActivity.setBlankTrackInfo();
-            currentState = MediaPlayerState.STOPPED;
-        }
+    public void setBlankTrackInfoOnMainView(){
+        mainActivity.setBlankTrackInfo();
     }
 
 
@@ -141,45 +127,20 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     public void stop(){
-        stop(true);
-    }
-
-
-    private void stop(boolean shouldUpdateMainView){
-        stop(shouldUpdateMainView, true);
-    }
-
-
-    private void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
-        if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED) {
-            mediaPlayer.stop();
-            currentState = MediaPlayerState.STOPPED;
-            mediaPlayer.reset();
-        }
-        stopUpdatingElapsedTimeOnView();
-        elapsedTime = 0;
-        if(shouldUpdateNotification) {
-            mediaNotificationManager.updateNotification();
-        }
-        if(shouldUpdateMainView) {
-            if(mainActivity != null) {
-                mainActivity.notifyMediaPlayerStopped();
-            }
-        }
-        cancelScheduledStoppageOfTrack();
+        mediaPlayerHelper.stop(true);
     }
 
 
     public void seek(int milliseconds){
-        if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
-            mediaPlayer.seekTo(milliseconds);
-        }
+       mediaPlayerHelper.seek(milliseconds);
     }
 
 
-    private void cancelScheduledStoppageOfTrack(){
-        if(stopTrackFuture != null) {
-            stopTrackFuture.cancel(false);
+    public void updateMainViewOfStop(boolean shouldUpdateMainView){
+        if(shouldUpdateMainView) {
+            if(mainActivity != null) {
+                mainActivity.notifyMediaPlayerStopped();
+            }
         }
     }
 
@@ -203,15 +164,15 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     public PlaylistManager getPlaylistManager(){return playlistHelper.getPlaylistManager();}
 
 
-
     public void updateViewTrackList(PlaylistManager playlistManager) {
+        Track currentTrack = mediaPlayerHelper.getCurrentTrack();
         int currentTrackIndex = currentTrack == null ? -1 : currentTrack.getIndex();
         mainActivity.updateTracksList(playlistManager.getTracks(), currentTrack, currentTrackIndex);
     }
 
 
     public void updateViewTrackListAndDeselectList(PlaylistManager playlistManager){
-        mainActivity.updateTracksList(playlistManager.getTracks(), currentTrack,-1);
+        mainActivity.updateTracksList(playlistManager.getTracks(), mediaPlayerHelper.getCurrentTrack(),-1);
     }
 
 
@@ -221,52 +182,29 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     public void selectAndPlayTrack(Track track){
-        cancelScheduledStoppageOfTrack();
-        currentTrack = track;
-        assignAlbumArt(track);
-        if(hasEncounteredError){
-            return;
-        }
-        updateViewsEnsurePlayerStoppedAndSchedulePlay();
+        mediaPlayerHelper.selectAndPlayTrack(track);
         getPlaylistManager().addToTrackHistory(track);
-        mainActivity.setTrackDetails(currentTrack, 0);
+        mainActivity.setTrackDetails(mediaPlayerHelper.getCurrentTrack(), 0);
     }
 
 
     public void selectTrack(int index){
-        assignTrack(getPlaylistManager().selectTrack(index));
+        mediaPlayerHelper.assignTrack(getPlaylistManager().selectTrack(index));
     }
 
 
     public void loadNextTrack(){
-        loadNext();
-        cancelScheduledStoppageOfTrack();
-    }
-
-
-    private void loadNext(){
         Track track = getPlaylistManager().getNextTrack();
-        loadTrack(track == null ? currentTrack : track);
+        mediaPlayerHelper.loadNext(track);
     }
 
 
     public void loadPreviousTrack(){
-        loadTrack(getPlaylistManager().getPreviousTrack());
-        cancelScheduledStoppageOfTrack();
+        mediaPlayerHelper.loadPreviousTrack(getPlaylistManager().getPreviousTrack());
     }
 
 
-    private void loadTrack(Track track){
-        if(isPreparingTrack.get()){
-            return;
-        }
-        assignTrack(track);
-        scrollToPositionOf(track);
-        mediaNotificationManager.updateNotification();
-    }
-
-
-    private void scrollToPositionOf(Track track){
+    void scrollToPositionOf(Track track){
         int trackIndexOnCurrentPlaylist = getPlaylistManager().getCurrentIndexOf(track);
         if(trackIndexOnCurrentPlaylist == - 1){
             mainActivity.deselectCurrentTrack();
@@ -278,59 +216,25 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     public void enableStopAfterTrackFinishes(){
-        if(currentState == MediaPlayerState.PLAYING) {
-            shouldNextTrackPlayAfterCurrentTrackEnds = false;
-        }
+        mediaPlayerHelper.enabledStopAfterTrackFinishes();
     }
 
 
     public void stopPlayingInThreeMinutes(){
-        stopTrackFuture = executorService.schedule( this::stopAndResetTime, 3, TimeUnit.SECONDS);
+        mediaPlayerHelper.stopPlayingInThreeMinutes();
     }
 
 
-    private void stopAndResetTime(){
-        stop(true);
+    void resetElapsedTimeOnMainView(){
         mainActivity.resetElapsedTime();
     }
 
 
-    private void assignTrack(Track track){
-        currentTrack = track;
-        elapsedTime = 0;
-        if(currentTrack == null){
-            return;
-        }
-        if(currentTrack.getPathname() == null) {
-            handleNullPathname();
-            return;
-        }
-        assignAlbumArt(track);
-        if(hasEncounteredError){
-            return;
-        }
-        updateViewsOnTrackAssigned();
-        select(currentTrack);
-    }
-
-
-    private void updateViewsOnTrackAssigned(){
+    void updateViewsOnTrackAssigned(){
         mediaNotificationManager.updateNotification();
-        mainActivity.setTrackDetails(currentTrack, 0);
-        if(currentState == MediaPlayerState.PAUSED){
+        mainActivity.setTrackDetails(mediaPlayerHelper.getCurrentTrack(), 0);
+        if(mediaPlayerHelper.isPaused()){
             mainActivity.hideTrackSeekBar();
-        }
-    }
-
-
-    private void select(Track track){
-        MediaPlayerState oldState = currentState;
-        if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
-            stop(false);
-        }
-        currentTrack = track;
-        if(oldState == MediaPlayerState.PLAYING){
-            updateViewsEnsurePlayerStoppedAndSchedulePlay();
         }
     }
 
@@ -341,49 +245,31 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    private void assignAlbumArt(Track track){
-        try(MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever()){
-            mediaMetadataRetriever.setDataSource(track.getPathname());
-            currentAlbumArt = retrieveAlbumArt(mediaMetadataRetriever);
-            mainActivity.setAlbumArt(currentAlbumArt);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        catch(IllegalArgumentException e){
-            hasEncounteredError = true;
-            mainActivity.toastFileDoesNotExistError(track);
-        }
-    }
-
-
-    private Bitmap retrieveAlbumArt(MediaMetadataRetriever mediaMetadataRetriever){
-        byte[] coverArt = mediaMetadataRetriever.getEmbeddedPicture();
-        if (coverArt != null) {
-            return BitmapFactory.decodeByteArray(coverArt, 0, coverArt.length);
-        }
-        return null;
+    public void setAlbumArtOnMainView(Bitmap albumArt){
+        mainActivity.setAlbumArt(albumArt);
     }
 
 
     public void updateViews(PlaylistManager playlistManager){
+        Track currentTrack = mediaPlayerHelper.getCurrentTrack();
         if(currentTrack != null){
             mainActivity.setTrackDetails(currentTrack, 0);
-            mainActivity.setElapsedTime(elapsedTime);
-            mainActivity.setAlbumArt(currentAlbumArt);
+            mainActivity.setElapsedTime(mediaPlayerHelper.getElapsedTime());
+            mainActivity.setAlbumArt(mediaPlayerHelper.getCurrentAlbumArt());
         }
         updateListViews(playlistManager);
     }
 
 
     public boolean isPlaying(){
-        return currentState == MediaPlayerState.PLAYING;
+        return mediaPlayerHelper.isPlaying();
     }
 
 
     @Override
     public void onCreate() {
         super.onCreate();
-        createMediaPlayer();
+        mediaPlayerHelper.createMediaPlayer();
         setupBroadcastReceivers();
         mediaNotificationManager = new MediaNotificationManager(getApplicationContext(), this);
         playlistHelper.setMediaNotificationManager(mediaNotificationManager);
@@ -391,36 +277,13 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-    private void createMediaPlayer(){
-        mediaPlayer = new MediaPlayer();
-        currentState = MediaPlayerState.STOPPED;
-        mediaPlayer.setOnCompletionListener(this::onTrackFinished);
-        setupErrorListener();
-    }
-
-
-    private void onTrackFinished(MediaPlayer mediaPlayer){
-        currentState = MediaPlayerState.FINISHED;
-        stopUpdatingElapsedTimeOnView();
-        mediaPlayer.reset();
-        loadNextTrack();
-        if(shouldNextTrackPlayAfterCurrentTrackEnds) {
-            updateViewsEnsurePlayerStoppedAndSchedulePlay();
-        }
-        else{
-            stop();
-        }
-    }
-
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         unregisterBroadcastReceivers();
-        releaseMediaPlayerAndLocks();
-        stop(false, false);
-        mediaPlayer.release();
-        mediaPlayer = null;
+        mediaPlayerHelper.stop(false, false);
+        mediaPlayerHelper.onDestroy();
         mediaNotificationManager.dismissNotification();
         mediaNotificationManager = null;
     }
@@ -455,7 +318,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
 
-
     private void setupBroadcastReceiversMap(){
         broadcastReceiverMap = new HashMap<>();
         broadcastReceiverMap.put(serviceReceiverForPlay, ACTION_PLAY);
@@ -467,30 +329,16 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     public void playTrack(){
-        if(currentState == MediaPlayerState.STOPPED || currentState == MediaPlayerState.FINISHED){
-            updateViewsEnsurePlayerStoppedAndSchedulePlay();
-        }
-        else if(currentState == MediaPlayerState.PAUSED){
-            resume();
-        }
+        mediaPlayerHelper.playTrack();
     }
 
 
-    public void startUpdatingElapsedTimeOnView(){
-        updateElapsedTimeFuture = executorService.scheduleAtFixedRate(this::updateElapsedTimeOnView, 0L, 200L, TimeUnit.MILLISECONDS);
+    public void stopUpdatingElapsedTimeOnView(){
+        mediaPlayerHelper.stopUpdatingElapsedTimeOnView();
     }
 
 
-    private void stopUpdatingElapsedTimeOnView(){
-        if(updateElapsedTimeFuture == null){
-            return;
-        }
-        updateElapsedTimeFuture.cancel(false);
-    }
-
-
-    private void updateElapsedTimeOnView(){
-        elapsedTime = mediaPlayer.getCurrentPosition();
+    public void setElapsedTimeOnView(int elapsedTime){
         mainActivity.setElapsedTime(elapsedTime);
     }
 
@@ -499,12 +347,6 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
         return playlistHelper.getTrackCount();
     }
 
-
-    private void releaseMediaPlayerAndLocks(){
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-        }
-    }
 
 
     private void moveToForeground(){
@@ -516,13 +358,13 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
     String getCurrentStatus(){
         int resId = R.string.status_ready;
-        if(hasEncounteredError){
+        if(mediaPlayerHelper.hasEncounteredError()){
             resId = R.string.status_error;
         }
-        else if(currentState == MediaPlayerState.PLAYING){
+        else if(mediaPlayerHelper.isPlaying()){
             resId = R.string.status_playing;
         }
-        else if(currentState == MediaPlayerState.PAUSED){
+        else if(mediaPlayerHelper.isPaused()){
             resId = R.string.status_paused;
         }
         return getApplicationContext().getString(resId);
@@ -530,159 +372,59 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
 
 
     public Track getCurrentTrack(){
-        return currentTrack;
+        return mediaPlayerHelper.getCurrentTrack();
     }
 
 
     public Bitmap getAlbumArt(){
-        return currentAlbumArt;
+        return mediaPlayerHelper.getCurrentAlbumArt();
+    }
+
+
+
+    public void notifyMainViewThatFileDoesNotExist(Track track){
+        mainActivity.toastFileDoesNotExistError(track);
     }
 
 
     String getCurrentUrl(){
-        return currentTrack == null ? "" : currentTrack.getPathname();
+        return mediaPlayerHelper.getCurrentUrl();
     }
 
 
-    private void updateViewsEnsurePlayerStoppedAndSchedulePlay() {
-        updateViewsForConnecting();
-        stopRunningMediaPlayer();
-        stopUpdatingElapsedTimeOnView();
-        elapsedTime = 0;
-        shouldNextTrackPlayAfterCurrentTrackEnds = true;
-        executorService.schedule(this::startTrack, 1, TimeUnit.MILLISECONDS);
-    }
-
-
-    private void stopRunningMediaPlayer(){
-        if(mediaPlayer != null && (mediaPlayer.isPlaying() || currentState == MediaPlayerState.PAUSED)){
-            mediaPlayer.stop();
-            mediaPlayer.reset();
-        }
-        currentState = MediaPlayerState.STOPPED;
-    }
-
-
-    private void startTrack(){
-        hasEncounteredError = false;
-        try {
-            isPreparingTrack.set(true);
-            stopPlayer();
-            createMediaPlayer();
-            mediaPlayer.setDataSource(currentTrack.getPathname());
-            mediaPlayer.setOnPreparedListener(this);
-            mediaPlayer.prepare();
-            startUpdatingElapsedTimeOnView();
-            currentState = MediaPlayerState.PLAYING;
-            mainActivity.notifyMediaPlayerPlaying();
-            mediaNotificationManager.updateNotification();
-        }catch (IOException e){
-            e.printStackTrace();
-            onError();
-            mainActivity.displayError(currentTrack);
-        }finally{
-            isPreparingTrack.set(false);
-        }
-    }
-
-
-    @Override
-    public void onPrepared(MediaPlayer mediaPlayer) {
-        setCpuWakeLock();
-        mediaPlayer.start();
-    }
-
-
-    private void onError(){
-        currentState = MediaPlayerState.STOPPED;
-        mainActivity.notifyMediaPlayerStopped();
-        releaseAndResetMediaPlayer();
-        createMediaPlayer();
-    }
-
-
-    public void resume(){
-            currentState = MediaPlayerState.PLAYING;
-            mediaPlayer.start();
-            startUpdatingElapsedTimeOnView();
-            mainActivity.notifyMediaPlayerPlaying();
-            mediaNotificationManager.updateNotification();
-    }
-
-
-    private void updateViewsForConnecting(){
+    void updateViewsForConnecting(){
         sendBroadcast(ACTION_NOTIFY_VIEW_OF_CONNECTING);
         mediaNotificationManager.updateNotification();
     }
 
 
-    private void setCpuWakeLock(){
+     public void notifyViewOfMediaPlayerStop(){
+         mainActivity.notifyMediaPlayerStopped();
+     }
+
+
+    void setCpuWakeLock(){
         if (checkSelfPermission(Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
-            mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+            mediaPlayerHelper.setCpuWakeLock(getApplicationContext());
         }
     }
 
 
-    private void setupErrorListener(){
-        mediaPlayer.setOnErrorListener((mediaPlayer, i, i1) -> {
-            stopPlayer();
-            handleConnectionError();
-            return false;
-        });
-    }
-
-
-    private void handleConnectionError(){
-        hasEncounteredError = true;
-        mediaNotificationManager.updateNotification();
-        onError();
-    }
-
-
-    private void stopPlayer(){
-        releaseAndResetMediaPlayer();
+    public void updateNotification(){
         mediaNotificationManager.updateNotification();
     }
 
 
     public void pause(){
-        pauseMediaPlayer();
+        mediaPlayerHelper.pauseMediaPlayer();
         mediaNotificationManager.updateNotification();
         mainActivity.notifyMediaPlayerPaused();
-        cancelScheduledStoppageOfTrack();
-    }
-
-
-    private void pauseMediaPlayer(){
-        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-            stopUpdatingElapsedTimeOnView();
-            currentState = MediaPlayerState.PAUSED;
-        }
-    }
-
-
-    private void releaseAndResetMediaPlayer(){
-        try {
-            if (mediaPlayer != null) {
-                mediaPlayer.reset();
-                mediaPlayer.release();
-                mediaPlayer = null;
-            }
-        }catch (RuntimeException e){
-            log("releaseAndResetMediaPlayerAndWifiLock() exception:  " + e.getMessage());
-            e.printStackTrace();
-        }
+        mediaPlayerHelper.cancelScheduledStoppageOfTrack();
     }
 
 
     private void sendBroadcast(String action){
         sendBroadcast(new Intent(action));
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ MediaPlayerService: " +  msg);
     }
 
 
@@ -704,12 +446,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     private final BroadcastReceiver serviceReceiverForPlay = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(currentState == MediaPlayerState.PAUSED){
-                resume();
-            }
-            else if(currentState == MediaPlayerState.STOPPED) {
-                updateViewsEnsurePlayerStoppedAndSchedulePlay();
-            }
+            mediaPlayerHelper.onReceiveBroadcastForPlay();
         }
     };
 
@@ -745,7 +482,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnPrepare
     private final BroadcastReceiver serviceReceiverForRequestStatus = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String broadcast = currentState == MediaPlayerState.PLAYING ? ACTION_NOTIFY_VIEW_OF_PLAYING : ACTION_NOTIFY_VIEW_OF_STOP;
+            String broadcast = mediaPlayerHelper.isPlaying() ? ACTION_NOTIFY_VIEW_OF_PLAYING : ACTION_NOTIFY_VIEW_OF_STOP;
             sendBroadcast(broadcast);
         }
     };
