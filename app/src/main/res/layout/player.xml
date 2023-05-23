@@ -32,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:adjustViewBounds="true"
+        android:layout_marginVertical="@dimen/album_art_margin_vertical"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/trackDetailsLayout"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -53,8 +54,8 @@
             android:id="@+id/albumTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/track_detail_text_margin_vertical"
             android:text="@string/album_label"
+            android:layout_marginTop="@dimen/track_detail_text_margin_vertical"
             android:textAlignment="center"
             android:textSize="@dimen/album_text_size" />
 

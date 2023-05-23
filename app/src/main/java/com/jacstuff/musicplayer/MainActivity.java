@@ -238,9 +238,7 @@ public class MainActivity extends AppCompatActivity {
     public void setTrackDetails(final Track track, int elapsedTime){ playerViewHelper.setTrackDetails(track, elapsedTime); }
 
 
-    public void setAlbumArt(Bitmap coverArtBitmap){
-        albumArtHelper.changeAlbumArtTo(coverArtBitmap);
-    }
+    public void setAlbumArt(Bitmap coverArtBitmap){ albumArtHelper.changeAlbumArtTo(coverArtBitmap);}
 
 
     public void disableViewForAWhile(View view){
