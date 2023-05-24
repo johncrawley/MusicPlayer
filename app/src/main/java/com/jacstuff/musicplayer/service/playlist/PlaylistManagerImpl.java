@@ -360,6 +360,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
             return;
         }
         tracks = getSortedTracks(savedAlbum.getAllTracks());
+        tracks.forEach(track -> System.out.println("^^^ loadTracksFromAlbum: " + track.getOrderedString()));
         assignIndexesToTracks();
         setupQueue();
         currentPlaylist = someAlbumPlaylist;

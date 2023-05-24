@@ -38,13 +38,12 @@ public class ArtistsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_artists, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_artists, container, false);
     }
 
 
     @Override
-    public void onViewCreated(View view,  Bundle savedInstanceState){
+    public void onViewCreated(@androidx.annotation.NonNull View view, Bundle savedInstanceState){
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.artistsRecyclerView);
         setupButtons(parentView);
@@ -59,10 +58,15 @@ public class ArtistsFragment extends Fragment {
             int visibility = isBundleUserPlaylistLoaded(bundle) && isItemSelected()? View.VISIBLE : View.INVISIBLE;
             addTracksToPlaylistButton.setVisibility(visibility);
         });
+
         getParentFragmentManager().setFragmentResultListener(MainActivity.SEND_ARTISTS_TO_FRAGMENT, this, (requestKey, bundle) -> {
             ArrayList<String> artistNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ARTIST_UPDATES);
             listAdapter.setItems(artistNames);
             listAdapter.notifyDataSetChanged();
+        });
+
+        getParentFragmentManager().setFragmentResultListener(ArtistOptionsFragment.NOTIFY_ARTISTS_FRAGMENT_TO_LOAD_ARTIST, this, (requestKey, bundle) -> {
+            listAdapter.selectLongClickItem();
         });
     }
 
@@ -93,6 +97,11 @@ public class ArtistsFragment extends Fragment {
     }
 
 
+    private String getLongClickSelectedArtist(){
+        return listAdapter.getCurrentlySelectedItem();
+    }
+
+
     public void notifyCurrentlySelectedTrack(int position){
         getMainActivity().selectTrack(position);
     }
@@ -108,10 +117,15 @@ public class ArtistsFragment extends Fragment {
         if(this.parentView == null ||artists == null){
             return;
         }
-        listAdapter = new StringListAdapter(artists, this::setButtonsVisibility, this::showOptionsDialog);
+        listAdapter = new StringListAdapter(artists, this::loadTracksAndAlbumsFromArtist, this::showOptionsDialog);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);
+    }
+
+
+    private void loadTracksAndAlbumsFromArtist(String artistName){
+        getMainActivity().loadTracksFromArtist(artistName);
     }
 
 
@@ -121,12 +135,21 @@ public class ArtistsFragment extends Fragment {
         if(fragmentManager == null){
             return;
         }
+        Bundle bundle = new Bundle();
+        log("showOptionsDialog, adding artist name to bundle: " + artistName);
+        bundle.putString(ArtistOptionsFragment.ARTIST_NAME_BUNDLE_KEY, artistName);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        removePreviousFragmentTransaction(fragmentManager,tag, fragmentTransaction);
+        removePreviousFragmentTransaction(fragmentManager, tag, fragmentTransaction);
         ArtistOptionsFragment artistOptionsFragment = ArtistOptionsFragment.newInstance();
+        artistOptionsFragment.setArguments(bundle);
         artistOptionsFragment.show(fragmentTransaction, tag);
-
     }
+
+
+    private void log(String msg){
+        System.out.println("^^ ArtistsFragment: " + msg);
+    }
+
 
 
     private FragmentManager getSupportFragmentManager(){

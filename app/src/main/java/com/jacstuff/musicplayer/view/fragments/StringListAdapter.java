@@ -22,6 +22,7 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
     private int indexToScrollTo = -1;
     private final Consumer<String> clickConsumer, longClickConsumer;
     private String currentItem;
+    private View longClickedView;
 
 
     class TextViewHolder extends RecyclerView.ViewHolder {
@@ -42,13 +43,19 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
                 clickConsumer.accept(currentItem);
             });
 
+
             view.setOnLongClickListener(v -> {
+                currentItem = textView.getText().toString();
                 longClickConsumer.accept(currentItem);
+                longClickedView = view;
                 return false;
             });
         }
     }
 
+    public void  selectLongClickItem(){
+        longClickedView.callOnClick();
+    }
 
     public void setItems(List<String> albumNames){
         this.items = albumNames;

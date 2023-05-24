@@ -84,6 +84,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         }
     }
 
+
     public int getElapsedTime(){
         return elapsedTime;
     }
@@ -138,13 +139,9 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-
-
     public void stopPlayingInThreeMinutes(){
         stopTrackFuture = executorService.schedule( this::stopAndResetTime, 3, TimeUnit.SECONDS);
     }
-
-
 
 
     private void releaseAndResetMediaPlayer(){
@@ -224,7 +221,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         }
         return null;
     }
-
 
 
     void playTrack(){
@@ -421,9 +417,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
             updateViewsEnsurePlayerStoppedAndSchedulePlay();
         }
     }
-
-
-
 
 
 }
