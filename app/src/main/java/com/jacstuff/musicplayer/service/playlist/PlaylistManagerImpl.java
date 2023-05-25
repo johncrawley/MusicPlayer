@@ -169,9 +169,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
         defaultPlaylistIds.add(SOME_ARTIST_PLAYLIST_ID);
         defaultPlaylistIds.add(ALL_TRACKS_PLAYLIST_ID);
 
-        someAlbumPlaylist = new Playlist(SOME_ALBUM_PLAYLIST_ID, "Some Album");
-        someArtistPlaylist = new Playlist(SOME_ARTIST_PLAYLIST_ID, "Some Artist");
-        allTracksPlaylist = new Playlist(ALL_TRACKS_PLAYLIST_ID, ALL_TRACKS_PLAYLIST);
+        someAlbumPlaylist = new Playlist(SOME_ALBUM_PLAYLIST_ID, "Some Album", false);
+        someArtistPlaylist = new Playlist(SOME_ARTIST_PLAYLIST_ID, "Some Artist", false);
+        allTracksPlaylist = new Playlist(ALL_TRACKS_PLAYLIST_ID, ALL_TRACKS_PLAYLIST, false);
         currentPlaylist = allTracksPlaylist;
     }
 

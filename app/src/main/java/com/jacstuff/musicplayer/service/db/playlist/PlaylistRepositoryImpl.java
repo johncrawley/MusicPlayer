@@ -10,6 +10,7 @@ import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.service.db.DbHelper;
 import com.jacstuff.musicplayer.service.db.DbUtils;
 import com.jacstuff.musicplayer.service.db.DbContract;
+import com.jacstuff.musicplayer.service.playlist.PlaylistManagerImpl;
 
 
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ import java.util.List;
 public class PlaylistRepositoryImpl implements PlaylistRepository {
 
     private final SQLiteDatabase db;
-    private Cursor cursor;
     private final PlaylistItemRepository playlistItemRepository;
 
 
@@ -89,12 +89,20 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
     @Override
     public List<Playlist> getAllPlaylists() {
         List<Playlist> playlists = new ArrayList<>();
+        playlists.add(new Playlist(PlaylistManagerImpl.ALL_TRACKS_PLAYLIST_ID, PlaylistManagerImpl.ALL_TRACKS_PLAYLIST,false));
+        playlists.addAll(getPlaylistsFromDB());
+        return  playlists;
+    }
+
+
+    public List<Playlist> getPlaylistsFromDB(){
+        List<Playlist> playlists = new ArrayList<>();
         String query = "SELECT * FROM " + DbContract.PlaylistEntry.TABLE_NAME + ";";
         try(Cursor cursor = db.rawQuery(query, null)){
             while(cursor.moveToNext()){
                 long id = getLong(cursor, DbContract.PlaylistEntry._ID);
                 String name = getString(cursor, DbContract.PlaylistEntry.COL_NAME);
-                playlists.add(new Playlist(id, name));
+                playlists.add(new Playlist(id, name, true));
             }
         }
         catch(SQLException e){

@@ -45,6 +45,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
             });
 
             view.setOnLongClickListener( v -> {
+                selectedPlaylist = (Playlist)trackNameTextView.getTag();
                 onItemLongClickConsumer.accept(selectedPlaylist);
                 return false;
             });

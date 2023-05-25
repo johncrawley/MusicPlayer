@@ -1,6 +1,8 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 
+
 public class PlaylistOptionsFragment extends DialogFragment {
+
+
+    public final static String NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE= "Notify_Playlists_Fragment_To_Delete";
+    public final static String NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE= "Notify_Playlists_Fragment_To_Create";
+    public final static String NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD= "Notify_Playlists_Fragment_To_Load";
+
+    private Button loadPlaylistButton, deletePlaylistButton;
+    private boolean isUserPlaylist;
 
 
     public static PlaylistOptionsFragment newInstance() {
@@ -30,15 +40,42 @@ public class PlaylistOptionsFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        assignArgs();
         setupButtons(view);
     }
 
 
-    private void setupButtons(View parentView){
-        setupButton(parentView, R.id.loadPlaylistButton, this::enqueueCurrentTrack);
-        setupButton(parentView, R.id.createNewPlaylistButton, this::showAddTrackToPlaylistDialog);
-        Button removeTrackButton = setupButton(parentView, R.id.removePlaylistButton, this::removeSelectedTrackFromPlaylist);
+    private void assignArgs(){
+        Bundle bundle = getArguments();
+        assert bundle != null;
+        isUserPlaylist = bundle.getBoolean(PlaylistsFragment.BUNDLE_KEY_IS_USER_PLAYLIST, false);
+    }
 
+
+    private void setupButtons(View parentView){
+        loadPlaylistButton = setupButton(parentView, R.id.loadPlaylistButton, ()-> sendMessage(NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD));
+        deletePlaylistButton = setupButton(parentView, R.id.removePlaylistButton, ()-> sendMessage(NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE));
+        if(!isUserPlaylist){
+            deletePlaylistButton.setVisibility(View.GONE);
+        }
+    }
+
+
+    private void sendMessage(String key){
+        disableAllButtons();
+        getParentFragmentManager().setFragmentResult(key, new Bundle());
+        dismissAfterPause();
+    }
+
+
+    private void disableAllButtons(){
+        loadPlaylistButton.setEnabled(false);
+        deletePlaylistButton.setEnabled(false);
+    }
+
+
+    private void dismissAfterPause(){
+        new Handler(Looper.getMainLooper()).postDelayed(this::dismiss, 150);
     }
 
 
@@ -48,37 +85,6 @@ public class PlaylistOptionsFragment extends DialogFragment {
         return button;
     }
 
-
-    private void enqueueCurrentTrack(){
-        MainActivity mainActivity = getMainActivity();
-        if(mainActivity != null){
-            mainActivity.addSelectedTrackToQueue();
-        }
-        dismiss();
-    }
-
-
-    private void showAddTrackToPlaylistDialog(){
-        MainActivity mainActivity = getMainActivity();
-        if(mainActivity != null){
-            mainActivity.showAddTrackToPlaylistView();
-        }
-        dismiss();
-    }
-
-
-    private void removeSelectedTrackFromPlaylist(){
-        MainActivity mainActivity = getMainActivity();
-        if(mainActivity != null){
-            mainActivity.removeSelectedTrackFromPlaylist();
-        }
-        dismiss();
-    }
-
-
-    private MainActivity getMainActivity(){
-        return (MainActivity) getActivity();
-    }
 
 
 }

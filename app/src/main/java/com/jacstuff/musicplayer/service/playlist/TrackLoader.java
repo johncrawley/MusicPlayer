@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 
@@ -45,8 +46,8 @@ public class TrackLoader {
 
     public List<Track> loadAudioFiles(){
         tracks = new ArrayList<>(10_000);
-        albums = new HashMap<>(5000);
-        artists = new HashMap<>(500);
+        albums = new ConcurrentHashMap<>(5000);
+        artists = new ConcurrentHashMap<>(500);
         artistsSet = new HashSet<>(1000);
         addTracksData();
         return tracks;

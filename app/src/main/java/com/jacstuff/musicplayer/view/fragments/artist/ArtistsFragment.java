@@ -97,16 +97,6 @@ public class ArtistsFragment extends Fragment {
     }
 
 
-    private String getLongClickSelectedArtist(){
-        return listAdapter.getCurrentlySelectedItem();
-    }
-
-
-    public void notifyCurrentlySelectedTrack(int position){
-        getMainActivity().selectTrack(position);
-    }
-
-
     private MainActivity getMainActivity(){
         return (MainActivity)getActivity();
     }

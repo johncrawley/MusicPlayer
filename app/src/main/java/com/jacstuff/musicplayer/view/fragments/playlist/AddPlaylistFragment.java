@@ -126,7 +126,7 @@ public class AddPlaylistFragment extends DialogFragment {
 
     @Override
     @SuppressWarnings("@NonNull")
-    public void onDismiss(DialogInterface dialogInterface){
+    public void onDismiss(@NonNull DialogInterface dialogInterface){
         super.onDismiss(dialogInterface);
         notifyDismissOnParentFragment();
     }
@@ -148,7 +148,6 @@ public class AddPlaylistFragment extends DialogFragment {
             playlistsFragment.onAddDialogDismissed();
         }
     }
-
 
 
     private PlaylistsFragment getPlaylistsFragment(){

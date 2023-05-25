@@ -47,7 +47,7 @@
     <string name="button_search_play_selected">Play</string>
     <string name="button_search_play_next">Enqueue</string>
     <string name="button_search_add_all">Add All</string>
-    <string name="button_add_playlist">New</string>
+    <string name="button_add_playlist">+</string>
     <string name="button_load_playlist">Load</string>
     <string name="button_delete_playlist">Remove</string>
     <string name="button_load_tracks_from_artist">Load Tracks</string>

@@ -63,8 +63,7 @@ public class ArtistOptionsFragment extends DialogFragment {
 
 
     private void notifyArtistFragmentToLoadArtist(){
-        Bundle bundle = new Bundle();
-        getParentFragmentManager().setFragmentResult(NOTIFY_ARTISTS_FRAGMENT_TO_LOAD_ARTIST, bundle);
+        getParentFragmentManager().setFragmentResult(NOTIFY_ARTISTS_FRAGMENT_TO_LOAD_ARTIST, new Bundle());
     }
 
 
