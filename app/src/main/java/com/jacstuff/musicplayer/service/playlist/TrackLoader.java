@@ -123,6 +123,9 @@ public class TrackLoader {
 
 
     public List<Track> getTracksForArtist(String artistName){
+        if(artists == null){
+            artists = new HashMap<>(500);
+        }
         Artist artist =  artists.getOrDefault(artistName, new Artist(-1, "null album!"));
         if(artist == null){
             return Collections.emptyList();

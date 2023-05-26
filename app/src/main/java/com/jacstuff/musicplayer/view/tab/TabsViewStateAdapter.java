@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.jacstuff.musicplayer.view.fragments.albums.AlbumsFragment;
+import com.jacstuff.musicplayer.view.fragments.album.AlbumsFragment;
 import com.jacstuff.musicplayer.view.fragments.artist.ArtistsFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;

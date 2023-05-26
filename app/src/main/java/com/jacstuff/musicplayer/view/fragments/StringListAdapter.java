@@ -53,9 +53,14 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
         }
     }
 
+
     public void  selectLongClickItem(){
+        if(longClickedView == null){
+            return;
+        }
         longClickedView.callOnClick();
     }
+
 
     public void setItems(List<String> albumNames){
         this.items = albumNames;
