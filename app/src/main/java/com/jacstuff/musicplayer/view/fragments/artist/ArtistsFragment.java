@@ -1,5 +1,8 @@
 package com.jacstuff.musicplayer.view.fragments.artist;
 
+import static com.jacstuff.musicplayer.MainActivity.SEND_ARTISTS_TO_FRAGMENT;
+import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +24,8 @@ import java.util.List;
 
 public class ArtistsFragment extends Fragment {
 
+    public final static String NOTIFY_TO_LOAD_ARTIST = "Notify_Artists_Fragment_To_Load_Artist";
+    public final static String NOTIFY_TO_DESELECT_ITEMS = "Notify_Artists_Fragment_To_Deselect_Items";
     private RecyclerView recyclerView;
     private StringListAdapter listAdapter;
     private View parentView;
@@ -45,29 +50,24 @@ public class ArtistsFragment extends Fragment {
     }
 
 
-    @SuppressLint("NotifyDataSetChanged")
     private void setupFragmentListener(){
-
-        getParentFragmentManager().setFragmentResultListener(MainActivity.SEND_ARTISTS_TO_FRAGMENT, this, (requestKey, bundle) -> {
-            ArrayList<String> artistNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ARTIST_UPDATES);
-            listAdapter.setItems(artistNames);
-            listAdapter.notifyDataSetChanged();
-        });
-
-        getParentFragmentManager().setFragmentResultListener(ArtistOptionsFragment.NOTIFY_ARTISTS_FRAGMENT_TO_LOAD_ARTIST,
-                this,
-                (requestKey, bundle) -> listAdapter.selectLongClickItem());
+        setListener(this, SEND_ARTISTS_TO_FRAGMENT, this::loadArtists);
+        setListener(this, NOTIFY_TO_LOAD_ARTIST, (bundle) -> listAdapter.selectLongClickItem());
+        setListener(this, NOTIFY_TO_DESELECT_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
     }
 
 
-    private MainActivity getMainActivity(){
-        return (MainActivity)getActivity();
+    @SuppressLint("NotifyDataSetChanged")
+    private void loadArtists(Bundle bundle){
+        ArrayList<String> artistNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ARTIST_UPDATES);
+        listAdapter.setItems(artistNames);
+        listAdapter.notifyDataSetChanged();
     }
 
 
     private void refreshArtistsList(){
         List<String> artists = getMainActivity().getArtistNames();
-        if(this.parentView == null ||artists == null){
+        if(this.parentView == null || artists == null){
             return;
         }
         listAdapter = new StringListAdapter(artists, this::loadTracksAndAlbumsFromArtist, this::showOptionsDialog);
@@ -88,4 +88,8 @@ public class ArtistsFragment extends Fragment {
         FragmentManagerHelper.showOptionsDialog(this, ArtistOptionsFragment.newInstance(), "artist_options", bundle);
     }
 
+
+    private MainActivity getMainActivity(){
+        return (MainActivity)getActivity();
+    }
 }

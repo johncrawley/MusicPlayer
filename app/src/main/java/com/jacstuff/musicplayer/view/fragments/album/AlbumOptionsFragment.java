@@ -21,7 +21,6 @@ public class AlbumOptionsFragment extends DialogFragment {
     private String albumName;
     public final static String ALBUM_NAME_BUNDLE_KEY = "album_name_key";
     Button addTracksToPlaylistButton, loadTracksButton;
-    public final static String NOTIFY_ALBUMS_FRAGMENT_TO_LOAD_ALBUM= "Notify_Albums_Fragment_To_Load_Album";
 
     public static AlbumOptionsFragment newInstance() {
         return new AlbumOptionsFragment();
@@ -63,7 +62,7 @@ public class AlbumOptionsFragment extends DialogFragment {
 
 
     private void notifyAlbumFragmentToLoadAlbum(){
-        getParentFragmentManager().setFragmentResult(NOTIFY_ALBUMS_FRAGMENT_TO_LOAD_ALBUM, new Bundle());
+        getParentFragmentManager().setFragmentResult(AlbumsFragment.NOTIFY_TO_LOAD_ALBUM, new Bundle());
     }
 
 

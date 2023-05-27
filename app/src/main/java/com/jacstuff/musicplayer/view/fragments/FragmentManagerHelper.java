@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.function.Consumer;
+
 
 public class FragmentManagerHelper {
 
@@ -26,6 +28,19 @@ public class FragmentManagerHelper {
             fragmentTransaction.remove(prev);
         }
         fragmentTransaction.addToBackStack(null);
+    }
+
+
+
+    public static void setListener(Fragment fragment, String key, Consumer<Bundle> consumer){
+        fragment.getParentFragmentManager().setFragmentResultListener(key, fragment, (requestKey, bundle) -> {
+            consumer.accept(bundle);
+        });
+    }
+
+
+    public static void send(Fragment fragment, String key, Bundle bundle){
+        fragment.getParentFragmentManager().setFragmentResult(key, bundle);
     }
 
 }

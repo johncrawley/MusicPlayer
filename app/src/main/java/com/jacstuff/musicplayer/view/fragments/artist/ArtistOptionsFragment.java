@@ -21,7 +21,6 @@ public class ArtistOptionsFragment extends DialogFragment {
     private String artistName;
     public final static String ARTIST_NAME_BUNDLE_KEY = "artist_name_key";
     Button addTracksToPlaylistButton, loadTracksButton;
-    public final static String NOTIFY_ARTISTS_FRAGMENT_TO_LOAD_ARTIST= "Notify_Artists_Fragment_To_Load_Artist";
 
     public static ArtistOptionsFragment newInstance() {
         return new ArtistOptionsFragment();
@@ -63,7 +62,7 @@ public class ArtistOptionsFragment extends DialogFragment {
 
 
     private void notifyArtistFragmentToLoadArtist(){
-        getParentFragmentManager().setFragmentResult(NOTIFY_ARTISTS_FRAGMENT_TO_LOAD_ARTIST, new Bundle());
+        getParentFragmentManager().setFragmentResult(ArtistsFragment.NOTIFY_TO_LOAD_ARTIST, new Bundle());
     }
 
 

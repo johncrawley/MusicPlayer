@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
-import com.jacstuff.musicplayer.service.db.track.Track;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +23,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     private int indexToScrollTo = -1;
     private final Consumer<Playlist> onItemClickConsumer, onItemLongClickConsumer;
     private Playlist selectedPlaylist;
+    private View longClickedView;
 
 
     class PlaylistViewHolder extends RecyclerView.ViewHolder {
@@ -45,6 +45,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
             });
 
             view.setOnLongClickListener( v -> {
+                longClickedView = v;
                 selectedPlaylist = (Playlist)trackNameTextView.getTag();
                 onItemLongClickConsumer.accept(selectedPlaylist);
                 return false;
@@ -78,6 +79,13 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     public Playlist getSelectedPlaylist(){
         return selectedPlaylist;
     }
+
+
+    public void selectLongClickedView(){
+        longClickedView.callOnClick();
+    }
+
+
 
 
     public void select(View view){

@@ -126,18 +126,21 @@ public class PlaylistHelper {
     public void loadPlaylist(Playlist playlist){
         playlistManager.loadPlaylist(playlist);
         mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
-        mediaPlayerService.updateAlbumsView();
+        //mediaPlayerService.updateAlbumsView(); TODO: Causing album to get reselected when it shouldn't, but required for when "all tracks" playlist is loaded
     }
+
 
     public PlaylistManager getPlaylistManager(){
         return playlistManager;
     }
+
 
     public void addTrackToCurrentPlaylist(Track track){
         playlistManager.addTrackToCurrentPlaylist(track, playlistViewNotifier);
         mediaPlayerService.updateViewTrackList(playlistManager);
         mediaNotificationManager.updateNotification();
     }
+
 
     public void addTrackToPlaylist(Track track, Playlist playlist){
         playlistManager.addTrackToPlaylist(track, playlist, playlistViewNotifier);

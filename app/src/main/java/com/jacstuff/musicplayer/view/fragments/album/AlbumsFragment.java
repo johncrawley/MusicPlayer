@@ -1,10 +1,14 @@
 package com.jacstuff.musicplayer.view.fragments.album;
 
+import static com.jacstuff.musicplayer.MainActivity.SEND_ALBUMS_TO_FRAGMENT;
+import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,9 +26,13 @@ import java.util.List;
 
 public class AlbumsFragment extends Fragment {
 
+    public final static String NOTIFY_TO_LOAD_ALBUM = "Notify_Albums_Fragment_To_Load_Album";
+    public final static String NOTIFY_TO_DESELECT_ITEMS = "Notify_Albums_Fragment_To_Deselect_Items";
+
     private RecyclerView recyclerView;
     private StringListAdapter listAdapter;
     private View parentView;
+
 
     public AlbumsFragment() {
         // Required empty public constructor
@@ -41,40 +49,39 @@ public class AlbumsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.albumsRecyclerView);
+        ImageButton temp = parentView.findViewById(R.id.tempButton);
+        temp.setOnClickListener(v -> listAdapter.deselectCurrentlySelectedItem());
         refreshList();
         setupFragmentListener();
     }
 
 
-    @SuppressLint("NotifyDataSetChanged")
     private void setupFragmentListener(){
-
-        getParentFragmentManager().setFragmentResultListener(MainActivity.SEND_ALBUMS_TO_FRAGMENT, this, (requestKey, bundle) -> {
-            ArrayList<String> albumNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ALBUM_UPDATES);
-            listAdapter.setItems(albumNames);
-            listAdapter.notifyDataSetChanged();
+        setListener(this, SEND_ALBUMS_TO_FRAGMENT, this::loadAlbums);
+        setListener(this, NOTIFY_TO_LOAD_ALBUM, (bundle) -> listAdapter.selectLongClickItem());
+        setListener(this, NOTIFY_TO_DESELECT_ITEMS, (bundle) -> {
+            log("message received NOTIFY_DESELECT_ITEMS !!!");
+            listAdapter.deselectCurrentlySelectedItem();
         });
-
-
-        getParentFragmentManager().setFragmentResultListener(AlbumOptionsFragment.NOTIFY_ALBUMS_FRAGMENT_TO_LOAD_ALBUM,
-                this,
-                (requestKey, bundle) -> listAdapter.selectLongClickItem());
     }
 
 
-    private void loadTracksFromAlbum(String albumName){
-        getMainActivity().loadTracksFromAlbum(albumName);
+    private void log(String msg){
+        System.out.println("^^^ AlbumsFragment: " + msg);
     }
 
 
-    private MainActivity getMainActivity(){
-        return (MainActivity)getActivity();
+    @SuppressLint("NotifyDataSetChanged")
+    private void loadAlbums(Bundle bundle){
+        ArrayList<String> albumNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ALBUM_UPDATES);
+        listAdapter.setItems(albumNames);
+        listAdapter.notifyDataSetChanged();
     }
 
 
     private void refreshList(){
         List<String> albums = getMainActivity().getAlbumNames();
-        if(this.parentView == null ||albums == null){
+        if(this.parentView == null || albums == null){
             return;
         }
         listAdapter = new StringListAdapter(albums, this::loadTracksFromAlbum, this::showOptionsDialog);
@@ -84,10 +91,20 @@ public class AlbumsFragment extends Fragment {
     }
 
 
+    private void loadTracksFromAlbum(String albumName){
+        getMainActivity().loadTracksFromAlbum(albumName);
+    }
+
+
     private void showOptionsDialog(String albumName){
         Bundle bundle = new Bundle();
         bundle.putString(AlbumOptionsFragment.ALBUM_NAME_BUNDLE_KEY, albumName);
         FragmentManagerHelper.showOptionsDialog(this, AlbumOptionsFragment.newInstance(), "album_options", bundle);
+    }
+
+
+    private MainActivity getMainActivity(){
+        return (MainActivity)getActivity();
     }
 
 }

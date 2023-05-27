@@ -66,6 +66,7 @@
     <string name="button_artist_options_add_tracks_to_playlist">Add To Playlist</string>
 
     <string name="album_art_content_description">Album Art</string>
+    <string name="create_playlist_icon_content_description">Create Playlist/</string>
 
 
     <string name="button_stop_now">Stop Now</string>

@@ -32,25 +32,28 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
         TextViewHolder(View view) {
             super(view);
             textView = view.findViewById(R.id.trackName);
-
-            view.setOnClickListener(v -> {
-                deselectCurrentlySelectedItem();
-                currentlySelectedView = v;
-                currentItem = textView.getText().toString();
-                setIndexToScrollTo(getLayoutPosition());
-                currentlySelectedView.setSelected(true);
-                selectedPosition = RecyclerView.NO_POSITION;
-                clickConsumer.accept(currentItem);
-            });
-
-
-            view.setOnLongClickListener(v -> {
-                currentItem = textView.getText().toString();
-                longClickConsumer.accept(currentItem);
-                longClickedView = view;
-                return false;
-            });
+            view.setOnClickListener(v -> onClick(this, v, textView));
+            view.setOnLongClickListener(v -> onLongClick(v, textView));
         }
+    }
+
+
+    private void onClick(TextViewHolder textViewHolder, View v, TextView textView){
+        deselectCurrentlySelectedItem();
+        currentlySelectedView = v;
+        currentItem = textView.getText().toString();
+        setIndexToScrollTo(textViewHolder.getLayoutPosition());
+        currentlySelectedView.setSelected(true);
+        selectedPosition = RecyclerView.NO_POSITION;
+        clickConsumer.accept(currentItem);
+    }
+
+
+    private boolean onLongClick(View v, TextView textView){
+        currentItem = textView.getText().toString();
+        longClickConsumer.accept(currentItem);
+        longClickedView = v;
+        return false;
     }
 
 
@@ -74,16 +77,6 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
     }
 
 
-    public StringListAdapter(List<String> items, Consumer<String> clickConsumer){
-        this(items, clickConsumer, s-> {});
-    }
-
-
-    public String getCurrentlySelectedItem(){
-        return currentItem;
-    }
-
-
     @Override
     @NonNull
     public TextViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
@@ -92,17 +85,17 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
     }
 
 
-    public void selectItemAt(int index){
-        deselectCurrentlySelectedItem();
-        setIndexToScrollTo(index);
-        changePositionTo(index);
+    public void deselectCurrentlySelectedItem(){
+        log("deselectCurrentlySelectedItem() ");
+        if(currentlySelectedView != null){
+            log("deselectCurrentlySelectedItem() currentlySelectedView is not null!");
+            currentlySelectedView.setSelected(false);
+        }
     }
 
 
-    public void deselectCurrentlySelectedItem(){
-        if(currentlySelectedView != null){
-            currentlySelectedView.setSelected(false);
-        }
+    private void log(String msg){
+        System.out.println("^^^ StringListAdapter: " + msg);
     }
 
 
@@ -116,6 +109,7 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
             deselectCurrentlySelectedItem();
             currentlySelectedView = holder.itemView;
             currentlySelectedView.setSelected(true);
+            log("onBindViewHolder() just selected a view!");
         }
     }
 
@@ -123,13 +117,6 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
     @Override
     public int getItemCount(){
         return items.size();
-    }
-
-
-    public void changePositionTo(int newPosition){
-        notifyItemChanged(selectedPosition);
-        selectedPosition = newPosition;
-        notifyItemChanged(selectedPosition);
     }
 
 

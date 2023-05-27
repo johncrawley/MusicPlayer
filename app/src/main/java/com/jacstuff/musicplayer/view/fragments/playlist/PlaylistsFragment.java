@@ -1,6 +1,12 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
-import android.annotation.SuppressLint;
+import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.send;
+import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+import static com.jacstuff.musicplayer.view.fragments.playlist.PlaylistOptionsFragment.NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE;
+import static com.jacstuff.musicplayer.view.fragments.playlist.PlaylistOptionsFragment.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
+import static com.jacstuff.musicplayer.view.fragments.playlist.PlaylistOptionsFragment.NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD;
+
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +20,9 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
+import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
+import com.jacstuff.musicplayer.view.fragments.album.AlbumsFragment;
+import com.jacstuff.musicplayer.view.fragments.artist.ArtistsFragment;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.ArrayList;
@@ -22,10 +31,7 @@ import java.util.List;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,9 +45,6 @@ public class PlaylistsFragment extends Fragment {
     private RecyclerView recyclerView;
     private Set<String> playlistNames;
     private final int INITIAL_PLAYLIST_CAPACITY = 50;
-    public static final String NOTIFY_ARTISTS_FRAGMENT_OF_PLAYLIST= "Notify_Artists_Fragment_Of_Playlist_Loaded";
-    public static final  String NOTIFY_ALBUMS_FRAGMENT_OF_PLAYLIST = "Notify_Albums_Fragment_Of_Playlist_Loaded";
-    public static final String BUNDLE_KEY_USER_PLAYLIST_LOADED = "User_Playlist_Loaded_message";
     public static final String BUNDLE_KEY_IS_USER_PLAYLIST = "bundle_key_is_user_playlist";
 
     public PlaylistsFragment() {
@@ -62,16 +65,10 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-    @SuppressLint("NotifyDataSetChanged")
-    private void setupFragmentListeners() {
-        setupFragmentListener(PlaylistOptionsFragment.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE, this::showDeletePlaylistDialog);
-        setupFragmentListener(PlaylistOptionsFragment.NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD, this::loadSelectedPlaylist);
-        setupFragmentListener(PlaylistOptionsFragment.NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE, this::startAddPlaylistFragment);
-    }
-
-
-    private void setupFragmentListener(String key, Runnable runnable){
-        getParentFragmentManager().setFragmentResultListener(key, this, (requestKey, bundle) -> runnable.run());
+    private void setupFragmentListeners(){
+        setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE, (bundle)->  showDeletePlaylistDialog());
+        setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD, (bundle) -> loadSelectedPlaylist());
+        setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE, (bundle) -> startAddPlaylistFragment());
     }
 
 
@@ -120,33 +117,14 @@ public class PlaylistsFragment extends Fragment {
             return;
         }
         hasClicked = true;
-        startDialogFragment("add_playlist", AddPlaylistFragment.newInstance(), new Bundle());
+        FragmentManagerHelper.showOptionsDialog(this, AddPlaylistFragment.newInstance(), "playlist_options", new Bundle());
     }
 
 
     private void startPlaylistOptionsFragment(Playlist playlist){
         Bundle bundle = new Bundle();
         bundle.putBoolean(BUNDLE_KEY_IS_USER_PLAYLIST, playlist.isUserPlaylist());
-        startDialogFragment("playlist_options", PlaylistOptionsFragment.newInstance(), bundle);
-    }
-
-
-    private void startDialogFragment(String tag, DialogFragment dialogFragment, Bundle bundle){
-        FragmentManager fragmentManager =  getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        removePreviousFragmentTransaction(fragmentManager,tag, fragmentTransaction);
-        dialogFragment.setArguments(bundle);
-        dialogFragment.show(fragmentTransaction, tag);
-
-    }
-
-
-    private void removePreviousFragmentTransaction(FragmentManager fragmentManager, String tag, FragmentTransaction fragmentTransaction){
-        Fragment prev = fragmentManager.findFragmentByTag(tag);
-        if (prev != null) {
-            fragmentTransaction.remove(prev);
-        }
-        fragmentTransaction.addToBackStack(null);
+        FragmentManagerHelper.showOptionsDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
     }
 
 
@@ -175,24 +153,13 @@ public class PlaylistsFragment extends Fragment {
         showPlaylistDeletedToast();
         View item = recyclerView.getChildAt(0);
         playlistRecyclerAdapter.select(item);
-        loadSelectedPlaylist(false);
+        loadSelectedPlaylist();
     }
 
 
     private void loadSelectedPlaylist(){
-        loadSelectedPlaylist(false);
-    }
-
-
-    private void loadSelectedPlaylist(boolean shouldSwitchToTracksTab){
-        Playlist playlist = playlistRecyclerAdapter.getSelectedPlaylist();
-        if(playlist != null){
-            MainActivity mainActivity = getMainActivity();
-            if(mainActivity != null){
-                mainActivity.loadPlaylist(playlist, shouldSwitchToTracksTab);
-                notifyFragmentsOfPlaylistType(mainActivity.isUserPlaylistLoaded());
-            }
-        }
+        playlistRecyclerAdapter.selectLongClickedView();
+        loadSelectedPlaylist(playlistRecyclerAdapter.getSelectedPlaylist());
     }
 
 
@@ -201,17 +168,16 @@ public class PlaylistsFragment extends Fragment {
             MainActivity mainActivity = getMainActivity();
             if(mainActivity != null){
                 mainActivity.loadPlaylist(playlist, false);
-                notifyFragmentsOfPlaylistType(mainActivity.isUserPlaylistLoaded());
+                notifyOtherFragmentsToDeselectItems();
             }
         }
     }
 
 
-    private void notifyFragmentsOfPlaylistType(boolean isUserPlaylistLoaded){
+    private void notifyOtherFragmentsToDeselectItems(){
         Bundle bundle = new Bundle();
-        bundle.putBoolean(BUNDLE_KEY_USER_PLAYLIST_LOADED, isUserPlaylistLoaded);
-        getParentFragmentManager().setFragmentResult(NOTIFY_ARTISTS_FRAGMENT_OF_PLAYLIST, bundle);
-        getParentFragmentManager().setFragmentResult(NOTIFY_ALBUMS_FRAGMENT_OF_PLAYLIST, bundle);
+        send(this, AlbumsFragment.NOTIFY_TO_DESELECT_ITEMS, bundle);
+        send(this, ArtistsFragment.NOTIFY_TO_DESELECT_ITEMS, bundle);
     }
 
 
