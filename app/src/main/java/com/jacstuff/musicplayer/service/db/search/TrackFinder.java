@@ -3,6 +3,7 @@ package com.jacstuff.musicplayer.service.db.search;
 import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.service.playlist.TrackLoader;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,45 @@ public class TrackFinder {
     }
 
 
-    public List<Track> searchFor(String searchTerm){
+    public List<Track> searchFor(String inputStr){
+        String searchStr = inputStr.toLowerCase().trim();
+        return resultsMap.getOrDefault(searchStr, searchForTerms(searchStr));
+    }
+
+
+    private List<Track> searchForTerms(String searchStr){
+        return searchStr.contains(" ") ?
+                searchForMultipleTerms(searchStr) : searchForTerm(searchStr);
+    }
+
+
+    private List<Track> searchForMultipleTerms(String searchStr){
+        List<String> searchTerms = Arrays.asList(searchStr.split(" "));
+        List<Track> initialResults = searchForTerm(searchTerms.get(0));
+        List<Track> filteredResults = getFilteredResultsFromRemainingTerms(searchTerms, initialResults);
+        resultsMap.put(searchStr, filteredResults);
+        return filteredResults;
+    }
+
+
+    private List<Track> getFilteredResultsFromRemainingTerms(List<String> searchTerms, List<Track> initialResults){
+        List<String> remainingTerms = searchTerms.subList(1, searchTerms.size());
+        return initialResults.stream()
+                .filter(t-> containsAll(t, remainingTerms))
+                .collect(Collectors.toList());
+    }
+
+    private boolean containsAll(Track track, List<String> searchTerms){
+        for(String searchTerm : searchTerms){
+            if(!track.getSearchString().contains(searchTerm)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    public List<Track> searchForTerm(String searchTerm){
         if(isTooShortToSearch(searchTerm)) {
             return Collections.emptyList();
         }
@@ -63,7 +102,7 @@ public class TrackFinder {
         if(results == null){
             return Collections.emptyList();
         }
-       return results.stream().filter(t -> t.getSearchString().toLowerCase().contains(prefix)).collect(Collectors.toList());
+       return results.stream().filter(t -> t.getSearchString().contains(prefix)).collect(Collectors.toList());
     }
 
 
