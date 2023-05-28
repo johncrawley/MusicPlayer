@@ -20,9 +20,9 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
-    private final Consumer<String> clickConsumer, longClickConsumer;
     private String currentItem;
     private View longClickedView;
+    private final Consumer<String> clickConsumer, longClickConsumer;
 
 
     class TextViewHolder extends RecyclerView.ViewHolder {
@@ -35,6 +35,15 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
             view.setOnClickListener(v -> onClick(this, v, textView));
             view.setOnLongClickListener(v -> onLongClick(v, textView));
         }
+    }
+
+
+    public void resetSelections(){
+       selectedPosition = RecyclerView.NO_POSITION;
+       currentlySelectedView = null;
+       indexToScrollTo = -1;
+       currentItem = null;
+       longClickedView = null;
     }
 
 
@@ -86,16 +95,9 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
 
 
     public void deselectCurrentlySelectedItem(){
-        log("deselectCurrentlySelectedItem() ");
         if(currentlySelectedView != null){
-            log("deselectCurrentlySelectedItem() currentlySelectedView is not null!");
             currentlySelectedView.setSelected(false);
         }
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ StringListAdapter: " + msg);
     }
 
 
@@ -109,7 +111,6 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
             deselectCurrentlySelectedItem();
             currentlySelectedView = holder.itemView;
             currentlySelectedView.setSelected(true);
-            log("onBindViewHolder() just selected a view!");
         }
     }
 

@@ -136,11 +136,4 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
         notifyItemChanged(selectedPosition);
     }
 
-
-    public void setIndexToScrollTo(int index){
-        this.indexToScrollTo = index;
-    }
-
-
-
 }

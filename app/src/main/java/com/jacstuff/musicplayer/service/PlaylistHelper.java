@@ -123,10 +123,12 @@ public class PlaylistHelper {
     }
 
 
-    public void loadPlaylist(Playlist playlist){
+    public void loadPlaylist(Playlist playlist) {
         playlistManager.loadPlaylist(playlist);
         mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
-        //mediaPlayerService.updateAlbumsView(); TODO: Causing album to get reselected when it shouldn't, but required for when "all tracks" playlist is loaded
+        if (playlist.getId() == PlaylistManagerImpl.ALL_TRACKS_PLAYLIST_ID) {
+            mediaPlayerService.updateAlbumsView();
+        }
     }
 
 

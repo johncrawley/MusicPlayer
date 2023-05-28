@@ -1,6 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments.artist;
 
 import static com.jacstuff.musicplayer.MainActivity.SEND_ARTISTS_TO_FRAGMENT;
+import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 
 import android.annotation.SuppressLint;
@@ -18,6 +19,7 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
+import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +81,7 @@ public class ArtistsFragment extends Fragment {
 
     private void loadTracksAndAlbumsFromArtist(String artistName){
         getMainActivity().loadTracksFromArtist(artistName);
+        sendMessage(this, PlaylistsFragment.NOTIFY_TO_DESELECT_ITEMS);
     }
 
 

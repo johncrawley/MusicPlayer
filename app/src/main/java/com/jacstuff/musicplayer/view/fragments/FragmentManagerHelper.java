@@ -31,7 +31,6 @@ public class FragmentManagerHelper {
     }
 
 
-
     public static void setListener(Fragment fragment, String key, Consumer<Bundle> consumer){
         fragment.getParentFragmentManager().setFragmentResultListener(key, fragment, (requestKey, bundle) -> {
             consumer.accept(bundle);
@@ -39,8 +38,14 @@ public class FragmentManagerHelper {
     }
 
 
-    public static void send(Fragment fragment, String key, Bundle bundle){
+    public static void sendMessage(Fragment fragment, String key){
+        sendMessage(fragment, key, new Bundle());
+    }
+
+
+    public static void sendMessage(Fragment fragment, String key, Bundle bundle){
         fragment.getParentFragmentManager().setFragmentResult(key, bundle);
     }
+
 
 }

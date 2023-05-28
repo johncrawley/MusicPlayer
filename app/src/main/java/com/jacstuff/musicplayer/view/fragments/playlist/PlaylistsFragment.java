@@ -1,6 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.send;
+import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 import static com.jacstuff.musicplayer.view.fragments.playlist.PlaylistOptionsFragment.NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE;
 import static com.jacstuff.musicplayer.view.fragments.playlist.PlaylistOptionsFragment.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
@@ -46,6 +46,7 @@ public class PlaylistsFragment extends Fragment {
     private Set<String> playlistNames;
     private final int INITIAL_PLAYLIST_CAPACITY = 50;
     public static final String BUNDLE_KEY_IS_USER_PLAYLIST = "bundle_key_is_user_playlist";
+    public final static String NOTIFY_TO_DESELECT_ITEMS = "Notify_Playlists_Fragment_To_Deselect_Items";
 
     public PlaylistsFragment() {
         // Required empty public constructor
@@ -69,6 +70,7 @@ public class PlaylistsFragment extends Fragment {
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE, (bundle)->  showDeletePlaylistDialog());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD, (bundle) -> loadSelectedPlaylist());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE, (bundle) -> startAddPlaylistFragment());
+        setListener(this, NOTIFY_TO_DESELECT_ITEMS, (bundle) -> playlistRecyclerAdapter.deselectCurrentlySelectedItem());
     }
 
 
@@ -128,11 +130,6 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ PlaylistsFragment: " + msg);
-    }
-
-
     private void showDeletePlaylistDialog(){
         Playlist playlist = playlistRecyclerAdapter.getSelectedPlaylist();
         if(playlist == null){
@@ -175,9 +172,8 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void notifyOtherFragmentsToDeselectItems(){
-        Bundle bundle = new Bundle();
-        send(this, AlbumsFragment.NOTIFY_TO_DESELECT_ITEMS, bundle);
-        send(this, ArtistsFragment.NOTIFY_TO_DESELECT_ITEMS, bundle);
+        sendMessage(this, AlbumsFragment.NOTIFY_TO_DESELECT_ITEMS);
+        sendMessage(this, ArtistsFragment.NOTIFY_TO_DESELECT_ITEMS);
     }
 
 

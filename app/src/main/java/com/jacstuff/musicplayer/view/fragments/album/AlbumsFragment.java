@@ -1,6 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments.album;
 
 import static com.jacstuff.musicplayer.MainActivity.SEND_ALBUMS_TO_FRAGMENT;
+import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 
 import android.annotation.SuppressLint;
@@ -20,6 +21,7 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
+import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,15 +61,7 @@ public class AlbumsFragment extends Fragment {
     private void setupFragmentListener(){
         setListener(this, SEND_ALBUMS_TO_FRAGMENT, this::loadAlbums);
         setListener(this, NOTIFY_TO_LOAD_ALBUM, (bundle) -> listAdapter.selectLongClickItem());
-        setListener(this, NOTIFY_TO_DESELECT_ITEMS, (bundle) -> {
-            log("message received NOTIFY_DESELECT_ITEMS !!!");
-            listAdapter.deselectCurrentlySelectedItem();
-        });
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ AlbumsFragment: " + msg);
+        setListener(this, NOTIFY_TO_DESELECT_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
     }
 
 
@@ -76,6 +70,8 @@ public class AlbumsFragment extends Fragment {
         ArrayList<String> albumNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ALBUM_UPDATES);
         listAdapter.setItems(albumNames);
         listAdapter.notifyDataSetChanged();
+        listAdapter.deselectCurrentlySelectedItem();
+        listAdapter.resetSelections();
     }
 
 
@@ -93,6 +89,7 @@ public class AlbumsFragment extends Fragment {
 
     private void loadTracksFromAlbum(String albumName){
         getMainActivity().loadTracksFromAlbum(albumName);
+        sendMessage(this, PlaylistsFragment.NOTIFY_TO_DESELECT_ITEMS);
     }
 
 

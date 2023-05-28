@@ -90,6 +90,7 @@ public class MediaPlayerService extends Service{
         mainActivity.displayError(track);
     }
 
+
     public void updateArtistView(){
         mainActivity.updateArtistsList(getPlaylistManager().getArtistNames());
     }
@@ -275,7 +276,6 @@ public class MediaPlayerService extends Service{
         playlistHelper.setMediaNotificationManager(mediaNotificationManager);
         moveToForeground();
     }
-
 
 
     @Override
@@ -494,6 +494,5 @@ public class MediaPlayerService extends Service{
             pause();
         }
     };
-
 
 }
