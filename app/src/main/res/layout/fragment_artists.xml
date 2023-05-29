@@ -14,49 +14,11 @@
         android:layout_marginBottom="@dimen/list_margin_bottom"
         android:fadeScrollbars="true"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/artistsButtonsLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
-    <View
-        android:id="@+id/artistsBottomDivider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/artistsRecyclerView"
-        />
-    <LinearLayout
-        android:id="@+id/artistsButtonsLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <Button
-            android:id="@+id/loadTracksFromArtistButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/list_button_margin_horizontal"
-            android:layout_marginVertical="@dimen/list_button_margin_vertical"
-            android:text="@string/button_load_tracks_from_artist"
-            android:visibility="invisible"/>
-
-        <Button
-            android:id="@+id/addTracksFromArtistToPlaylistButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/list_button_margin_horizontal"
-            android:layout_marginVertical="@dimen/list_button_margin_vertical"
-            android:text="@string/button_add_tracks_from_artist"
-            android:visibility="invisible"/>
-    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

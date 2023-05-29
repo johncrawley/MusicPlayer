@@ -54,6 +54,7 @@ public class TrackFinder {
                 .filter(t-> containsAll(t, remainingTerms))
                 .collect(Collectors.toList());
     }
+    
 
     private boolean containsAll(Track track, List<String> searchTerms){
         for(String searchTerm : searchTerms){
