@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             playerViewHelper.setMediaPlayerService(mediaPlayerService);
             albumArtHelper = new AlbumArtHelper(MainActivity.this);
             mediaPlayerService.setActivity(MainActivity.this);
+            addTrackToPlaylistViewHelper = new AddTrackToPlaylistViewHelper(MainActivity.this);
             searchViewHelper = new SearchViewHelper(MainActivity.this);
             searchViewHelper.setMediaPlayerService(mediaPlayerService);
         }
@@ -88,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
         requestPermissions();
         initPlayerViewHelper();
         startMediaPlayerService();
-        addTrackToPlaylistViewHelper = new AddTrackToPlaylistViewHelper(this);
     }
 
 
@@ -160,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
     public SearchViewHelper getSearchViewHelper(){
         return searchViewHelper;
     }
+
+    public AddTrackToPlaylistViewHelper getAddTrackToPlaylistViewHelper(){ return addTrackToPlaylistViewHelper; }
 
 
     public List<String> getAlbumNames(){

@@ -74,6 +74,11 @@ public class AddTrackToPlaylistViewHelper {
     }
 
 
+    public void hideView(){
+        addTrackToPlaylistView.setVisibility(View.GONE);
+    }
+
+
     private void refreshPlaylist(){
         playlists.clear();
         playlists.addAll(mainActivity.getAllUserPlaylists());
