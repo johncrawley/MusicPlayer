@@ -31,6 +31,8 @@ public interface PlaylistManager {
     void addTracksFromStorage(MediaPlayerService mediaPlayerService);
     void addTrackToQueue(Track track);
 
+    List<Playlist> getAllPlaylists();
+    List<Playlist> getAllUserPlaylists();
     void loadPlaylist(Playlist playlist);
     void loadAllTracksPlaylist();
     void loadTracksFromAlbum(String albumName);

@@ -12,6 +12,7 @@ import com.jacstuff.musicplayer.service.db.track.Track;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -37,7 +38,7 @@ public class TracksFragment extends Fragment{
 
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.recyclerView);
         setupRecyclerView(getMainActivity().getTrackList());

@@ -7,6 +7,8 @@ import com.jacstuff.musicplayer.service.db.artist.Artist;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistItemRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistItemRepositoryImpl;
+import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
+import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 
@@ -29,6 +31,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private int currentIndex = 0;
     private final TrackLoader trackLoader;
     private final Random random;
+    private final PlaylistRepository playlistRepository;
     private final PlaylistItemRepository playlistItemRepository;
     private List<Track> tracks;
     private List<Track> unPlayedTracks;
@@ -51,6 +54,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public PlaylistManagerImpl(Context context, TrackLoader trackLoader){
+        playlistRepository = new PlaylistRepositoryImpl(context);
         playlistItemRepository = new PlaylistItemRepositoryImpl(context);
         tracks = new ArrayList<>(10_000);
         allTracks = new ArrayList<>(10_000);
@@ -100,6 +104,17 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(currentPlaylist == null){
             loadAllTracksPlaylist();
         }
+    }
+
+
+    @Override
+    public List<Playlist> getAllPlaylists(){
+        return playlistRepository.getAllPlaylists();
+    }
+
+    @Override
+    public List<Playlist> getAllUserPlaylists(){
+        return playlistRepository.getAllUserPlaylists();
     }
 
 

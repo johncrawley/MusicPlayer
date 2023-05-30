@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
-import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
+import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistRecyclerAdapter;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
 import com.jacstuff.musicplayer.view.utils.AnimatorHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddTrackToPlaylistViewHelper {
 
@@ -24,6 +26,8 @@ public class AddTrackToPlaylistViewHelper {
     private final MainActivity mainActivity;
     private View addTrackToPlaylistView;
     private OnBackPressedCallback dismissAddTrackToPlaylistViewOnBackPressedCallback;
+    private List<Playlist> playlists;
+    private PlaylistRecyclerAdapter playlistRecyclerAdapter;
 
 
     public AddTrackToPlaylistViewHelper(MainActivity mainActivity){
@@ -35,9 +39,9 @@ public class AddTrackToPlaylistViewHelper {
 
     public void setupAddTrackToPlaylistView() {
         addTrackToPlaylistView = mainActivity.findViewById(R.id.addTrackToPlaylistView);
-        PlaylistRepository playlistRepository = new PlaylistRepositoryImpl(mainActivity);
         RecyclerView addTrackToPlaylistRecyclerView = mainActivity.findViewById(R.id.addTrackToPlaylistRecyclerView);
-        PlaylistRecyclerAdapter playlistRecyclerAdapter = new PlaylistRecyclerAdapter(playlistRepository.getAllPlaylists(), mainActivity::addTrackToPlaylist);
+        playlists = new ArrayList<>(mainActivity.getAllUserPlaylists());
+        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(playlists, mainActivity::addTrackToPlaylist);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mainActivity);
         addTrackToPlaylistRecyclerView.setLayoutManager(layoutManager);
@@ -59,6 +63,7 @@ public class AddTrackToPlaylistViewHelper {
 
     public void showAddTrackToPlaylistView(){
         SearchViewHelper searchViewHelper = mainActivity.getSearchViewHelper();
+        refreshPlaylist();
         if(searchViewHelper != null){
             searchViewHelper.hideAllSearchResultsButtons();
         }
@@ -66,6 +71,13 @@ public class AddTrackToPlaylistViewHelper {
         addTrackToPlaylistView.setVisibility(View.VISIBLE);
         dismissAddTrackToPlaylistViewOnBackPressedCallback.setEnabled(true);
         animator.start();
+    }
+
+
+    private void refreshPlaylist(){
+        playlists.clear();
+        playlists.addAll(mainActivity.getAllUserPlaylists());
+        playlistRecyclerAdapter.refresh(playlists);
     }
 
 

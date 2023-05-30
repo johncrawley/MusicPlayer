@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
         initPlayerViewHelper();
         startMediaPlayerService();
         addTrackToPlaylistViewHelper = new AddTrackToPlaylistViewHelper(this);
-
     }
 
 
@@ -179,6 +178,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public List<Playlist> getAllUserPlaylists(){
+        if(mediaPlayerService == null || mediaPlayerService.getPlaylistManager() == null){
+            return Collections.emptyList();
+        }
+        return mediaPlayerService.getPlaylistManager().getAllUserPlaylists();
+    }
+
+
     private boolean isPlaylistManagerUnavailable(){
         return mediaPlayerService == null || mediaPlayerService.getPlaylistManager() == null;
     }
@@ -204,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayerService.stop();
         resetElapsedTime();
     }
-
 
     public void hidePlayerViews(){ playerViewHelper.setVisibilityOnPlayerViews(View.INVISIBLE);}
 

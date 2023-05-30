@@ -1,5 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,9 +71,11 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     public void refresh(List<Playlist> playlists){
         this.playlists.clear();
         this.playlists.addAll(playlists);
+        notifyDataSetChanged();
     }
 
 
@@ -86,10 +89,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     }
 
 
-
-
     public void select(View view){
-       // int index = Math.max(Math.min(position, playlists.size()-1), 0);
         changePositionTo(0);
         selectedPlaylist = playlists.get(0);
         currentlySelectedView = view;

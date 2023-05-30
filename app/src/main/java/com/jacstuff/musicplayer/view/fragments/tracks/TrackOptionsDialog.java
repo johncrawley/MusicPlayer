@@ -13,6 +13,8 @@ import androidx.fragment.app.DialogFragment;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 
+import java.util.function.Supplier;
+
 
 public class TrackOptionsDialog extends DialogFragment {
 
@@ -38,13 +40,22 @@ public class TrackOptionsDialog extends DialogFragment {
 
     private void setupButtons(View parentView){
         setupButton(parentView, R.id.enqueueTrackButton, this::enqueueCurrentTrack);
-        setupButton(parentView, R.id.addTrackToPlaylistButton, this::showAddTrackToPlaylistDialog);
+        Button addTrackToPlaylistButton = setupButton(parentView, R.id.addTrackToPlaylistButton, this::showAddTrackToPlaylistDialog);
+        setupVisibilityForUserPlaylistsExist(addTrackToPlaylistButton);
         Button removeTrackButton = setupButton(parentView, R.id.removeFromPlaylistButton, this::removeSelectedTrackFromPlaylist);
-        setupVisibilityFor(removeTrackButton);
+        setupVisibilityForUserPlaylistLoaded(removeTrackButton);
     }
 
 
-    private void setupVisibilityFor(View view){
+    private void setupVisibilityForUserPlaylistsExist(View view){
+        MainActivity mainActivity = getMainActivity();
+        int visibility = mainActivity != null && !mainActivity.getAllUserPlaylists().isEmpty() ?
+                View.VISIBLE : View.GONE;
+        view.setVisibility(visibility);
+    }
+
+
+    private void setupVisibilityForUserPlaylistLoaded(View view){
         MainActivity mainActivity = getMainActivity();
         int visibility = mainActivity != null && mainActivity.isUserPlaylistLoaded() ?
                 View.VISIBLE : View.GONE;

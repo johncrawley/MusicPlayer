@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.service.db.DbHelper;
 import com.jacstuff.musicplayer.service.db.DbUtils;
 import com.jacstuff.musicplayer.service.db.DbContract;
@@ -14,7 +13,6 @@ import com.jacstuff.musicplayer.service.playlist.PlaylistManagerImpl;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class PlaylistRepositoryImpl implements PlaylistRepository {
@@ -41,12 +39,6 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
 
 
     @Override
-    public List<Track> getAllTracksFromPlaylist(Long playlistId){
-     return Collections.emptyList();
-    }
-
-
-    @Override
     public void deletePlaylist(Long playlistId) {
         String query = "DELETE FROM "
                 + DbContract.PlaylistEntry.TABLE_NAME
@@ -55,18 +47,6 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
                 + ";";
         execSql(query);
         playlistItemRepository.deleteAllPlaylistItems(playlistId);
-    }
-
-
-    @Override
-    public void addTrackToPlaylist(Long playlistId, Long trackId) {
-        //do nothing
-    }
-
-
-    @Override
-    public void removeTrackFromPlaylist(Long playlistId, Long trackId) {
-       //do nothing
     }
 
 
@@ -81,17 +61,17 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
 
 
     @Override
-    public void renamePlaylist(Long playlistId, String updatedName) {
-
-    }
-
-
-    @Override
     public List<Playlist> getAllPlaylists() {
         List<Playlist> playlists = new ArrayList<>();
         playlists.add(new Playlist(PlaylistManagerImpl.ALL_TRACKS_PLAYLIST_ID, PlaylistManagerImpl.ALL_TRACKS_PLAYLIST,false));
         playlists.addAll(getPlaylistsFromDB());
         return  playlists;
+    }
+
+
+    @Override
+    public List<Playlist> getAllUserPlaylists() {
+        return getPlaylistsFromDB();
     }
 
 
