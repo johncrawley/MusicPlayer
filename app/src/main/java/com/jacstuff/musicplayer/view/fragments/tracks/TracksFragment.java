@@ -1,14 +1,18 @@
 package com.jacstuff.musicplayer.view.fragments.tracks;
 
 
+import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.List;
 
@@ -25,6 +29,9 @@ public class TracksFragment extends Fragment{
     private TrackListAdapter trackListAdapter;
     private int previousIndex = 0;
     private View parentView;
+    private ImageButton addTracksButton;
+    public final static String NOTIFY_USER_PLAYLIST_LOADED= "notify_user_playlist_loaded";
+    public final static String IS_USER_PLAYLIST_LOADED_KEY= "is_user_playlist_loaded_key";
 
     public TracksFragment() {
         // Required empty public constructor
@@ -42,7 +49,28 @@ public class TracksFragment extends Fragment{
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.recyclerView);
         setupRecyclerView(getMainActivity().getTrackList());
+        setupAddTracksButton(view);
         getMainActivity().setPlayerFragment(this);
+        setListener(this, NOTIFY_USER_PLAYLIST_LOADED, this::setVisibilityOnAddTracksToPlaylistButton);
+    }
+
+
+    private void setVisibilityOnAddTracksToPlaylistButton(Bundle bundle){
+        int visibility = bundle.getBoolean(IS_USER_PLAYLIST_LOADED_KEY) ? View.VISIBLE : View.INVISIBLE;
+        addTracksButton.setVisibility(visibility);
+    }
+
+
+    private void setupAddTracksButton(View parentView){
+        addTracksButton = ButtonMaker.createImageButton(parentView, R.id.addTracksToPlaylistButton, this::addTracksToPlaylist);
+    }
+
+
+    private void addTracksToPlaylist(){
+        MainActivity mainActivity = getMainActivity();
+        if(mainActivity != null){
+            mainActivity.getSearchViewHelper().showSearch(true);
+        }
     }
 
 
@@ -87,7 +115,7 @@ public class TracksFragment extends Fragment{
         if(this.parentView == null ||tracks == null){
             return;
         }
-        trackListAdapter = new TrackListAdapter(tracks, this::selectTrack, this::createTrackOptionsFragment );
+        trackListAdapter = new TrackListAdapter(tracks, this::selectTrack, this::createTrackOptionsFragment);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(trackListAdapter);

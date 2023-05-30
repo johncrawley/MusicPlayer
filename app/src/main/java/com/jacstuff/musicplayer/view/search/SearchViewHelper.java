@@ -40,6 +40,7 @@ public class SearchViewHelper {
     private OnBackPressedCallback dismissSearchViewOnBackPressedCallback;
     private MediaPlayerService mediaPlayerService;
     private final AddTrackToPlaylistViewHelper addTrackToPlaylistViewHelper;
+    private boolean isAddingTrackToPlaylist;
 
 
     public SearchViewHelper(MainActivity mainActivity){
@@ -83,6 +84,12 @@ public class SearchViewHelper {
 
 
     private void showSearch(){
+        showSearch(false);
+    }
+
+
+    public void showSearch(boolean isAddingTrackToPlaylist){
+        this.isAddingTrackToPlaylist = isAddingTrackToPlaylist;
         addTrackToPlaylistViewHelper.hideView();
         hideAllSearchResultsButtons();
         Animator animator = createShowAnimatorFor(searchView, ()-> keyboardHelper.showKeyboardAndFocusOn(searchEditText));
@@ -147,6 +154,10 @@ public class SearchViewHelper {
 
     private void onSearchResultSelect(Track track){
         selectedSearchResultTrack = track;
+        if(isAddingTrackToPlaylist){
+            addSelectedSearchResultToPlaylist();
+            return;
+        }
         showSearchResultsButtons();
     }
 
@@ -187,6 +198,22 @@ public class SearchViewHelper {
 
 
     public void showSearchResultsButtons(){
+        if(isAddingTrackToPlaylist){
+            setButtonVisibilityForAddingTrackToPlaylist();
+            return;
+        }
+        setButtonVisibilityForNormalSearch();
+    }
+
+
+    private void setButtonVisibilityForAddingTrackToPlaylist(){
+        addSearchResultButton.setVisibility(View.VISIBLE);
+        playSearchResultButton.setVisibility(View.GONE);
+        enqueueSearchResultButton.setVisibility(View.GONE);
+    }
+
+
+    private void setButtonVisibilityForNormalSearch(){
         playSearchResultButton.setVisibility(View.VISIBLE);
         enqueueSearchResultButton.setVisibility(View.VISIBLE);
         if(mainActivity.isUserPlaylistLoaded()){

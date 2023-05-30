@@ -23,6 +23,7 @@ import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.album.AlbumsFragment;
 import com.jacstuff.musicplayer.view.fragments.artist.ArtistsFragment;
+import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.ArrayList;
@@ -150,7 +151,6 @@ public class PlaylistsFragment extends Fragment {
         playlistRepository.deletePlaylist(playlist.getId());
         refreshList();
         showPlaylistDeletedToast();
-        //loadSelectedPlaylist();
     }
 
     private void navigateToFirstPlaylistIfDeletedPlaylistIsLoaded(Playlist playlist){
@@ -169,7 +169,15 @@ public class PlaylistsFragment extends Fragment {
                 mainActivity.loadPlaylist(playlist, false);
                 notifyOtherFragmentsToDeselectItems();
             }
+            notifyTracksFragmentOfPlaylistLoaded(playlist.isUserPlaylist());
         }
+    }
+
+
+    private void notifyTracksFragmentOfPlaylistLoaded(boolean isUserPlaylist){
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(TracksFragment.IS_USER_PLAYLIST_LOADED_KEY, isUserPlaylist);
+        sendMessage(this, TracksFragment.NOTIFY_USER_PLAYLIST_LOADED, bundle);
     }
 
 
