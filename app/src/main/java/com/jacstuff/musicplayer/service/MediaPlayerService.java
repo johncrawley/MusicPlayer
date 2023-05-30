@@ -6,16 +6,11 @@ import static com.jacstuff.musicplayer.service.MediaNotificationManager.NOTIFICA
 import android.Manifest;
 import android.app.Notification;
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
@@ -23,31 +18,18 @@ import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MediaPlayerService extends Service{
 
-    public static final String ACTION_PLAY = "com.j.crawley.music_player.play";
-    public static final String ACTION_PAUSE_PLAYER = "com.j.crawley.music_player.pausePlayer";
-    public static final String ACTION_REQUEST_STATUS = "com.j.crawley.music_player.requestStatus";
-
-    public static final String ACTION_SELECT_PREVIOUS_TRACK = "com.j.crawley.music_player.selectPreviousTrack";
-    public static final String ACTION_SELECT_NEXT_TRACK = "com.j.crawley.music_player.selectNextTrack";
-    public static final String ACTION_NOTIFY_VIEW_OF_STOP = "com.j.crawley.music_player.notifyViewOfStop";
-    public static final String ACTION_NOTIFY_VIEW_OF_CONNECTING = "com.j.crawley.music_player.notifyViewOfPlay";
-    public static final String ACTION_NOTIFY_VIEW_OF_PLAYING = "com.j.crawley.music_player.notifyViewOfPlayInfo";
 
     private MediaNotificationManager mediaNotificationManager;
-    Map<BroadcastReceiver, String> broadcastReceiverMap;
-    private final AtomicBoolean shouldSkipBroadcastReceivedForTrackChange = new AtomicBoolean();
 
     private MainActivity mainActivity;
     private final IBinder binder = new LocalBinder();
     private final PlaylistHelper playlistHelper;
     private final MediaPlayerHelper mediaPlayerHelper;
+    private BroadcastHelper broadcastHelper;
 
 
     public MediaPlayerService() {
@@ -83,6 +65,10 @@ public class MediaPlayerService extends Service{
         updateViewTrackList(playlistManager);
         mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
         mainActivity.updateArtistsList(playlistManager.getArtistNames());
+    }
+
+    public MediaPlayerHelper getMediaPlayerHelper(){
+        return mediaPlayerHelper;
     }
 
 
@@ -271,7 +257,7 @@ public class MediaPlayerService extends Service{
     public void onCreate() {
         super.onCreate();
         mediaPlayerHelper.createMediaPlayer();
-        setupBroadcastReceivers();
+        broadcastHelper = new BroadcastHelper(this);
         mediaNotificationManager = new MediaNotificationManager(getApplicationContext(), this);
         playlistHelper.setMediaNotificationManager(mediaNotificationManager);
         moveToForeground();
@@ -281,7 +267,7 @@ public class MediaPlayerService extends Service{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterBroadcastReceivers();
+        broadcastHelper.onDestroy();
         mediaPlayerHelper.stop(false, false);
         mediaPlayerHelper.onDestroy();
         mediaNotificationManager.dismissNotification();
@@ -309,22 +295,6 @@ public class MediaPlayerService extends Service{
     public void disableShuffle(){
         getPlaylistManager().disableShuffle();
         mainActivity.notifyShuffleDisabled();
-    }
-
-
-    private void setupBroadcastReceivers(){
-        setupBroadcastReceiversMap();
-        registerBroadcastReceivers();
-    }
-
-
-    private void setupBroadcastReceiversMap(){
-        broadcastReceiverMap = new HashMap<>();
-        broadcastReceiverMap.put(serviceReceiverForPlay, ACTION_PLAY);
-        broadcastReceiverMap.put(serviceReceiverForRequestStatus, ACTION_REQUEST_STATUS);
-        broadcastReceiverMap.put(serviceReceiverForPause, ACTION_PAUSE_PLAYER);
-        broadcastReceiverMap.put(serviceReceiverForNext, ACTION_SELECT_NEXT_TRACK);
-        broadcastReceiverMap.put(serviceReceiverForPrevious, ACTION_SELECT_PREVIOUS_TRACK);
     }
 
 
@@ -393,12 +363,12 @@ public class MediaPlayerService extends Service{
 
 
     void updateViewsForConnecting(){
-        sendBroadcast(ACTION_NOTIFY_VIEW_OF_CONNECTING);
+        broadcastHelper.notifyViewOfConnectingStatus();
         mediaNotificationManager.updateNotification();
     }
 
 
-     public void notifyViewOfMediaPlayerStop(){
+    public void notifyViewOfMediaPlayerStop(){
          mainActivity.notifyMediaPlayerStopped();
      }
 
@@ -421,78 +391,5 @@ public class MediaPlayerService extends Service{
         mainActivity.notifyMediaPlayerPaused();
         mediaPlayerHelper.cancelScheduledStoppageOfTrack();
     }
-
-
-    private void sendBroadcast(String action){
-        sendBroadcast(new Intent(action));
-    }
-
-
-    private void registerBroadcastReceivers(){
-        for(BroadcastReceiver bcr : broadcastReceiverMap.keySet()){
-            IntentFilter intentFilter = new IntentFilter(broadcastReceiverMap.get(bcr));
-            registerReceiver(bcr, intentFilter);
-        }
-    }
-
-
-    private void unregisterBroadcastReceivers(){
-        for(BroadcastReceiver bcr : broadcastReceiverMap.keySet()){
-            unregisterReceiver(bcr);
-        }
-    }
-
-
-    private final BroadcastReceiver serviceReceiverForPlay = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            mediaPlayerHelper.onReceiveBroadcastForPlay();
-        }
-    };
-
-
-    private final BroadcastReceiver serviceReceiverForNext = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            handleTrackChangeRequest(MediaPlayerService.this::loadNextTrack);
-        }
-    };
-
-
-    private final BroadcastReceiver serviceReceiverForPrevious = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            handleTrackChangeRequest(MediaPlayerService.this::loadPreviousTrack);
-        }
-    };
-
-
-    private void handleTrackChangeRequest(Runnable operation){
-        if(shouldSkipBroadcastReceivedForTrackChange.get()){
-            return;
-        }
-        shouldSkipBroadcastReceivedForTrackChange.set(true);
-        operation.run();
-        new Handler(Looper.getMainLooper())
-                .postDelayed(()-> shouldSkipBroadcastReceivedForTrackChange.set(false),
-                        600);
-    }
-
-
-    private final BroadcastReceiver serviceReceiverForRequestStatus = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String broadcast = mediaPlayerHelper.isPlaying() ? ACTION_NOTIFY_VIEW_OF_PLAYING : ACTION_NOTIFY_VIEW_OF_STOP;
-            sendBroadcast(broadcast);
-        }
-    };
-
-
-    private final BroadcastReceiver serviceReceiverForPause = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            pause();
-        }
-    };
 
 }

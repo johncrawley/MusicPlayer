@@ -119,7 +119,7 @@ public class PlaylistsFragment extends Fragment {
             return;
         }
         hasClicked = true;
-        FragmentManagerHelper.showOptionsDialog(this, AddPlaylistFragment.newInstance(), "playlist_options", new Bundle());
+        FragmentManagerHelper.showOptionsDialog(this, AddPlaylistFragment.newInstance(), "create_playlist", new Bundle());
     }
 
 
@@ -139,8 +139,8 @@ public class PlaylistsFragment extends Fragment {
                 .setTitle(getString(R.string.delete_confirm_dialog_title))
                 .setMessage(getResources().getString(R.string.delete_confirm_dialog_text, playlist.getName()))
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> deletePlaylistAndSelectFirstPlaylist(playlist))
-                .setNegativeButton(android.R.string.no, null).show();
+                .setPositiveButton(android.R.string.ok, (dialog, whichButton) -> deletePlaylistAndSelectFirstPlaylist(playlist))
+                .setNegativeButton(android.R.string.cancel, null).show();
     }
 
 

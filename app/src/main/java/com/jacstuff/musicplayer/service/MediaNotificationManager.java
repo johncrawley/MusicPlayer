@@ -1,10 +1,10 @@
 package com.jacstuff.musicplayer.service;
 
 
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_PAUSE_PLAYER;
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_PLAY;
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_NEXT_TRACK;
-import static com.jacstuff.musicplayer.service.MediaPlayerService.ACTION_SELECT_PREVIOUS_TRACK;
+import static com.jacstuff.musicplayer.service.BroadcastHelper.ACTION_PAUSE_PLAYER;
+import static com.jacstuff.musicplayer.service.BroadcastHelper.ACTION_PLAY;
+import static com.jacstuff.musicplayer.service.BroadcastHelper.ACTION_SELECT_NEXT_TRACK;
+import static com.jacstuff.musicplayer.service.BroadcastHelper.ACTION_SELECT_PREVIOUS_TRACK;
 
 import android.Manifest;
 import android.app.Notification;
