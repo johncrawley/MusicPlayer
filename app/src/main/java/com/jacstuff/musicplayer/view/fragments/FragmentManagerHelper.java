@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 public class FragmentManagerHelper {
 
 
-    public static void showOptionsDialog(Fragment parentFragment, DialogFragment dialogFragment, String tag, Bundle bundle){
+    public static void showDialog(Fragment parentFragment, DialogFragment dialogFragment, String tag, Bundle bundle){
         FragmentManager fragmentManager = parentFragment.getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         removePreviousFragmentTransaction(fragmentManager, tag, fragmentTransaction);

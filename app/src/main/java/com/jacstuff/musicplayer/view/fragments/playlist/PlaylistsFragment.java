@@ -68,7 +68,7 @@ public class PlaylistsFragment extends Fragment {
 
     private void setupFragmentListeners(){
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE, (bundle)->  showDeletePlaylistDialog());
-        setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD, (bundle) -> loadSelectedPlaylist());
+        setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD, (bundle) -> loadLongClickedPlaylist());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE, (bundle) -> startAddPlaylistFragment());
         setListener(this, NOTIFY_TO_DESELECT_ITEMS, (bundle) -> playlistRecyclerAdapter.deselectCurrentlySelectedItem());
     }
@@ -119,19 +119,19 @@ public class PlaylistsFragment extends Fragment {
             return;
         }
         hasClicked = true;
-        FragmentManagerHelper.showOptionsDialog(this, AddPlaylistFragment.newInstance(), "create_playlist", new Bundle());
+        FragmentManagerHelper.showDialog(this, AddPlaylistFragment.newInstance(), "create_playlist", new Bundle());
     }
 
 
     private void startPlaylistOptionsFragment(Playlist playlist){
         Bundle bundle = new Bundle();
         bundle.putBoolean(BUNDLE_KEY_IS_USER_PLAYLIST, playlist.isUserPlaylist());
-        FragmentManagerHelper.showOptionsDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
+        FragmentManagerHelper.showDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
     }
 
 
     private void showDeletePlaylistDialog(){
-        Playlist playlist = playlistRecyclerAdapter.getSelectedPlaylist();
+        Playlist playlist = playlistRecyclerAdapter.getLongClickedPlaylist();
         if(playlist == null){
             return;
         }
@@ -145,18 +145,20 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void deletePlaylistAndSelectFirstPlaylist(Playlist playlist){
+        navigateToFirstPlaylistIfDeletedPlaylistIsLoaded(playlist);
+        playlistRecyclerAdapter.clearLongClickedView();
         playlistRepository.deletePlaylist(playlist.getId());
         refreshList();
         showPlaylistDeletedToast();
-        View item = recyclerView.getChildAt(0);
-        playlistRecyclerAdapter.select(item);
-        loadSelectedPlaylist();
+        //loadSelectedPlaylist();
     }
 
-
-    private void loadSelectedPlaylist(){
-        playlistRecyclerAdapter.selectLongClickedView();
-        loadSelectedPlaylist(playlistRecyclerAdapter.getSelectedPlaylist());
+    private void navigateToFirstPlaylistIfDeletedPlaylistIsLoaded(Playlist playlist){
+        if(playlistRecyclerAdapter.getSelectedPlaylist() == playlist){
+            View item = recyclerView.getChildAt(0);
+            item.callOnClick();
+            playlistRecyclerAdapter.select(item);
+        }
     }
 
 
@@ -168,6 +170,12 @@ public class PlaylistsFragment extends Fragment {
                 notifyOtherFragmentsToDeselectItems();
             }
         }
+    }
+
+
+    private void loadLongClickedPlaylist(){
+        playlistRecyclerAdapter.selectLongClickedView();
+        loadSelectedPlaylist(playlistRecyclerAdapter.getSelectedPlaylist());
     }
 
 
@@ -187,10 +195,9 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-    @SuppressWarnings("notifyDataSetChanged")
+
     private void refreshList(){
         playlistRecyclerAdapter.refresh(getAllPlaylists());
-        playlistRecyclerAdapter.notifyDataSetChanged();
     }
 
 

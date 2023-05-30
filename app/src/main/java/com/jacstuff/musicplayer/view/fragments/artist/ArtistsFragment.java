@@ -88,7 +88,7 @@ public class ArtistsFragment extends Fragment {
     private void showOptionsDialog(String artistName){
         Bundle bundle = new Bundle();
         bundle.putString(ArtistOptionsFragment.ARTIST_NAME_BUNDLE_KEY, artistName);
-        FragmentManagerHelper.showOptionsDialog(this, ArtistOptionsFragment.newInstance(), "artist_options", bundle);
+        FragmentManagerHelper.showDialog(this, ArtistOptionsFragment.newInstance(), "artist_options", bundle);
     }
 
 

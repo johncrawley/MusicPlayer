@@ -21,9 +21,9 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     private final List<Playlist> playlists;
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
-    private int indexToScrollTo = -1;
     private final Consumer<Playlist> onItemClickConsumer, onItemLongClickConsumer;
     private Playlist selectedPlaylist;
+    private Playlist longClickedPlaylist;
     private View longClickedView;
 
 
@@ -34,24 +34,28 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
         PlaylistViewHolder(View view) {
             super(view);
             trackNameTextView = view.findViewById(R.id.trackName);
-
-            view.setOnClickListener(v -> {
-                if(currentlySelectedView != null){
-                    currentlySelectedView.setSelected(false);
-                }
-                selectedPlaylist = (Playlist)trackNameTextView.getTag();
-                currentlySelectedView = v;
-                currentlySelectedView.setSelected(true);
-                onItemClickConsumer.accept(selectedPlaylist);
-            });
-
-            view.setOnLongClickListener( v -> {
-                longClickedView = v;
-                selectedPlaylist = (Playlist)trackNameTextView.getTag();
-                onItemLongClickConsumer.accept(selectedPlaylist);
-                return false;
-            });
+            view.setOnClickListener(v -> onClick(v, trackNameTextView));
+            view.setOnLongClickListener(v -> onLongClick(v, trackNameTextView));
         }
+    }
+
+
+    private void onClick(View v, TextView trackNameTextView){
+        if(currentlySelectedView != null){
+            currentlySelectedView.setSelected(false);
+        }
+        selectedPlaylist = (Playlist)trackNameTextView.getTag();
+        currentlySelectedView = v;
+        currentlySelectedView.setSelected(true);
+        onItemClickConsumer.accept(selectedPlaylist);
+    }
+
+
+    private boolean onLongClick(View v, TextView trackNameTextView){
+        longClickedView = v;
+        longClickedPlaylist = (Playlist)trackNameTextView.getTag();
+        onItemLongClickConsumer.accept(longClickedPlaylist);
+        return false;
     }
 
 
@@ -71,11 +75,19 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     }
 
 
+    public Playlist getLongClickedPlaylist(){
+        return longClickedPlaylist;
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     public void refresh(List<Playlist> playlists){
         this.playlists.clear();
         this.playlists.addAll(playlists);
         notifyDataSetChanged();
+        if(currentlySelectedView != null){
+            currentlySelectedView.callOnClick();
+        }
+        reselectPreviouslySelectedPlaylist();
     }
 
 
@@ -116,10 +128,34 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
         holder.trackNameTextView.setText(playlists.get(position).getName());
         holder.trackNameTextView.setTag(playlists.get(position));
         holder.itemView.setSelected(selectedPosition == position);
+        int indexToScrollTo = -1;
         if(position == indexToScrollTo){
             deselectCurrentlySelectedItem();
             currentlySelectedView = holder.itemView;
             currentlySelectedView.setSelected(true);
+        }
+    }
+
+
+    public void clearLongClickedView(){
+        if(selectedPlaylist.getId() == longClickedPlaylist.getId()){
+           selectedPlaylist = null;
+           currentlySelectedView = null;
+        }
+        longClickedView = null;
+
+    }
+
+
+    private void reselectPreviouslySelectedPlaylist(){
+        if(selectedPlaylist == null){
+            return;
+        }
+        for(int i=0; i< playlists.size(); i++){
+            if(selectedPlaylist.getId().equals(playlists.get(i).getId())){
+                selectedPosition = i;
+                break;
+            }
         }
     }
 

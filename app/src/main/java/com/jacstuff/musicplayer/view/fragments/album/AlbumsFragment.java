@@ -93,7 +93,7 @@ public class AlbumsFragment extends Fragment {
     private void showOptionsDialog(String albumName){
         Bundle bundle = new Bundle();
         bundle.putString(AlbumOptionsFragment.ALBUM_NAME_BUNDLE_KEY, albumName);
-        FragmentManagerHelper.showOptionsDialog(this, AlbumOptionsFragment.newInstance(), "album_options", bundle);
+        FragmentManagerHelper.showDialog(this, AlbumOptionsFragment.newInstance(), "album_options", bundle);
     }
 
 
