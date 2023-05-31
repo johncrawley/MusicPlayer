@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
@@ -30,6 +31,7 @@ public class TracksFragment extends Fragment{
     private int previousIndex = 0;
     private View parentView;
     private ImageButton addTracksButton;
+    private TextView noTracksFoundTextView;
     public final static String NOTIFY_USER_PLAYLIST_LOADED= "notify_user_playlist_loaded";
     public final static String IS_USER_PLAYLIST_LOADED_KEY= "is_user_playlist_loaded_key";
 
@@ -48,6 +50,7 @@ public class TracksFragment extends Fragment{
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.recyclerView);
+        noTracksFoundTextView = parentView.findViewById(R.id.noTracksFoundTextView);
         setupRecyclerView(getMainActivity().getTrackList());
         setupAddTracksButton(view);
         getMainActivity().setPlayerFragment(this);
@@ -94,13 +97,14 @@ public class TracksFragment extends Fragment{
 
 
     public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
+        refreshTrackList(updatedTracks);
         previousIndex = 0;
         if(currentTrackIndex < 0){
             setupRecyclerView(updatedTracks);
             return;
         }
-        refreshTrackList(updatedTracks);
         scrollToAndSelectListPosition(currentTrackIndex);
+        setVisibilityOnNoTracksFoundText(updatedTracks);
     }
 
 
@@ -108,6 +112,13 @@ public class TracksFragment extends Fragment{
     public void refreshTrackList(List<Track> tracks){
         trackListAdapter.setItems(tracks);
         trackListAdapter.notifyDataSetChanged();
+        setVisibilityOnNoTracksFoundText(tracks);
+    }
+
+
+    private void setVisibilityOnNoTracksFoundText(List<Track> tracks){
+        recyclerView.setVisibility(tracks.isEmpty()? View.GONE : View.VISIBLE);
+        noTracksFoundTextView.setVisibility(tracks.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
 
