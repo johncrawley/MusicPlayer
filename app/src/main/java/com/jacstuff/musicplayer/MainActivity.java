@@ -408,11 +408,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void updateTracksList(List<Track> updatedTracks, Track currentTrack, int currentTrackIndex){
+    public void updateTracksList(Playlist playlist, Track currentTrack, int currentTrackIndex){
         runOnUiThread(()-> {
             if(tracksFragment != null) {
-                tracksFragment.updateTracksList(updatedTracks, currentTrackIndex);
-                updateViews(updatedTracks, currentTrack);
+                tracksFragment.updateTracksList(playlist, currentTrackIndex);
+                updateViews(playlist.getTracks(), currentTrack);
             }
         });
     }

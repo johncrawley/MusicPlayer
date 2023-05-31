@@ -21,7 +21,7 @@ public interface PlaylistManager {
     ArrayList<String> getAlbumNames();
     ArrayList<String> getArtistNames();
 
-    List<Track> getTracks();
+    Playlist getCurrentPlaylist();
     Track getNextTrack();
     Track getPreviousTrack();
     Track getNextRandomUnPlayedTrack();

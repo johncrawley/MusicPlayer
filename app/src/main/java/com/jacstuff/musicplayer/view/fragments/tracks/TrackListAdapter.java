@@ -71,6 +71,9 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
 
     public void setItems(List<Track> tracks){
         this.tracks = tracks;
+        if(tracks == null){
+            return;
+        }
         trackNames = tracks.stream().map(this::getStrOf).collect(Collectors.toList());
     }
 

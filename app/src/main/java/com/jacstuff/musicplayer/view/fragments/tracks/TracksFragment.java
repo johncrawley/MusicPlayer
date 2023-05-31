@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
@@ -31,7 +32,7 @@ public class TracksFragment extends Fragment{
     private int previousIndex = 0;
     private View parentView;
     private ImageButton addTracksButton;
-    private TextView noTracksFoundTextView;
+    private TextView noTracksFoundTextView, playlistInfoTextView;
     public final static String NOTIFY_USER_PLAYLIST_LOADED= "notify_user_playlist_loaded";
     public final static String IS_USER_PLAYLIST_LOADED_KEY= "is_user_playlist_loaded_key";
 
@@ -51,6 +52,7 @@ public class TracksFragment extends Fragment{
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.recyclerView);
         noTracksFoundTextView = parentView.findViewById(R.id.noTracksFoundTextView);
+        playlistInfoTextView = parentView.findViewById(R.id.playlistNameTextView);
         setupRecyclerView(getMainActivity().getTrackList());
         setupAddTracksButton(view);
         getMainActivity().setPlayerFragment(this);
@@ -96,7 +98,20 @@ public class TracksFragment extends Fragment{
     }
 
 
-    public void updateTracksList(List<Track> updatedTracks, int currentTrackIndex){
+    private void updatePlaylistInfoView(Playlist playlist){
+        int resId = R.string.playlist_info_playlist_prefix;
+        switch (playlist.getPlaylistType()){
+            case ALBUM: resId = R.string.playlist_info_album_prefix; break;
+            case ARTIST: resId = R.string.playlist_info_artist_prefix; break;
+        }
+        String info = getString(resId) + " " + playlist.getName();
+        playlistInfoTextView.setText(info);
+    }
+
+
+    public void updateTracksList(Playlist playlist, int currentTrackIndex){
+        List<Track> updatedTracks = playlist.getTracks();
+        updatePlaylistInfoView(playlist);
         refreshTrackList(updatedTracks);
         previousIndex = 0;
         if(currentTrackIndex < 0){
@@ -108,6 +123,8 @@ public class TracksFragment extends Fragment{
     }
 
 
+
+
     @SuppressWarnings("notifyDataSetChanged")
     public void refreshTrackList(List<Track> tracks){
         trackListAdapter.setItems(tracks);
@@ -117,6 +134,9 @@ public class TracksFragment extends Fragment{
 
 
     private void setVisibilityOnNoTracksFoundText(List<Track> tracks){
+        if(tracks == null){
+            return;
+        }
         recyclerView.setVisibility(tracks.isEmpty()? View.GONE : View.VISIBLE);
         noTracksFoundTextView.setVisibility(tracks.isEmpty() ? View.VISIBLE : View.GONE);
     }

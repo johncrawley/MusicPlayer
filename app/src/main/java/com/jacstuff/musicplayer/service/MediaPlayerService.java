@@ -154,17 +154,17 @@ public class MediaPlayerService extends Service{
     public void updateViewTrackList(PlaylistManager playlistManager) {
         Track currentTrack = mediaPlayerHelper.getCurrentTrack();
         int currentTrackIndex = currentTrack == null ? -1 : currentTrack.getIndex();
-        mainActivity.updateTracksList(playlistManager.getTracks(), currentTrack, currentTrackIndex);
+        mainActivity.updateTracksList(playlistManager.getCurrentPlaylist(), currentTrack, currentTrackIndex);
     }
 
 
     public void updateViewTrackListAndDeselectList(PlaylistManager playlistManager){
-        mainActivity.updateTracksList(playlistManager.getTracks(), mediaPlayerHelper.getCurrentTrack(),-1);
+        mainActivity.updateTracksList(playlistManager.getCurrentPlaylist(), mediaPlayerHelper.getCurrentTrack(),-1);
     }
 
 
     public List<Track> getTrackList(){
-        return getPlaylistManager().getTracks();
+        return getPlaylistManager().getCurrentPlaylist().getTracks();
     }
 
 

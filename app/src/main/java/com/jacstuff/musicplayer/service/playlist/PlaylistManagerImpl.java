@@ -61,8 +61,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
         unPlayedTracks = new ArrayList<>();
         random = new Random(System.currentTimeMillis());
         this.trackLoader = trackLoader;
-        initTrackList();
         setupDefaultPlaylists();
+        initTrackList();
         trackHistory = new TrackHistory();
         queuedTracks = new ArrayDeque<>();
         currentPlaylistFilenames = new HashSet<>();
@@ -92,11 +92,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         initTrackList();
         calculateAndDisplayNewTracksStats(mediaPlayerService);
         loadAllTracksIfNoPlaylistLoaded();
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ PlaylistManagerImpl: " + msg);
     }
 
 
@@ -174,6 +169,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private void initTrackList(){
         tracks = allTracks;
+        allTracksPlaylist.setTracks(allTracks);
         assignIndexesToTracks();
     }
 
@@ -184,8 +180,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
         defaultPlaylistIds.add(SOME_ARTIST_PLAYLIST_ID);
         defaultPlaylistIds.add(ALL_TRACKS_PLAYLIST_ID);
 
-        someAlbumPlaylist = new Playlist(SOME_ALBUM_PLAYLIST_ID, "Some Album", false);
-        someArtistPlaylist = new Playlist(SOME_ARTIST_PLAYLIST_ID, "Some Artist", false);
+        someAlbumPlaylist = new Playlist(SOME_ALBUM_PLAYLIST_ID, "Some Album", Playlist.PlaylistType.ALBUM, false);
+        someArtistPlaylist = new Playlist(SOME_ARTIST_PLAYLIST_ID, "Some Artist", Playlist.PlaylistType.ARTIST, false);
         allTracksPlaylist = new Playlist(ALL_TRACKS_PLAYLIST_ID, ALL_TRACKS_PLAYLIST, false);
         currentPlaylist = allTracksPlaylist;
     }
@@ -202,6 +198,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         }
         else{
             tracks = playlistItemRepository.getTracksForPlaylistId(playlist.getId());
+            currentPlaylist.setTracks(tracks);
             currentPlaylistFilenames = tracks.stream().map(Track::getPathname).collect(Collectors.toSet());
             assignIndexesToTracks();
         }
@@ -354,9 +351,10 @@ public class PlaylistManagerImpl implements PlaylistManager {
         }
         currentArtist = artists.get(artistName);
         if(currentArtist == null){
-            log("saved artist is null!");
             return;
         }
+        someArtistPlaylist.setTracks(currentArtist.getTracks());
+        someArtistPlaylist.setName(artistName);
         tracks = currentArtist.getTracks();
         assignIndexesToTracks();
         setupQueue();
@@ -375,7 +373,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
             return;
         }
         tracks = getSortedTracks(savedAlbum.getAllTracks());
-        tracks.forEach(track -> System.out.println("^^^ loadTracksFromAlbum: " + track.getOrderedString()));
+        someAlbumPlaylist.setTracks(getSortedTracks(savedAlbum.getAllTracks()));
+        someAlbumPlaylist.setName(albumName);
         assignIndexesToTracks();
         setupQueue();
         currentPlaylist = someAlbumPlaylist;
@@ -548,9 +547,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    public List<Track> getTracks(){
-        return tracks;
-    }
-
+    @Override
+    public Playlist getCurrentPlaylist(){return currentPlaylist;}
 
 }

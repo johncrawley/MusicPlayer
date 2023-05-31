@@ -38,4 +38,5 @@
     <dimen name="list_margin_top">0dp</dimen>
     <dimen name="list_margin_bottom">0dp</dimen>
     <dimen name="no_tracks_found_text_size">18sp</dimen>
+    <dimen name="playlist_info_text_size">14sp</dimen>
 </resources>
