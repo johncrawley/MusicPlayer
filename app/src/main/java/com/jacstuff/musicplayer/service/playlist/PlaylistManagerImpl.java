@@ -107,6 +107,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         return playlistRepository.getAllPlaylists();
     }
 
+
     @Override
     public List<Playlist> getAllUserPlaylists(){
         return playlistRepository.getAllUserPlaylists();

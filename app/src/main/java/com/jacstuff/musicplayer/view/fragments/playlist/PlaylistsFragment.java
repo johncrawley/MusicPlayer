@@ -153,6 +153,7 @@ public class PlaylistsFragment extends Fragment {
         showPlaylistDeletedToast();
     }
 
+
     private void navigateToFirstPlaylistIfDeletedPlaylistIsLoaded(Playlist playlist){
         if(playlistRecyclerAdapter.getSelectedPlaylist() == playlist){
             View item = recyclerView.getChildAt(0);
@@ -163,14 +164,14 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void loadSelectedPlaylist(Playlist playlist){
-        if(playlist != null){
-            MainActivity mainActivity = getMainActivity();
-            if(mainActivity != null){
-                mainActivity.loadPlaylist(playlist, false);
-                notifyOtherFragmentsToDeselectItems();
-            }
-            notifyTracksFragmentOfPlaylistLoaded(playlist.isUserPlaylist());
+        MainActivity mainActivity = getMainActivity();
+        if(mainActivity == null || playlist == null){
+            return;
         }
+        mainActivity.loadPlaylist(playlist, false);
+        notifyOtherFragmentsToDeselectItems();
+        notifyTracksFragmentOfPlaylistLoaded(playlist.isUserPlaylist());
+        toastLoaded();
     }
 
 
@@ -203,7 +204,6 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-
     private void refreshList(){
         playlistRecyclerAdapter.refresh(getAllPlaylists());
     }
@@ -220,6 +220,11 @@ public class PlaylistsFragment extends Fragment {
     private void assignPlaylistNames(List<Playlist> playlists){
         playlistNames = new HashSet<>(INITIAL_PLAYLIST_CAPACITY);
         playlists.forEach((Playlist pl) -> playlistNames.add(pl.getName().toLowerCase()));
+    }
+
+
+    private void toastLoaded(){
+        Toast.makeText(getContext(), getString(R.string.toast_playlist_tracks_loaded), Toast.LENGTH_SHORT).show();
     }
 
 }

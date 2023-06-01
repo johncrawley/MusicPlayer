@@ -74,8 +74,10 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
     }
 
 
+    @SuppressWarnings("notifyDataSetChanged")
     public void setItems(List<String> albumNames){
         this.items = albumNames;
+        notifyDataSetChanged();
     }
 
 

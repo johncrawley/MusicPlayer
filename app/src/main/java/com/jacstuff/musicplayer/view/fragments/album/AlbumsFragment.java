@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -62,11 +63,9 @@ public class AlbumsFragment extends Fragment {
     }
 
 
-    @SuppressLint("NotifyDataSetChanged")
     private void loadAlbums(Bundle bundle){
         ArrayList<String> albumNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ALBUM_UPDATES);
         listAdapter.setItems(albumNames);
-        listAdapter.notifyDataSetChanged();
         listAdapter.deselectCurrentlySelectedItem();
         listAdapter.resetSelections();
     }
@@ -87,6 +86,7 @@ public class AlbumsFragment extends Fragment {
     private void loadTracksFromAlbum(String albumName){
         getMainActivity().loadTracksFromAlbum(albumName);
         sendMessage(this, PlaylistsFragment.NOTIFY_TO_DESELECT_ITEMS);
+        toastLoaded();
     }
 
 
@@ -100,5 +100,11 @@ public class AlbumsFragment extends Fragment {
     private MainActivity getMainActivity(){
         return (MainActivity)getActivity();
     }
+
+
+    private void toastLoaded(){
+        Toast.makeText(getContext(), getString(R.string.toast_album_tracks_loaded), Toast.LENGTH_SHORT).show();
+    }
+
 
 }

@@ -4,11 +4,11 @@ import static com.jacstuff.musicplayer.MainActivity.SEND_ARTISTS_TO_FRAGMENT;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -53,17 +53,15 @@ public class ArtistsFragment extends Fragment {
 
 
     private void setupFragmentListener(){
-        setListener(this, SEND_ARTISTS_TO_FRAGMENT, this::loadArtists);
+        setListener(this, SEND_ARTISTS_TO_FRAGMENT, this::populateArtistsList);
         setListener(this, NOTIFY_TO_LOAD_ARTIST, (bundle) -> listAdapter.selectLongClickItem());
         setListener(this, NOTIFY_TO_DESELECT_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
     }
 
 
-    @SuppressLint("NotifyDataSetChanged")
-    private void loadArtists(Bundle bundle){
+    private void populateArtistsList(Bundle bundle){
         ArrayList<String> artistNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ARTIST_UPDATES);
         listAdapter.setItems(artistNames);
-        listAdapter.notifyDataSetChanged();
     }
 
 
@@ -82,6 +80,7 @@ public class ArtistsFragment extends Fragment {
     private void loadTracksAndAlbumsFromArtist(String artistName){
         getMainActivity().loadTracksFromArtist(artistName);
         sendMessage(this, PlaylistsFragment.NOTIFY_TO_DESELECT_ITEMS);
+        toastLoaded();
     }
 
 
@@ -95,4 +94,10 @@ public class ArtistsFragment extends Fragment {
     private MainActivity getMainActivity(){
         return (MainActivity)getActivity();
     }
+
+
+    private void toastLoaded(){
+        Toast.makeText(getContext(), getString(R.string.toast_artist_tracks_loaded), Toast.LENGTH_SHORT).show();
+    }
+
 }

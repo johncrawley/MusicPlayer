@@ -41,6 +41,10 @@
     <string name="thumbnail_content_description">Next Track</string>
     <string name="default_path">Music/</string>
 
+    <string name="toast_artist_tracks_loaded">Artist Tracks Loaded</string>
+    <string name="toast_album_tracks_loaded">Album Loaded</string>
+    <string name="toast_playlist_tracks_loaded">Playlist Loaded</string>
+
     <string name="tracks_tab">Tracks</string>
     <string name="playlists_tab">Lists</string>
     <string name="artists_tab">Artists</string>
