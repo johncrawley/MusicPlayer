@@ -31,7 +31,7 @@ public class TracksFragment extends Fragment{
     private TrackListAdapter trackListAdapter;
     private int previousIndex = 0;
     private View parentView;
-    private ImageButton addTracksButton;
+    private View addTracksToPlaylistButtonOuterLayout;
     private TextView noTracksFoundTextView, playlistInfoTextView;
     public final static String NOTIFY_USER_PLAYLIST_LOADED= "notify_user_playlist_loaded";
     public final static String IS_USER_PLAYLIST_LOADED_KEY= "is_user_playlist_loaded_key";
@@ -62,12 +62,13 @@ public class TracksFragment extends Fragment{
 
     private void setVisibilityOnAddTracksToPlaylistButton(Bundle bundle){
         int visibility = bundle.getBoolean(IS_USER_PLAYLIST_LOADED_KEY) ? View.VISIBLE : View.INVISIBLE;
-        addTracksButton.setVisibility(visibility);
+        addTracksToPlaylistButtonOuterLayout.setVisibility(visibility);
     }
 
 
     private void setupAddTracksButton(View parentView){
-        addTracksButton = ButtonMaker.createImageButton(parentView, R.id.addTracksToPlaylistButton, this::addTracksToPlaylist);
+        addTracksToPlaylistButtonOuterLayout = parentView.findViewById(R.id.addTracksToPlaylistButtonOuterLayout);
+        ButtonMaker.createImageButton(parentView, R.id.addTracksToPlaylistButton, this::addTracksToPlaylist);
     }
 
 

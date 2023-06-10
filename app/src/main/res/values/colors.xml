@@ -27,6 +27,8 @@
     <color name="material_edit_text_focussed">#388E3C</color>
     <color name="material_edit_text_hover">#388E3C</color>
     <color name="material_edit_text">#2E7D32</color>
+    <color name="add_image_button_layout_background">#272727</color>
+    <color name="add_image_button_outer_layout_background">#919090</color>
 
     <color name="primary_yellow">#E8D424</color>
     <color name="text_yellow">#E8C630</color>
