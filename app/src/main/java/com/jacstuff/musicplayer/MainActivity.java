@@ -311,6 +311,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void loadAlbumOfSelectedTrack(){
+        mediaPlayerService.loadAlbumOTrack(selectedTrack);
+    }
+
+
     public List<Track> getTrackList(){
         if(mediaPlayerService == null){
             return Collections.emptyList();

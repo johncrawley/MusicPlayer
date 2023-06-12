@@ -67,6 +67,7 @@ public class MediaPlayerService extends Service{
         mainActivity.updateArtistsList(playlistManager.getArtistNames());
     }
 
+
     public MediaPlayerHelper getMediaPlayerHelper(){
         return mediaPlayerHelper;
     }
@@ -149,6 +150,8 @@ public class MediaPlayerService extends Service{
     public void removeTrackFromCurrentPlaylist(Track track){ playlistHelper.removeTrackFromCurrentPlaylist(track);}
 
     public PlaylistManager getPlaylistManager(){return playlistHelper.getPlaylistManager();}
+
+    public void loadAlbumOTrack(Track track){ playlistHelper.loadAlbumOfTrack(track);}
 
 
     public void updateViewTrackList(PlaylistManager playlistManager) {

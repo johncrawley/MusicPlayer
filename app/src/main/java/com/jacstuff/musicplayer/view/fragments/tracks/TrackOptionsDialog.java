@@ -2,6 +2,8 @@ package com.jacstuff.musicplayer.view.fragments.tracks;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +14,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-
-import java.util.function.Supplier;
+import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 
 public class TrackOptionsDialog extends DialogFragment {
@@ -26,7 +27,6 @@ public class TrackOptionsDialog extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_dialog_track_options, container, false);
     }
 
@@ -39,11 +39,26 @@ public class TrackOptionsDialog extends DialogFragment {
 
 
     private void setupButtons(View parentView){
-        setupButton(parentView, R.id.enqueueTrackButton, this::enqueueCurrentTrack);
-        Button addTrackToPlaylistButton = setupButton(parentView, R.id.addTrackToPlaylistButton, this::showAddTrackToPlaylistDialog);
-        setupVisibilityForUserPlaylistsExist(addTrackToPlaylistButton);
-        Button removeTrackButton = setupButton(parentView, R.id.removeFromPlaylistButton, this::removeSelectedTrackFromPlaylist);
-        setupVisibilityForUserPlaylistLoaded(removeTrackButton);
+        ButtonMaker.createButton(parentView, R.id.enqueueTrackButton, this::enqueueCurrentTrack);
+        ButtonMaker.createButton(parentView, R.id.loadAlbumButton, this::loadRelatedAlbum);
+        setupAddTrackToPlaylistButton(parentView);
+        setupRemoveTrackButton(parentView);
+    }
+
+
+    private void setupAddTrackToPlaylistButton(View parentView){
+        Button addTrackToPlaylistButton =  ButtonMaker.createButton(parentView, R.id.addTrackToPlaylistButton, this::showAddTrackToPlaylistDialog);
+        if(addTrackToPlaylistButton != null) {
+            setupVisibilityForUserPlaylistsExist(addTrackToPlaylistButton);
+        }
+    }
+
+
+    private void setupRemoveTrackButton(View parentView){
+        Button removeTrackButton =  ButtonMaker.createButton(parentView, R.id.removeFromPlaylistButton, this::removeSelectedTrackFromPlaylist);
+        if(removeTrackButton != null) {
+            setupVisibilityForUserPlaylistLoaded(removeTrackButton);
+        }
     }
 
 
@@ -63,19 +78,21 @@ public class TrackOptionsDialog extends DialogFragment {
     }
 
 
-    private Button setupButton(View parentView, int id, Runnable runnable){
-        Button button = parentView.findViewById(id);
-        button.setOnClickListener((View v)-> runnable.run());
-        return button;
-    }
-
-
     private void enqueueCurrentTrack(){
         MainActivity mainActivity = getMainActivity();
         if(mainActivity != null){
             mainActivity.addSelectedTrackToQueue();
         }
-        dismiss();
+        dismissAfterDelay();
+    }
+
+
+    private void loadRelatedAlbum(){
+        MainActivity mainActivity = getMainActivity();
+        if(mainActivity != null) {
+            mainActivity.loadAlbumOfSelectedTrack();
+        }
+        dismissAfterDelay();
     }
 
 
@@ -84,7 +101,7 @@ public class TrackOptionsDialog extends DialogFragment {
         if(mainActivity != null){
             mainActivity.showAddTrackToPlaylistView();
         }
-        dismiss();
+        dismissAfterDelay();
     }
 
 
@@ -93,7 +110,7 @@ public class TrackOptionsDialog extends DialogFragment {
         if(mainActivity != null){
             mainActivity.removeSelectedTrackFromPlaylist();
         }
-        dismiss();
+        dismissAfterDelay();
     }
 
 
@@ -102,4 +119,7 @@ public class TrackOptionsDialog extends DialogFragment {
     }
 
 
+    private void dismissAfterDelay(){
+        new Handler(Looper.getMainLooper()).postDelayed(this::dismiss, 200);
+    }
 }

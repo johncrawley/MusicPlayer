@@ -131,6 +131,10 @@ public class PlaylistHelper {
         }
     }
 
+    public void loadAlbumOfTrack(Track track){
+        loadTracksFromAlbum(track.getAlbum());
+    }
+
 
     public PlaylistManager getPlaylistManager(){
         return playlistManager;
