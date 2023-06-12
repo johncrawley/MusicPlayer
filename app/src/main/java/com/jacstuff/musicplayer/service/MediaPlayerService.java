@@ -207,8 +207,13 @@ public class MediaPlayerService extends Service{
     }
 
 
+    public void stopPlayingInOneMinute(){
+        mediaPlayerHelper.stopPlayingInThreeMinutes(1);
+    }
+
+
     public void stopPlayingInThreeMinutes(){
-        mediaPlayerHelper.stopPlayingInThreeMinutes();
+        mediaPlayerHelper.stopPlayingInThreeMinutes(3);
     }
 
 

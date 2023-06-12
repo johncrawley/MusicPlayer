@@ -41,6 +41,7 @@ public class StopOptionsFragment extends DialogFragment {
     private void setupButtons(View parentView){
         setupButton(parentView, R.id.stopNowButton, this::stopNow);
         setupButton(parentView, R.id.stopAfterCurrentTrackButton, this::stopWhenCurrentTrackEnds);
+        setupButton(parentView, R.id.stopInOneMinuteButton, this::stopInOneMinute);
         setupButton(parentView, R.id.stopInThreeMinutesButton, this::stopInThreeMinutes);
     }
 
@@ -68,6 +69,12 @@ public class StopOptionsFragment extends DialogFragment {
 
     private void stopInThreeMinutes(){
         runMediaPlayerServiceCall(MediaPlayerService::stopPlayingInThreeMinutes);
+        dismiss();
+    }
+
+
+    private void stopInOneMinute(){
+        runMediaPlayerServiceCall(MediaPlayerService::stopPlayingInOneMinute);
         dismiss();
     }
 

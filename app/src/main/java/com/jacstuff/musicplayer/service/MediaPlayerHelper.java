@@ -139,8 +139,8 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    public void stopPlayingInThreeMinutes(){
-        stopTrackFuture = executorService.schedule( this::stopAndResetTime, 3, TimeUnit.SECONDS);
+    public void stopPlayingInThreeMinutes(int numberOfMinutes){
+        stopTrackFuture = executorService.schedule( this::stopAndResetTime, numberOfMinutes, TimeUnit.MINUTES);
     }
 
 

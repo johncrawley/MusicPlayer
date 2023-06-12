@@ -83,6 +83,7 @@
     <string name="button_stop_now">Stop Now</string>
     <string name="button_stop_after_current_track">Stop After Current Track</string>
     <string name="button_stop_in_three_minutes">Stop In Three Minutes</string>
+    <string name="button_stop_in_one_minute">Stop In One Minute</string>
 
     <string name="delete_confirm_dialog_title">Delete Playlist</string>
     <string name="delete_confirm_dialog_text">Are you sure you want to delete Playlist %1$s?</string>
