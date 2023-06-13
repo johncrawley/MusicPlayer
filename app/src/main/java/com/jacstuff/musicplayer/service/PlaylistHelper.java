@@ -106,8 +106,11 @@ public class PlaylistHelper {
 
 
     public void loadTracksFromAlbum(String albumName){
-        playlistManager.loadTracksFromAlbum(albumName);
-        mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
+        boolean isAlbumLoaded = playlistManager.loadTracksFromAlbum(albumName);
+        if(isAlbumLoaded){
+            mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
+            mediaPlayerService.notifyViewToDeselectPlaylistAndArtistTabs();
+        }
     }
 
 
@@ -132,9 +135,13 @@ public class PlaylistHelper {
     }
 
     public void loadAlbumOfTrack(Track track){
+        log("Entered loadAlbumOfTrack() track title, albumName: " + track.getTitle() + " -- " + track.getAlbum() + " track path: " + track.getPathname());
         loadTracksFromAlbum(track.getAlbum());
     }
 
+    private void log(String msg){
+        System.out.println("^^^ PlaylistHelper: " + msg);
+    }
 
     public PlaylistManager getPlaylistManager(){
         return playlistManager;

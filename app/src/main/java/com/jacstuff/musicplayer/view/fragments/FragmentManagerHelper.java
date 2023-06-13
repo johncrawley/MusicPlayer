@@ -32,9 +32,7 @@ public class FragmentManagerHelper {
 
 
     public static void setListener(Fragment fragment, String key, Consumer<Bundle> consumer){
-        fragment.getParentFragmentManager().setFragmentResultListener(key, fragment, (requestKey, bundle) -> {
-            consumer.accept(bundle);
-        });
+        fragment.getParentFragmentManager().setFragmentResultListener(key, fragment, (requestKey, bundle) -> consumer.accept(bundle));
     }
 
 

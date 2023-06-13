@@ -28,6 +28,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
+import com.jacstuff.musicplayer.view.fragments.artist.ArtistsFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.view.player.PlayerViewHelper;
@@ -420,6 +421,17 @@ public class MainActivity extends AppCompatActivity {
                 updateViews(playlist.getTracks(), currentTrack);
             }
         });
+    }
+
+
+    public void deselectItemsInPlaylistAndArtistTabs(){
+        sendFragmentMessage(PlaylistsFragment.NOTIFY_TO_DESELECT_ITEMS);
+        sendFragmentMessage(ArtistsFragment.NOTIFY_TO_DESELECT_ITEMS);
+    }
+
+
+    private void sendFragmentMessage(String messageKey){
+        getSupportFragmentManager().setFragmentResult(messageKey, new Bundle());
     }
 
 

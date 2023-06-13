@@ -59,9 +59,44 @@ public class TracksFragment extends Fragment{
     }
 
 
+    public void updateTracksList(Playlist playlist, int currentTrackIndex){
+        List<Track> updatedTracks = playlist.getTracks();
+        updatePlaylistInfoView(playlist);
+        refreshTrackList(updatedTracks);
+        setVisibilityOnNoTracksFoundText(updatedTracks);
+        setVisibilityOnAddTracksToPlaylistButton(playlist.isUserPlaylist());
+        previousIndex = 0;
+        if(currentTrackIndex < 0){
+            setupRecyclerView(updatedTracks);
+            return;
+        }
+        scrollToAndSelectListPosition(currentTrackIndex);
+    }
+
+
+    @SuppressWarnings("notifyDataSetChanged")
+    public void refreshTrackList(List<Track> tracks){
+        trackListAdapter.setItems(tracks);
+        trackListAdapter.notifyDataSetChanged();
+        setVisibilityOnNoTracksFoundText(tracks);
+    }
+
+
+    private void setupRecyclerView(List<Track> tracks){
+        if(this.parentView == null ||tracks == null){
+            return;
+        }
+        trackListAdapter = new TrackListAdapter(tracks, this::selectTrack, this::createTrackOptionsFragment);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(trackListAdapter);
+    }
+
+
     private void setVisibilityOnAddTracksToPlaylistButton(Bundle bundle){
         int visibility = bundle.getBoolean(IS_USER_PLAYLIST_LOADED_KEY) ? View.VISIBLE : View.INVISIBLE;
         addTracksToPlaylistButtonOuterLayout.setVisibility(visibility);
+        setVisibilityOnAddTracksToPlaylistButton(bundle.getBoolean(IS_USER_PLAYLIST_LOADED_KEY) );
     }
 
 
@@ -109,28 +144,6 @@ public class TracksFragment extends Fragment{
     }
 
 
-    public void updateTracksList(Playlist playlist, int currentTrackIndex){
-        List<Track> updatedTracks = playlist.getTracks();
-        updatePlaylistInfoView(playlist);
-        refreshTrackList(updatedTracks);
-        previousIndex = 0;
-        if(currentTrackIndex < 0){
-            setupRecyclerView(updatedTracks);
-            return;
-        }
-        scrollToAndSelectListPosition(currentTrackIndex);
-        setVisibilityOnNoTracksFoundText(updatedTracks);
-    }
-
-
-    @SuppressWarnings("notifyDataSetChanged")
-    public void refreshTrackList(List<Track> tracks){
-        trackListAdapter.setItems(tracks);
-        trackListAdapter.notifyDataSetChanged();
-        setVisibilityOnNoTracksFoundText(tracks);
-    }
-
-
     private void setVisibilityOnNoTracksFoundText(List<Track> tracks){
         if(tracks == null){
             return;
@@ -139,15 +152,15 @@ public class TracksFragment extends Fragment{
         noTracksFoundTextView.setVisibility(tracks.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
+    private void log(String msg){
+        System.out.println("^^^ TracksFragment: " + msg);
+    }
 
-    public void setupRecyclerView(List<Track> tracks){
-        if(this.parentView == null ||tracks == null){
-            return;
-        }
-        trackListAdapter = new TrackListAdapter(tracks, this::selectTrack, this::createTrackOptionsFragment);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(trackListAdapter);
+
+    private void setVisibilityOnAddTracksToPlaylistButton(boolean isUserPlaylistLoaded){
+        log("setVisibilityOnAddTracksToPlaylistButton() is userPlaylist? " + isUserPlaylistLoaded);
+        int visibility = isUserPlaylistLoaded? View.VISIBLE : View.INVISIBLE;
+        addTracksToPlaylistButtonOuterLayout.setVisibility(visibility);
     }
 
 

@@ -12,12 +12,9 @@ import java.util.Set;
 
 public interface PlaylistManager {
 
-    boolean hasTracksQueued();
     boolean isUserPlaylistLoaded();
     boolean hasAnyTracks();
     int getNumberOfTracks();
-    Set<String> getArtists();
-    Map<String, Album> getAlbums();
     ArrayList<String> getAlbumNames();
     ArrayList<String> getArtistNames();
 
@@ -31,11 +28,10 @@ public interface PlaylistManager {
     void addTracksFromStorage(MediaPlayerService mediaPlayerService);
     void addTrackToQueue(Track track);
 
-    List<Playlist> getAllPlaylists();
     List<Playlist> getAllUserPlaylists();
     void loadPlaylist(Playlist playlist);
     void loadAllTracksPlaylist();
-    void loadTracksFromAlbum(String albumName);
+    boolean loadTracksFromAlbum(String albumName);
     void loadTracksFromArtist(String artistName);
 
     void addTrackToCurrentPlaylist(Track track, PlaylistViewNotifier playlistViewNotifier);
@@ -53,4 +49,8 @@ public interface PlaylistManager {
     void onlyDisplayMainArtists(boolean shouldOnlyDisplayMainArtists);
     String getTrackNameAt(int position);
     void deleteAll();
+    boolean hasTracksQueued();
+    Set<String> getArtists();
+    Map<String, Album> getAlbums();
+    List<Playlist> getAllPlaylists();
 }

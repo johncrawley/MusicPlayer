@@ -151,7 +151,9 @@ public class MediaPlayerService extends Service{
 
     public PlaylistManager getPlaylistManager(){return playlistHelper.getPlaylistManager();}
 
-    public void loadAlbumOTrack(Track track){ playlistHelper.loadAlbumOfTrack(track);}
+    public void loadAlbumOTrack(Track track){
+        playlistHelper.loadAlbumOfTrack(track);
+    }
 
 
     public void updateViewTrackList(PlaylistManager playlistManager) {
@@ -163,6 +165,11 @@ public class MediaPlayerService extends Service{
 
     public void updateViewTrackListAndDeselectList(PlaylistManager playlistManager){
         mainActivity.updateTracksList(playlistManager.getCurrentPlaylist(), mediaPlayerHelper.getCurrentTrack(),-1);
+    }
+
+
+    public void notifyViewToDeselectPlaylistAndArtistTabs(){
+        mainActivity.deselectItemsInPlaylistAndArtistTabs();
     }
 
 

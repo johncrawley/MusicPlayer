@@ -364,14 +364,14 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
-    public void loadTracksFromAlbum(String albumName) {
+    public boolean loadTracksFromAlbum(String albumName) {
         Map <String, Album> albums = trackLoader.getAlbums();
         if(albums == null){
-            return;
+            return false;
         }
         Album savedAlbum = albums.get(albumName);
         if(savedAlbum == null){
-            return;
+            return false;
         }
         tracks = getSortedTracks(savedAlbum.getAllTracks());
         someAlbumPlaylist.setTracks(getSortedTracks(savedAlbum.getAllTracks()));
@@ -379,6 +379,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         assignIndexesToTracks();
         setupQueue();
         currentPlaylist = someAlbumPlaylist;
+        return true;
     }
 
 

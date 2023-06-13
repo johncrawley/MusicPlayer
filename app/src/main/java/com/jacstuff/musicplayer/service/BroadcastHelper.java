@@ -39,11 +39,9 @@ public class BroadcastHelper {
     }
 
 
-
     public void notifyViewOfConnectingStatus(){
         sendBroadcast(ACTION_NOTIFY_VIEW_OF_CONNECTING);
     }
-
 
 
     private void setupBroadcastReceivers(){
