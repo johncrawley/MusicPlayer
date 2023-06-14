@@ -168,6 +168,11 @@ public class MediaPlayerService extends Service{
     }
 
 
+    public void notifyViewOfAlbumNotLoaded(String albumName){
+        mainActivity.notifyAlbumNotLoaded(albumName);
+    }
+
+
     public void notifyViewToDeselectPlaylistAndArtistTabs(){
         mainActivity.deselectItemsInPlaylistAndArtistTabs();
     }

@@ -370,6 +370,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    private void toast(int resId, String arg){
+        runOnUiThread(()-> Toast.makeText(MainActivity.this, getString(resId, arg), Toast.LENGTH_SHORT).show());
+    }
+
+
     private void toast(int resId){
         toast(getString(resId));
     }
@@ -421,6 +427,11 @@ public class MainActivity extends AppCompatActivity {
                 updateViews(playlist.getTracks(), currentTrack);
             }
         });
+    }
+
+
+    public void notifyAlbumNotLoaded(String albumName){
+        toast(R.string.unable_to_load_album_toast_message, albumName);
     }
 
 

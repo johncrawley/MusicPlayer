@@ -110,7 +110,9 @@ public class PlaylistHelper {
         if(isAlbumLoaded){
             mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
             mediaPlayerService.notifyViewToDeselectPlaylistAndArtistTabs();
+            return;
         }
+        mediaPlayerService.notifyViewOfAlbumNotLoaded(albumName);
     }
 
 

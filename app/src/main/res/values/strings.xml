@@ -92,6 +92,7 @@
 
 
     <string name="add_playlist_already_exists_error">This name is already in use</string>
+    <string name="unable_to_load_album_toast_message">Unable to find album: %1$s</string>
     <string name="create_playlist_button_text">Create</string>
     <string name="status_ready">Ready</string>
     <string name="status_error">Error - Unable To Play</string>
