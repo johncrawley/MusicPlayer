@@ -8,6 +8,7 @@ import com.jacstuff.musicplayer.service.MediaPlayerService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public interface PlaylistManager {
@@ -20,7 +21,7 @@ public interface PlaylistManager {
 
     Playlist getCurrentPlaylist();
     Track getNextTrack();
-    Track getPreviousTrack();
+    Optional<Track> getPreviousTrack();
     Track getNextRandomUnPlayedTrack();
     Track selectTrack(int index);
 

@@ -20,9 +20,10 @@ public class TrackHistory {
         resetCurrentIndex();
     }
 
+
     public Track getPreviousTrack(){
         currentHistoryIndex = Math.max(0, currentHistoryIndex-1);
-        return trackHistory.get(currentHistoryIndex);
+        return trackHistory.isEmpty() ? null : trackHistory.get(currentHistoryIndex);
     }
 
 

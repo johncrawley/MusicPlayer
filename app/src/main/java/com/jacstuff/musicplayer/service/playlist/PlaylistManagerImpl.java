@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -463,13 +464,16 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
-    public Track getPreviousTrack(){
-        return isShuffleEnabled ? getPreviousTrackFromHistory() : getPreviousTrackOnList();
+    public Optional<Track> getPreviousTrack(){
+        return Optional.ofNullable(isShuffleEnabled ? getPreviousTrackFromHistory() : getPreviousTrackOnList());
     }
 
 
     private Track getPreviousTrackFromHistory(){
         Track track = trackHistory.getPreviousTrack();
+        if(track == null){
+            return null;
+        }
         currentIndex = track.getIndex();
         return track;
     }

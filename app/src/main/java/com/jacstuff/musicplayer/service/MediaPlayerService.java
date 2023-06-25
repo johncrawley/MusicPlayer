@@ -202,7 +202,7 @@ public class MediaPlayerService extends Service{
 
 
     public void loadPreviousTrack(){
-        mediaPlayerHelper.loadPreviousTrack(getPlaylistManager().getPreviousTrack());
+        getPlaylistManager().getPreviousTrack().ifPresent(mediaPlayerHelper::loadPreviousTrack);
     }
 
 
