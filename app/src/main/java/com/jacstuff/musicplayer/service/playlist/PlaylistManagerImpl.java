@@ -338,14 +338,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    private List<Track> getSortedTracks(List<Track> list){
-        if(list == null){
-            return Collections.emptyList();
-        }
-        return list.stream().sorted(Comparator.comparing(Track::getOrderedString)).collect(Collectors.toList());
-    }
-
-
     public void loadTracksFromArtist(String artistName){
         Map <String, Artist> artists = trackLoader.getArtists();
         if(artists == null){
@@ -374,8 +366,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(savedAlbum == null){
             return false;
         }
-        tracks = getSortedTracks(savedAlbum.getAllTracks());
-        someAlbumPlaylist.setTracks(getSortedTracks(savedAlbum.getAllTracks()));
+        tracks = getSortedAlbumTracks(savedAlbum.getAllTracks());
+        someAlbumPlaylist.setTracks(getSortedAlbumTracks(savedAlbum.getAllTracks()));
         someAlbumPlaylist.setName(albumName);
         assignIndexesToTracks();
         setupQueue();
@@ -394,9 +386,24 @@ public class PlaylistManagerImpl implements PlaylistManager {
     @Override
     public void addTracksFromAlbumToCurrentPlaylist(String albumName, PlaylistViewNotifier playlistViewNotifier) {
         List<Track> tracks = trackLoader.getTracksForAlbum(albumName);
-        addTracksToCurrentPlaylist(getSortedTracks(tracks), playlistViewNotifier);
+        addTracksToCurrentPlaylist(getSortedAlbumTracks(tracks), playlistViewNotifier);
     }
 
+
+    private List<Track> getSortedTracks(List<Track> list){
+        if(list == null){
+            return Collections.emptyList();
+        }
+        return list.stream().sorted(Comparator.comparing(Track::getOrderedString)).collect(Collectors.toList());
+    }
+
+
+    private List<Track> getSortedAlbumTracks(List<Track> albumTracks){
+        if(albumTracks == null){
+            return Collections.emptyList();
+        }
+        return albumTracks.stream().sorted(Comparator.comparing(Track::getTrackNumber)).collect(Collectors.toList());
+    }
 
     private void setupQueue(){
         setupUnPlayedIndexes();
