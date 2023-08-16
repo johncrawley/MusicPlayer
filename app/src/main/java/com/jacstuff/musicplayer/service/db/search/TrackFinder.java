@@ -5,6 +5,7 @@ import com.jacstuff.musicplayer.service.playlist.TrackLoader;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,7 +81,13 @@ public class TrackFinder {
 
     public List<Track> createTracksListFor(String searchTerm){
         List<Track> tracks = getCachedOrDbResultsFor(searchTerm);
-        resultsMap.put(searchTerm, tracks);
+        Comparator<Track> startsWithSearchTermComparator = (t1, t2) -> {
+            int result1 = t1.getSearchString().startsWith(searchTerm) ? 1 : -1;
+            int result2 = t2.getSearchString().startsWith(searchTerm) ? 1 : -1;
+            return result2 - result1;
+        };
+        List<Track> sortedTracks = tracks.stream().sorted(startsWithSearchTermComparator).collect(Collectors.toList());
+        resultsMap.put(searchTerm, sortedTracks);
         return tracks;
     }
 
@@ -108,7 +115,7 @@ public class TrackFinder {
 
 
     public boolean isTooShortToSearch(String prefix){
-        int MINIMUM_SEARCH_LENGTH = 3;
+        int MINIMUM_SEARCH_LENGTH = 1;
         return prefix.length() < MINIMUM_SEARCH_LENGTH;
     }
 }

@@ -2,7 +2,8 @@ package com.jacstuff.musicplayer.service.db.track;
 
 public class Track {
 
-    private  String pathname, title, artist, album, disc, genre;
+    private final String pathname, title, artist, album, genre;
+    private String disc;
     private String orderedStr;
     private String searchStr;
     private final long id, trackNumber;
