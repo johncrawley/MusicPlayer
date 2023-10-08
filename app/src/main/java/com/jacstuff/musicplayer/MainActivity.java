@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPostNotificationPermission();
+            requestPermissions(new String[]{Manifest.permission.READ_MEDIA_AUDIO}, 3);
         }
     }
 
@@ -368,7 +369,6 @@ public class MainActivity extends AppCompatActivity {
     private void toast(String msg){
         runOnUiThread(()-> Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show());
     }
-
 
 
     private void toast(int resId, String arg){

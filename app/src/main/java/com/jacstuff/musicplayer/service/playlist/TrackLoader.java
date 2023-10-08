@@ -114,6 +114,12 @@ public class TrackLoader {
     }
 
 
+    private String getMusicPathname(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString("tracksPathnameString", "/Music");
+    }
+
+
     public List<Track> getTracksForAlbum(String albumName){
         Album album =  albums.getOrDefault(albumName, new Album(-1, "null album!"));
         if(album == null){
@@ -304,7 +310,7 @@ public class TrackLoader {
 
 
     private boolean isContainingCorrectPath(String path){
-        String expectedPath = context.getString(R.string.default_path);
+        String expectedPath = getMusicPathname();
         return path.contains(expectedPath);
     }
 

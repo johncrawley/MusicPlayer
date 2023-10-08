@@ -27,11 +27,13 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+
     public static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
             setupNumberPreference();
+            setupTracksPathnamePreference();
         }
 
         private void setupNumberPreference(){
@@ -44,14 +46,23 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
-    }
+        private void setupTracksPathnamePreference(){
+            androidx.preference.EditTextPreference editTextPreference = getPreferenceManager().findPreference("tracksPathnameString");
+            assert editTextPreference != null;
+            editTextPreference.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_TEXT);
+                int maxLengthOfInput = 15;
+                editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLengthOfInput)});
+            });
+        }
 
+    }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            super.onBackPressed();
+            getOnBackPressedDispatcher().onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);

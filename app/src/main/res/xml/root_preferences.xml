@@ -21,6 +21,13 @@
             app:defaultValue="1"
             app:useSimpleSummaryProvider="true" />
 
+        <EditTextPreference
+            app:key="tracksPathnameString"
+            app:title="@string/include_music_with_pathname"
+            app:summary="@string/include_music_with_pathname_summary"
+            app:defaultValue="/Music"
+            app:useSimpleSummaryProvider="true" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>
