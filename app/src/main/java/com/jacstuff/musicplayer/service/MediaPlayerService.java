@@ -89,7 +89,7 @@ public class MediaPlayerService extends Service{
 
 
     public void setCurrentTrackAndUpdatePlayerViewVisibility(){
-        if(mediaPlayerHelper.getCurrentTrack() != null){
+        if(!isCurrentTrackEmpty()){
             mainActivity.showPlayerViews();
             return;
         }
@@ -220,6 +220,9 @@ public class MediaPlayerService extends Service{
     public void enableStopAfterTrackFinishes(){
         mediaPlayerHelper.enabledStopAfterTrackFinishes();
     }
+
+
+    public boolean isCurrentTrackEmpty(){ return mediaPlayerHelper.getCurrentTrack() == null;}
 
 
     public void stopPlayingInOneMinute(){

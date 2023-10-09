@@ -110,19 +110,12 @@
     <string name="theme_header">Theme</string>
     <string name="lists_header">Lists</string>
 
-    <!-- Messages Preferences -->
+    <!-- Preferences -->
     <string name="theme_title">Theme</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
     <string name="min_number_of_tracks_for_main_artist_title">Min. Tracks To Show Artist</string>
     <string name="min_number_of_tracks_for_main_artist_summary">The minimum number of tracks belonging to an artist for that artist to appear in the artists list.</string>
     <string name="include_music_with_pathname">Load Tracks with Pathname</string>
     <string name="include_music_with_pathname_summary">Only tracks that include the given string will be shown in the All Tracks list.</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 
 </resources>

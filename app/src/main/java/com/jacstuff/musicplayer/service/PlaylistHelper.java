@@ -89,10 +89,11 @@ public class PlaylistHelper {
         }
         isScanningForTracks.set(true);
         executorService.execute(()->{
-            playlistManager.addTracksFromStorage( mediaPlayerService);
+            playlistManager.addTracksFromStorage(mediaPlayerService);
             mediaPlayerService.updateListViews(playlistManager);
             initTrackFinder();
             trackFinder.initCache();
+            mediaPlayerService.setCurrentTrackAndUpdatePlayerViewVisibility();
             isScanningForTracks.set(false);
         });
     }
