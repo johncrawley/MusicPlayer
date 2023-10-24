@@ -17,7 +17,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,7 +26,6 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
-import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.artist.ArtistsFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
@@ -148,14 +146,6 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean isUserPlaylistLoaded(){
         return mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
-    }
-
-
-    public void deselectCurrentTrackAfterDelay(){
-        // we need to give the recycler view in tracks fragment time to recreate its layout
-        new Handler(Looper.getMainLooper())
-                .postDelayed(()->tracksFragment.deselectCurrentItemAndNotify(),
-                        300);
     }
 
 
@@ -381,15 +371,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void scrollToAndSelectPosition(int index){
-       runOnUiThread(()-> {
-           if(tracksFragment != null){
-               tracksFragment.scrollToAndSelectListPosition(index);
-           }
-       });
-    }
-
-
     public void deselectCurrentTrack(){
         tracksFragment.deselectCurrentItem();
     }
@@ -549,21 +530,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void scrollToTrack(Track track){
-        PlaylistManager playlistManager = mediaPlayerService.getPlaylistManager();
-        if(playlistManager == null || tracksFragment == null){
-            return;
-        }
-       if (playlistManager.isUserPlaylistLoaded()) {
-           int index = playlistManager.getCurrentIndexOf(track);
-           if (index != -1) {
-               tracksFragment.scrollToAndSelectListPosition(index);
-           } else {
-               deselectCurrentTrackAfterDelay();
-           }
-       } else {
-           tracksFragment.scrollToAndSelectListPosition(track.getIndex());
-       }
+    public void scrollToAndSelectPosition(int index, boolean isSearchResult){
+        runOnUiThread(()-> {
+            if(tracksFragment != null){
+                tracksFragment.scrollToAndSelectListPosition(index, isSearchResult);
+            }
+        });
     }
 
 

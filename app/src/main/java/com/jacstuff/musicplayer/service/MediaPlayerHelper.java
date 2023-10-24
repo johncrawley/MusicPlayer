@@ -119,6 +119,17 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
+    void selectAndPlayTrack(Track track){
+        cancelScheduledStoppageOfTrack();
+        currentTrack = track;
+        assignAlbumArt(track);
+        if(hasEncounteredError){
+            return;
+        }
+        updateViewsEnsurePlayerStoppedAndSchedulePlay();
+    }
+
+
     private void handleNullPathname(){
         if(currentTrack.getPathname() == null){
             mediaPlayerService.setBlankTrackInfoOnMainView();
@@ -158,15 +169,18 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
+    //NB try-with-resources requires API 29 (version code Q), and min is currently API 26
     private void assignAlbumArt(Track track){
-        try(MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever()){
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+        try{
             mediaMetadataRetriever.setDataSource(track.getPathname());
             currentAlbumArt = retrieveAlbumArt(mediaMetadataRetriever);
             mediaPlayerService.setAlbumArtOnMainView(currentAlbumArt);
-        }catch (IOException e){
-            e.printStackTrace();
+            mediaMetadataRetriever.close();
         }
-        catch(IllegalArgumentException e){
+        catch(IOException e){
+            e.printStackTrace();
+        } catch(IllegalArgumentException e){
             hasEncounteredError = true;
             mediaPlayerService.notifyMainViewThatFileDoesNotExist(track);
         }
@@ -254,18 +268,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
             stopTrackFuture.cancel(false);
         }
     }
-
-
-    void selectAndPlayTrack(Track track){
-        cancelScheduledStoppageOfTrack();
-        currentTrack = track;
-        assignAlbumArt(track);
-        if(hasEncounteredError){
-            return;
-        }
-        updateViewsEnsurePlayerStoppedAndSchedulePlay();
-    }
-
 
 
     void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){

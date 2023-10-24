@@ -257,12 +257,9 @@ public class PlayerViewHelper {
     }
 
 
-
     public void setBlankTrackInfo(){
         mainActivity.runOnUiThread(()-> trackTitle.setText(""));
     }
-
-
 
 
     public void hideTrackSeekBar(){

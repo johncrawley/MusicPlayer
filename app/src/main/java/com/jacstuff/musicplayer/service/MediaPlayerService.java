@@ -206,13 +206,23 @@ public class MediaPlayerService extends Service{
     }
 
 
-    void scrollToPositionOf(Track track){
+    public void scrollToPositionOf(Track track, boolean isSearchResult){
         int trackIndexOnCurrentPlaylist = getPlaylistManager().getCurrentIndexOf(track);
         if(trackIndexOnCurrentPlaylist == - 1){
             mainActivity.deselectCurrentTrack();
         }
         else {
-            mainActivity.scrollToAndSelectPosition(trackIndexOnCurrentPlaylist);
+            mainActivity.scrollToAndSelectPosition(trackIndexOnCurrentPlaylist, isSearchResult);
+        }
+    }
+
+    public void scrollToPositionOf(Track track){
+        int trackIndexOnCurrentPlaylist = getPlaylistManager().getCurrentIndexOf(track);
+        if(trackIndexOnCurrentPlaylist == - 1){
+            mainActivity.deselectCurrentTrack();
+        }
+        else {
+            mainActivity.scrollToAndSelectPosition(trackIndexOnCurrentPlaylist, false);
         }
     }
 

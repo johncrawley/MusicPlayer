@@ -34,6 +34,7 @@ public class TracksFragment extends Fragment{
     private TextView noTracksFoundTextView, playlistInfoTextView;
     public final static String NOTIFY_USER_PLAYLIST_LOADED= "notify_user_playlist_loaded";
     public final static String IS_USER_PLAYLIST_LOADED_KEY= "is_user_playlist_loaded_key";
+    private final int SCROLL_OFFSET = 4;
 
     public TracksFragment() {
         // Required empty public constructor
@@ -121,13 +122,6 @@ public class TracksFragment extends Fragment{
     }
 
 
-    public void deselectCurrentItemAndNotify(){
-        if(trackListAdapter != null){
-            trackListAdapter.deselectCurrentlySelectedItemAndNotify();
-        }
-    }
-
-
     private MainActivity getMainActivity(){
         return (MainActivity)getActivity();
     }
@@ -152,13 +146,8 @@ public class TracksFragment extends Fragment{
         noTracksFoundTextView.setVisibility(tracks.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
-    private void log(String msg){
-        System.out.println("^^^ TracksFragment: " + msg);
-    }
-
 
     private void setVisibilityOnAddTracksToPlaylistButton(boolean isUserPlaylistLoaded){
-        log("setVisibilityOnAddTracksToPlaylistButton() is userPlaylist? " + isUserPlaylistLoaded);
         int visibility = isUserPlaylistLoaded? View.VISIBLE : View.INVISIBLE;
         addTracksToPlaylistButtonOuterLayout.setVisibility(visibility);
     }
@@ -194,32 +183,38 @@ public class TracksFragment extends Fragment{
 
 
     public void scrollToAndSelectListPosition(int index){
+        scrollToAndSelectListPosition(index, false);
+    }
+
+
+    public void scrollToAndSelectListPosition(int index, boolean isSearchResult){
         if(trackListAdapter == null){
             return;
         }
         trackListAdapter.selectItemAt(index);
         //could use: smoothScrollToPosition(calculatedScrollIndex)
         // but it would take too long for large list
-        recyclerView.scrollToPosition(calculateIndexWithOffset(index));
+        recyclerView.scrollToPosition(calculateIndexWithOffset(index, isSearchResult));
     }
 
 
-    private int calculateIndexWithOffset(int index){
-        int indexWithOffset = getItemScrollOffset(index);
-        if ( indexWithOffset > trackListAdapter.getItemCount() || indexWithOffset < 0) {
-            indexWithOffset = index;
-        }
+    private int calculateIndexWithOffset(int index, boolean isSearchResult){
+        int offsetIndex = isSearchResult && previousIndex < index ?
+                Math.max(0, index - SCROLL_OFFSET)
+                : getBoundedIndexWithOffset(index);
         previousIndex = index;
-        return indexWithOffset;
+        return offsetIndex;
     }
 
 
-    private int getItemScrollOffset(int index){
-        if(previousIndex == 0){
-            return index;
-        }
-        int offset = index > previousIndex ? 4 : -4;
-        return index + offset;
+    private int getBoundedIndexWithOffset(int index){
+        int indexWithOffset = index + getScrollOffset(index);
+        return indexWithOffset > trackListAdapter.getItemCount() || indexWithOffset < 0 ? index : indexWithOffset;
+    }
+
+
+    private int getScrollOffset(int index){
+        return previousIndex == 0 ? 0 : index > previousIndex ? SCROLL_OFFSET : -SCROLL_OFFSET;
     }
 
 }
