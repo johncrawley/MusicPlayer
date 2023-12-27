@@ -22,8 +22,8 @@ public interface PlaylistManager {
     Playlist getCurrentPlaylist();
     Track getNextTrack();
     Optional<Track> getPreviousTrack();
-    Track getNextRandomUnPlayedTrack();
     Track selectTrack(int index);
+    void assignCurrentIndexIfApplicable(Track track);
 
     void addToTrackHistory(Track track);
     void addTracksFromStorage(MediaPlayerService mediaPlayerService);

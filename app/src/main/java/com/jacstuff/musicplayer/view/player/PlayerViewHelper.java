@@ -22,7 +22,6 @@ import java.util.List;
 public class PlayerViewHelper {
 
 
-
     private TextView trackTime, trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton, pauseButton, stopButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton;
     private SeekBar trackTimeSeekBar;
@@ -50,6 +49,11 @@ public class PlayerViewHelper {
         initTrackDetailViews();
         setupTrackTimeSeekBar();
         resetElapsedTime();
+    }
+
+
+    public void playTrack() {
+        mediaPlayerService.playTrack();
     }
 
 
@@ -195,10 +199,10 @@ public class PlayerViewHelper {
 
     private void setupPlayerButtonPanelViews(){
         playerButtonPanel = mainActivity.findViewById(R.id.buttonLayout);
-        previousTrackButton = setupImageButton(R.id.previousTrackButton, mainActivity::previousTrack);
-        nextTrackButton     = setupImageButton(R.id.nextTrackButton, mainActivity::nextTrack);
-        playButton  = setupImageButton(R.id.playButton, mainActivity::playTrack);
-        pauseButton = setupImageButton(R.id.pauseButton, mainActivity::pauseTrack);
+        previousTrackButton = setupImageButton(R.id.previousTrackButton, this::previousTrack);
+        nextTrackButton     = setupImageButton(R.id.nextTrackButton, this::nextTrack);
+        playButton  = setupImageButton(R.id.playButton, this::playTrack);
+        pauseButton = setupImageButton(R.id.pauseButton, this::pauseTrack);
         stopButton  = setupImageButton(R.id.stopButton, mainActivity:: stopTrack);
         setupLongClickListenerOnStopButton();
     }

@@ -218,16 +218,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    private void updateViewsEnsurePlayerStoppedAndSchedulePlay() {
-        mediaPlayerService.updateViewsForConnecting();
-        stopRunningMediaPlayer();
-        mediaPlayerService.stopUpdatingElapsedTimeOnView();
-        elapsedTime = 0;
-        shouldNextTrackPlayAfterCurrentTrackEnds = true;
-        executorService.schedule(this::startTrack, 1, TimeUnit.MILLISECONDS);
-    }
-
-
     private Bitmap retrieveAlbumArt(MediaMetadataRetriever mediaMetadataRetriever){
         byte[] coverArt = mediaMetadataRetriever.getEmbeddedPicture();
         if (coverArt != null) {
@@ -288,12 +278,17 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     private void select(Track track){
         MediaPlayerState oldState = currentState;
-        if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
-            stop(false);
-        }
+        stopTrackIfPlayingOrPaused();
         currentTrack = track;
         if(oldState == MediaPlayerState.PLAYING){
             updateViewsEnsurePlayerStoppedAndSchedulePlay();
+        }
+    }
+
+
+    private void stopTrackIfPlayingOrPaused(){
+        if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
+            stop(false);
         }
     }
 
@@ -302,11 +297,13 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         return currentState == MediaPlayerState.PAUSED;
     }
 
+
     void enabledStopAfterTrackFinishes(){
         if(currentState == MediaPlayerState.PLAYING) {
             shouldNextTrackPlayAfterCurrentTrackEnds = false;
         }
     }
+
 
     private void startTrack(){
         hasEncounteredError = false;
@@ -418,6 +415,16 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         else if(currentState == MediaPlayerState.STOPPED) {
             updateViewsEnsurePlayerStoppedAndSchedulePlay();
         }
+    }
+
+
+    private void updateViewsEnsurePlayerStoppedAndSchedulePlay() {
+        mediaPlayerService.updateViewsForConnecting();
+        stopRunningMediaPlayer();
+        mediaPlayerService.stopUpdatingElapsedTimeOnView();
+        elapsedTime = 0;
+        shouldNextTrackPlayAfterCurrentTrackEnds = true;
+        executorService.schedule(this::startTrack, 1, TimeUnit.MILLISECONDS);
     }
 
 

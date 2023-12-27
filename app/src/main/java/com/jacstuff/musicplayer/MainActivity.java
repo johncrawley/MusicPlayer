@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public boolean isUserPlaylistLoaded(){
-        return mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
+        return !isPlaylistManagerUnavailable() && mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
     }
 
 
@@ -157,26 +157,17 @@ public class MainActivity extends AppCompatActivity {
 
 
     public List<String> getAlbumNames(){
-        if(isPlaylistManagerUnavailable()){
-            return Collections.emptyList();
-        }
-        return mediaPlayerService.getPlaylistManager().getAlbumNames();
+        return isPlaylistManagerUnavailable() ? Collections.emptyList() : mediaPlayerService.getPlaylistManager().getAlbumNames();
     }
 
 
     public List<String> getArtistNames(){
-        if(isPlaylistManagerUnavailable()){
-            return Collections.emptyList();
-        }
-        return mediaPlayerService.getPlaylistManager().getArtistNames();
+        return isPlaylistManagerUnavailable() ? Collections.emptyList() : mediaPlayerService.getPlaylistManager().getArtistNames();
     }
 
 
     public List<Playlist> getAllUserPlaylists(){
-        if(mediaPlayerService == null || mediaPlayerService.getPlaylistManager() == null){
-            return Collections.emptyList();
-        }
-        return mediaPlayerService.getPlaylistManager().getAllUserPlaylists();
+        return isPlaylistManagerUnavailable() ? Collections.emptyList() : mediaPlayerService.getPlaylistManager().getAllUserPlaylists();
     }
 
 
@@ -191,20 +182,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void nextTrack(){ playerViewHelper.nextTrack(); }
-
-    public void previousTrack(){ playerViewHelper.previousTrack(); }
-
-    public void pauseTrack() { playerViewHelper.pauseTrack(); }
-
-    public void playTrack() {
-        mediaPlayerService.playTrack();
-    }
-
     public void stopTrack(){
         mediaPlayerService.stop();
         resetElapsedTime();
     }
+
 
     public void hidePlayerViews(){ playerViewHelper.setVisibilityOnPlayerViews(View.INVISIBLE);}
 

@@ -186,6 +186,7 @@ public class MediaPlayerService extends Service{
     public void selectAndPlayTrack(Track track){
         mediaPlayerHelper.selectAndPlayTrack(track);
         getPlaylistManager().addToTrackHistory(track);
+        getPlaylistManager().assignCurrentIndexIfApplicable(track);
         mainActivity.setTrackDetails(mediaPlayerHelper.getCurrentTrack(), 0);
     }
 

@@ -476,6 +476,17 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
+    @Override
+    public void assignCurrentIndexIfApplicable(Track track){
+        int trackIndex = track.getIndex();
+        if(trackIndex > -1 && trackIndex < tracks.size()){
+            if(tracks.get(trackIndex).getPathname().equals(track.getPathname())){
+                currentIndex = trackIndex;
+            }
+        }
+    }
+
+
     private Track getPreviousTrackFromHistory(){
         Track track = trackHistory.getPreviousTrack();
         if(track == null){
@@ -487,10 +498,13 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private Track getNextTrackOnList(){
+        log("Entered getNextTrackOnList()");
         if(!attemptSetupOfIndexesIfEmpty() || tracks.isEmpty()){
             return null;
         }
-        currentIndex = currentIndex >= tracks.size() -1 ? 0 : currentIndex + 1;
+        log("getNextTrackOnList() current index: " + currentIndex);
+        incrementCurrentIndex();
+        log("getNextTrackOnList() current index after increment: " + currentIndex);
         Track currentTrack = tracks.get(currentIndex);
         trackHistory.removeHistoriesAfterCurrent();
         trackHistory.add(currentTrack);
@@ -499,16 +513,27 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private Track getPreviousTrackOnList(){
-        currentIndex--;
-        if(currentIndex < 0){
-            currentIndex = tracks.size()-1;
-        }
+        decrementCurrentIndex();
         return tracks.get(currentIndex);
     }
 
 
-    @Override
-    public Track getNextRandomUnPlayedTrack(){
+    private void incrementCurrentIndex(){
+        currentIndex = currentIndex >= tracks.size() -1 ? 0 : currentIndex + 1;
+    }
+
+
+    private void decrementCurrentIndex(){
+        currentIndex = currentIndex <= 0 ? tracks.size() -1 : currentIndex - 1;
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ PlaylistManagerImpl: " + msg);
+    }
+
+
+    private Track getNextRandomUnPlayedTrack(){
         if(trackHistory.isHistoryIndexOld()){
             return trackHistory.getNextTrack();
         }
