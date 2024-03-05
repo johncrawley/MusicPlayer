@@ -132,8 +132,12 @@ public class SearchViewHelper {
         animator.start();
     }
 
+    private void log(String msg){
+        System.out.println("^^^ SearchViewHelper: " + msg);
+    }
 
     private void scrollToPositionIfSearchResultHasBeenPlayed(){
+        log("Entered scrollToPositionIfSearchResultHasBeenPlayed() hasSearchResultBeenPlayed: " + hasSearchResultBeenPlayed);
         if(hasSearchResultBeenPlayed){
             mainActivity.getMediaPlayerService().scrollToPositionOf(selectedSearchResultTrack, true);
         }
