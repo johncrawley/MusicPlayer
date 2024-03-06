@@ -65,6 +65,7 @@ public class MediaPlayerService extends Service{
         updateViewTrackList(playlistManager);
         mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
         mainActivity.updateArtistsList(playlistManager.getArtistNames());
+        mainActivity.updateGenresList(playlistManager.getGenreNames());
     }
 
 
@@ -137,6 +138,8 @@ public class MediaPlayerService extends Service{
 
     public void loadTracksFromAlbum(String albumName){ playlistHelper.loadTracksFromAlbum(albumName);  }
 
+    public void loadTracksFromGenre(String genreName){ playlistHelper.loadTracksFromGenre(genreName);  }
+
     public void addTracksFromAristToCurrentPlaylist(String artistName){ playlistHelper.addTracksFromAristToCurrentPlaylist(artistName); }
 
     public void addTracksFromAlbumToCurrentPlaylist(String albumName){ playlistHelper.addTracksFromAlbumToCurrentPlaylist( albumName); }
@@ -175,6 +178,11 @@ public class MediaPlayerService extends Service{
 
     public void notifyViewToDeselectPlaylistAndArtistTabs(){
         mainActivity.deselectItemsInPlaylistAndArtistTabs();
+    }
+
+
+    public void notifyViewToDeselectEverythingButGenre(){
+        mainActivity.deselectItemsInTabsOtherThanGenre();
     }
 
 

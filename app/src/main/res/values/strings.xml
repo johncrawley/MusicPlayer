@@ -13,6 +13,7 @@
     <string name="playlist_info_playlist_prefix">Playlist:</string>
     <string name="playlist_info_artist_prefix">Artist:</string>
     <string name="playlist_info_album_prefix">Album:</string>
+    <string name="playlist_info_genre_prefix">Genre:</string>
     <string name="error_playing_track_toast_message">Unable to play the track at %1$s</string>
     <string name="error_loading_track_toast_message">Unable to load the track at %1$s</string>
     <string name="elapsed_time_label">Elapsed Time</string>
@@ -44,11 +45,13 @@
     <string name="toast_artist_tracks_loaded">Artist Tracks Loaded</string>
     <string name="toast_album_tracks_loaded">Album Loaded</string>
     <string name="toast_playlist_tracks_loaded">Playlist Loaded</string>
+    <string name="toast_genre_tracks_loaded">Genre Loaded</string>
 
     <string name="tracks_tab">Tracks</string>
     <string name="playlists_tab">Lists</string>
     <string name="artists_tab">Artists</string>
     <string name="albums_tab">Albums</string>
+    <string name="genres_tab">Genres</string>
     <string name="search_tab">Find</string>
 
     <string name="button_search_add_selected">Add</string>

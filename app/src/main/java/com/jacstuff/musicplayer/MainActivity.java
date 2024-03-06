@@ -26,6 +26,9 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.view.fragments.MessageKey;
+import com.jacstuff.musicplayer.view.fragments.Message;
+import com.jacstuff.musicplayer.view.fragments.album.AlbumsFragment;
 import com.jacstuff.musicplayer.view.fragments.artist.ArtistsFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
@@ -158,6 +161,11 @@ public class MainActivity extends AppCompatActivity {
 
     public List<String> getAlbumNames(){
         return isPlaylistManagerUnavailable() ? Collections.emptyList() : mediaPlayerService.getPlaylistManager().getAlbumNames();
+    }
+
+
+    public List<String> getGenreNames(){
+        return isPlaylistManagerUnavailable() ? Collections.emptyList() : mediaPlayerService.getPlaylistManager().getGenreNames();
     }
 
 
@@ -390,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateTracksList(Playlist playlist, Track currentTrack, int currentTrackIndex){
         runOnUiThread(()-> {
-            if(tracksFragment != null) {
+            if(tracksFragment != null && tracksFragment.getContext() != null) {
                 tracksFragment.updateTracksList(playlist, currentTrackIndex);
                 updateViews(playlist.getTracks(), currentTrack);
             }
@@ -406,11 +414,24 @@ public class MainActivity extends AppCompatActivity {
     public void deselectItemsInPlaylistAndArtistTabs(){
         sendFragmentMessage(PlaylistsFragment.NOTIFY_TO_DESELECT_ITEMS);
         sendFragmentMessage(ArtistsFragment.NOTIFY_TO_DESELECT_ITEMS);
+        sendFragmentMessage(Message.NOTIFY_TO_DESELECT_GENRE_ITEMS);
+    }
+
+
+    public void deselectItemsInTabsOtherThanGenre(){
+        sendFragmentMessage(PlaylistsFragment.NOTIFY_TO_DESELECT_ITEMS);
+        sendFragmentMessage(ArtistsFragment.NOTIFY_TO_DESELECT_ITEMS);
+        sendFragmentMessage(AlbumsFragment.NOTIFY_TO_DESELECT_ITEMS);
     }
 
 
     private void sendFragmentMessage(String messageKey){
         getSupportFragmentManager().setFragmentResult(messageKey, new Bundle());
+    }
+
+
+    private void sendFragmentMessage(Message message){
+        getSupportFragmentManager().setFragmentResult(message.toString(), new Bundle());
     }
 
 
@@ -432,10 +453,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void updateGenresList(ArrayList<String> genres){
+        sendArrayListToFragment(Message.SEND_GENRES_TO_FRAGMENT, MessageKey.GENRE_UPDATES, genres);
+    }
+
+
     private void sendArrayListToFragment(String requestKey, String itemKey, ArrayList<String> arrayList){
         Bundle bundle = new Bundle();
         bundle.putStringArrayList(itemKey, arrayList);
         runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(requestKey, bundle));
+    }
+
+
+    private void sendArrayListToFragment(Message requestKey, MessageKey itemKey, ArrayList<String> arrayList){
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList(itemKey.toString(), arrayList);
+        runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(requestKey.toString(), bundle));
     }
 
 
@@ -446,6 +479,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadTracksFromAlbum(String albumName){
         mediaPlayerService.loadTracksFromAlbum(albumName);
+    }
+
+
+    public void loadTracksFromGenre(String genreName){
+        mediaPlayerService.loadTracksFromGenre(genreName);
     }
 
 

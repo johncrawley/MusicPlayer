@@ -1,5 +1,6 @@
 package com.jacstuff.musicplayer.service.db.album;
 
+import com.jacstuff.musicplayer.service.db.TrackStore;
 import com.jacstuff.musicplayer.service.db.track.Track;
 
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Album {
+public class Album implements TrackStore {
     private final long id;
     private final String name;
     private final List<Track> allTracks;
@@ -99,7 +100,7 @@ public class Album {
     }
 
 
-    public List<Track> getAllTracks(){
+    public List<Track> getTracks(){
         return allTracks;
     }
 

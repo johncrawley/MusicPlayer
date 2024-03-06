@@ -1,5 +1,6 @@
 package com.jacstuff.musicplayer.service.db.artist;
 
+import com.jacstuff.musicplayer.service.db.TrackStore;
 import com.jacstuff.musicplayer.service.db.track.Track;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Artist {
+public class Artist implements TrackStore {
 
     private final long id;
     private final String name;

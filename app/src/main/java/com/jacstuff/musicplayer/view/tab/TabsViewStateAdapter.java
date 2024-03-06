@@ -8,6 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.jacstuff.musicplayer.view.fragments.album.AlbumsFragment;
 import com.jacstuff.musicplayer.view.fragments.artist.ArtistsFragment;
+import com.jacstuff.musicplayer.view.fragments.genre.GenresFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
 
@@ -31,13 +32,16 @@ public class TabsViewStateAdapter extends FragmentStateAdapter {
         else if (position == 2){
             return new ArtistsFragment();
         }
-        return new AlbumsFragment();
+        else if (position == 3){
+            return new AlbumsFragment();
+        }
+        return new GenresFragment();
     }
 
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 5;
     }
 
 }

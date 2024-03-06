@@ -122,6 +122,17 @@ public class PlaylistHelper {
     }
 
 
+    public void loadTracksFromGenre(String genreName){
+        boolean isGenreLoaded = playlistManager.loadTracksFromGenre(genreName);
+        if(isGenreLoaded){
+            mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
+            mediaPlayerService.notifyViewToDeselectPlaylistAndArtistTabs();
+            return;
+        }
+        mediaPlayerService.notifyViewOfAlbumNotLoaded(genreName);
+    }
+
+
     public void addTracksFromAristToCurrentPlaylist(String artistName){
         playlistManager.addTracksFromArtistToCurrentPlaylist(artistName, playlistViewNotifier);
         mediaPlayerService.updateViewTrackList(playlistManager);

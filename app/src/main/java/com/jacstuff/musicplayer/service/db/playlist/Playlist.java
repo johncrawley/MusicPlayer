@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Playlist {
 
-    public enum PlaylistType { PLAYLIST, ALBUM, ARTIST}
+    public enum PlaylistType { PLAYLIST, ALBUM, ARTIST, GENRE}
     private final PlaylistType playlistType;
     private final Long id;
     private String name;

@@ -13,6 +13,7 @@ import androidx.preference.PreferenceManager;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.album.Album;
 import com.jacstuff.musicplayer.service.db.artist.Artist;
+import com.jacstuff.musicplayer.service.db.genre.Genre;
 import com.jacstuff.musicplayer.service.db.track.Track;
 
 import java.util.ArrayList;
@@ -33,8 +34,10 @@ public class TrackLoader {
     private Set<String> artistsSet;
     private Map<String, Album> albums;
     private Map<String, Artist> artists;
+    private Map<String, Genre> genres;
     private long artistCount;
     private int albumCount;
+    private int genreCount;
     private Map<String, Integer> columnMap;
 
 
@@ -48,7 +51,9 @@ public class TrackLoader {
         tracks = new ArrayList<>(10_000);
         albums = new ConcurrentHashMap<>(5000);
         artists = new ConcurrentHashMap<>(500);
+        genres = new ConcurrentHashMap<>(100);
         artistsSet = new HashSet<>(1000);
+        log("Entered loadAudioFiles()");
         addTracksData();
         return tracks;
     }
@@ -64,6 +69,11 @@ public class TrackLoader {
     }
 
 
+    public Map<String, Genre> getGenres(){
+        return genres;
+    }
+
+
     public List<Track> getAllTracksContaining(String searchTerm){
         return tracks.parallelStream()
                 .filter(track -> track.getSearchString().contains(searchTerm))
@@ -76,16 +86,6 @@ public class TrackLoader {
             return new ArrayList<>();
         }
         ArrayList<String> names = new ArrayList<>(albums.keySet());
-        Collections.sort(names);
-        return names;
-    }
-
-
-    public ArrayList<String> getArtistNames(){
-        if(artists == null){
-            return new ArrayList<>();
-        }
-        ArrayList<String> names = new ArrayList<>(artists.keySet());
         Collections.sort(names);
         return names;
     }
@@ -108,6 +108,16 @@ public class TrackLoader {
     }
 
 
+    public ArrayList<String> getAllGenreNames(){
+        if(albums == null){
+            return new ArrayList<>();
+        }
+        ArrayList<String> names = new ArrayList<>(genres.keySet());
+        Collections.sort(names);
+        return names;
+    }
+
+
     private int getMinimumNumberOfTracksForMainArtist(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return Integer.parseInt(prefs.getString("minimumNumberOfTracksForMainArtist", "1"));
@@ -125,7 +135,7 @@ public class TrackLoader {
         if(album == null){
             return Collections.emptyList();
         }
-        return album.getAllTracks();
+        return album.getTracks();
     }
 
 
@@ -160,7 +170,7 @@ public class TrackLoader {
                 addTrack(cursor);
             }
             long duration = System.currentTimeMillis() - startTime;
-            log("addTracksData() finished adding tracks, time taken: " + duration);
+            log("tracks loaded in " + duration + "ms");
             cursor.close();
         }
     }
@@ -224,13 +234,13 @@ public class TrackLoader {
         }
         String albumName = getValueFrom(cursor, MediaStore.Audio.Media.ALBUM);
         String artistName = getValueFrom(cursor, MediaStore.Audio.Media.ARTIST);
-
+        String genreName = getGenre(cursor);
         Track track = new Track(
                 path,
                 getValueFrom(cursor, MediaStore.Audio.Media.TITLE),
                 artistName,
                 albumName,
-                getGenre(cursor),
+                genreName,
                 getIntValueFrom(cursor, MediaStore.Audio.Media.DURATION),
                 getTrackNumber(cursor)
         );
@@ -238,6 +248,7 @@ public class TrackLoader {
         addToAlbum(track, albumName, artistName);
         addToArtist(track, artistName);
         addAlbumToArtist(albumName, artistName);
+        addToGenre(track, genreName);
     }
 
 
@@ -279,12 +290,20 @@ public class TrackLoader {
     }
 
 
+    private void addToGenre(Track track, String genreName){
+        if(genreName.trim().isEmpty()){
+            return;
+        }
+        genres.computeIfAbsent(genreName, k -> new Genre(genreCount++, k)).addTrack(track);
+    }
+
+
     private String getGenre(Cursor cursor){
         String genre = "";
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             genre = getValueFrom(cursor, MediaStore.Audio.Media.GENRE);
         }
-        return genre;
+        return genre == null ? "" : genre;
     }
 
 

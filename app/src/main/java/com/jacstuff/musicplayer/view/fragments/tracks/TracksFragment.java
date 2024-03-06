@@ -59,8 +59,12 @@ public class TracksFragment extends Fragment{
         setListener(this, NOTIFY_USER_PLAYLIST_LOADED, this::setVisibilityOnAddTracksToPlaylistButton);
     }
 
+    private void log(String msg){
+        System.out.println("^^^ TracksFragment:  " + msg);
+    }
 
     public void updateTracksList(Playlist playlist, int currentTrackIndex){
+        log("entered updateTracksList()");
         List<Track> updatedTracks = playlist.getTracks();
         updatePlaylistInfoView(playlist);
         refreshTrackList(updatedTracks);
@@ -128,11 +132,12 @@ public class TracksFragment extends Fragment{
 
 
     private void updatePlaylistInfoView(Playlist playlist){
-        int resId = R.string.playlist_info_playlist_prefix;
-        switch (playlist.getPlaylistType()){
-            case ALBUM: resId = R.string.playlist_info_album_prefix; break;
-            case ARTIST: resId = R.string.playlist_info_artist_prefix; break;
-        }
+        int resId = switch (playlist.getPlaylistType()){
+            case PLAYLIST -> R.string.playlist_info_playlist_prefix;
+            case ALBUM   -> R.string.playlist_info_album_prefix;
+            case ARTIST -> R.string.playlist_info_artist_prefix;
+            case GENRE -> R.string.playlist_info_genre_prefix;
+        };
         String info = getString(resId) + " " + playlist.getName();
         playlistInfoTextView.setText(info);
     }

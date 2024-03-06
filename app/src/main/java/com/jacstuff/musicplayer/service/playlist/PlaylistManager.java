@@ -18,6 +18,7 @@ public interface PlaylistManager {
     int getNumberOfTracks();
     ArrayList<String> getAlbumNames();
     ArrayList<String> getArtistNames();
+    ArrayList<String> getGenreNames();
 
     Playlist getCurrentPlaylist();
     Track getNextTrack();
@@ -33,6 +34,7 @@ public interface PlaylistManager {
     void loadPlaylist(Playlist playlist);
     void loadAllTracksPlaylist();
     boolean loadTracksFromAlbum(String albumName);
+    boolean loadTracksFromGenre(String genreName);
     void loadTracksFromArtist(String artistName);
 
     void addTrackToCurrentPlaylist(Track track, PlaylistViewNotifier playlistViewNotifier);
@@ -48,6 +50,7 @@ public interface PlaylistManager {
     void disableShuffle();
     boolean isShuffleEnabled();
 
+    /*
     void onlyDisplayMainArtists(boolean shouldOnlyDisplayMainArtists);
     String getTrackNameAt(int position);
     void deleteAll();
@@ -55,4 +58,6 @@ public interface PlaylistManager {
     Set<String> getArtists();
     Map<String, Album> getAlbums();
     List<Playlist> getAllPlaylists();
+
+     */
 }

@@ -88,6 +88,11 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
     }
 
 
+    public StringListAdapter(List<String> items, Consumer<String> clickConsumer){
+        this(items, clickConsumer, s -> {});
+    }
+
+
     @Override
     @NonNull
     public TextViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
