@@ -207,14 +207,7 @@ public class MediaPlayerService extends Service{
     }
 
 
-
-    private void log(String msg){
-        System.out.println("^^^ MediaPlayerService: " + msg);
-    }
-
-
     public void scrollToPositionOf(Track track, boolean isSearchResult){
-        log("entered scrollToPositionOf()");
         int trackIndexOnCurrentPlaylist = getPlaylistManager().getCurrentIndexOf(track);
         if(trackIndexOnCurrentPlaylist == - 1){
             mainActivity.deselectCurrentTrack();
@@ -222,6 +215,11 @@ public class MediaPlayerService extends Service{
         else {
             mainActivity.scrollToAndSelectPosition(trackIndexOnCurrentPlaylist, isSearchResult);
         }
+    }
+
+
+    public int getCurrentTrackIndex(){
+        return playlistHelper.getIndexOfCurrentTrack();
     }
 
 

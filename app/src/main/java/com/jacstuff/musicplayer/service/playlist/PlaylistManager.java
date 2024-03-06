@@ -42,6 +42,7 @@ public interface PlaylistManager {
     void removeTrackFromCurrentPlaylist(Track track, PlaylistViewNotifier playlistViewNotifier);
 
     int getCurrentIndexOf(Track track);
+    int getCurrentIndex();
 
     void enableShuffle();
     void disableShuffle();

@@ -121,23 +121,20 @@ public class SearchViewHelper {
         if(searchView.getVisibility() != View.VISIBLE){
             return;
         }
+        keyboardHelper.hideKeyboard(searchView);
         Animator animator = AnimatorHelper.createHideAnimatorFor(searchView, ()->{
             searchView.setVisibility(View.GONE);
             searchEditText.setText("");
             clearSearchResults();
             scrollToPositionIfSearchResultHasBeenPlayed();
+            mainActivity.ensureSelectedTrackIsVisible();
         });
-        keyboardHelper.hideKeyboard(searchView);
         dismissSearchViewOnBackPressedCallback.setEnabled(false);
         animator.start();
     }
 
-    private void log(String msg){
-        System.out.println("^^^ SearchViewHelper: " + msg);
-    }
 
     private void scrollToPositionIfSearchResultHasBeenPlayed(){
-        log("Entered scrollToPositionIfSearchResultHasBeenPlayed() hasSearchResultBeenPlayed: " + hasSearchResultBeenPlayed);
         if(hasSearchResultBeenPlayed){
             mainActivity.getMediaPlayerService().scrollToPositionOf(selectedSearchResultTrack, true);
         }

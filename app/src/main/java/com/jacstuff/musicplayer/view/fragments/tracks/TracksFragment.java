@@ -192,9 +192,37 @@ public class TracksFragment extends Fragment{
             return;
         }
         trackListAdapter.selectItemAt(index);
+        scrollToOffsetPosition(index, isSearchResult);
+        scrollDownAPixel();
+    }
+
+
+    private void scrollToOffsetPosition(int index, boolean isSearchResult){
         //could use: smoothScrollToPosition(calculatedScrollIndex)
         // but it would take too long for large list
-        recyclerView.scrollToPosition(calculateIndexWithOffset(index, isSearchResult));
+        int offsetSetPosition = calculateIndexWithOffset(index, isSearchResult);
+        recyclerView.scrollToPosition(offsetSetPosition);
+    }
+
+
+    /* for some reason, after scrolling up using RecyclerView's scrollToPosition method,
+        opening and closing the search window will make the track list jump back to the top.
+        We can avoid this behaviour by scrolling down a further one pixel after a scroll.
+     */
+    private void scrollDownAPixel(){
+        recyclerView.scrollBy(0,1);
+    }
+
+
+    public void ensureSelectedTrackIsVisible(int trackIndex){
+        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        if(layoutManager == null){
+           return;
+        }
+        int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
+        if(trackIndex < firstVisiblePosition || firstVisiblePosition < 0){
+            recyclerView.scrollToPosition(trackIndex);
+        }
     }
 
 

@@ -45,6 +45,11 @@ public class PlaylistHelper {
     }
 
 
+    public int getIndexOfCurrentTrack(){
+        return playlistManager.getCurrentIndex();
+    }
+
+
     public List<Track> searchForTracks(String str){
         initTrackFinder();
         return trackFinder == null ? Collections.emptyList() : trackFinder.searchFor(str);

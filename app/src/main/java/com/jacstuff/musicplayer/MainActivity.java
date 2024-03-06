@@ -352,8 +352,13 @@ public class MainActivity extends AppCompatActivity {
         toast(getString(resId));
     }
 
+    private void log(String msg){
+        System.out.println("^^^ MainActivity: " + msg);
+    }
+
 
     public void deselectCurrentTrack(){
+        log("Entered deselectCurrentTrack");
         tracksFragment.deselectCurrentItem();
     }
 
@@ -516,6 +521,19 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(()-> {
             if(tracksFragment != null){
                 tracksFragment.scrollToAndSelectListPosition(index, isSearchResult);
+            }
+        });
+    }
+
+
+    public void ensureSelectedTrackIsVisible(){
+        runOnUiThread(()-> {
+            if(tracksFragment != null){
+                if(mediaPlayerService == null){
+                    return;
+                }
+                int currentTrackIndex = mediaPlayerService.getCurrentTrackIndex();
+                tracksFragment.ensureSelectedTrackIsVisible(currentTrackIndex);
             }
         });
     }

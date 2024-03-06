@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 public class MainViewModel extends ViewModel {
 
-    public List<Track> tracks;
     public int currentTabIndex;
     public Bitmap currentAlbumArt;
+
 }

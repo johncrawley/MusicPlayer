@@ -312,6 +312,11 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
+    public int getCurrentIndex(){
+        return currentIndex;
+    }
+
+
     @Override
     public void loadAllTracksPlaylist(){
         initAllTracks();
@@ -498,13 +503,10 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private Track getNextTrackOnList(){
-        log("Entered getNextTrackOnList()");
         if(!attemptSetupOfIndexesIfEmpty() || tracks.isEmpty()){
             return null;
         }
-        log("getNextTrackOnList() current index: " + currentIndex);
         incrementCurrentIndex();
-        log("getNextTrackOnList() current index after increment: " + currentIndex);
         Track currentTrack = tracks.get(currentIndex);
         trackHistory.removeHistoriesAfterCurrent();
         trackHistory.add(currentTrack);
@@ -525,11 +527,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private void decrementCurrentIndex(){
         currentIndex = currentIndex <= 0 ? tracks.size() -1 : currentIndex - 1;
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ PlaylistManagerImpl: " + msg);
     }
 
 
