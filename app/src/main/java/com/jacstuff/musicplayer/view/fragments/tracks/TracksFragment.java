@@ -53,18 +53,15 @@ public class TracksFragment extends Fragment{
         recyclerView = parentView.findViewById(R.id.recyclerView);
         noTracksFoundTextView = parentView.findViewById(R.id.noTracksFoundTextView);
         playlistInfoTextView = parentView.findViewById(R.id.playlistNameTextView);
-        setupRecyclerView(getMainActivity().getTrackList());
+        //setupRecyclerView(getMainActivity().getTrackList());
+        setupRecyclerView(getMainActivity().getCurrentPlaylist());
         setupAddTracksButton(view);
         getMainActivity().setPlayerFragment(this);
         setListener(this, NOTIFY_USER_PLAYLIST_LOADED, this::setVisibilityOnAddTracksToPlaylistButton);
     }
 
-    private void log(String msg){
-        System.out.println("^^^ TracksFragment:  " + msg);
-    }
 
     public void updateTracksList(Playlist playlist, int currentTrackIndex){
-        log("entered updateTracksList()");
         List<Track> updatedTracks = playlist.getTracks();
         updatePlaylistInfoView(playlist);
         refreshTrackList(updatedTracks);
@@ -81,6 +78,9 @@ public class TracksFragment extends Fragment{
 
     @SuppressWarnings("notifyDataSetChanged")
     public void refreshTrackList(List<Track> tracks){
+        if(tracks == null){
+            return;
+        }
         trackListAdapter.setItems(tracks);
         trackListAdapter.notifyDataSetChanged();
         setVisibilityOnNoTracksFoundText(tracks);
@@ -95,6 +95,19 @@ public class TracksFragment extends Fragment{
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(trackListAdapter);
+    }
+
+
+    private void setupRecyclerView(Playlist playlist){
+        List<Track> tracks = playlist.getTracks();
+        if(this.parentView == null ||tracks == null){
+            return;
+        }
+        trackListAdapter = new TrackListAdapter(tracks, this::selectTrack, this::createTrackOptionsFragment);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(trackListAdapter);
+        updatePlaylistInfoView(playlist);
     }
 
 
@@ -132,13 +145,15 @@ public class TracksFragment extends Fragment{
 
 
     private void updatePlaylistInfoView(Playlist playlist){
-        int resId = switch (playlist.getPlaylistType()){
+        int resId = switch (playlist.getType()){
+            case ALL_TRACKS -> R.string.default_playlist_info;
             case PLAYLIST -> R.string.playlist_info_playlist_prefix;
             case ALBUM   -> R.string.playlist_info_album_prefix;
             case ARTIST -> R.string.playlist_info_artist_prefix;
             case GENRE -> R.string.playlist_info_genre_prefix;
         };
-        String info = getString(resId) + " " + playlist.getName();
+        String prefix = getString(resId);
+        String info = resId == R.string.default_playlist_info ? prefix : prefix + " " + playlist.getName();
         playlistInfoTextView.setText(info);
     }
 

@@ -1,6 +1,7 @@
 package com.jacstuff.musicplayer.service.db.album;
 
-import com.jacstuff.musicplayer.service.db.TrackStore;
+import com.jacstuff.musicplayer.service.db.PlaylistStore;
+import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
 
 import java.util.ArrayList;
@@ -8,77 +9,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Album implements TrackStore {
+public class Album implements PlaylistStore {
     private final long id;
     private final String name;
-    private final List<Track> allTracks;
+    private List<Track> allTracks;
     private final Map<String, Integer> artistsCount;
-    private final Map<String, List<Track>> tracksMap;
-    private String primaryArtist;
-    private boolean hasVariousArtists;
+
 
     public Album(long id, String name){
         this.id = id;
         this.name = name;
         allTracks = new ArrayList<>(50);
         artistsCount = new HashMap<>();
-        tracksMap = new HashMap<>();
     }
 
 
     public void addTrack(Track track) {
         allTracks.add(track);
-    }
-
-
-    public void addTracks(List<Track> tracks) {
-        allTracks.addAll(tracks);
-    }
-
-
-
-    public void addTrack(Track track, String artistName) {
-        if(tracksMap.containsKey(artistName)){
-            addTrackToArtist(artistName, track);
-            return;
-        }
-        artistsCount.put(artistName, 1);
-    }
-
-
-    public void setPrimaryArtist(String artistName){
-        this.primaryArtist = artistName;
-    }
-
-
-    public void setPrimaryArtistAsVarious(){
-        hasVariousArtists = true;
-    }
-
-
-
-
-    public Map<String, List<Track>>  getTracksMap(){
-        return tracksMap;
-    }
-
-
-    public String getPrimaryArtist(){
-        return primaryArtist;
-    }
-
-
-    public String getDisplayName(){
-        if(hasVariousArtists){
-            return "Various - " + getName();
-        }
-        return primaryArtist + " - " + name;
-    }
-
-
-    private void addTrackToArtist(String artistName, Track track){
-        List<Track> tracksForArtist = tracksMap.computeIfAbsent(artistName, k -> new ArrayList<>(20));
-        tracksForArtist.add(track);
     }
 
 
@@ -102,6 +49,19 @@ public class Album implements TrackStore {
 
     public List<Track> getTracks(){
         return allTracks;
+    }
+
+
+    public void setTracks(List<Track> tracks){
+        this.allTracks = tracks;
+    }
+
+
+    @Override
+    public Playlist getPlaylist(){
+        Playlist playlist = new Playlist(name, Playlist.PlaylistType.ALBUM);
+        playlist.setTracks(allTracks);
+        return playlist;
     }
 
 

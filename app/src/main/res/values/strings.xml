@@ -9,7 +9,7 @@
     <string name="playlist_refreshed_one_new_track">Playlist Refreshed (1 New)</string>
     <string name="no_tracks_found">No Tracks Found</string>
     <string name="playlist_is_empty">Playlist Is Empty</string>
-    <string name="default_playlist_info">Playlist: All Tracks</string>
+    <string name="default_playlist_info">All Tracks</string>
     <string name="playlist_info_playlist_prefix">Playlist:</string>
     <string name="playlist_info_artist_prefix">Artist:</string>
     <string name="playlist_info_album_prefix">Album:</string>

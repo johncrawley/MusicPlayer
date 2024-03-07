@@ -2,9 +2,8 @@ package com.jacstuff.musicplayer.service.playlist;
 
 import android.content.Context;
 
-import com.jacstuff.musicplayer.service.db.TrackStore;
+import com.jacstuff.musicplayer.service.db.PlaylistStore;
 import com.jacstuff.musicplayer.service.db.artist.Artist;
-import com.jacstuff.musicplayer.service.db.genre.Genre;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistItemRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistItemRepositoryImpl;
@@ -43,19 +42,14 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private final TrackHistory trackHistory;
     private boolean isShuffleEnabled = true;
     public static String ALL_TRACKS_PLAYLIST = "All Tracks";
-    public static long ALL_TRACKS_PLAYLIST_ID = -10L;
-    public static long SOME_ALBUM_PLAYLIST_ID = -20L;
-    public static long SOME_ARTIST_PLAYLIST_ID = -30L;
-    public static long SOME_GENRE_PLAYLIST_ID = -40L;
-    private Playlist someArtistPlaylist, someAlbumPlaylist, allTracksPlaylist, someGenrePlaylist;
-    private Set<Long> defaultPlaylistIds;
+    private Playlist allTracksPlaylist;
     private Playlist currentPlaylist;
     private Artist currentArtist;
-    private Genre currentGenre;
     private final ArrayDeque<Track> queuedTracks;
     private Set<String> currentPlaylistFilenames;
     private Map<String, Integer> trackPathsToIndexesMap;
     private Map<String, Integer> allTracksPathsToIndexesMap;
+    public static long ALL_TRACKS_PLAYLIST_ID = -10L;
 
 
     public PlaylistManagerImpl(Context context, TrackLoader trackLoader){
@@ -119,6 +113,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
                 trackLoader.getAllAlbumNames() : currentArtist.getAlbumNames();
     }
 
+
     @Override
     public ArrayList<String> getArtistNames(){
        return trackLoader.getMainArtistNames();
@@ -133,7 +128,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public boolean isUserPlaylistLoaded(){
-        return currentPlaylist != null && !defaultPlaylistIds.contains(currentPlaylist.getId());
+        return currentPlaylist != null && currentPlaylist.isUserPlaylist();
     }
 
 
@@ -150,35 +145,46 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void setupDefaultPlaylists(){
-        defaultPlaylistIds = new HashSet<>();
-        defaultPlaylistIds.add(SOME_ALBUM_PLAYLIST_ID);
-        defaultPlaylistIds.add(SOME_ARTIST_PLAYLIST_ID);;
-        defaultPlaylistIds.add(SOME_GENRE_PLAYLIST_ID);
-        defaultPlaylistIds.add(ALL_TRACKS_PLAYLIST_ID);
-
-        someAlbumPlaylist = new Playlist(SOME_ALBUM_PLAYLIST_ID, "Some Album", Playlist.PlaylistType.ALBUM, false);
-        someArtistPlaylist = new Playlist(SOME_ARTIST_PLAYLIST_ID, "Some Artist", Playlist.PlaylistType.ARTIST, false);
-        someGenrePlaylist = new Playlist(SOME_GENRE_PLAYLIST_ID, "Some Genre", Playlist.PlaylistType.GENRE, false);
-        allTracksPlaylist = new Playlist(ALL_TRACKS_PLAYLIST_ID, ALL_TRACKS_PLAYLIST, false);
+        allTracksPlaylist = new Playlist(ALL_TRACKS_PLAYLIST, Playlist.PlaylistType.ALL_TRACKS);
         currentPlaylist = allTracksPlaylist;
     }
 
 
     public void loadPlaylist(Playlist playlist){
-        if(isAlreadyCurrentPlaylist(playlist)){
+        if(isCurrentPlaylist(playlist)){
             return;
         }
-        this.currentPlaylist = playlist;
-
-        if(playlist.getId() == ALL_TRACKS_PLAYLIST_ID){
+        if(playlist.getType() == Playlist.PlaylistType.ALL_TRACKS){
             loadAllTracksPlaylist();
         }
         else{
-            tracks = playlistItemRepository.getTracksForPlaylistId(playlist.getId());
-            currentPlaylist.setTracks(tracks);
-            currentPlaylistFilenames = tracks.stream().map(Track::getPathname).collect(Collectors.toSet());
-            assignIndexesToTracks();
+           loadUserPlaylist(playlist);
         }
+        setInitialPlaylistState();
+    }
+
+
+    @Override
+    public void loadAllTracksPlaylist(){
+        initAllTracks();
+        setAllTracksIndexes();
+        setupUnPlayedIndexes();
+        trackHistory.reset();
+        currentPlaylist = allTracksPlaylist;
+        tracks = allTracks;
+    }
+
+
+    private void loadUserPlaylist(Playlist playlist){
+        currentPlaylist = playlist;
+        tracks = playlistItemRepository.getTracksForPlaylistId(playlist.getId());
+        currentPlaylist.setTracks(tracks);
+        currentPlaylistFilenames = tracks.stream().map(Track::getPathname).collect(Collectors.toSet());
+        assignIndexesToTracks();
+    }
+
+
+    private void setInitialPlaylistState(){
         setupUnPlayedIndexes();
         trackHistory.reset();
         currentIndex = -1;
@@ -186,7 +192,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    private boolean isAlreadyCurrentPlaylist(Playlist playlist){
+    private boolean isCurrentPlaylist(Playlist playlist){
        return currentPlaylist != null && (Objects.equals(this.currentPlaylist.getId(), playlist.getId()));
     }
 
@@ -233,7 +239,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         playlistItemRepository.addPlaylistItem(track, playlistId);
         playlistViewNotifier.notifyViewOfTrackAddedToPlaylist();
     }
-
 
 
     private void addTracksToCurrentPlaylist(List<Track> additionalTracks, PlaylistViewNotifier playlistViewNotifier) {
@@ -292,17 +297,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    @Override
-    public void loadAllTracksPlaylist(){
-        initAllTracks();
-        setAllTracksIndexes();
-        setupUnPlayedIndexes();
-        trackHistory.reset();
-        currentPlaylist = allTracksPlaylist;
-        tracks = new ArrayList<>(allTracks);
-    }
-
-
     private void initAllTracks(){
         if(allTracks == null){
             initTrackList();
@@ -318,49 +312,42 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ PlaylistManagerImpl: " + msg);
-    }
-
 
     @Override
     public void loadTracksFromArtist(String artistName){
-        log("entered loadTracksFromArtist() name: "+  artistName);
-        loadTracksFromGenericPlaylist(artistName, trackLoader::getArtists, someArtistPlaylist, this::getSortedTracks);
+        loadTracksFromGenericPlaylist(artistName, trackLoader::getArtists, this::getSortedTracks);
+        currentArtist = trackLoader.getArtists().get(artistName);
     }
 
 
     @Override
     public boolean loadTracksFromAlbum(String albumName) {
-        return loadTracksFromGenericPlaylist(albumName, trackLoader::getAlbums, someAlbumPlaylist, this::getSortedAlbumTracks);
+        return loadTracksFromGenericPlaylist(albumName, trackLoader::getAlbums, this::getSortedAlbumTracks);
     }
 
 
     @Override
     public boolean loadTracksFromGenre(String genreName) {
-        log("entered loadTracksFromGenre() name: "+  genreName);
-        return loadTracksFromGenericPlaylist(genreName, trackLoader::getGenres, someGenrePlaylist, this::getSortedTracks);
+        return loadTracksFromGenericPlaylist(genreName, trackLoader::getGenres, this::getSortedTracks);
     }
 
 
-    private <T extends TrackStore> boolean loadTracksFromGenericPlaylist(String name,
-                                                                         Supplier<Map<String,T>> supplier,
-                                                                         Playlist playlist,
-                                                                         Function<List<Track>, List<Track>> sortingConsumer){
+    private <T extends PlaylistStore> boolean loadTracksFromGenericPlaylist(String name,
+                                                                            Supplier<Map<String,T>> supplier,
+                                                                            Function<List<Track>, List<Track>> sortingConsumer){
         Map <String, T> map = supplier.get();
         if(map == null){
             return false;
         }
-        T savedPlaylist = map.get(name);
-        if(savedPlaylist == null){
+        T playlistStore = map.get(name);
+        if(playlistStore == null){
             return false;
         }
-        tracks = sortingConsumer.apply(savedPlaylist.getTracks());
-        playlist.setTracks(tracks);
-        playlist.setName(name);
+        tracks = sortingConsumer.apply(playlistStore.getTracks());
+        playlistStore.setTracks(tracks);
         assignIndexesToTracks();
         setupQueue();
-        currentPlaylist = playlist;
+        currentPlaylist = playlistStore.getPlaylist();
         return true;
     }
 
@@ -393,7 +380,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         }
         return albumTracks.stream().sorted(Comparator.comparing(Track::getTrackNumber)).collect(Collectors.toList());
     }
-
 
 
     private void setupQueue(){

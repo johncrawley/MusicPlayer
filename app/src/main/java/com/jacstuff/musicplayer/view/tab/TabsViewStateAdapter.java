@@ -21,8 +21,8 @@ public class TabsViewStateAdapter extends FragmentStateAdapter {
 
 
     @NonNull
-    @Override
-    public Fragment createFragment(int position) {
+    //@Override
+    public Fragment createFragment2(int position) {
         if(position == 0){
             return new TracksFragment(); // auto-assigned tag: 'f0'
         }
@@ -38,6 +38,17 @@ public class TabsViewStateAdapter extends FragmentStateAdapter {
         return new GenresFragment();
     }
 
+    @NonNull
+    @Override
+    public Fragment createFragment(int position) {
+        return switch (position) {
+            case 0 -> new TracksFragment();
+            case 1 -> new PlaylistsFragment();
+            case 2 -> new ArtistsFragment();
+            case 3 -> new AlbumsFragment();
+            default -> new GenresFragment();
+        };
+    }
 
     @Override
     public int getItemCount() {

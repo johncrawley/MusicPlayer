@@ -1,6 +1,7 @@
 package com.jacstuff.musicplayer.service.db.artist;
 
-import com.jacstuff.musicplayer.service.db.TrackStore;
+import com.jacstuff.musicplayer.service.db.PlaylistStore;
+import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
 
 import java.util.ArrayList;
@@ -9,11 +10,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Artist implements TrackStore {
+public class Artist implements PlaylistStore {
 
     private final long id;
     private final String name;
-    private final List<Track> tracks;
+    private List<Track> tracks;
     private final Set<String> albumNames;
     private ArrayList<String> sortedAlbumNames;
 
@@ -48,9 +49,24 @@ public class Artist implements TrackStore {
     }
 
 
+    @Override
+    public Playlist getPlaylist(){
+        Playlist playlist = new Playlist(name, Playlist.PlaylistType.ARTIST);
+        playlist.setTracks(tracks);
+        return playlist;
+    }
+
+
     public List<Track> getTracks(){
         return tracks;
     }
+
+
+    public void setTracks(List<Track> tracks){
+        this.tracks = tracks;
+    }
+
+
     public String getName(){
         return name;
     }

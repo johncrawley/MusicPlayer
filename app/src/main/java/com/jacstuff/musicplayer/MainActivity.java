@@ -304,7 +304,13 @@ public class MainActivity extends AppCompatActivity {
         }
         List<Track> tracks = mediaPlayerService.getTrackList();
         updateViews(tracks, mediaPlayerService.getCurrentTrack());
-       return tracks;
+        return tracks;
+    }
+
+
+    public Playlist getCurrentPlaylist(){
+        return mediaPlayerService == null ? new Playlist(-50L, "Empty Playlist", false):
+                mediaPlayerService.getPlaylistManager().getCurrentPlaylist();
     }
 
 
