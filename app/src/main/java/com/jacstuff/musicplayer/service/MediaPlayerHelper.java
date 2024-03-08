@@ -112,10 +112,15 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         }
         assignAlbumArt(track);
         if(hasEncounteredError){
-            return;
+            log("assignTrack() encountered error after invoking assignAlbumArt()");
+            mediaPlayerService.setBlankAlbumArt();
         }
         mediaPlayerService.updateViewsOnTrackAssigned();
         select(currentTrack);
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ MediaPlayerHelper: " + msg);
     }
 
 
@@ -124,7 +129,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         currentTrack = track;
         assignAlbumArt(track);
         if(hasEncounteredError){
-            return;
+            mediaPlayerService.setBlankAlbumArt();
         }
         updateViewsEnsurePlayerStoppedAndSchedulePlay();
     }
@@ -261,6 +266,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
+        log("entered stop(boolean, boolean)");
         if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED) {
             mediaPlayer.stop();
             currentState = MediaPlayerState.STOPPED;
@@ -306,6 +312,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     private void startTrack(){
+        log("Entered startTrack()");
         hasEncounteredError = false;
         try {
             isPreparingTrack.set(true);
@@ -319,6 +326,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
             mediaPlayerService.notifyMainViewOfMediaPlayerPlaying();
             mediaPlayerService.updateNotification();
         }catch (IOException e){
+            log("IO exception trying to start track: " + currentTrack.getPathname());
             e.printStackTrace();
             onError();
             mediaPlayerService.displayErrorOnMainView(currentTrack);

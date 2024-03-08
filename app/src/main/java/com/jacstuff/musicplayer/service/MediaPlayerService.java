@@ -279,6 +279,11 @@ public class MediaPlayerService extends Service{
     }
 
 
+    public void setBlankAlbumArt(){
+        mainActivity.setBlankAlbumArt();
+    }
+
+
     public void updateViews(PlaylistManager playlistManager){
         Track currentTrack = mediaPlayerHelper.getCurrentTrack();
         if(currentTrack != null){
@@ -380,7 +385,18 @@ public class MediaPlayerService extends Service{
             resId = R.string.status_paused;
         }
         return getApplicationContext().getString(resId);
+
     }
+
+    public String getReadyStatusStr(){
+        return getApplicationContext().getString(R.string.status_ready);
+    }
+
+
+    public boolean hasEncounteredError(){
+        return mediaPlayerHelper.hasEncounteredError();
+    }
+
 
 
     public Track getCurrentTrack(){
@@ -433,5 +449,12 @@ public class MediaPlayerService extends Service{
         mainActivity.notifyMediaPlayerPaused();
         mediaPlayerHelper.cancelScheduledStoppageOfTrack();
     }
+
+
+    public void testErrorOnNotification(){
+        mediaPlayerHelper.hasEncounteredError = true;
+        mediaNotificationManager.updateNotification();
+    }
+
 
 }

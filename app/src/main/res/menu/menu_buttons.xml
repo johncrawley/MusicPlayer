@@ -17,5 +17,9 @@
         android:orderInCategory="100" app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_manage"
         android:title="@string/menu_button_settings"/>
+    <item android:id="@+id/temp" android:name="temp"
+        android:orderInCategory="100" app:showAsAction="never"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="temp"/>
 
 </menu>

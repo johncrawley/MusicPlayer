@@ -1,6 +1,5 @@
 package com.jacstuff.musicplayer.service;
 
-
 import static com.jacstuff.musicplayer.service.BroadcastHelper.ACTION_PAUSE_PLAYER;
 import static com.jacstuff.musicplayer.service.BroadcastHelper.ACTION_PLAY;
 import static com.jacstuff.musicplayer.service.BroadcastHelper.ACTION_SELECT_NEXT_TRACK;
@@ -25,6 +24,8 @@ import androidx.core.app.NotificationCompat;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.track.Track;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class MediaNotificationManager {
@@ -60,7 +61,6 @@ public class MediaNotificationManager {
 
         addPreviousButtonTo(notification);
         addPlayButtonTo(notification);
-        //addStopButtonTo(notification);
         addPauseButtonTo(notification);
         addNextButtonTo(notification);
         return notification.build();
@@ -110,12 +110,50 @@ public class MediaNotificationManager {
         if(!isPostNotificationsPermitted()){
             return;
         }
-        new Handler(Looper.getMainLooper()).post(() -> {
-            String trackInfo = parseTrackDetails(mediaPlayerService.getCurrentTrack());
-            Notification notification = createNotification(mediaPlayerService.getCurrentStatus(), trackInfo);
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(NOTIFICATION_ID, notification);
-        });
+        resetErrorStatusAfterDelay();
+        new Handler(Looper.getMainLooper()).post(() ->
+            sendNotification(mediaPlayerService.getCurrentStatus(), mediaPlayerService.getCurrentTrack()));
+    }
+
+    private final AtomicBoolean hasErrorNotificationBeenReplaced = new AtomicBoolean(false);
+
+    private void resetErrorStatusAfterDelay(){
+        if(!mediaPlayerService.hasEncounteredError()){
+            hasErrorNotificationBeenReplaced.set(true);
+            return;
+        }else{
+            hasErrorNotificationBeenReplaced.set(false);
+        }
+        String status = mediaPlayerService.getReadyStatusStr();
+        Track track = mediaPlayerService.getCurrentTrack();
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if(!hasErrorNotificationBeenReplaced.get()){
+                sendNotification(status, track);
+                hasErrorNotificationBeenReplaced.set(true);
+            }
+        }, 9_000);
+    }
+
+
+
+
+    private void log(String msg){
+        System.out.println("^^^ MediaNotificationManager: " + msg);
+    }
+
+
+    private void sendNotification( String status, Track track){
+        String trackInfo = parseTrackDetails(track);
+        Notification notification = createNotification(status, trackInfo);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(NOTIFICATION_ID, notification);
+    }
+
+
+    void dismissNotification(){
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(NOTIFICATION_ID);
     }
 
 
@@ -200,9 +238,4 @@ public class MediaNotificationManager {
                 PendingIntent.FLAG_IMMUTABLE);
     }
 
-
-    void dismissNotification(){
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(NOTIFICATION_ID);
-    }
 }

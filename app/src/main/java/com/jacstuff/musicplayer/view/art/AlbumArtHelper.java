@@ -55,6 +55,12 @@ public class AlbumArtHelper {
     }
 
 
+    public void changeAlbumArtToBlank(){
+        assignBlankAlbumArt(albumArtImageView);
+        assignBlankAlbumArt(albumArtLargeImageView);
+    }
+
+
     private void showLargeAlbumArt(){
         Animator animator = createShowAnimatorFor(albumArtLargeView, ()-> {});
         albumArtLargeView.setVisibility(View.VISIBLE);
@@ -134,10 +140,13 @@ public class AlbumArtHelper {
             imageView.setImageDrawable(new BitmapDrawable(mainActivity.getResources(), updatedAlbumArt));
             return;
         }
-        imageView.setImageResource(R.drawable.album_art_empty);
+        assignBlankAlbumArt(imageView);
     }
 
 
+    public void assignBlankAlbumArt(ImageView imageView){
+        imageView.setImageResource(R.drawable.album_art_empty);
+    }
 
 
 }
