@@ -1,6 +1,8 @@
-package com.jacstuff.musicplayer.service;
+package com.jacstuff.musicplayer.service.helpers;
 
 import com.jacstuff.musicplayer.MainActivity;
+import com.jacstuff.musicplayer.service.MediaNotificationManager;
+import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.search.TrackFinder;
 import com.jacstuff.musicplayer.service.db.track.Track;

@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.service;
+package com.jacstuff.musicplayer.service.helpers;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Looper;
+
+import com.jacstuff.musicplayer.service.MediaPlayerService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +29,7 @@ public class BroadcastHelper {
     Map<BroadcastReceiver, String> broadcastReceiverMap;
     private final AtomicBoolean shouldSkipBroadcastReceivedForTrackChange = new AtomicBoolean();
 
-    BroadcastHelper(MediaPlayerService mediaPlayerService){
+    public BroadcastHelper(MediaPlayerService mediaPlayerService){
         this.mediaPlayerService = mediaPlayerService;
         setupBroadcastReceivers();
     }

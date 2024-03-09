@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.service;
+package com.jacstuff.musicplayer.service.helpers;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.track.Track;
 
 import java.io.IOException;
@@ -30,7 +31,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     private final AtomicBoolean isPreparingTrack = new AtomicBoolean();
     private int elapsedTime;
     private Track currentTrack;
-    private Bitmap currentAlbumArt;
     private final ScheduledExecutorService executorService;
 
 
@@ -55,7 +55,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    void loadNext(Track track){
+    public void loadNext(Track track){
         loadTrack(track == null ? currentTrack : track);
         cancelScheduledStoppageOfTrack();
     }
@@ -71,7 +71,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    void onDestroy(){
+    public void onDestroy(){
         releaseMediaPlayerAndLocks();
         mediaPlayer.release();
         mediaPlayer = null;
@@ -90,7 +90,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    void stop(boolean shouldUpdateMainView){
+    public void stop(boolean shouldUpdateMainView){
         stop(shouldUpdateMainView, true);
     }
 
@@ -100,7 +100,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    void assignTrack(Track track){
+    public void assignTrack(Track track){
         currentTrack = track;
         elapsedTime = 0;
         if(currentTrack == null){
@@ -119,12 +119,13 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         select(currentTrack);
     }
 
+
     private void log(String msg){
         System.out.println("^^^ MediaPlayerHelper: " + msg);
     }
 
 
-    void selectAndPlayTrack(Track track){
+    public void selectAndPlayTrack(Track track){
         cancelScheduledStoppageOfTrack();
         currentTrack = track;
         assignAlbumArt(track);
@@ -176,12 +177,9 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     //NB try-with-resources requires API 29 (version code Q), and min is currently API 26
     private void assignAlbumArt(Track track){
-        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+        AlbumArtRetriever albumArtRetriever = mediaPlayerService.getAlbumArtRetriever();
         try{
-            mediaMetadataRetriever.setDataSource(track.getPathname());
-            currentAlbumArt = retrieveAlbumArt(mediaMetadataRetriever);
-            mediaPlayerService.setAlbumArtOnMainView(currentAlbumArt);
-            mediaMetadataRetriever.close();
+            albumArtRetriever.assignAlbumArt(track);
         }
         catch(IOException e){
             e.printStackTrace();
@@ -208,11 +206,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    public Bitmap getCurrentAlbumArt(){
-        return currentAlbumArt;
-    }
-
-
     public Track getCurrentTrack(){
         return currentTrack;
     }
@@ -223,16 +216,9 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    private Bitmap retrieveAlbumArt(MediaMetadataRetriever mediaMetadataRetriever){
-        byte[] coverArt = mediaMetadataRetriever.getEmbeddedPicture();
-        if (coverArt != null) {
-            return BitmapFactory.decodeByteArray(coverArt, 0, coverArt.length);
-        }
-        return null;
-    }
 
 
-    void playTrack(){
+    public void playTrack(){
         if(currentState == MediaPlayerState.STOPPED || currentState == MediaPlayerState.FINISHED){
             updateViewsEnsurePlayerStoppedAndSchedulePlay();
         }
@@ -248,24 +234,24 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    boolean isPlaying(){
+    public boolean isPlaying(){
         return currentState == MediaPlayerState.PLAYING;
     }
 
 
-    boolean hasEncounteredError(){
+    public boolean hasEncounteredError(){
         return hasEncounteredError;
     }
 
 
-    void cancelScheduledStoppageOfTrack(){
+    public void cancelScheduledStoppageOfTrack(){
         if(stopTrackFuture != null) {
             stopTrackFuture.cancel(false);
         }
     }
 
 
-    void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
+    public void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
         log("entered stop(boolean, boolean)");
         if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED) {
             mediaPlayer.stop();
@@ -299,12 +285,12 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    boolean isPaused(){
+    public boolean isPaused(){
         return currentState == MediaPlayerState.PAUSED;
     }
 
 
-    void enabledStopAfterTrackFinishes(){
+    public void enabledStopAfterTrackFinishes(){
         if(currentState == MediaPlayerState.PLAYING) {
             shouldNextTrackPlayAfterCurrentTrackEnds = false;
         }
@@ -336,13 +322,14 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    void pauseMediaPlayer(){
+    public void pauseMediaPlayer(){
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             stopUpdatingElapsedTimeOnView();
             currentState = MediaPlayerState.PAUSED;
         }
     }
+
 
     public void stopUpdatingElapsedTimeOnView(){
         if(updateElapsedTimeFuture == null){
@@ -351,13 +338,13 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         updateElapsedTimeFuture.cancel(false);
     }
 
-    void createMediaPlayer(){
+
+    public void createMediaPlayer(){
         mediaPlayer = new MediaPlayer();
         currentState = MediaPlayerState.STOPPED;
         mediaPlayer.setOnCompletionListener(this::onTrackFinished);
         setupErrorListener();
     }
-
 
 
     private void onTrackFinished(MediaPlayer mediaPlayer){
@@ -398,7 +385,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-
     public void seek(int milliseconds){
         if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
             mediaPlayer.seekTo(milliseconds);
@@ -406,7 +392,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    void setCpuWakeLock(Context context){
+    public void setCpuWakeLock(Context context){
             mediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
     }
 

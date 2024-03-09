@@ -16,25 +16,56 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.helpers.AlbumArtRetriever;
+import com.jacstuff.musicplayer.service.helpers.BroadcastHelper;
+import com.jacstuff.musicplayer.service.helpers.MediaPlayerHelper;
+import com.jacstuff.musicplayer.service.helpers.PlaylistHelper;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 
 import java.util.List;
 
 public class MediaPlayerService extends Service{
 
-
     private MediaNotificationManager mediaNotificationManager;
-
     private MainActivity mainActivity;
     private final IBinder binder = new LocalBinder();
     private final PlaylistHelper playlistHelper;
     private final MediaPlayerHelper mediaPlayerHelper;
     private BroadcastHelper broadcastHelper;
-
+    private AlbumArtRetriever albumArtRetriever;
 
     public MediaPlayerService() {
         playlistHelper = new PlaylistHelper(this);
         mediaPlayerHelper = new MediaPlayerHelper(this);
+    }
+
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mediaPlayerHelper.createMediaPlayer();
+        broadcastHelper = new BroadcastHelper(this);
+        mediaNotificationManager = new MediaNotificationManager(getApplicationContext(), this);
+        playlistHelper.setMediaNotificationManager(mediaNotificationManager);
+        albumArtRetriever = new AlbumArtRetriever(this, getApplicationContext());
+        moveToForeground();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        broadcastHelper.onDestroy();
+        mediaPlayerHelper.stop(false, false);
+        mediaPlayerHelper.onDestroy();
+        mediaNotificationManager.dismissNotification();
+        mediaNotificationManager = null;
+    }
+
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId){
+        return Service.START_NOT_STICKY; // service is not restarted when terminated
     }
 
 
@@ -45,7 +76,7 @@ public class MediaPlayerService extends Service{
     }
 
 
-    void notifyMainViewOfMediaPlayerPlaying(){
+    public void notifyMainViewOfMediaPlayerPlaying(){
         mainActivity.notifyMediaPlayerPlaying();
     }
 
@@ -74,7 +105,7 @@ public class MediaPlayerService extends Service{
     }
 
 
-    void displayErrorOnMainView(Track track){
+    public void displayErrorOnMainView(Track track){
         mainActivity.displayError(track);
     }
 
@@ -157,6 +188,8 @@ public class MediaPlayerService extends Service{
     public void loadAlbumOTrack(Track track){
         playlistHelper.loadAlbumOfTrack(track);
     }
+
+    public Bitmap getAlbumArtForNotification(){ return albumArtRetriever.getAlbumArtForNotification(); }
 
 
     public void updateViewTrackList(PlaylistManager playlistManager) {
@@ -254,12 +287,12 @@ public class MediaPlayerService extends Service{
     }
 
 
-    void resetElapsedTimeOnMainView(){
+    public void resetElapsedTimeOnMainView(){
         mainActivity.resetElapsedTime();
     }
 
 
-    void updateViewsOnTrackAssigned(){
+    public void updateViewsOnTrackAssigned(){
         mediaNotificationManager.updateNotification();
         mainActivity.setTrackDetails(mediaPlayerHelper.getCurrentTrack(), 0);
         if(mediaPlayerHelper.isPaused()){
@@ -289,7 +322,7 @@ public class MediaPlayerService extends Service{
         if(currentTrack != null){
             mainActivity.setTrackDetails(currentTrack, 0);
             mainActivity.setElapsedTime(mediaPlayerHelper.getElapsedTime());
-            mainActivity.setAlbumArt(mediaPlayerHelper.getCurrentAlbumArt());
+            mainActivity.setAlbumArt(albumArtRetriever.getCurrentAlbumArt());
         }
         updateListViews(playlistManager);
     }
@@ -297,34 +330,6 @@ public class MediaPlayerService extends Service{
 
     public boolean isPlaying(){
         return mediaPlayerHelper.isPlaying();
-    }
-
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        mediaPlayerHelper.createMediaPlayer();
-        broadcastHelper = new BroadcastHelper(this);
-        mediaNotificationManager = new MediaNotificationManager(getApplicationContext(), this);
-        playlistHelper.setMediaNotificationManager(mediaNotificationManager);
-        moveToForeground();
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        broadcastHelper.onDestroy();
-        mediaPlayerHelper.stop(false, false);
-        mediaPlayerHelper.onDestroy();
-        mediaNotificationManager.dismissNotification();
-        mediaNotificationManager = null;
-    }
-
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId){
-        return Service.START_NOT_STICKY; // service is not restarted when terminated
     }
 
 
@@ -385,8 +390,8 @@ public class MediaPlayerService extends Service{
             resId = R.string.status_paused;
         }
         return getApplicationContext().getString(resId);
-
     }
+
 
     public String getReadyStatusStr(){
         return getApplicationContext().getString(R.string.status_ready);
@@ -405,9 +410,13 @@ public class MediaPlayerService extends Service{
 
 
     public Bitmap getAlbumArt(){
-        return mediaPlayerHelper.getCurrentAlbumArt();
+        return albumArtRetriever.getCurrentAlbumArt();
     }
 
+
+    public AlbumArtRetriever getAlbumArtRetriever(){
+        return albumArtRetriever;
+    }
 
 
     public void notifyMainViewThatFileDoesNotExist(Track track){
@@ -420,7 +429,7 @@ public class MediaPlayerService extends Service{
     }
 
 
-    void updateViewsForConnecting(){
+    public void updateViewsForConnecting(){
         broadcastHelper.notifyViewOfConnectingStatus();
         mediaNotificationManager.updateNotification();
     }
@@ -431,7 +440,7 @@ public class MediaPlayerService extends Service{
      }
 
 
-    void setCpuWakeLock(){
+    public void setCpuWakeLock(){
         if (checkSelfPermission(Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
             mediaPlayerHelper.setCpuWakeLock(getApplicationContext());
         }

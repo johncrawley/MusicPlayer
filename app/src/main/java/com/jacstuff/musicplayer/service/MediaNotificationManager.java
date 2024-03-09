@@ -1,9 +1,9 @@
 package com.jacstuff.musicplayer.service;
 
-import static com.jacstuff.musicplayer.service.BroadcastHelper.ACTION_PAUSE_PLAYER;
-import static com.jacstuff.musicplayer.service.BroadcastHelper.ACTION_PLAY;
-import static com.jacstuff.musicplayer.service.BroadcastHelper.ACTION_SELECT_NEXT_TRACK;
-import static com.jacstuff.musicplayer.service.BroadcastHelper.ACTION_SELECT_PREVIOUS_TRACK;
+import static com.jacstuff.musicplayer.service.helpers.BroadcastHelper.ACTION_PAUSE_PLAYER;
+import static com.jacstuff.musicplayer.service.helpers.BroadcastHelper.ACTION_PLAY;
+import static com.jacstuff.musicplayer.service.helpers.BroadcastHelper.ACTION_SELECT_NEXT_TRACK;
+import static com.jacstuff.musicplayer.service.helpers.BroadcastHelper.ACTION_SELECT_PREVIOUS_TRACK;
 
 import android.Manifest;
 import android.app.Notification;
@@ -13,8 +13,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -35,6 +33,7 @@ public class MediaNotificationManager {
     final static int NOTIFICATION_ID = 1001;
     private PendingIntent pendingIntent;
     final static String NOTIFICATION_CHANNEL_ID = "com.jcrawley.musicplayer-notification";
+    private final AtomicBoolean hasErrorNotificationBeenReplaced = new AtomicBoolean(false);
 
 
     MediaNotificationManager(Context context, MediaPlayerService mediaPlayerService){
@@ -45,14 +44,13 @@ public class MediaNotificationManager {
 
     Notification createNotification(String heading, String channelName){
 
-
         final NotificationCompat.Builder notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(heading)
                 .setContentText(channelName)
                 .setSilent(true)
                 .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
                 .setSmallIcon(R.drawable.ic_baseline_music_note_24)
-                .setLargeIcon(createLargeIconBitmap())
+                .setLargeIcon(mediaPlayerService.getAlbumArtForNotification())
                 .setNumber(-1)
                 .setOnlyAlertOnce(true)
                 .setContentIntent(pendingIntent)
@@ -64,31 +62,6 @@ public class MediaNotificationManager {
         addPauseButtonTo(notification);
         addNextButtonTo(notification);
         return notification.build();
-    }
-
-
-    private Bitmap createLargeIconBitmap(){
-        if (mediaPlayerService.getAlbumArt() != null){
-            return createScaledBitmapForLargeIcon(mediaPlayerService.getAlbumArt());
-        }
-        if(context == null){
-            return null;
-        }
-        try{
-            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.album_art_empty);
-            if(bitmap == null){
-                return null;
-            }
-            return createScaledBitmapForLargeIcon(bitmap);
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
-    private Bitmap createScaledBitmapForLargeIcon(Bitmap bitmap){
-        return Bitmap.createScaledBitmap(bitmap, 128, 128, false);
     }
 
 
@@ -106,7 +79,7 @@ public class MediaNotificationManager {
     }
 
 
-    void updateNotification() {
+    public void updateNotification() {
         if(!isPostNotificationsPermitted()){
             return;
         }
@@ -115,7 +88,6 @@ public class MediaNotificationManager {
             sendNotification(mediaPlayerService.getCurrentStatus(), mediaPlayerService.getCurrentTrack()));
     }
 
-    private final AtomicBoolean hasErrorNotificationBeenReplaced = new AtomicBoolean(false);
 
     private void resetErrorStatusAfterDelay(){
         if(!mediaPlayerService.hasEncounteredError()){
@@ -134,8 +106,6 @@ public class MediaNotificationManager {
             }
         }, 9_000);
     }
-
-
 
 
     private void log(String msg){
