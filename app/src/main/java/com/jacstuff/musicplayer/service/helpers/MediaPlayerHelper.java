@@ -216,8 +216,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-
-
     public void playTrack(){
         if(currentState == MediaPlayerState.STOPPED || currentState == MediaPlayerState.FINISHED){
             updateViewsEnsurePlayerStoppedAndSchedulePlay();

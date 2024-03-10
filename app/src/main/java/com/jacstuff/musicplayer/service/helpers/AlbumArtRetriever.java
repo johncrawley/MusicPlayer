@@ -16,19 +16,27 @@ public class AlbumArtRetriever {
     private final MediaPlayerService mediaPlayerService;
     private final Context context;
     private Bitmap currentAlbumArt;
+    private Bitmap blankAlbumArt;
+
 
     public AlbumArtRetriever(MediaPlayerService mediaPlayerService, Context context){
         this.mediaPlayerService = mediaPlayerService;
         this.context = context;
+        loadBlankAlbumArt();
     }
 
 
     public void assignAlbumArt(Track track) throws IOException, IllegalArgumentException{
-        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-        mediaMetadataRetriever.setDataSource(track.getPathname());
-        currentAlbumArt = retrieveAlbumArt(mediaMetadataRetriever);
-        mediaPlayerService.setAlbumArtOnMainView(currentAlbumArt);
-        mediaMetadataRetriever.close();
+        try {
+            MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+            mediaMetadataRetriever.setDataSource(track.getPathname());
+            currentAlbumArt = retrieveAlbumArt(mediaMetadataRetriever);
+            mediaPlayerService.setAlbumArtOnMainView(currentAlbumArt);
+            mediaMetadataRetriever.close();
+        }catch(IOException | IllegalArgumentException e){
+            currentAlbumArt = blankAlbumArt;
+            throw e;
+        }
     }
 
 
@@ -42,21 +50,26 @@ public class AlbumArtRetriever {
 
 
     public Bitmap getAlbumArtForNotification(){
-        if (mediaPlayerService.getAlbumArt() != null){
-            return createScaledBitmapForLargeIcon(mediaPlayerService.getAlbumArt());
+        if (currentAlbumArt != null){
+            return createScaledBitmapForLargeIcon(currentAlbumArt);
         }
         if(context == null){
             return null;
         }
+        currentAlbumArt = blankAlbumArt;
+        return blankAlbumArt;
+    }
+
+
+    private void loadBlankAlbumArt(){
         try{
             Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.album_art_empty);
             if(bitmap == null){
-                return null;
+               return;
             }
-            return createScaledBitmapForLargeIcon(bitmap);
+            blankAlbumArt = createScaledBitmapForLargeIcon(bitmap);
         }catch (Exception e){
             e.printStackTrace();
-            return null;
         }
     }
 

@@ -83,7 +83,7 @@ public class MediaNotificationManager {
         if(!isPostNotificationsPermitted()){
             return;
         }
-        resetErrorStatusAfterDelay();
+       // resetErrorStatusAfterDelay();
         new Handler(Looper.getMainLooper()).post(() ->
             sendNotification(mediaPlayerService.getCurrentStatus(), mediaPlayerService.getCurrentTrack()));
     }
