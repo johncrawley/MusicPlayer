@@ -403,7 +403,6 @@ public class MediaPlayerService extends Service{
     }
 
 
-
     public Track getCurrentTrack(){
         return mediaPlayerHelper.getCurrentTrack();
     }
@@ -458,12 +457,5 @@ public class MediaPlayerService extends Service{
         mainActivity.notifyMediaPlayerPaused();
         mediaPlayerHelper.cancelScheduledStoppageOfTrack();
     }
-
-
-    public void testErrorOnNotification(){
-        mediaPlayerHelper.hasEncounteredError = true;
-        mediaNotificationManager.updateNotification();
-    }
-
 
 }

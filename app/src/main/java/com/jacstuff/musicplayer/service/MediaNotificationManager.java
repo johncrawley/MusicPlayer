@@ -43,7 +43,6 @@ public class MediaNotificationManager {
 
 
     Notification createNotification(String heading, String channelName){
-
         final NotificationCompat.Builder notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(heading)
                 .setContentText(channelName)
@@ -83,15 +82,16 @@ public class MediaNotificationManager {
         if(!isPostNotificationsPermitted()){
             return;
         }
-       // resetErrorStatusAfterDelay();
+        resetErrorStatusAfterDelay();
         new Handler(Looper.getMainLooper()).post(() ->
             sendNotification(mediaPlayerService.getCurrentStatus(), mediaPlayerService.getCurrentTrack()));
     }
 
 
     private void resetErrorStatusAfterDelay(){
+        int numberOfMillisecondsBeforeResettingStatus = 9_000;
+        hasErrorNotificationBeenReplaced.set(true);
         if(!mediaPlayerService.hasEncounteredError()){
-            hasErrorNotificationBeenReplaced.set(true);
             return;
         }else{
             hasErrorNotificationBeenReplaced.set(false);
@@ -104,12 +104,7 @@ public class MediaNotificationManager {
                 sendNotification(status, track);
                 hasErrorNotificationBeenReplaced.set(true);
             }
-        }, 9_000);
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ MediaNotificationManager: " + msg);
+        }, numberOfMillisecondsBeforeResettingStatus);
     }
 
 

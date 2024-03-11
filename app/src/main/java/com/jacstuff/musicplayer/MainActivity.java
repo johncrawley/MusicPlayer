@@ -549,14 +549,7 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.options){
             startSettingsActivity();
         }
-        else if(id == R.id.temp){
-            testErrorOnNotification();
-        }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void testErrorOnNotification(){
-        mediaPlayerService.testErrorOnNotification();
     }
 
 

@@ -56,8 +56,14 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     public void loadNext(Track track){
+        resetErrorStatus();
         loadTrack(track == null ? currentTrack : track);
         cancelScheduledStoppageOfTrack();
+    }
+
+
+    private void resetErrorStatus(){
+        hasEncounteredError = false;
     }
 
 
@@ -145,6 +151,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     public void loadPreviousTrack(Track previousTrack){
+        resetErrorStatus();
         loadTrack(previousTrack);
         cancelScheduledStoppageOfTrack();
     }
@@ -296,8 +303,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     private void startTrack(){
-        log("Entered startTrack()");
-        hasEncounteredError = false;
+        resetErrorStatus();
         try {
             isPreparingTrack.set(true);
             stopPlayer();
@@ -308,14 +314,15 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
             startUpdatingElapsedTimeOnView();
             currentState = MediaPlayerState.PLAYING;
             mediaPlayerService.notifyMainViewOfMediaPlayerPlaying();
-            mediaPlayerService.updateNotification();
         }catch (IOException e){
             log("IO exception trying to start track: " + currentTrack.getPathname());
             e.printStackTrace();
             onError();
+            hasEncounteredError = true;
             mediaPlayerService.displayErrorOnMainView(currentTrack);
         }finally{
             isPreparingTrack.set(false);
+            mediaPlayerService.updateNotification();
         }
     }
 

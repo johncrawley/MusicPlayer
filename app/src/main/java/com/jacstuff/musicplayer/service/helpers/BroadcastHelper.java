@@ -13,6 +13,7 @@ import com.jacstuff.musicplayer.service.MediaPlayerService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 public class BroadcastHelper {
 
@@ -80,11 +81,7 @@ public class BroadcastHelper {
     private final BroadcastReceiver serviceReceiverForPlay = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            MediaPlayerHelper mediaPlayerHelper = mediaPlayerService.getMediaPlayerHelper();
-            if(mediaPlayerHelper == null){
-                return;
-            }
-            mediaPlayerHelper.onReceiveBroadcastForPlay();
+            runOnAvailableMediaPlayerHelper(MediaPlayerHelper::onReceiveBroadcastForPlay);
         }
     };
 
@@ -128,6 +125,17 @@ public class BroadcastHelper {
             sendBroadcast(broadcast);
         }
     };
+
+
+    private void runOnAvailableMediaPlayerHelper(Consumer<MediaPlayerHelper> consumer){
+        if(mediaPlayerService == null){
+            return;
+        }
+        MediaPlayerHelper mediaPlayerHelper = mediaPlayerService.getMediaPlayerHelper();
+        if(mediaPlayerHelper != null){
+            consumer.accept(mediaPlayerHelper);
+        }
+    }
 
 
     private final BroadcastReceiver serviceReceiverForPause = new BroadcastReceiver() {
