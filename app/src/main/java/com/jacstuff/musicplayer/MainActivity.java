@@ -397,14 +397,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void updatePlaylistList(){
-        PlaylistsFragment fragment = (PlaylistsFragment)getSupportFragmentManager().findFragmentByTag("f1");
-        if(fragment != null) {
-            fragment.onAddNewPlaylist();
-        }
-    }
-
-
     public void updateTracksList(Playlist playlist, Track currentTrack, int currentTrackIndex){
         runOnUiThread(()-> {
             if(tracksFragment != null && tracksFragment.getContext() != null) {

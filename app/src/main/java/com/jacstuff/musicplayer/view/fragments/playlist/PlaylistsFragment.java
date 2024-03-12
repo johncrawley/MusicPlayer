@@ -10,6 +10,8 @@ import static com.jacstuff.musicplayer.view.fragments.playlist.PlaylistOptionsFr
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,12 +90,22 @@ public class PlaylistsFragment extends Fragment {
 
     public void onAddNewPlaylist(){
         hasClicked = false;
+        int previousPlaylistCount =  playlistRecyclerAdapter.getItemCount();
         refreshList();
+        toastIfPlaylistAdded(previousPlaylistCount);
     }
 
 
     public void onAddDialogDismissed(){
         hasClicked = false;
+        refreshList();
+    }
+
+
+    private void toastIfPlaylistAdded(int previousPlaylistCount){
+        if(playlistRecyclerAdapter != null && playlistRecyclerAdapter.getItemCount() > previousPlaylistCount){
+            toastPlaylistCreated();
+        }
     }
 
 
@@ -225,6 +237,14 @@ public class PlaylistsFragment extends Fragment {
 
     private void toastLoaded(){
         Toast.makeText(getContext(), getString(R.string.toast_playlist_tracks_loaded), Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void toastPlaylistCreated(){
+        new Handler(Looper.getMainLooper())
+                .postDelayed(()->
+                    Toast.makeText(getContext(), getString(R.string.toast_playlist_created), Toast.LENGTH_SHORT).show()
+        , 500);
     }
 
 }

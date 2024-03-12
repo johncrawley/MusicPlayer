@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
@@ -80,15 +79,12 @@ public class AddPlaylistFragment extends DialogFragment {
     private void setupTextChangedListener(){
         addPlaylistNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 disableCreateButtonIfInputsAreEmpty();
             }
 
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
         });
     }
 
@@ -102,10 +98,12 @@ public class AddPlaylistFragment extends DialogFragment {
         });
     }
 
+
     private void setupCancelButton(View parentView){
         Button cancelButton = parentView.findViewById(R.id.cancelDialogButton);
         cancelButton.setOnClickListener((View v)->dismiss());
     }
+
 
     private void updatePlaylistsOnParentFragment(){
         PlaylistsFragment playlistsFragment = getPlaylistsFragment();
@@ -113,6 +111,7 @@ public class AddPlaylistFragment extends DialogFragment {
             playlistsFragment.onAddNewPlaylist();
         }
     }
+
 
     private void assignPlaylistNames(){
         PlaylistsFragment playlistsFragment = getPlaylistsFragment();
@@ -134,10 +133,6 @@ public class AddPlaylistFragment extends DialogFragment {
 
     @Override
     public void dismiss(){
-        MainActivity mainActivity = (MainActivity)getActivity();
-        if(mainActivity != null) {
-            mainActivity.updatePlaylistList();
-        }
         super.dismiss();
     }
 

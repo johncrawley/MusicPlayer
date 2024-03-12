@@ -46,6 +46,7 @@
     <string name="toast_artist_tracks_loaded">Artist Tracks Loaded</string>
     <string name="toast_album_tracks_loaded">Album Loaded</string>
     <string name="toast_playlist_tracks_loaded">Playlist Loaded</string>
+    <string name="toast_playlist_created">Playlist Created</string>
     <string name="toast_genre_tracks_loaded">Genre Loaded</string>
 
     <string name="tracks_tab">Tracks</string>

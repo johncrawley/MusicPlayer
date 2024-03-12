@@ -84,9 +84,6 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
         this.playlists.clear();
         this.playlists.addAll(playlists);
         notifyDataSetChanged();
-        if(currentlySelectedView != null){
-            currentlySelectedView.callOnClick();
-        }
         reselectPreviouslySelectedPlaylist();
     }
 
@@ -138,7 +135,10 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
 
     public void clearLongClickedView(){
-        if(selectedPlaylist.getId() == longClickedPlaylist.getId()){
+        if(selectedPlaylist == null || longClickedPlaylist == null){
+            return;
+        }
+        if(selectedPlaylist.getId().equals(longClickedPlaylist.getId())){
            selectedPlaylist = null;
            currentlySelectedView = null;
         }

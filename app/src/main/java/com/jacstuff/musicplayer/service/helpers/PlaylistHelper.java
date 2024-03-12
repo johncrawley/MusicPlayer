@@ -128,7 +128,7 @@ public class PlaylistHelper {
         boolean isGenreLoaded = playlistManager.loadTracksFromGenre(genreName);
         if(isGenreLoaded){
             mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
-            mediaPlayerService.notifyViewToDeselectPlaylistAndArtistTabs();
+            mediaPlayerService.notifyViewToDeselectEverythingButGenre();
             return;
         }
         mediaPlayerService.notifyViewOfAlbumNotLoaded(genreName);
