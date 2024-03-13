@@ -15,7 +15,7 @@
         <item name="materialButtonStyle">@style/customMaterialOutlineButtonStyle</item>
         <item name="android:alertDialogTheme">@style/customAlertDialogStyle</item>
         <item name="imageButtonStyle">@style/customImageButtonStyle</item>
-        <item name="android:fontFamily">@font/sofia_sans_condensed_variable</item>
+        <item name="android:fontFamily">@font/swansea_q3pd</item>
     </style>
 
 

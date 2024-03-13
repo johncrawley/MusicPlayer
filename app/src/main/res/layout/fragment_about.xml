@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    android:gravity="center"
+    android:background="@color/default_dialog_background"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:text="@string/app_name"
+        android:layout_marginVertical="8dp"
+        />
+
+    <TextView
+        android:id="@+id/aboutInfoText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:text="@string/about_info"
+        android:layout_marginVertical="8dp"
+        />
+
+    <TextView
+        android:id="@+id/aboutFontHeadingText"
+        android:layout_width="wrap_content"
+        android:textSize="14sp"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:text="@string/about_font_heading"
+        android:layout_marginVertical="8dp"
+        />
+
+
+    <TextView
+        android:id="@+id/aboutFontText"
+        android:fontFamily="sans-serif"
+        android:layout_width="wrap_content"
+        android:textSize="12sp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:text="@string/about_font_info"
+        />
+
+    <Button
+        android:id="@+id/dismissAboutDialogButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
+        android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"
+        android:text="@android:string/ok" />
+</LinearLayout>

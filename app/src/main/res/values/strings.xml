@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Music Player</string>
+    <string name="about_info">2024, Created by John Crawley</string>
+    <string name="about_font_heading">Font Information</string>
+    <string name="about_font_info">Main text: Swansea, Public Domain \n https://www.fontspace.com/swansea-font-f5873\n\n Time elapsed: Poe Monospace, Freeware\n https://www.fontspace.com/poe-monospace-font-f23572 </string>
     <string name="title_activity_settings">Settings</string>
     <string name="menu_button_refresh">Refresh</string>
     <string name="menu_button_search">Search</string>
@@ -84,7 +87,6 @@
     <string name="album_art_large_view_content_description">Album Art Expanded View</string>
     <string name="create_playlist_icon_content_description">Create Playlist/</string>
     <string name="add_tracks_to_playlist_icon_content_description">Add Tracks To Current Playlist/</string>
-
 
     <string name="button_stop_now">Stop Now</string>
     <string name="button_stop_after_current_track">Stop After Current Track</string>

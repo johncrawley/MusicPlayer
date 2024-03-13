@@ -26,8 +26,10 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.Message;
+import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
 import com.jacstuff.musicplayer.view.fragments.album.AlbumsFragment;
 import com.jacstuff.musicplayer.view.fragments.artist.ArtistsFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
@@ -37,6 +39,7 @@ import com.jacstuff.musicplayer.view.playlist.AddTrackToPlaylistViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
 import com.jacstuff.musicplayer.view.tab.TabsViewStateAdapter;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
+import com.jacstuff.musicplayer.view.utils.FragmentHelper;
 import com.jacstuff.musicplayer.view.utils.ThemeHelper;
 import com.jacstuff.musicplayer.view.art.AlbumArtHelper;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
@@ -301,16 +304,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public List<Track> getTrackList(){
-        if(mediaPlayerService == null){
-            return Collections.emptyList();
-        }
-        List<Track> tracks = mediaPlayerService.getTrackList();
-        updateViews(tracks, mediaPlayerService.getCurrentTrack());
-        return tracks;
-    }
-
-
     public Playlist getCurrentPlaylist(){
         return mediaPlayerService == null ? new Playlist(-50L, "Empty Playlist", false):
                 mediaPlayerService.getPlaylistManager().getCurrentPlaylist();
@@ -541,6 +534,9 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.options){
             startSettingsActivity();
         }
+        else if(id == R.id.about){
+            loadAboutDialog();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -548,6 +544,10 @@ public class MainActivity extends AppCompatActivity {
     private void startSettingsActivity(){
         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    private void loadAboutDialog(){
+        FragmentManagerHelper.showDialog(this, new AboutDialogFragment(), "aboutDialogFragment");
     }
 
 

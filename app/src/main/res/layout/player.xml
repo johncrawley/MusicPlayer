@@ -90,7 +90,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="@dimen/track_time_margin_bottom_small"
         android:text="@string/elapsed_time_label"
-        android:fontFamily="@font/courier_prime_regular"
+        android:fontFamily="@font/poe_monospace_djj6"
         android:textSize="@dimen/track_time_text_size_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

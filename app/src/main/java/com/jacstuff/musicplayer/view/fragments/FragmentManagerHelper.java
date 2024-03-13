@@ -1,7 +1,9 @@
 package com.jacstuff.musicplayer.view.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,6 +20,14 @@ public class FragmentManagerHelper {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         removePreviousFragmentTransaction(fragmentManager, tag, fragmentTransaction);
         dialogFragment.setArguments(bundle);
+        dialogFragment.show(fragmentTransaction, tag);
+    }
+
+
+    public static void showDialog(AppCompatActivity activity, DialogFragment dialogFragment, String tag){
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        removePreviousFragmentTransaction(fragmentManager, tag, fragmentTransaction);
         dialogFragment.show(fragmentTransaction, tag);
     }
 
