@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 public class MainViewModel extends ViewModel {
     public boolean hasFourthTabBeenInitialized = false;
+    public boolean isFirstPlaylistLoad = true;
     public int currentTabIndex = 0;
     public Bitmap currentAlbumArt;
 

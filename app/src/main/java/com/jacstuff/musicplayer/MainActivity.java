@@ -32,6 +32,7 @@ import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
 import com.jacstuff.musicplayer.view.fragments.album.AlbumsFragment;
 import com.jacstuff.musicplayer.view.fragments.artist.ArtistsFragment;
+import com.jacstuff.musicplayer.view.fragments.tracks.TrackOptionsDialog;
 import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.view.player.PlayerViewHelper;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             addTrackToPlaylistViewHelper = new AddTrackToPlaylistViewHelper(MainActivity.this);
             searchViewHelper = new SearchViewHelper(MainActivity.this);
             searchViewHelper.setMediaPlayerService(mediaPlayerService);
+            setupOptionsMenuForCurrentTrack();
         }
         @Override public void onServiceDisconnected(ComponentName arg0) {}
     };
@@ -365,16 +367,7 @@ public class MainActivity extends AppCompatActivity {
         toast(getString(resId));
     }
 
-    private void log(String msg){
-        System.out.println("^^^ MainActivity: " + msg);
-    }
-
-
-    public void deselectCurrentTrack(){
-        log("Entered deselectCurrentTrack");
-        tracksFragment.deselectCurrentItem();
-    }
-
+    public void deselectCurrentTrack(){ tracksFragment.deselectCurrentItem(); }
 
     private void setupViewModel(){
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
@@ -419,6 +412,18 @@ public class MainActivity extends AppCompatActivity {
         sendFragmentMessage(PlaylistsFragment.NOTIFY_TO_DESELECT_ITEMS);
         sendFragmentMessage(ArtistsFragment.NOTIFY_TO_DESELECT_ITEMS);
         sendFragmentMessage(AlbumsFragment.NOTIFY_TO_DESELECT_ITEMS);
+    }
+
+
+    private void setupOptionsMenuForCurrentTrack(){
+        List<View> views = List.of(findViewById(R.id.trackTitle), findViewById(R.id.albumArtImageView), findViewById(R.id.trackDetailsLayout));
+        views.forEach(v -> v.setOnLongClickListener(c -> {createTrackOptionsFragment(); return false;}));
+    }
+
+
+    private void createTrackOptionsFragment() {
+        setSelectedTrack(mediaPlayerService.getCurrentTrack());
+        FragmentManagerHelper.showDialog(this, TrackOptionsDialog.newInstance(), "track_options_dialog");
     }
 
 
@@ -495,6 +500,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void displayPlaylistRefreshedMessage(){
+        if(viewModel.isFirstPlaylistLoad){
+            viewModel.isFirstPlaylistLoad = false;
+            return;
+        }
         String msg = getResources().getString(R.string.playlist_refreshed_message);
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }

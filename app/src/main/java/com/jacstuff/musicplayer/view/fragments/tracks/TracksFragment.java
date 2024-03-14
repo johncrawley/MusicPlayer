@@ -13,6 +13,7 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.List;
@@ -173,26 +174,13 @@ public class TracksFragment extends Fragment{
     }
 
 
-    private void createTrackOptionsFragment(Track track){
-        String tag = "track_options_dialog";
+    private void createTrackOptionsFragment(Track track) {
         MainActivity mainActivity = getMainActivity();
-        if(mainActivity == null){
+        if (mainActivity == null) {
             return;
         }
         mainActivity.setSelectedTrack(track);
-        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-        removePreviousFragmentTransaction(tag, fragmentTransaction);
-        TrackOptionsDialog trackOptionsDialog = TrackOptionsDialog.newInstance();
-        trackOptionsDialog.show(fragmentTransaction, tag);
-    }
-
-
-    private void removePreviousFragmentTransaction(String tag, FragmentTransaction fragmentTransaction){
-        Fragment prev = getParentFragmentManager().findFragmentByTag(tag);
-        if (prev != null) {
-            fragmentTransaction.remove(prev);
-        }
-        fragmentTransaction.addToBackStack(null);
+        FragmentManagerHelper.showDialog(this, TrackOptionsDialog.newInstance(), "track_options_dialog", new Bundle());
     }
 
 
