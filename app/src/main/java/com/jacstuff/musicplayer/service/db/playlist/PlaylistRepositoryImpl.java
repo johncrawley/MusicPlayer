@@ -63,7 +63,7 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
     @Override
     public List<Playlist> getAllPlaylists() {
         List<Playlist> playlists = new ArrayList<>();
-        playlists.add(new Playlist(PlaylistManagerImpl.ALL_TRACKS_PLAYLIST, Playlist.PlaylistType.ALL_TRACKS));
+        playlists.add(new Playlist(PlaylistManagerImpl.ALL_TRACKS_PLAYLIST, PlaylistType.ALL_TRACKS));
         playlists.addAll(getPlaylistsFromDB());
         return  playlists;
     }

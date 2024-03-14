@@ -1,13 +1,9 @@
 package com.jacstuff.musicplayer.service.db;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.jacstuff.musicplayer.service.db.track.Track;
-
-import java.util.List;
 
 public class DbUtils {
 
@@ -26,28 +22,6 @@ public class DbUtils {
         }
         db.endTransaction();
         return id;
-    }
-
-
-    public static void addTrackTo(List<Track> tracks, Cursor cursor){
-        tracks.add(new Track.Builder()
-                .createTrackWithPathname(getString(cursor, DbContract.TracksEntry.COL_PATH))
-                .withId(getLong(cursor, DbContract.TracksEntry._ID))
-                .withTitle(getString(cursor, DbContract.TracksEntry.COL_TITLE))
-                .withTrackNumber(-1)
-                .withArtist(getString(cursor, DbContract.TracksEntry.COL_ARTIST))
-                .withAlbum(getString(cursor, DbContract.TracksEntry.COL_ALBUM))
-                .build());
-    }
-
-
-    private static String getString(Cursor cursor, String name){
-        return cursor.getString(cursor.getColumnIndexOrThrow(name));
-    }
-
-
-    private static long getLong(Cursor cursor, String name){
-        return cursor.getLong(cursor.getColumnIndexOrThrow(name));
     }
 
 }

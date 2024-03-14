@@ -2,6 +2,7 @@ package com.jacstuff.musicplayer.service.db.album;
 
 import com.jacstuff.musicplayer.service.db.PlaylistStore;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
+import com.jacstuff.musicplayer.service.db.playlist.PlaylistType;
 import com.jacstuff.musicplayer.service.db.track.Track;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class Album implements PlaylistStore {
 
     @Override
     public Playlist getPlaylist(){
-        Playlist playlist = new Playlist(name, Playlist.PlaylistType.ALBUM);
+        Playlist playlist = new Playlist(name, PlaylistType.ALBUM);
         playlist.setTracks(allTracks);
         return playlist;
     }

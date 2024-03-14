@@ -2,6 +2,7 @@ package com.jacstuff.musicplayer.service.db.genre;
 
 import com.jacstuff.musicplayer.service.db.PlaylistStore;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
+import com.jacstuff.musicplayer.service.db.playlist.PlaylistType;
 import com.jacstuff.musicplayer.service.db.track.Track;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class Genre implements PlaylistStore {
 
     @Override
     public Playlist getPlaylist(){
-        Playlist playlist = new Playlist(name, Playlist.PlaylistType.GENRE);
+        Playlist playlist = new Playlist(name, PlaylistType.GENRE);
         playlist.setTracks(allTracks);
         return playlist;
     }

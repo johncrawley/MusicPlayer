@@ -7,34 +7,6 @@ import java.util.List;
 
 public class Playlist {
 
-    public enum PlaylistType {
-        ALL_TRACKS(-100L, false),
-        PLAYLIST(-1L, true),
-        ALBUM(-10L, false),
-        ARTIST(-20L, true),
-        GENRE(-30L, true);
-
-        final long defaultId;
-        final boolean isUserPlaylist;
-
-        PlaylistType(long defaultId, boolean isUserPlaylist){
-            this.defaultId = defaultId;
-            this.isUserPlaylist = isUserPlaylist;
-        }
-
-
-        public long getDefaultId(){
-            return defaultId;
-        }
-
-
-        public boolean isUserPlaylist(){
-            return isUserPlaylist;
-        }
-
-    }
-
-
     private final PlaylistType playlistType;
     private final Long id;
     private String name;

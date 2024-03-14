@@ -4,13 +4,11 @@ package com.jacstuff.musicplayer.service.playlist;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.os.Build;
 import android.provider.MediaStore;
 
 
 import androidx.preference.PreferenceManager;
 
-import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.album.Album;
 import com.jacstuff.musicplayer.service.db.artist.Artist;
 import com.jacstuff.musicplayer.service.db.genre.Genre;
@@ -19,10 +17,8 @@ import com.jacstuff.musicplayer.service.db.track.Track;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -31,7 +27,6 @@ public class TrackLoader {
 
     private final Context context;
     private List<Track> tracks;
-    private Set<String> artistsSet;
     private Map<String, Album> albums;
     private Map<String, Artist> artists;
     private Map<String, Genre> genres;
@@ -52,8 +47,6 @@ public class TrackLoader {
         albums = new ConcurrentHashMap<>(5000);
         artists = new ConcurrentHashMap<>(500);
         genres = new ConcurrentHashMap<>(100);
-        artistsSet = new HashSet<>(1000);
-        log("Entered loadAudioFiles()");
         addTracksData();
         return tracks;
     }
@@ -151,11 +144,6 @@ public class TrackLoader {
     }
 
 
-    public Set<String> getArtistsSet(){
-        return artistsSet;
-    }
-
-
     private void log(String msg){
         System.out.println("^^^ AudioInfoLoader: " + msg);
     }
@@ -186,24 +174,15 @@ public class TrackLoader {
 
 
     private String[] createProjection() {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            return new String[]{
-                    MediaStore.Audio.Media.DISPLAY_NAME,
-                    MediaStore.Audio.Media.TITLE,
-                    MediaStore.Audio.Media.ARTIST,
-                    MediaStore.Audio.Media.ALBUM,
-                    MediaStore.Audio.Media.DURATION,
-                    MediaStore.Audio.Media.DATA,
-                    MediaStore.Audio.Media.CD_TRACK_NUMBER,
-                    MediaStore.Audio.Media.GENRE};
-        }
         return new String[]{
                 MediaStore.Audio.Media.DISPLAY_NAME,
                 MediaStore.Audio.Media.TITLE,
                 MediaStore.Audio.Media.ARTIST,
                 MediaStore.Audio.Media.ALBUM,
                 MediaStore.Audio.Media.DURATION,
-                MediaStore.Audio.Media.DATA
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.CD_TRACK_NUMBER,
+                MediaStore.Audio.Media.GENRE
         };
     }
 
@@ -215,10 +194,8 @@ public class TrackLoader {
         addToColumnMap(cursor, MediaStore.Audio.Media.ALBUM);
         addToColumnMap(cursor, MediaStore.Audio.Media.TITLE);
         addToColumnMap(cursor, MediaStore.Audio.Media.DURATION);
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            addToColumnMap(cursor, MediaStore.Audio.Media.CD_TRACK_NUMBER);
-            addToColumnMap(cursor, MediaStore.Audio.Media.GENRE);
-        }
+        addToColumnMap(cursor, MediaStore.Audio.Media.CD_TRACK_NUMBER);
+        addToColumnMap(cursor, MediaStore.Audio.Media.GENRE);
     }
 
 
@@ -300,19 +277,13 @@ public class TrackLoader {
 
     private String getGenre(Cursor cursor){
         String genre = "";
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            genre = getValueFrom(cursor, MediaStore.Audio.Media.GENRE);
-        }
+        genre = getValueFrom(cursor, MediaStore.Audio.Media.GENRE);
         return genre == null ? "" : genre;
     }
 
 
     private int getTrackNumber(Cursor cursor){
-        int trackNumber = 1000;
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            trackNumber = getIntValueFrom(cursor, MediaStore.Audio.Media.CD_TRACK_NUMBER);
-        }
-        return trackNumber;
+        return getIntValueFrom(cursor, MediaStore.Audio.Media.CD_TRACK_NUMBER);
     }
 
 

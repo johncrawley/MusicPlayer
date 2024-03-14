@@ -9,6 +9,7 @@ import com.jacstuff.musicplayer.service.db.playlist.PlaylistItemRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistItemRepositoryImpl;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
+import com.jacstuff.musicplayer.service.db.playlist.PlaylistType;
 import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 
@@ -145,7 +146,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void setupDefaultPlaylists(){
-        allTracksPlaylist = new Playlist(ALL_TRACKS_PLAYLIST, Playlist.PlaylistType.ALL_TRACKS);
+        allTracksPlaylist = new Playlist(ALL_TRACKS_PLAYLIST, PlaylistType.ALL_TRACKS);
         currentPlaylist = allTracksPlaylist;
     }
 
@@ -154,7 +155,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(isCurrentPlaylist(playlist)){
             return;
         }
-        if(playlist.getType() == Playlist.PlaylistType.ALL_TRACKS){
+        if(playlist.getType() == PlaylistType.ALL_TRACKS){
             loadAllTracksPlaylist();
         }
         else{
