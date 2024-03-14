@@ -39,7 +39,6 @@ import com.jacstuff.musicplayer.view.playlist.AddTrackToPlaylistViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
 import com.jacstuff.musicplayer.view.tab.TabsViewStateAdapter;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
-import com.jacstuff.musicplayer.view.utils.FragmentHelper;
 import com.jacstuff.musicplayer.view.utils.ThemeHelper;
 import com.jacstuff.musicplayer.view.art.AlbumArtHelper;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
@@ -300,7 +299,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void loadAlbumOfSelectedTrack(){
-        mediaPlayerService.loadAlbumOTrack(selectedTrack);
+        mediaPlayerService.loadAlbumOfTrack(selectedTrack);
+    }
+
+    public void loadArtistOfSelectedTrack(){
+        mediaPlayerService.loadArtistOfTrack(selectedTrack);
     }
 
 

@@ -14,11 +14,14 @@ import androidx.fragment.app.DialogFragment;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 
 public class TrackOptionsDialog extends DialogFragment {
-
 
     public static TrackOptionsDialog newInstance() {
         return new TrackOptionsDialog();
@@ -40,9 +43,36 @@ public class TrackOptionsDialog extends DialogFragment {
 
     private void setupButtons(View parentView){
         ButtonMaker.createButton(parentView, R.id.enqueueTrackButton, this::enqueueCurrentTrack);
-        ButtonMaker.createButton(parentView, R.id.loadAlbumButton, this::loadRelatedAlbum);
+        setupLoadAlbumButton(parentView);
+        setupLoadArtistButton(parentView);
         setupAddTrackToPlaylistButton(parentView);
         setupRemoveTrackButton(parentView);
+    }
+
+
+    private void setupLoadAlbumButton(View parentView){
+        setupButtonIfConditionsMet(parentView, R.id.loadAlbumButton, Track::getAlbum, this::loadRelatedAlbum);
+    }
+
+
+    private void setupLoadArtistButton(View parentView){
+        setupButtonIfConditionsMet(parentView, R.id.loadArtistButton, Track::getArtist, this::loadRelatedArtist);
+    }
+
+
+    private void setupButtonIfConditionsMet(View parentView, int buttonId, Function<Track, String> function, Runnable runnable){
+        Track track = getCurrentTrack();
+        if(track == null){
+            return;
+        }
+        String attribute = function.apply(track);
+        if(attribute.isBlank() || attribute.equalsIgnoreCase("<unknown>")){
+            return;
+        }
+        Button button = ButtonMaker.createButton(parentView, buttonId, runnable);
+        if(button != null){
+            button.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -51,6 +81,14 @@ public class TrackOptionsDialog extends DialogFragment {
         if(addTrackToPlaylistButton != null) {
             setupVisibilityForUserPlaylistsExist(addTrackToPlaylistButton);
         }
+    }
+
+
+    private Track getCurrentTrack(){
+        if(getMainActivity() == null || getMainActivity().getMediaPlayerService() == null){
+            return  null;
+        }
+       return getMainActivity().getMediaPlayerService().getCurrentTrack();
     }
 
 
@@ -79,36 +117,34 @@ public class TrackOptionsDialog extends DialogFragment {
 
 
     private void enqueueCurrentTrack(){
-        MainActivity mainActivity = getMainActivity();
-        if(mainActivity != null){
-            mainActivity.addSelectedTrackToQueue();
-        }
-        dismissAfterDelay();
+        runThenDismissAfterDelay(MainActivity::addSelectedTrackToQueue);
     }
 
 
     private void loadRelatedAlbum(){
-        MainActivity mainActivity = getMainActivity();
-        if(mainActivity != null) {
-            mainActivity.loadAlbumOfSelectedTrack();
-        }
-        dismissAfterDelay();
+        runThenDismissAfterDelay(MainActivity::loadAlbumOfSelectedTrack);
+    }
+
+
+    private void loadRelatedArtist(){
+        runThenDismissAfterDelay(MainActivity::loadArtistOfSelectedTrack);
     }
 
 
     private void showAddTrackToPlaylistDialog(){
-        MainActivity mainActivity = getMainActivity();
-        if(mainActivity != null){
-            mainActivity.showAddTrackToPlaylistView();
-        }
-        dismissAfterDelay();
+        runThenDismissAfterDelay(MainActivity::showAddTrackToPlaylistView);
     }
 
 
     private void removeSelectedTrackFromPlaylist(){
-        MainActivity mainActivity = getMainActivity();
-        if(mainActivity != null){
-            mainActivity.removeSelectedTrackFromPlaylist();
+        runThenDismissAfterDelay(MainActivity::removeSelectedTrackFromPlaylist);
+    }
+
+
+    private void runThenDismissAfterDelay(Consumer<MainActivity> consumer){
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if(mainActivity != null) {
+            consumer.accept(mainActivity);
         }
         dismissAfterDelay();
     }

@@ -107,6 +107,7 @@ public class Track {
         return index;
     }
 
+
     @Override
     public String toString(){
        return "::: Track name: " +  getTitle()
@@ -116,8 +117,8 @@ public class Track {
                + " pathname: " + getPathname();
     }
 
-    public static class Builder{
 
+    public static class Builder{
 
         private String pathname, title, artist, album, disc, genre;
         private long id = -1;
@@ -176,6 +177,7 @@ public class Track {
             this.artist = artist;
             return this;
         }
+
 
         public Builder withDisc(String disc){
             this.disc = disc;

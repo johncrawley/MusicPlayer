@@ -155,14 +155,16 @@ public class PlaylistHelper {
         }
     }
 
+
     public void loadAlbumOfTrack(Track track){
-        log("Entered loadAlbumOfTrack() track title, albumName: " + track.getTitle() + " -- " + track.getAlbum() + " track path: " + track.getPathname());
         loadTracksFromAlbum(track.getAlbum());
     }
 
-    private void log(String msg){
-        System.out.println("^^^ PlaylistHelper: " + msg);
+
+    public void loadArtistOfTrack(Track track){
+        loadTracksFromArtist(track.getArtist());
     }
+
 
     public PlaylistManager getPlaylistManager(){
         return playlistManager;

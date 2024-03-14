@@ -185,9 +185,11 @@ public class MediaPlayerService extends Service{
 
     public PlaylistManager getPlaylistManager(){return playlistHelper.getPlaylistManager();}
 
-    public void loadAlbumOTrack(Track track){
-        playlistHelper.loadAlbumOfTrack(track);
-    }
+    public void loadAlbumOfTrack(Track track){playlistHelper.loadAlbumOfTrack(track);}
+
+    public void loadArtistOfTrack(Track track){playlistHelper.loadArtistOfTrack(track);}
+
+
 
     public Bitmap getAlbumArtForNotification(){ return albumArtRetriever.getAlbumArtForNotification(); }
 
