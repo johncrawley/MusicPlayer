@@ -14,29 +14,12 @@ import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
 
 public class TabsViewStateAdapter extends FragmentStateAdapter {
 
+    private final int numberOfFragments = 5;
 
     public TabsViewStateAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
     }
 
-
-    @NonNull
-    //@Override
-    public Fragment createFragment2(int position) {
-        if(position == 0){
-            return new TracksFragment(); // auto-assigned tag: 'f0'
-        }
-        else if (position == 1){
-            return new PlaylistsFragment(); // auto-assigned tag: 'f1', and so on.
-        }
-        else if (position == 2){
-            return new ArtistsFragment();
-        }
-        else if (position == 3){
-            return new AlbumsFragment();
-        }
-        return new GenresFragment();
-    }
 
     @NonNull
     @Override
@@ -46,13 +29,16 @@ public class TabsViewStateAdapter extends FragmentStateAdapter {
             case 1 -> new PlaylistsFragment();
             case 2 -> new ArtistsFragment();
             case 3 -> new AlbumsFragment();
-            default -> new GenresFragment();
+            case 4 -> new GenresFragment();
+            default -> throw new RuntimeException("createFragment() : position exceeded number of fragments (" + numberOfFragments + ") position: " + position);
         };
     }
 
+
     @Override
     public int getItemCount() {
-        return 5;
+        return numberOfFragments;
     }
+
 
 }

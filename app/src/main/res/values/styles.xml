@@ -16,6 +16,7 @@
         <item name="android:alertDialogTheme">@style/customAlertDialogStyle</item>
         <item name="imageButtonStyle">@style/customImageButtonStyle</item>
         <item name="android:fontFamily">@font/swansea_q3pd</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
 
 

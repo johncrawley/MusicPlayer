@@ -1,5 +1,8 @@
 package com.jacstuff.musicplayer.view.tab;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -17,8 +20,34 @@ public class TabHelper {
     public void setupTabLayout(TabLayout tabLayout, ViewPager2 pager){
         refreshSelectedTabWhenPagerSwiped(pager, tabLayout);
         setupTabSelectedListener(tabLayout, pager);
-        setTabToIndex(tabLayout, viewModel.currentTabIndex);
+        initTabSelection(tabLayout);
     }
+
+
+    private void initTabSelection(TabLayout tabLayout){
+        if(viewModel.hasFourthTabBeenInitialized){
+            selectTabAtIndex(tabLayout, viewModel.currentTabIndex);
+            return;
+        }
+        viewModel.hasFourthTabBeenInitialized = true;
+        moveToTheLastTabAndBack(tabLayout);
+    }
+
+
+    /*
+        For reasons unknown, moving to the 4th tab (out of 5)
+         causes the 5th fragment (genre) to load instead of the 4th (albums).
+         It only happens on the first click, if no other tabs have first been selected.
+         This workaround moves to the last tab, and then back to the first when app starts up.
+     */
+    private void moveToTheLastTabAndBack(TabLayout tabLayout){
+        int previousIndex = viewModel.currentTabIndex;
+        selectTabAtIndex(tabLayout, 4);
+        new Handler(Looper.getMainLooper())
+                .postDelayed(()-> selectTabAtIndex(tabLayout, previousIndex),
+                        200);
+    }
+
 
 
     private void refreshSelectedTabWhenPagerSwiped(ViewPager2 pager, TabLayout tabLayout){
@@ -51,7 +80,7 @@ public class TabHelper {
     }
 
 
-    private void setTabToIndex(TabLayout tabLayout, int index){
+    private void selectTabAtIndex(TabLayout tabLayout, int index){
         tabLayout.selectTab(tabLayout.getTabAt(index));
     }
 
@@ -71,7 +100,8 @@ public class TabHelper {
         }
     }
 
-    public void setTabIndexToViewModel(TabLayout tabLayout){
+
+    private void setTabIndexToViewModel(TabLayout tabLayout){
         tabLayout.selectTab(tabLayout.getTabAt(viewModel.currentTabIndex));
     }
 }

@@ -1,9 +1,6 @@
 package com.jacstuff.musicplayer.service.helpers;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.PowerManager;
 import android.util.Log;
@@ -257,7 +254,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     public void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
-        log("entered stop(boolean, boolean)");
         if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED) {
             mediaPlayer.stop();
             currentState = MediaPlayerState.STOPPED;
