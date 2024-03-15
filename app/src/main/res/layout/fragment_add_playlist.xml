@@ -54,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/list_button_margin_horizontal"
             android:id="@+id/createPlaylistButton"
+            android:visibility="invisible"
             style="@android:attr/buttonBarButtonStyle"
             android:text="@string/create_playlist_button_text"/>
     </LinearLayout>

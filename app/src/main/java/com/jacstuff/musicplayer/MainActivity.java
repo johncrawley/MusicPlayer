@@ -282,10 +282,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void notifyTracksAddedToPlaylist(int numberOfTracks){
-        switch(numberOfTracks){
-            case 0 : toast(R.string.toast_no_new_tracks_were_added_to_playlist); break;
-            case 1 : toast(R.string.toast_one_track_added_to_playlist); break;
-            default : toast(getString(R.string.toast_tracks_added_to_playlist, numberOfTracks));
+        switch (numberOfTracks) {
+            case 0 -> toast(R.string.toast_no_new_tracks_were_added_to_playlist);
+            case 1 -> toast(R.string.toast_one_track_added_to_playlist);
+            default -> toast(getString(R.string.toast_tracks_added_to_playlist, numberOfTracks));
         }
     }
 
@@ -302,10 +302,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadAlbumOfSelectedTrack(){
         mediaPlayerService.loadAlbumOfTrack(selectedTrack);
+        toast(R.string.toast_album_tracks_loaded);
     }
+
 
     public void loadArtistOfSelectedTrack(){
         mediaPlayerService.loadArtistOfTrack(selectedTrack);
+        toast(R.string.toast_artist_tracks_loaded);
     }
 
 

@@ -50,14 +50,4 @@ public interface PlaylistManager {
     void disableShuffle();
     boolean isShuffleEnabled();
 
-    /*
-    void onlyDisplayMainArtists(boolean shouldOnlyDisplayMainArtists);
-    String getTrackNameAt(int position);
-    void deleteAll();
-    boolean hasTracksQueued();
-    Set<String> getArtists();
-    Map<String, Album> getAlbums();
-    List<Playlist> getAllPlaylists();
-
-     */
 }

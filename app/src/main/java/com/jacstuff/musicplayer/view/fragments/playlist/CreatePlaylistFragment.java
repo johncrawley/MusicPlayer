@@ -8,6 +8,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,16 +27,18 @@ import androidx.fragment.app.Fragment;
 import java.util.Collections;
 import java.util.Set;
 
-public class AddPlaylistFragment extends DialogFragment {
+public class CreatePlaylistFragment extends DialogFragment {
 
     private EditText addPlaylistNameEditText;
     private Button createPlaylistButton;
     private PlaylistRepository playlistRepository;
     private Set<String> playlistNames;
     private TextView playlistAlreadyExistsTextView;
+    private Animation fadeIn, fadeOut;
 
-    public static AddPlaylistFragment newInstance() {
-        return new AddPlaylistFragment();
+
+    public static CreatePlaylistFragment newInstance() {
+        return new CreatePlaylistFragment();
     }
 
 
@@ -70,6 +74,7 @@ public class AddPlaylistFragment extends DialogFragment {
         playlistAlreadyExistsTextView = rootView.findViewById(R.id.playlistAlreadyExistsTextView);
         createPlaylistButton = rootView.findViewById(R.id.createPlaylistButton);
         addPlaylistNameEditText = rootView.findViewById(R.id.addPlaylistNameEditText);
+        initAnimations();
         setupTextChangedListener();
         setupCreateButton();
         setupCancelButton(rootView);
@@ -156,7 +161,56 @@ public class AddPlaylistFragment extends DialogFragment {
 
     private void disableCreateButtonIfInputsAreEmpty(){
         createPlaylistButton.setEnabled(isNameValid() && isNameUnique());
+        if(!isNameValid() || !isNameUnique()){
+            fadeOutCreateButton();
+        }
+        else{
+            fadeInCreateButtonIfInvisible();
+        }
     }
+
+
+    private void fadeInCreateButtonIfInvisible(){
+        if(createPlaylistButton.getVisibility() == View.INVISIBLE){
+            createPlaylistButton.setVisibility(View.VISIBLE);
+            createPlaylistButton.startAnimation(fadeIn);
+        }
+    }
+
+
+    private void fadeOutCreateButton(){
+        createPlaylistButton.startAnimation(fadeOut);
+    }
+
+
+    private void initAnimations(){
+        initFadeInAnimation();
+        initFadeOutAnimation();
+    }
+
+
+    private void initFadeInAnimation(){
+        fadeIn = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+        fadeIn.setAnimationListener(new Animation.AnimationListener() {
+            @Override public void onAnimationStart(Animation animation) {}
+            @Override public void onAnimationRepeat(Animation animation) {}
+            @Override public void onAnimationEnd(Animation animation) {
+            }
+        });
+    }
+
+
+    private void initFadeOutAnimation(){
+        fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
+        fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override public void onAnimationStart(Animation animation) {}
+            @Override public void onAnimationRepeat(Animation animation) {}
+            @Override public void onAnimationEnd(Animation animation) {
+                createPlaylistButton.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+
 
 
     private boolean isNameValid(){
@@ -174,6 +228,8 @@ public class AddPlaylistFragment extends DialogFragment {
     private String getEditText(){
         return addPlaylistNameEditText.getText().toString().trim();
     }
+
+
 
 
 }

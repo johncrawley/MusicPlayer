@@ -39,6 +39,7 @@ public class ThemeHelper {
     }
 
 
+
     public void assignTheme(MainActivity mainActivity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mainActivity);
         String themeKey = prefs.getString("theme_color", "green");

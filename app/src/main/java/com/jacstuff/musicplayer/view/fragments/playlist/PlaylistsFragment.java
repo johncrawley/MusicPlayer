@@ -132,7 +132,7 @@ public class PlaylistsFragment extends Fragment {
             return;
         }
         hasClicked = true;
-        FragmentManagerHelper.showDialog(this, AddPlaylistFragment.newInstance(), "create_playlist", new Bundle());
+        FragmentManagerHelper.showDialog(this, CreatePlaylistFragment.newInstance(), "create_playlist", new Bundle());
     }
 
 

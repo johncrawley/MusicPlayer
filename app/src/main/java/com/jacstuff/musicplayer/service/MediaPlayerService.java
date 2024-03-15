@@ -189,8 +189,6 @@ public class MediaPlayerService extends Service{
 
     public void loadArtistOfTrack(Track track){playlistHelper.loadArtistOfTrack(track);}
 
-
-
     public Bitmap getAlbumArtForNotification(){ return albumArtRetriever.getAlbumArtForNotification(); }
 
 
@@ -218,11 +216,6 @@ public class MediaPlayerService extends Service{
 
     public void notifyViewToDeselectEverythingButGenre(){
         mainActivity.deselectItemsInTabsOtherThanGenre();
-    }
-
-
-    public List<Track> getTrackList(){
-        return getPlaylistManager().getCurrentPlaylist().getTracks();
     }
 
 

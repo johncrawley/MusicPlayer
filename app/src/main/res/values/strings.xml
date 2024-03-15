@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Music Player</string>
-    <string name="about_info">2024, Created by John Crawley</string>
-    <string name="about_font_heading">Font Information</string>
+    <string name="about_info">Version 1.0, 2024\nCreated by John Crawley</string>
+    <string name="about_font_heading"><u>Font Information</u></string>
     <string name="about_font_info">Main text: Swansea, Public Domain \n https://www.fontspace.com/swansea-font-f5873\n\n Time elapsed: Poe Monospace, Freeware\n https://www.fontspace.com/poe-monospace-font-f23572 </string>
     <string name="title_activity_settings">Settings</string>
     <string name="menu_button_refresh">Refresh</string>
