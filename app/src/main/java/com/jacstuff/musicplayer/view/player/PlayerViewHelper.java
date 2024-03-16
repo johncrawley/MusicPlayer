@@ -140,7 +140,7 @@ public class PlayerViewHelper {
     private void setElapsedTimeOnView(String elapsedTime){
         mainActivity.runOnUiThread(()->{
             if(trackTime != null){
-                String time = elapsedTime + " / " + totalTrackTime;
+                String time = elapsedTime + "/" + totalTrackTime;
                 trackTime.setText(time);
             }
         });

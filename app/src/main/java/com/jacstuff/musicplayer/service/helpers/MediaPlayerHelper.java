@@ -182,12 +182,13 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     //NB try-with-resources requires API 29 (version code Q), and min is currently API 26
     private void assignAlbumArt(Track track){
         AlbumArtRetriever albumArtRetriever = mediaPlayerService.getAlbumArtRetriever();
+
         try{
             albumArtRetriever.assignAlbumArt(track);
         }
         catch(IOException e){
             e.printStackTrace();
-        } catch(IllegalArgumentException e){
+        } catch(RuntimeException e){
             hasEncounteredError = true;
             mediaPlayerService.notifyMainViewThatFileDoesNotExist(track);
         }

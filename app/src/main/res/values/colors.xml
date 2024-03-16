@@ -21,7 +21,7 @@
     <color name="image_button_background_tint">#373737</color>
     <color name="image_button_tint">#DCDCDC</color>
     <color name="image_button_shuffle_on_tint">#737373</color>
-    <color name="button_text">#B9B9BA</color>
+    <color name="button_text">#D1D1D5</color>
     <color name="button_background_tint">#373737</color>
     <color name="dialog_background">#1E1E1E</color>
     <color name="material_edit_text_focussed">#388E3C</color>
@@ -35,15 +35,43 @@
     <color name="color_accent_yellow">#C1A52C</color>
     <color name="button_outline_yellow">#F6CB10</color>
 
+    <color name="primary_light_yellow">#E3D87F</color>
+    <color name="text_light_yellow">#F0CE79</color>
+    <color name="color_accent_light_yellow">#BDAD64</color>
+    <color name="button_outline_light_yellow">#EFDC8B</color>
+
+    <color name="primary_gold">#FFA736</color>
+    <color name="text_gold">#DDA530</color>
+    <color name="color_accent_gold">#D6994C</color>
+    <color name="button_outline_gold">#D8A34E</color>
+
+    <color name="primary_light_green">#78F18D</color>
+    <color name="text_light_green">#63E470</color>
+    <color name="color_accent_light_green">#84CD70</color>
+    <color name="button_outline_light_green">#8AD681</color>
+
     <color name="primary_red">#9E0E0E</color>
-    <color name="text_red">#A32121</color>
+    <color name="text_red">#B62B2B</color>
     <color name="color_accent_red">#C12C2C</color>
     <color name="button_outline_red">#D80000</color>
+    <color name="list_item_focused_red">#1E2129</color>
+
+
+    <color name="primary_rose">#B16EA0</color>
+    <color name="text_rose">#D291D6</color>
+    <color name="color_accent_rose">#AB81B5</color>
+    <color name="button_outline_rose">#D066DC</color>
+
 
     <color name="primary_blue">#047BD6</color>
     <color name="text_blue">#3F86FF</color>
     <color name="color_accent_blue">#2C8DC1</color>
     <color name="button_outline_blue">#0073D8</color>
+
+    <color name="primary_light_blue">#5EA6DD</color>
+    <color name="text_light_blue">#86A6DD</color>
+    <color name="color_accent_light_blue">#63A1C3</color>
+    <color name="button_outline_light_blue">#5BB1FB</color>
 
     <color name="primary_grey">#B8CAD8</color>
     <color name="text_grey">#CDCDCD</color>

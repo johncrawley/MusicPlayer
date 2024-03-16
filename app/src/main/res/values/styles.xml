@@ -17,6 +17,7 @@
         <item name="imageButtonStyle">@style/customImageButtonStyle</item>
         <item name="android:fontFamily">@font/swansea_q3pd</item>
         <item name="android:lineSpacingMultiplier">1.3</item>
+        <item name="list_item_focused">@color/list_item_focused</item>
     </style>
 
 
@@ -46,10 +47,51 @@
         <item name="materialButtonStyle">@style/yellowMaterialButtonStyle</item>
     </style>
 
-
     <style name="yellowMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
         <item name="backgroundColor">@color/color_accent_yellow</item>
         <item name="strokeColor">@color/button_outline_yellow</item>
+    </style>
+
+
+    <style name="LightYellowTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_light_yellow</item>
+        <item name="colorAccent">@color/color_accent_light_yellow</item>
+        <item name="android:textColor">@color/text_light_yellow</item>
+        <item name="android:buttonTint">@color/primary_light_yellow</item>
+        <item name="materialButtonStyle">@style/lightYellowMaterialButtonStyle</item>
+    </style>
+
+    <style name="lightYellowMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
+        <item name="backgroundColor">@color/color_accent_light_yellow</item>
+        <item name="strokeColor">@color/button_outline_light_yellow</item>
+    </style>
+
+
+    <style name="GoldTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_gold</item>
+        <item name="colorAccent">@color/color_accent_gold</item>
+        <item name="android:textColor">@color/text_gold</item>
+        <item name="android:buttonTint">@color/primary_gold</item>
+        <item name="materialButtonStyle">@style/goldMaterialButtonStyle</item>
+    </style>
+
+    <style name="goldMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
+        <item name="backgroundColor">@color/color_accent_gold</item>
+        <item name="strokeColor">@color/button_outline_gold</item>
+    </style>
+
+
+    <style name="LightGreenTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_light_green</item>
+        <item name="colorAccent">@color/color_accent_light_green</item>
+        <item name="android:textColor">@color/text_light_green</item>
+        <item name="android:buttonTint">@color/primary_light_green</item>
+        <item name="materialButtonStyle">@style/lightGreenMaterialButtonStyle</item>
+    </style>
+
+    <style name="lightGreenMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
+        <item name="backgroundColor">@color/color_accent_light_green</item>
+        <item name="strokeColor">@color/button_outline_light_green</item>
     </style>
 
 
@@ -59,12 +101,27 @@
         <item name="android:textColor">@color/text_red</item>
         <item name="android:buttonTint">@color/primary_red</item>
         <item name="materialButtonStyle">@style/materialButtonStyleRed</item>
+        <item name="list_item_focused">@color/list_item_focused_red</item>
     </style>
-
 
     <style name="materialButtonStyleRed" parent="customMaterialOutlineButtonStyle">
         <item name="backgroundColor">@color/color_accent_red</item>
         <item name="strokeColor">@color/button_outline_red</item>
+    </style>
+
+
+    <style name="RoseTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_rose</item>
+        <item name="colorAccent">@color/color_accent_rose</item>
+        <item name="android:textColor">@color/text_rose</item>
+        <item name="android:buttonTint">@color/primary_rose</item>
+        <item name="materialButtonStyle">@style/materialButtonStyleRose</item>
+    </style>
+
+
+    <style name="materialButtonStyleRose" parent="customMaterialOutlineButtonStyle">
+        <item name="backgroundColor">@color/color_accent_rose</item>
+        <item name="strokeColor">@color/button_outline_rose</item>
     </style>
 
     <style name="BlueTheme" parent="AppTheme">
@@ -72,6 +129,15 @@
         <item name="colorAccent">@color/color_accent_blue</item>
         <item name="android:textColor">@color/text_blue</item>
         <item name="android:buttonTint">@color/primary_blue</item>
+        <item name="materialButtonStyle">@style/materialButtonStyleBlue</item>
+    </style>
+
+
+    <style name="LightBlueTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_light_blue</item>
+        <item name="colorAccent">@color/color_accent_light_blue</item>
+        <item name="android:textColor">@color/text_light_blue</item>
+        <item name="android:buttonTint">@color/primary_light_blue</item>
         <item name="materialButtonStyle">@style/materialButtonStyleBlue</item>
     </style>
 

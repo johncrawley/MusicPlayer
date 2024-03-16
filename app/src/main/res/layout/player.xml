@@ -45,6 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginHorizontal="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/albumArtImageView">
@@ -53,7 +54,6 @@
             android:id="@+id/albumTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/album_label"
             android:layout_marginTop="@dimen/track_detail_text_margin_vertical"
             android:textAlignment="center"
             android:textSize="@dimen/album_text_size" />
@@ -64,7 +64,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/artist_text_margin_top"
             android:layout_marginBottom="@dimen/artist_text_margin_bottom"
-            android:text="@string/artist_label"
             android:textAlignment="center"
             android:textSize="@dimen/artist_text_size" />
 

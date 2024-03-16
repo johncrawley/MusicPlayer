@@ -1,30 +1,29 @@
 <resources>
-    <!-- Reply Preference -->
-    <string-array name="reply_entries">
-        <item>Reply</item>
-        <item>Reply to all</item>
-    </string-array>
 
-    <string-array name="reply_values">
-        <item>reply</item>
-        <item>reply_all</item>
-    </string-array>
-
-    <!-- Reply Preference -->
     <string-array name="theme_color_entries">
-        <item>Green</item>
-        <item>Yellow</item>
-        <item>Blue</item>
-        <item>Red</item>
-        <item>Grey</item>
-        <item>Magenta</item>
-        <item>Cyan</item>
+        <item>@string/theme_green</item>
+        <item>@string/theme_yellow</item>
+        <item>@string/theme_blue</item>
+        <item>@string/theme_light_blue</item>
+        <item>@string/theme_light_green</item>
+        <item>@string/theme_light_yellow</item>
+        <item>@string/theme_gold</item>
+        <item>@string/theme_rose</item>
+        <item>@string/theme_red</item>
+        <item>@string/theme_grey</item>
+        <item>@string/theme_magenta</item>
+        <item>@string/theme_cyan</item>
     </string-array>
 
     <string-array name="theme_color_values">
         <item>green</item>
         <item>yellow</item>
         <item>blue</item>
+        <item>light_blue</item>
+        <item>light_green</item>
+        <item>light_yellow</item>
+        <item>gold</item>
+        <item>rose</item>
         <item>red</item>
         <item>grey</item>
         <item>magenta</item>

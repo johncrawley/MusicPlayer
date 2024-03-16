@@ -24,9 +24,14 @@ public class ThemeHelper {
         themeMap.put("yellow", R.style.YellowTheme);
         themeMap.put("red", R.style.RedTheme);
         themeMap.put("blue", R.style.BlueTheme);
+        themeMap.put("light_blue", R.style.LightBlueTheme);
+        themeMap.put("light_green", R.style.LightGreenTheme);
+        themeMap.put("light_yellow", R.style.LightYellowTheme);
+        themeMap.put("rose", R.style.RoseTheme);
         themeMap.put("grey", R.style.GreyTheme);
         themeMap.put("magenta", R.style.MagentaTheme);
         themeMap.put("cyan", R.style.CyanTheme);
+        themeMap.put("gold", R.style.GoldTheme);
     }
 
 
@@ -37,7 +42,6 @@ public class ThemeHelper {
             restartActivity(mainActivity);
         }
     }
-
 
 
     public void assignTheme(MainActivity mainActivity) {
