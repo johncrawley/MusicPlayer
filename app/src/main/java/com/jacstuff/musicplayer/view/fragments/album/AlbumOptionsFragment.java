@@ -1,5 +1,8 @@
 package com.jacstuff.musicplayer.view.fragments.album;
 
+import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ALBUM;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -62,7 +65,7 @@ public class AlbumOptionsFragment extends DialogFragment {
 
 
     private void notifyAlbumFragmentToLoadAlbum(){
-        getParentFragmentManager().setFragmentResult(AlbumsFragment.NOTIFY_TO_LOAD_ALBUM, new Bundle());
+        sendMessage(this, NOTIFY_TO_LOAD_ALBUM);
     }
 
 

@@ -105,14 +105,6 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     }
 
 
-    public void deselectCurrentlySelectedItemAndNotify(){
-        if(currentlySelectedView != null){
-            currentlySelectedView.setSelected(false);
-            notifyItemChanged(selectedPosition);
-        }
-    }
-
-
     @Override
     public void onBindViewHolder(@NonNull TrackViewHolder holder, int position){
         holder.trackNameTextView.setText(trackNames.get(position));

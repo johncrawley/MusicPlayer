@@ -1,5 +1,17 @@
 package com.jacstuff.musicplayer;
 
+import static com.jacstuff.musicplayer.view.fragments.Message.DESELECT_CURRENT_TRACK_ITEM;
+import static com.jacstuff.musicplayer.view.fragments.Message.ENSURE_SELECTED_TRACK_IS_VISIBLE;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_REQUEST_UPDATED_PLAYLIST;
+import static com.jacstuff.musicplayer.view.fragments.Message.SCROLL_TO_CURRENT_TRACK;
+import static com.jacstuff.musicplayer.view.fragments.about.Utils.putBoolean;
+import static com.jacstuff.musicplayer.view.fragments.about.Utils.putInt;
+import static com.jacstuff.musicplayer.view.fragments.about.Utils.sendFragmentMessage;
+
 import android.Manifest;
 
 import androidx.annotation.RequiresApi;
@@ -26,15 +38,12 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
-import com.jacstuff.musicplayer.view.fragments.album.AlbumsFragment;
-import com.jacstuff.musicplayer.view.fragments.artist.ArtistsFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TrackOptionsDialog;
-import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
-import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
 import com.jacstuff.musicplayer.view.player.PlayerViewHelper;
 import com.jacstuff.musicplayer.view.playlist.AddTrackToPlaylistViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
@@ -48,6 +57,7 @@ import com.jacstuff.musicplayer.view.viewmodel.MainViewModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String SEND_ARTISTS_TO_FRAGMENT = "send_artists_to_fragment";
     private TabsViewStateAdapter tabsViewStateAdapter;
     private MediaPlayerService mediaPlayerService;
-    private TracksFragment tracksFragment;
     private TabLayout tabLayout;
     private Track selectedTrack;
     private SearchViewHelper searchViewHelper;
@@ -66,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private AlbumArtHelper albumArtHelper;
     private AddTrackToPlaylistViewHelper addTrackToPlaylistViewHelper;
     private PlayerViewHelper playerViewHelper;
+    private Playlist playlist;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -160,21 +170,22 @@ public class MainActivity extends AppCompatActivity {
         return searchViewHelper;
     }
 
+
     public AddTrackToPlaylistViewHelper getAddTrackToPlaylistViewHelper(){ return addTrackToPlaylistViewHelper; }
 
 
     public List<String> getAlbumNames(){
-        return isPlaylistManagerUnavailable() ? Collections.emptyList() : mediaPlayerService.getPlaylistManager().getAlbumNames();
+        return getTracksOrEmptyList(PlaylistManager::getAlbumNames);
     }
 
 
     public List<String> getGenreNames(){
-        return isPlaylistManagerUnavailable() ? Collections.emptyList() : mediaPlayerService.getPlaylistManager().getGenreNames();
+        return getTracksOrEmptyList(PlaylistManager::getGenreNames);
     }
 
 
     public List<String> getArtistNames(){
-        return isPlaylistManagerUnavailable() ? Collections.emptyList() : mediaPlayerService.getPlaylistManager().getArtistNames();
+        return getTracksOrEmptyList(PlaylistManager::getArtistNames);
     }
 
 
@@ -183,14 +194,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private boolean isPlaylistManagerUnavailable(){
-        return mediaPlayerService == null || mediaPlayerService.getPlaylistManager() == null;
+    private List<String> getTracksOrEmptyList(Function<PlaylistManager, List<String>> function){
+        if(mediaPlayerService == null){
+            return Collections.emptyList();
+        }
+        PlaylistManager playlistManager = mediaPlayerService.getPlaylistManager();
+        return isPlaylistManagerUnavailable() ? Collections.emptyList() : function.apply(playlistManager);
     }
 
 
-    public void setPlayerFragment(TracksFragment tracksFragment){
-        this.tracksFragment = tracksFragment;
-        onQueueFragmentReady();
+    private boolean isPlaylistManagerUnavailable(){
+        return mediaPlayerService == null || mediaPlayerService.getPlaylistManager() == null;
     }
 
 
@@ -370,7 +384,6 @@ public class MainActivity extends AppCompatActivity {
         toast(getString(resId));
     }
 
-    public void deselectCurrentTrack(){ tracksFragment.deselectCurrentItem(); }
 
     private void setupViewModel(){
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
@@ -389,13 +402,48 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void deselectCurrentTrack() {
+        sendMessage(DESELECT_CURRENT_TRACK_ITEM);
+    }
+
+
     public void updateTracksList(Playlist playlist, Track currentTrack, int currentTrackIndex){
-        runOnUiThread(()-> {
-            if(tracksFragment != null && tracksFragment.getContext() != null) {
-                tracksFragment.updateTracksList(playlist, currentTrackIndex);
-                updateViews(playlist.getTracks(), currentTrack);
-            }
-        });
+        this.playlist = playlist;
+        Bundle bundle = new Bundle();
+        putInt(bundle, MessageKey.TRACK_INDEX, currentTrackIndex);
+        sendMessage(NOTIFY_TO_REQUEST_UPDATED_PLAYLIST, bundle);
+        runOnUiThread(()-> updateViews(playlist.getTracks(), currentTrack));
+    }
+
+
+    public Playlist getPlaylist() {
+        return playlist;
+    }
+
+
+    public void notifyTracksFragmentReady(){
+        startMediaPlayerService();
+    }
+
+
+    public void saveTrackIndexToScrollTo(int index){
+        viewModel.tracksFragmentSavedIndex = index;
+        viewModel.isTracksFragmentIndexSaved = true;
+    }
+
+
+    public boolean isTracksFragmentScrollIndexSaved(){
+        return viewModel.isTracksFragmentIndexSaved;
+    }
+
+
+    public void cancelSavedScrollIndex(){
+        viewModel.isTracksFragmentIndexSaved = false;
+    }
+
+
+    public int getSavedScrollIndex(){
+        return viewModel.tracksFragmentSavedIndex;
     }
 
 
@@ -405,16 +453,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void deselectItemsInPlaylistAndArtistTabs(){
-        sendFragmentMessage(PlaylistsFragment.NOTIFY_TO_DESELECT_ITEMS);
-        sendFragmentMessage(ArtistsFragment.NOTIFY_TO_DESELECT_ITEMS);
-        sendFragmentMessage(Message.NOTIFY_TO_DESELECT_GENRE_ITEMS);
+        sendMessage(NOTIFY_TO_DESELECT_PLAYLIST_ITEMS);
+        sendMessage(NOTIFY_TO_DESELECT_ARTIST_ITEMS);
+        sendMessage(NOTIFY_TO_DESELECT_GENRE_ITEMS);
     }
 
 
     public void deselectItemsInTabsOtherThanGenre(){
-        sendFragmentMessage(PlaylistsFragment.NOTIFY_TO_DESELECT_ITEMS);
-        sendFragmentMessage(ArtistsFragment.NOTIFY_TO_DESELECT_ITEMS);
-        sendFragmentMessage(AlbumsFragment.NOTIFY_TO_DESELECT_ITEMS);
+        sendMessage(NOTIFY_TO_DESELECT_PLAYLIST_ITEMS);
+        sendMessage(NOTIFY_TO_DESELECT_ARTIST_ITEMS);
+        sendMessage(NOTIFY_TO_DESELECT_ALBUM_ITEMS);
     }
 
 
@@ -427,16 +475,6 @@ public class MainActivity extends AppCompatActivity {
     private void createTrackOptionsFragment() {
         setSelectedTrack(mediaPlayerService.getCurrentTrack());
         FragmentManagerHelper.showDialog(this, TrackOptionsDialog.newInstance(), "track_options_dialog");
-    }
-
-
-    private void sendFragmentMessage(String messageKey){
-        getSupportFragmentManager().setFragmentResult(messageKey, new Bundle());
-    }
-
-
-    private void sendFragmentMessage(Message message){
-        getSupportFragmentManager().setFragmentResult(message.toString(), new Bundle());
     }
 
 
@@ -489,11 +527,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadTracksFromGenre(String genreName){
         mediaPlayerService.loadTracksFromGenre(genreName);
-    }
-
-
-    public void onQueueFragmentReady(){
-        startMediaPlayerService();
     }
 
 
@@ -561,6 +594,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
     private void loadAboutDialog(){
         FragmentManagerHelper.showDialog(this, new AboutDialogFragment(), "aboutDialogFragment");
     }
@@ -572,24 +606,30 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void scrollToAndSelectPosition(int index, boolean isSearchResult){
-        runOnUiThread(()-> {
-            if(tracksFragment != null){
-                tracksFragment.scrollToAndSelectListPosition(index, isSearchResult);
-            }
-        });
+        Bundle bundle = new Bundle();
+        putInt(bundle, MessageKey.TRACK_INDEX, index);
+        putBoolean(bundle, MessageKey.IS_SEARCH_RESULT, isSearchResult);
+        sendMessage(SCROLL_TO_CURRENT_TRACK, bundle);
     }
 
 
     public void ensureSelectedTrackIsVisible(){
-        runOnUiThread(()-> {
-            if(tracksFragment != null){
-                if(mediaPlayerService == null){
-                    return;
-                }
-                int currentTrackIndex = mediaPlayerService.getCurrentTrackIndex();
-                tracksFragment.ensureSelectedTrackIsVisible(currentTrackIndex);
-            }
-        });
+        if(mediaPlayerService == null){
+            return;
+        }
+        Bundle bundle = new Bundle();
+        putInt(bundle, MessageKey.TRACK_INDEX, mediaPlayerService.getCurrentTrackIndex());
+        sendMessage(ENSURE_SELECTED_TRACK_IS_VISIBLE, bundle);
+    }
+
+
+    private void sendMessage(Message message, Bundle bundle){
+        runOnUiThread(()-> sendFragmentMessage(this, message, bundle));
+    }
+
+
+    private void sendMessage(Message message){
+        runOnUiThread(()-> sendFragmentMessage(this, message));
     }
 
 

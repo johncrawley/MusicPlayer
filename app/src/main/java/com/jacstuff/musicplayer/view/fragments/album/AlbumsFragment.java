@@ -3,6 +3,9 @@ package com.jacstuff.musicplayer.view.fragments.album;
 import static com.jacstuff.musicplayer.MainActivity.SEND_ALBUMS_TO_FRAGMENT;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ALBUM;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,15 +23,11 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
-import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlbumsFragment extends Fragment {
-
-    public final static String NOTIFY_TO_LOAD_ALBUM = "Notify_Albums_Fragment_To_Load_Album";
-    public final static String NOTIFY_TO_DESELECT_ITEMS = "Notify_Albums_Fragment_To_Deselect_Items";
 
     private RecyclerView recyclerView;
     private StringListAdapter listAdapter;
@@ -58,7 +57,7 @@ public class AlbumsFragment extends Fragment {
     private void setupFragmentListener(){
         setListener(this, SEND_ALBUMS_TO_FRAGMENT, this::loadAlbums);
         setListener(this, NOTIFY_TO_LOAD_ALBUM, (bundle) -> listAdapter.selectLongClickItem());
-        setListener(this, NOTIFY_TO_DESELECT_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
+        setListener(this, NOTIFY_TO_DESELECT_ALBUM_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
     }
 
 
@@ -84,7 +83,7 @@ public class AlbumsFragment extends Fragment {
 
     private void loadTracksFromAlbum(String albumName){
         getMainActivity().loadTracksFromAlbum(albumName);
-        sendMessage(this, PlaylistsFragment.NOTIFY_TO_DESELECT_ITEMS);
+        sendMessage(this, NOTIFY_TO_DESELECT_PLAYLIST_ITEMS);
         toastLoaded();
     }
 

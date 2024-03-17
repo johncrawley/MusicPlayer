@@ -1,6 +1,5 @@
 package com.jacstuff.musicplayer.view.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,14 +50,13 @@ public class FragmentManagerHelper {
     }
 
 
-    public static void sendMessage(Fragment fragment, String key){
-        sendMessage(fragment, key, new Bundle());
+    public static void sendMessage(Fragment fragment, Message message){
+        sendMessage(fragment, message, new Bundle());
     }
 
 
-    public static void sendMessage(Fragment fragment, String key, Bundle bundle){
-        fragment.getParentFragmentManager().setFragmentResult(key, bundle);
+    public static void sendMessage(Fragment fragment, Message message, Bundle bundle){
+        fragment.getParentFragmentManager().setFragmentResult(message.toString(), bundle);
     }
-
 
 }

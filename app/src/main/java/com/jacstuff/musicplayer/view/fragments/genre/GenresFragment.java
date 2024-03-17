@@ -2,6 +2,7 @@ package com.jacstuff.musicplayer.view.fragments.genre;
 
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.GENRE_UPDATES;
 
 import android.os.Bundle;
@@ -20,7 +21,6 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
-import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +81,7 @@ public class GenresFragment extends Fragment {
 
     private void loadTracksFromGenre(String genreName){
         getMainActivity().loadTracksFromGenre(genreName);
-        sendMessage(this, PlaylistsFragment.NOTIFY_TO_DESELECT_ITEMS);
+        sendMessage(this, NOTIFY_TO_DESELECT_PLAYLIST_ITEMS);
         toastLoaded();
     }
 

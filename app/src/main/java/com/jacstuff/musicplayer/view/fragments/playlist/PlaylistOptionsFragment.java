@@ -1,5 +1,10 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD;
+import static com.jacstuff.musicplayer.view.fragments.MessageKey.IS_USER_PLAYLIST;
+import static com.jacstuff.musicplayer.view.fragments.about.Utils.getBoolean;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,14 +18,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.view.fragments.Message;
 
 
 public class PlaylistOptionsFragment extends DialogFragment {
 
-
-    public final static String NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE= "Notify_Playlists_Fragment_To_Delete";
-    public final static String NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE= "Notify_Playlists_Fragment_To_Create";
-    public final static String NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD= "Notify_Playlists_Fragment_To_Load";
 
     private Button loadPlaylistButton, deletePlaylistButton;
     private boolean isUserPlaylist;
@@ -48,7 +50,7 @@ public class PlaylistOptionsFragment extends DialogFragment {
     private void assignArgs(){
         Bundle bundle = getArguments();
         assert bundle != null;
-        isUserPlaylist = bundle.getBoolean(PlaylistsFragment.BUNDLE_KEY_IS_USER_PLAYLIST, false);
+        isUserPlaylist = getBoolean(bundle, IS_USER_PLAYLIST);
     }
 
 
@@ -61,9 +63,9 @@ public class PlaylistOptionsFragment extends DialogFragment {
     }
 
 
-    private void sendMessage(String key){
+    private void sendMessage(Message key){
         disableAllButtons();
-        getParentFragmentManager().setFragmentResult(key, new Bundle());
+        getParentFragmentManager().setFragmentResult(key.toString(), new Bundle());
         dismissAfterPause();
     }
 

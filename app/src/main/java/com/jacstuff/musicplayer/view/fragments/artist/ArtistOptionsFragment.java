@@ -1,5 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments.artist;
 
+import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,13 +16,14 @@ import androidx.fragment.app.DialogFragment;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 public class ArtistOptionsFragment extends DialogFragment {
 
     private String artistName;
     public final static String ARTIST_NAME_BUNDLE_KEY = "artist_name_key";
-    Button addTracksToPlaylistButton, loadTracksButton;
+    private Button addTracksToPlaylistButton, loadTracksButton;
 
     public static ArtistOptionsFragment newInstance() {
         return new ArtistOptionsFragment();
@@ -62,7 +65,7 @@ public class ArtistOptionsFragment extends DialogFragment {
 
 
     private void notifyArtistFragmentToLoadArtist(){
-        getParentFragmentManager().setFragmentResult(ArtistsFragment.NOTIFY_TO_LOAD_ARTIST, new Bundle());
+        sendMessage(this, Message.NOTIFY_TO_LOAD_ARTIST);
     }
 
 

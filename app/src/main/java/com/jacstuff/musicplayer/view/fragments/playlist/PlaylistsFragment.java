@@ -2,10 +2,13 @@ package com.jacstuff.musicplayer.view.fragments.playlist;
 
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
-import static com.jacstuff.musicplayer.view.fragments.playlist.PlaylistOptionsFragment.NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE;
-import static com.jacstuff.musicplayer.view.fragments.playlist.PlaylistOptionsFragment.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
-import static com.jacstuff.musicplayer.view.fragments.playlist.PlaylistOptionsFragment.NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD;
-
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_USER_PLAYLIST_LOADED;
+import static com.jacstuff.musicplayer.view.fragments.about.Utils.putBoolean;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -23,6 +26,8 @@ import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
+import com.jacstuff.musicplayer.view.fragments.Message;
+import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.album.AlbumsFragment;
 import com.jacstuff.musicplayer.view.fragments.artist.ArtistsFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
@@ -48,8 +53,6 @@ public class PlaylistsFragment extends Fragment {
     private RecyclerView recyclerView;
     private Set<String> playlistNames;
     private final int INITIAL_PLAYLIST_CAPACITY = 50;
-    public static final String BUNDLE_KEY_IS_USER_PLAYLIST = "bundle_key_is_user_playlist";
-    public final static String NOTIFY_TO_DESELECT_ITEMS = "Notify_Playlists_Fragment_To_Deselect_Items";
 
     public PlaylistsFragment() {
         // Required empty public constructor
@@ -73,7 +76,7 @@ public class PlaylistsFragment extends Fragment {
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE, (bundle)->  showDeletePlaylistDialog());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD, (bundle) -> loadLongClickedPlaylist());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE, (bundle) -> startAddPlaylistFragment());
-        setListener(this, NOTIFY_TO_DESELECT_ITEMS, (bundle) -> playlistRecyclerAdapter.deselectCurrentlySelectedItem());
+        setListener(this, Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS, (bundle) -> playlistRecyclerAdapter.deselectCurrentlySelectedItem());
     }
 
 
@@ -138,7 +141,7 @@ public class PlaylistsFragment extends Fragment {
 
     private void startPlaylistOptionsFragment(Playlist playlist){
         Bundle bundle = new Bundle();
-        bundle.putBoolean(BUNDLE_KEY_IS_USER_PLAYLIST, playlist.isUserPlaylist());
+        putBoolean(bundle, MessageKey.IS_USER_PLAYLIST, playlist.isUserPlaylist());
         FragmentManagerHelper.showDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
     }
 
@@ -189,8 +192,8 @@ public class PlaylistsFragment extends Fragment {
 
     private void notifyTracksFragmentOfPlaylistLoaded(boolean isUserPlaylist){
         Bundle bundle = new Bundle();
-        bundle.putBoolean(TracksFragment.IS_USER_PLAYLIST_LOADED_KEY, isUserPlaylist);
-        sendMessage(this, TracksFragment.NOTIFY_USER_PLAYLIST_LOADED, bundle);
+        putBoolean(bundle, MessageKey.IS_USER_PLAYLIST, isUserPlaylist);
+        sendMessage(this, NOTIFY_USER_PLAYLIST_LOADED, bundle);
     }
 
 
@@ -201,8 +204,8 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void notifyOtherFragmentsToDeselectItems(){
-        sendMessage(this, AlbumsFragment.NOTIFY_TO_DESELECT_ITEMS);
-        sendMessage(this, ArtistsFragment.NOTIFY_TO_DESELECT_ITEMS);
+        sendMessage(this, NOTIFY_TO_DESELECT_ALBUM_ITEMS);
+        sendMessage(this, NOTIFY_TO_DESELECT_ARTIST_ITEMS);
     }
 
 

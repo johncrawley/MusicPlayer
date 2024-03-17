@@ -51,13 +51,13 @@
     <color name="button_outline_light_green">#8AD681</color>
 
     <color name="primary_red">#9E0E0E</color>
-    <color name="text_red">#B62B2B</color>
+    <color name="text_red">#BA0606</color>
     <color name="color_accent_red">#C12C2C</color>
     <color name="button_outline_red">#D80000</color>
     <color name="list_item_focused_red">#1E2129</color>
 
 
-    <color name="primary_rose">#B16EA0</color>
+    <color name="primary_rose">#F67BB9</color>
     <color name="text_rose">#D291D6</color>
     <color name="color_accent_rose">#AB81B5</color>
     <color name="button_outline_rose">#D066DC</color>

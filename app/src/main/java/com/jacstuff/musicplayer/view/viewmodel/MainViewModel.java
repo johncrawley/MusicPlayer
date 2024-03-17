@@ -14,4 +14,7 @@ public class MainViewModel extends ViewModel {
     public int currentTabIndex = 0;
     public Bitmap currentAlbumArt;
 
+    public int tracksFragmentSavedIndex = 0;
+    public boolean isTracksFragmentIndexSaved = false;
+
 }

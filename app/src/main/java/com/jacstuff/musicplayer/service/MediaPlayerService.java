@@ -243,6 +243,24 @@ public class MediaPlayerService extends Service{
     }
 
 
+    public int getCurrentTrackIndex(){
+        return playlistHelper.getIndexOfCurrentTrack();
+    }
+
+
+    public void scrollToPositionOfCurrentTrack(){
+        Track track = getCurrentTrack();
+        if(track != null){
+            scrollToPositionOf(track, false);
+        }
+    }
+
+
+    public void scrollToPositionOf(Track track){
+        scrollToPositionOf(track, false);
+    }
+
+
     public void scrollToPositionOf(Track track, boolean isSearchResult){
         int trackIndexOnCurrentPlaylist = getPlaylistManager().getCurrentIndexOf(track);
         if(trackIndexOnCurrentPlaylist == - 1){
@@ -251,16 +269,6 @@ public class MediaPlayerService extends Service{
         else {
             mainActivity.scrollToAndSelectPosition(trackIndexOnCurrentPlaylist, isSearchResult);
         }
-    }
-
-
-    public int getCurrentTrackIndex(){
-        return playlistHelper.getIndexOfCurrentTrack();
-    }
-
-
-    public void scrollToPositionOf(Track track){
-        scrollToPositionOf(track, false);
     }
 
 
