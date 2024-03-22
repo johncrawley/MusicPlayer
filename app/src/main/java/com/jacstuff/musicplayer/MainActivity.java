@@ -14,7 +14,6 @@ import static com.jacstuff.musicplayer.view.fragments.about.Utils.sendFragmentMe
 
 import android.Manifest;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ComponentName;
@@ -98,11 +97,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestPermissions();
         assignTheme();
         setContentView(R.layout.activity_main);
         setupViewModel();
         setupTabLayout();
-        requestPermissions();
         initPlayerViewHelper();
         startMediaPlayerService();
     }
@@ -117,22 +116,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void requestPermissions(){
-        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestPostNotificationPermission();
-            requestPermissions(new String[]{Manifest.permission.READ_MEDIA_AUDIO}, 3);
+            requestPermissions(new String[]{
+                    Manifest.permission.POST_NOTIFICATIONS,
+                    Manifest.permission.READ_MEDIA_AUDIO
+            }, 1);
+        }else{
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         }
     }
 
 
     public void showAddTrackToPlaylistView(){
         addTrackToPlaylistViewHelper.showAddTrackToPlaylistView();
-    }
-
-
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    private void requestPostNotificationPermission(){
-        requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 3);
     }
 
 

@@ -4,8 +4,8 @@ package com.jacstuff.musicplayer.service.playlist;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.MediaStore;
-
 
 import androidx.preference.PreferenceManager;
 
@@ -155,10 +155,11 @@ public class TrackLoader {
             long startTime = System.currentTimeMillis();
             setupColumnMap(cursor);
             while(cursor.moveToNext()){
+                log("found track!");
                 addTrack(cursor);
             }
             long duration = System.currentTimeMillis() - startTime;
-            log("tracks loaded in " + duration + "ms");
+            log("tracks loaded in " + duration + "ms number of total tracks: " + cursor.getCount());
             cursor.close();
         }
     }
@@ -166,10 +167,9 @@ public class TrackLoader {
 
     private Cursor createCursorForFilesystemTracks(){
         String[] projection = createProjection();
-        String selection = null;
-        String[] selectionArgs = null;
         String sortOrder = MediaStore.Audio.Media.DEFAULT_SORT_ORDER + " ASC";
-        return context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection, selectionArgs, sortOrder);
+        Uri collection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
+        return context.getContentResolver().query(collection, projection, null, null, sortOrder);
     }
 
 

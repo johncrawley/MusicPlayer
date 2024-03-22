@@ -252,12 +252,13 @@ public class PlayerViewHelper {
 
 
     public void setVisibilityOnPlayerViews(int visibility){
-
-        trackTitle.setVisibility(visibility);
-        trackAlbum.setVisibility(visibility);
-        trackArtist.setVisibility(visibility);
-        trackTime.setVisibility(visibility);
-        playerButtonPanel.setVisibility(visibility);
+        mainActivity.runOnUiThread(()->{
+            trackTitle.setVisibility(visibility);
+            trackAlbum.setVisibility(visibility);
+            trackArtist.setVisibility(visibility);
+            trackTime.setVisibility(visibility);
+            playerButtonPanel.setVisibility(visibility);
+        });
     }
 
 

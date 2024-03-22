@@ -15,7 +15,7 @@
         <item name="materialButtonStyle">@style/customMaterialOutlineButtonStyle</item>
         <item name="android:alertDialogTheme">@style/customAlertDialogStyle</item>
         <item name="imageButtonStyle">@style/customImageButtonStyle</item>
-        <item name="android:fontFamily">@font/swansea_q3pd</item>
+        <item name="android:fontFamily">@font/le_patin_magicien_xb7d</item>
         <item name="android:lineSpacingMultiplier">1.3</item>
         <item name="list_item_focused">@color/list_item_focused</item>
     </style>
