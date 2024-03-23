@@ -3,6 +3,7 @@ package com.jacstuff.musicplayer.view.fragments.artist;
 import static com.jacstuff.musicplayer.MainActivity.SEND_ARTISTS_TO_FRAGMENT;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ARTIST;
 
@@ -54,7 +55,7 @@ public class ArtistsFragment extends Fragment {
     private void setupFragmentListener(){
         setListener(this, SEND_ARTISTS_TO_FRAGMENT, this::populateArtistsList);
         setListener(this, NOTIFY_TO_LOAD_ARTIST, (bundle) -> listAdapter.selectLongClickItem());
-        setListener(this, NOTIFY_TO_DESELECT_PLAYLIST_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
+        setListener(this, NOTIFY_TO_DESELECT_ARTIST_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
     }
 
 
