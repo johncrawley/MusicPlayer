@@ -214,6 +214,12 @@ public class MediaPlayerService extends Service{
     }
 
 
+    public void notifyViewToDeselectNonArtistLists(){
+        mainActivity.deselectItemsInNonArtistTabs();
+    }
+
+
+
     public void notifyViewToDeselectEverythingButGenre(){
         mainActivity.deselectItemsInTabsOtherThanGenre();
     }

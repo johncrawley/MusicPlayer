@@ -110,6 +110,8 @@ public class PlaylistHelper {
         playlistManager.loadTracksFromArtist(artistName);
         mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
         mediaPlayerService.updateAlbumsView();
+        mediaPlayerService.notifyViewToDeselectNonArtistLists();
+
     }
 
 
