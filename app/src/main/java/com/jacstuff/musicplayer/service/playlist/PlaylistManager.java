@@ -1,15 +1,12 @@
 package com.jacstuff.musicplayer.service.playlist;
 
-import com.jacstuff.musicplayer.service.db.album.Album;
 import com.jacstuff.musicplayer.service.db.playlist.Playlist;
 import com.jacstuff.musicplayer.service.db.track.Track;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 public interface PlaylistManager {
 

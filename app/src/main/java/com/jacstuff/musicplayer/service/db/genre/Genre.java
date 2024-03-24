@@ -21,6 +21,7 @@ public class Genre implements PlaylistStore {
         allTracks = new ArrayList<>(500);
     }
 
+
     @Override
     public List<Track> getTracks(){
         return allTracks;
