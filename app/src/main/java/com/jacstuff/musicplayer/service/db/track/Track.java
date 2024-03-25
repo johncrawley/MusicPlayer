@@ -9,6 +9,8 @@ public class Track {
     private final long id, trackNumber;
     private int index;
     private final long duration;
+    private final String year;
+    private final String bitrate;
 
 
     private Track(Builder builder){
@@ -22,12 +24,14 @@ public class Track {
         this.index = builder.index;
         this.disc = builder.disc;
         this.genre = builder.genre;
+        this.year = builder.year;
+        this.bitrate = builder.bitrate;
         createOrderedStr();
         createSearchStr();
     }
 
 
-    public Track(String path, String title, String artist, String album, String genre, int duration, int trackNumber){
+    public Track(String path, String title, String artist, String album, String genre, String year, int duration, int trackNumber, String bitrate){
         this.id = -1;
         this.pathname = path;
         this.duration = duration;
@@ -36,6 +40,8 @@ public class Track {
         this.album = album;
         this.trackNumber = trackNumber;
         this.genre = genre;
+        this.year = year;
+        this.bitrate = bitrate;
         createOrderedStr();
         createSearchStr();
     }
@@ -78,9 +84,15 @@ public class Track {
         return artist;
     }
 
+    public String getBitrate() { return bitrate; }
+
 
     public String getGenre() {
         return genre;
+    }
+
+    public String getYear() {
+        return year;
     }
 
 
@@ -88,6 +100,9 @@ public class Track {
 
 
     public long getTrackNumber(){return trackNumber;}
+
+
+    public String getTrackNumberStr(){return String.valueOf(trackNumber);}
 
 
     public String getPathname(){return pathname;}
@@ -125,11 +140,16 @@ public class Track {
         private long trackNumber;
         private long duration;
         private int index;
+        private String year;
+        private String bitrate;
 
         public Track build(){
             return new Track(this);
         }
 
+        public static Builder newInstance() {
+            return new Builder();
+        }
 
         public Builder createTrackWithPathname(String pathname){
             this.pathname = pathname;
@@ -145,6 +165,17 @@ public class Track {
 
         public Builder withGenre(String genre){
             this.genre = genre;
+            return this;
+        }
+
+        public Builder withYear(String year){
+            this.year = year;
+            return this;
+        }
+
+
+        public Builder withBitrate(String bitrate){
+            this.bitrate = bitrate;
             return this;
         }
 

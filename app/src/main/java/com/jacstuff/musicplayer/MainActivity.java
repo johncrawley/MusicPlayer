@@ -322,6 +322,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public Track getSelectedTrack(){
+        return selectedTrack;
+    }
+
+
     public Playlist getCurrentPlaylist(){
         return mediaPlayerService == null ? new Playlist(-50L, "Empty Playlist", false):
                 mediaPlayerService.getPlaylistManager().getCurrentPlaylist();

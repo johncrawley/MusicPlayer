@@ -145,7 +145,7 @@ public class TrackLoader {
 
 
     private void log(String msg){
-        System.out.println("^^^ AudioInfoLoader: " + msg);
+        System.out.println("^^^ TrackLoader: " + msg);
     }
 
 
@@ -155,7 +155,6 @@ public class TrackLoader {
             long startTime = System.currentTimeMillis();
             setupColumnMap(cursor);
             while(cursor.moveToNext()){
-                log("found track!");
                 addTrack(cursor);
             }
             long duration = System.currentTimeMillis() - startTime;
@@ -182,7 +181,9 @@ public class TrackLoader {
                 MediaStore.Audio.Media.DURATION,
                 MediaStore.Audio.Media.DATA,
                 MediaStore.Audio.Media.CD_TRACK_NUMBER,
-                MediaStore.Audio.Media.GENRE
+                MediaStore.Audio.Media.GENRE,
+                MediaStore.Audio.Media.YEAR,
+                MediaStore.Audio.Media.BITRATE
         };
     }
 
@@ -196,6 +197,8 @@ public class TrackLoader {
         addToColumnMap(cursor, MediaStore.Audio.Media.DURATION);
         addToColumnMap(cursor, MediaStore.Audio.Media.CD_TRACK_NUMBER);
         addToColumnMap(cursor, MediaStore.Audio.Media.GENRE);
+        addToColumnMap(cursor, MediaStore.Audio.Media.YEAR);
+        addToColumnMap(cursor, MediaStore.Audio.Media.BITRATE);
     }
 
 
@@ -211,15 +214,19 @@ public class TrackLoader {
         }
         String albumName = getValueFrom(cursor, MediaStore.Audio.Media.ALBUM);
         String artistName = getValueFrom(cursor, MediaStore.Audio.Media.ARTIST);
+        String year = getValueFrom(cursor, MediaStore.Audio.Media.YEAR);
         String genreName = getGenre(cursor);
+        String bitrate = getBitrate(cursor); //getValueFrom(cursor, MediaStore.Audio.Media.BITRATE);
         Track track = new Track(
                 path,
                 getValueFrom(cursor, MediaStore.Audio.Media.TITLE),
                 artistName,
                 albumName,
                 genreName,
+                year,
                 getIntValueFrom(cursor, MediaStore.Audio.Media.DURATION),
-                getTrackNumber(cursor)
+                getTrackNumber(cursor),
+                bitrate
         );
         tracks.add(track);
         addToAlbum(track, albumName, artistName);
@@ -279,6 +286,17 @@ public class TrackLoader {
         String genre = "";
         genre = getValueFrom(cursor, MediaStore.Audio.Media.GENRE);
         return genre == null ? "" : genre;
+    }
+
+
+
+    private String getBitrate(Cursor cursor){
+        int bitrate = getIntValueFrom(cursor, MediaStore.Audio.Media.BITRATE);
+        if(bitrate > 1000){
+            int kbps = bitrate / 1000;
+            return kbps + "kbps";
+        }
+        return String.valueOf(bitrate);
     }
 
 

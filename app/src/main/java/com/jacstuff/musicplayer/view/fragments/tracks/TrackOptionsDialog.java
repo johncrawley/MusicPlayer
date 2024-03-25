@@ -15,6 +15,8 @@ import androidx.fragment.app.DialogFragment;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
+import com.jacstuff.musicplayer.view.fragments.trackinfo.TrackInfoFragment;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.function.Consumer;
@@ -43,12 +45,17 @@ public class TrackOptionsDialog extends DialogFragment {
 
     private void setupButtons(View parentView){
         ButtonMaker.createButton(parentView, R.id.enqueueTrackButton, this::enqueueCurrentTrack);
+        setupInfoButton(parentView);
         setupLoadAlbumButton(parentView);
         setupLoadArtistButton(parentView);
         setupAddTrackToPlaylistButton(parentView);
         setupRemoveTrackButton(parentView);
     }
 
+
+    private void setupInfoButton(View parentView){
+        setupButtonIfConditionsMet(parentView, R.id.showTrackInfoButton, Track::getAlbum, this::loadInfoFragment);
+    }
 
     private void setupLoadAlbumButton(View parentView){
         setupButtonIfConditionsMet(parentView, R.id.loadAlbumButton, Track::getAlbum, this::loadRelatedAlbum);
@@ -123,6 +130,12 @@ public class TrackOptionsDialog extends DialogFragment {
 
     private void loadRelatedAlbum(){
         runThenDismissAfterDelay(MainActivity::loadAlbumOfSelectedTrack);
+    }
+
+
+    private void loadInfoFragment(){
+        dismiss();
+        FragmentManagerHelper.showDialog(this, new TrackInfoFragment(), TrackInfoFragment.TAG, new Bundle());
     }
 
 

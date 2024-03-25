@@ -10,16 +10,14 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "MusicPlayer.db";
 
     private static final String OPENING_BRACKET = " (";
     private static final String CLOSING_BRACKET = " );";
     private static final String INTEGER = " INTEGER";
     private static final String TEXT = " TEXT";
-    private static final String BLOB = " BLOB";
     private static final String COMMA = ",";
-    public static final String UNIQUE = " UNIQUE ";
     private static final String PRIMARY_KEY = " PRIMARY KEY";
     private static final String CREATE_TABLE_IF_NOT_EXISTS = "CREATE TABLE IF NOT EXISTS ";
 
@@ -87,6 +85,8 @@ public class DbHelper extends SQLiteOpenHelper {
                     + DbContract.PlaylistItemsEntry.COL_ARTIST_ID + INTEGER + COMMA
                     + DbContract.PlaylistItemsEntry.COL_TRACK_NUMBER + INTEGER + COMMA
                     + DbContract.PlaylistItemsEntry.COL_GENRE + TEXT + COMMA
+                    + DbContract.PlaylistItemsEntry.COL_YEAR + TEXT + COMMA
+                    + DbContract.PlaylistItemsEntry.COL_BITRATE + TEXT + COMMA
                     + DbContract.PlaylistItemsEntry.COL_DURATION + INTEGER
                     + CLOSING_BRACKET;
 
