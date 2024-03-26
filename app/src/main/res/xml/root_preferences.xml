@@ -21,6 +21,20 @@
             app:defaultValue="1"
             app:useSimpleSummaryProvider="true" />
 
+        <SwitchPreference
+            app:key="autoNextTrackOnPlaylistLoaded"
+            app:title="@string/move_to_next_track_when_playlist_loaded_title"
+            app:defaultValue="true"
+            app:enabled="true" />
+        <!--
+        <SwitchPreference
+            app:key="autoNextTrackOnPlaylistLoaded"
+            app:title="@string/move_to_next_track_when_playlist_loaded_title"
+            app:summary="@string/move_to_next_track_when_playlist_loaded_summary"
+            app:enabled="true"
+            app:useSimpleSummaryProvider="true" />
+            -->
+
         <EditTextPreference
             app:key="tracksPathnameString"
             app:title="@string/include_music_with_pathname"
@@ -29,5 +43,6 @@
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
+
 
 </PreferenceScreen>

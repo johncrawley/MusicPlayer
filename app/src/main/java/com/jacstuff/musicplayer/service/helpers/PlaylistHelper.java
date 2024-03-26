@@ -107,19 +107,34 @@ public class PlaylistHelper {
 
 
     public void loadTracksFromArtist(String artistName){
+        loadTracksFromArtist(artistName, true);
+    }
+
+
+    public void loadTracksFromArtist(String artistName, boolean shouldAttemptAutoloadOfNextTrack){
         playlistManager.loadTracksFromArtist(artistName);
         mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
         mediaPlayerService.updateAlbumsView();
         mediaPlayerService.notifyViewToDeselectNonArtistLists();
-
+        if(shouldAttemptAutoloadOfNextTrack){
+            autoLoadNextTrack();
+        }
     }
 
 
     public void loadTracksFromAlbum(String albumName){
+        loadTracksFromAlbum(albumName, true);
+    }
+
+
+    public void loadTracksFromAlbum(String albumName, boolean shouldAttemptAutoloadOfNextTrack){
         boolean isAlbumLoaded = playlistManager.loadTracksFromAlbum(albumName);
         if(isAlbumLoaded){
             mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
             mediaPlayerService.notifyViewToDeselectPlaylistAndArtistTabs();
+            if(shouldAttemptAutoloadOfNextTrack){
+                autoLoadNextTrack();
+            }
             return;
         }
         mediaPlayerService.notifyViewOfAlbumNotLoaded(albumName);
@@ -131,6 +146,7 @@ public class PlaylistHelper {
         if(isGenreLoaded){
             mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
             mediaPlayerService.notifyViewToDeselectEverythingButGenre();
+            autoLoadNextTrack();
             return;
         }
         mediaPlayerService.notifyViewOfAlbumNotLoaded(genreName);
@@ -155,16 +171,22 @@ public class PlaylistHelper {
         if (playlist.getId() == PlaylistManagerImpl.ALL_TRACKS_PLAYLIST_ID) {
             mediaPlayerService.updateAlbumsView();
         }
+        autoLoadNextTrack();
+    }
+
+
+    private void autoLoadNextTrack(){
+        mediaPlayerService.getPreferencesHelper().loadNextTrackAutomatically();
     }
 
 
     public void loadAlbumOfTrack(Track track){
-        loadTracksFromAlbum(track.getAlbum());
+        loadTracksFromAlbum(track.getAlbum(), false);
     }
 
 
     public void loadArtistOfTrack(Track track){
-        loadTracksFromArtist(track.getArtist());
+        loadTracksFromArtist(track.getArtist(), false);
     }
 
 

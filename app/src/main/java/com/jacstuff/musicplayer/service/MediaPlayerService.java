@@ -96,6 +96,8 @@ public class MediaPlayerService extends Service{
         return mediaPlayerHelper;
     }
 
+    public PreferencesHelper getPreferencesHelper(){ return preferencesHelper;}
+
 
     public void setCurrentTrackAndUpdatePlayerViewVisibility(){
         if(!isCurrentTrackEmpty()){

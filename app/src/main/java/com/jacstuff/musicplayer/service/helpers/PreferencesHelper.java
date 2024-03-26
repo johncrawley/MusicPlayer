@@ -27,21 +27,32 @@ public class PreferencesHelper {
 
 
     public void saveShuffleState(boolean isShuffleEnabled){
-        SharedPreferences sharedPreferences = getDefaultSharedPreferences(context);
-        sharedPreferences.edit()
+        getPrefs().edit()
                 .putBoolean(SHUFFLE_ENABLED_PREF, isShuffleEnabled)
                 .apply();
     }
 
 
     private void assignShuffleState(){
-        boolean isShuffleEnabled = getDefaultSharedPreferences(context).getBoolean(SHUFFLE_ENABLED_PREF, false);
+        boolean isShuffleEnabled = getPrefs().getBoolean(SHUFFLE_ENABLED_PREF, false);
         if(isShuffleEnabled){
             mediaPlayerService.enableShuffle();
         }
         else{
             mediaPlayerService.disableShuffle();
         }
+    }
+
+
+    public void loadNextTrackAutomatically(){
+        if(getPrefs().getBoolean("autoNextTrackOnPlaylistLoaded", true)){
+            mediaPlayerService.loadNextTrack();
+        }
+    }
+
+
+    private SharedPreferences getPrefs(){
+        return getDefaultSharedPreferences(context);
     }
 
 
