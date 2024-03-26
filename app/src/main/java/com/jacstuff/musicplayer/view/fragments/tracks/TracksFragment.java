@@ -21,8 +21,8 @@ import android.widget.TextView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.service.db.playlist.Playlist;
-import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.db.entities.Playlist;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;

@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.jacstuff.musicplayer.service.db.DbHelper;
 import com.jacstuff.musicplayer.service.db.DbUtils;
 import com.jacstuff.musicplayer.service.db.DbContract;
+import com.jacstuff.musicplayer.service.db.entities.Playlist;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManagerImpl;
 
 

@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.service.db.track;
+package com.jacstuff.musicplayer.service.db.entities;
 
 public class Track {
 

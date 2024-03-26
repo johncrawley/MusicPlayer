@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.service.db.playlist;
+package com.jacstuff.musicplayer.service.db.entities;
 
 public enum PlaylistType {
     ALL_TRACKS(-100L, false),

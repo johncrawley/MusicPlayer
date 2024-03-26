@@ -7,7 +7,7 @@ import android.media.MediaMetadataRetriever;
 
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
-import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 
 import java.io.IOException;
 

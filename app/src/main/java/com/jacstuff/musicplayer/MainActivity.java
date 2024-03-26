@@ -35,8 +35,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
-import com.jacstuff.musicplayer.service.db.playlist.Playlist;
-import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.db.entities.Playlist;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
     private AddTrackToPlaylistViewHelper addTrackToPlaylistViewHelper;
     private PlayerViewHelper playerViewHelper;
     private Playlist playlist;
-
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override

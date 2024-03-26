@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.service.db.playlist.Playlist;
+import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistRecyclerAdapter;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
 import com.jacstuff.musicplayer.view.utils.AnimatorHelper;

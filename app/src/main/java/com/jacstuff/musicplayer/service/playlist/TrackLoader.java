@@ -9,10 +9,10 @@ import android.provider.MediaStore;
 
 import androidx.preference.PreferenceManager;
 
-import com.jacstuff.musicplayer.service.db.album.Album;
-import com.jacstuff.musicplayer.service.db.artist.Artist;
-import com.jacstuff.musicplayer.service.db.genre.Genre;
-import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.db.entities.Album;
+import com.jacstuff.musicplayer.service.db.entities.Artist;
+import com.jacstuff.musicplayer.service.db.entities.Genre;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 
 import java.util.ArrayList;
 import java.util.Collections;

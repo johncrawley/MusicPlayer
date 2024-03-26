@@ -1,6 +1,4 @@
-package com.jacstuff.musicplayer.service.db.playlist;
-
-import com.jacstuff.musicplayer.service.db.track.Track;
+package com.jacstuff.musicplayer.service.db.entities;
 
 import java.util.ArrayList;
 import java.util.List;

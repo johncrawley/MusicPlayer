@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;

@@ -45,9 +45,8 @@ public class TabHelper {
         selectTabAtIndex(tabLayout, 4);
         new Handler(Looper.getMainLooper())
                 .postDelayed(()-> selectTabAtIndex(tabLayout, previousIndex),
-                        200);
+                        250);
     }
-
 
 
     private void refreshSelectedTabWhenPagerSwiped(ViewPager2 pager, TabLayout tabLayout){

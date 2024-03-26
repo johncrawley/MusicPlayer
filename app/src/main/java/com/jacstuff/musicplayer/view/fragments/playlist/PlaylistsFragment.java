@@ -22,15 +22,12 @@ import android.widget.Toast;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.service.db.playlist.Playlist;
+import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
-import com.jacstuff.musicplayer.view.fragments.album.AlbumsFragment;
-import com.jacstuff.musicplayer.view.fragments.artist.ArtistsFragment;
-import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.ArrayList;

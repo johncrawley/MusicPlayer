@@ -2,15 +2,15 @@ package com.jacstuff.musicplayer.service.playlist;
 
 import android.content.Context;
 
-import com.jacstuff.musicplayer.service.db.PlaylistStore;
-import com.jacstuff.musicplayer.service.db.artist.Artist;
-import com.jacstuff.musicplayer.service.db.playlist.Playlist;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistStore;
+import com.jacstuff.musicplayer.service.db.entities.Artist;
+import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistItemRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistItemRepositoryImpl;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
-import com.jacstuff.musicplayer.service.db.playlist.PlaylistType;
-import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 
 import java.util.ArrayDeque;

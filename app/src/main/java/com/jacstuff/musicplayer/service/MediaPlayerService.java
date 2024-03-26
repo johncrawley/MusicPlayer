@@ -1,6 +1,5 @@
 package com.jacstuff.musicplayer.service;
 
-
 import static com.jacstuff.musicplayer.service.MediaNotificationManager.NOTIFICATION_ID;
 
 import android.Manifest;
@@ -14,12 +13,13 @@ import android.os.IBinder;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.service.db.playlist.Playlist;
-import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.db.entities.Playlist;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.helpers.AlbumArtRetriever;
 import com.jacstuff.musicplayer.service.helpers.BroadcastHelper;
 import com.jacstuff.musicplayer.service.helpers.MediaPlayerHelper;
 import com.jacstuff.musicplayer.service.helpers.PlaylistHelper;
+import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 
 import java.util.List;
@@ -29,22 +29,24 @@ public class MediaPlayerService extends Service{
     private MediaNotificationManager mediaNotificationManager;
     private MainActivity mainActivity;
     private final IBinder binder = new LocalBinder();
-    private final PlaylistHelper playlistHelper;
-    private final MediaPlayerHelper mediaPlayerHelper;
+    private PlaylistHelper playlistHelper;
+    private MediaPlayerHelper mediaPlayerHelper;
     private BroadcastHelper broadcastHelper;
     private AlbumArtRetriever albumArtRetriever;
+    private PreferencesHelper preferencesHelper;
 
     public MediaPlayerService() {
-        playlistHelper = new PlaylistHelper(this);
-        mediaPlayerHelper = new MediaPlayerHelper(this);
     }
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mediaPlayerHelper = new MediaPlayerHelper(this);
         mediaPlayerHelper.createMediaPlayer();
+        playlistHelper = new PlaylistHelper(this);
         broadcastHelper = new BroadcastHelper(this);
+        preferencesHelper = new PreferencesHelper(this, getApplicationContext());
         mediaNotificationManager = new MediaNotificationManager(getApplicationContext(), this);
         playlistHelper.setMediaNotificationManager(mediaNotificationManager);
         albumArtRetriever = new AlbumArtRetriever(this, getApplicationContext());
@@ -76,19 +78,9 @@ public class MediaPlayerService extends Service{
     }
 
 
-    public void notifyMainViewOfMediaPlayerPlaying(){
-        mainActivity.notifyMediaPlayerPlaying();
-    }
-
-
     @Override
     public IBinder onBind(Intent intent) {
         return binder;
-    }
-
-
-    public void refreshTrackDataFromFilesystem() {
-        playlistHelper.refreshTrackDataFromFilesystem();
     }
 
 
@@ -105,21 +97,6 @@ public class MediaPlayerService extends Service{
     }
 
 
-    public void displayErrorOnMainView(Track track){
-        mainActivity.displayError(track);
-    }
-
-
-    public void updateArtistView(){
-        mainActivity.updateArtistsList(getPlaylistManager().getArtistNames());
-    }
-
-
-    public void updateAlbumsView(){
-        mainActivity.updateAlbumsList(getPlaylistManager().getAlbumNames());
-    }
-
-
     public void setCurrentTrackAndUpdatePlayerViewVisibility(){
         if(!isCurrentTrackEmpty()){
             mainActivity.showPlayerViews();
@@ -133,29 +110,6 @@ public class MediaPlayerService extends Service{
     }
 
 
-    public List<Track> getTracksForSearch(String str){ return playlistHelper.searchForTracks(str);}
-
-
-    public void setBlankTrackInfoOnMainView(){
-        mainActivity.setBlankTrackInfo();
-    }
-
-
-    public void displayPlaylistRefreshedMessage(int numberOfNewTracks){
-        mainActivity.displayPlaylistRefreshedMessage(numberOfNewTracks);
-    }
-
-
-    public void stop(){
-        mediaPlayerHelper.stop(true);
-    }
-
-
-    public void seek(int milliseconds){
-       mediaPlayerHelper.seek(milliseconds);
-    }
-
-
     public void updateMainViewOfStop(boolean shouldUpdateMainView){
         if(shouldUpdateMainView) {
             if(mainActivity != null) {
@@ -165,11 +119,19 @@ public class MediaPlayerService extends Service{
     }
 
 
+    public void refreshTrackDataFromFilesystem() { playlistHelper.refreshTrackDataFromFilesystem();}
+
+    public List<Track> getTracksForSearch(String str){ return playlistHelper.searchForTracks(str);}
+
     public void loadTracksFromArtist(String artistName){ playlistHelper.loadTracksFromArtist(artistName);}
 
-    public void loadTracksFromAlbum(String albumName){ playlistHelper.loadTracksFromAlbum(albumName);  }
+    public void loadTracksFromAlbum(String albumName){ playlistHelper.loadTracksFromAlbum(albumName); }
 
-    public void loadTracksFromGenre(String genreName){ playlistHelper.loadTracksFromGenre(genreName);  }
+    public void loadTracksFromGenre(String genreName){ playlistHelper.loadTracksFromGenre(genreName); }
+
+    public int getCurrentTrackIndex(){
+        return playlistHelper.getIndexOfCurrentTrack();
+    }
 
     public void addTracksFromAristToCurrentPlaylist(String artistName){ playlistHelper.addTracksFromAristToCurrentPlaylist(artistName); }
 
@@ -178,6 +140,8 @@ public class MediaPlayerService extends Service{
     public void loadPlaylist(Playlist playlist){ playlistHelper.loadPlaylist(playlist);}
 
     public void addTrackToCurrentPlaylist(Track track){ playlistHelper.addTrackToCurrentPlaylist(track);}
+
+    int getTrackCount(){ return playlistHelper.getTrackCount();}
 
     public void addTrackToPlaylist(Track track, Playlist playlist){ playlistHelper.addTrackToPlaylist(track, playlist);}
 
@@ -190,6 +154,92 @@ public class MediaPlayerService extends Service{
     public void loadArtistOfTrack(Track track){playlistHelper.loadArtistOfTrack(track);}
 
     public Bitmap getAlbumArtForNotification(){ return albumArtRetriever.getAlbumArtForNotification(); }
+
+    public boolean isCurrentTrackEmpty(){ return mediaPlayerHelper.getCurrentTrack() == null;}
+
+    public void stopPlayingInOneMinute(){
+        mediaPlayerHelper.stopPlayingInThreeMinutes(1);
+    }
+
+    public void stopPlayingInThreeMinutes(){
+        mediaPlayerHelper.stopPlayingInThreeMinutes(3);
+    }
+
+    public void stop(){
+        mediaPlayerHelper.stop(true);
+    }
+
+    public void seek(int milliseconds){
+        mediaPlayerHelper.seek(milliseconds);
+    }
+
+    public void selectTrack(int index){ mediaPlayerHelper.assignTrack(getPlaylistManager().selectTrack(index));}
+
+    public void enableStopAfterTrackFinishes(){mediaPlayerHelper.enabledStopAfterTrackFinishes();}
+
+    public boolean hasEncounteredError(){ return mediaPlayerHelper.hasEncounteredError();}
+
+    String getCurrentUrl(){ return mediaPlayerHelper.getCurrentUrl(); }
+
+    public Track getCurrentTrack(){ return mediaPlayerHelper.getCurrentTrack(); }
+
+    public boolean isPlaying(){
+        return mediaPlayerHelper.isPlaying();
+    }
+
+    public void playTrack(){ mediaPlayerHelper.playTrack(); }
+
+    public void stopUpdatingElapsedTimeOnView(){ mediaPlayerHelper.stopUpdatingElapsedTimeOnView(); }
+
+    public void notifyViewOfAlbumNotLoaded(String albumName){ mainActivity.notifyAlbumNotLoaded(albumName);}
+
+    public void notifyViewToDeselectPlaylistAndArtistTabs(){ mainActivity.deselectItemsInPlaylistAndArtistTabs(); }
+
+    public void notifyViewToDeselectNonArtistLists(){ mainActivity.deselectItemsInNonArtistTabs();}
+
+    public void notifyViewToDeselectEverythingButGenre(){ mainActivity.deselectItemsInTabsOtherThanGenre();}
+
+    public void resetElapsedTimeOnMainView(){
+        mainActivity.resetElapsedTime();
+    }
+
+    public void notifyMainViewThatFileDoesNotExist(Track track){ mainActivity.toastFileDoesNotExistError(track);}
+
+    public void notifyViewOfMediaPlayerStop(){ mainActivity.notifyMediaPlayerStopped(); }
+
+    public void setAlbumArtOnMainView(Bitmap albumArt){
+        mainActivity.setAlbumArt(albumArt);
+    }
+
+    public void setBlankAlbumArt(){
+        mainActivity.setBlankAlbumArt();
+    }
+
+    public Bitmap getAlbumArt(){ return albumArtRetriever.getCurrentAlbumArt();}
+
+    public void setElapsedTimeOnView(int elapsedTime){ mainActivity.setElapsedTime(elapsedTime);}
+
+    public void notifyMainViewOfMediaPlayerPlaying(){
+        mainActivity.notifyMediaPlayerPlaying();
+    }
+
+    public void displayErrorOnMainView(Track track){
+        mainActivity.displayError(track);
+    }
+
+    public void updateArtistView(){mainActivity.updateArtistsList(getPlaylistManager().getArtistNames()); }
+
+    public void updateAlbumsView(){ mainActivity.updateAlbumsList(getPlaylistManager().getAlbumNames()); }
+
+    public void setBlankTrackInfoOnMainView(){
+        mainActivity.setBlankTrackInfo();
+    }
+
+    public void displayPlaylistRefreshedMessage(int numberOfNewTracks){ mainActivity.displayPlaylistRefreshedMessage(numberOfNewTracks); }
+
+    public AlbumArtRetriever getAlbumArtRetriever(){ return albumArtRetriever;}
+
+    public void updateNotification(){ mediaNotificationManager.updateNotification();}
 
 
     public void updateViewTrackList(PlaylistManager playlistManager) {
@@ -204,37 +254,11 @@ public class MediaPlayerService extends Service{
     }
 
 
-    public void notifyViewOfAlbumNotLoaded(String albumName){
-        mainActivity.notifyAlbumNotLoaded(albumName);
-    }
-
-
-    public void notifyViewToDeselectPlaylistAndArtistTabs(){
-        mainActivity.deselectItemsInPlaylistAndArtistTabs();
-    }
-
-
-    public void notifyViewToDeselectNonArtistLists(){
-        mainActivity.deselectItemsInNonArtistTabs();
-    }
-
-
-
-    public void notifyViewToDeselectEverythingButGenre(){
-        mainActivity.deselectItemsInTabsOtherThanGenre();
-    }
-
-
     public void selectAndPlayTrack(Track track){
         mediaPlayerHelper.selectAndPlayTrack(track);
         getPlaylistManager().addToTrackHistory(track);
         getPlaylistManager().assignCurrentIndexIfApplicable(track);
         mainActivity.setTrackDetails(mediaPlayerHelper.getCurrentTrack(), 0);
-    }
-
-
-    public void selectTrack(int index){
-        mediaPlayerHelper.assignTrack(getPlaylistManager().selectTrack(index));
     }
 
 
@@ -246,19 +270,6 @@ public class MediaPlayerService extends Service{
 
     public void loadPreviousTrack(){
         getPlaylistManager().getPreviousTrack().ifPresent(mediaPlayerHelper::loadPreviousTrack);
-    }
-
-
-    public int getCurrentTrackIndex(){
-        return playlistHelper.getIndexOfCurrentTrack();
-    }
-
-
-    public void scrollToPositionOfCurrentTrack(){
-        Track track = getCurrentTrack();
-        if(track != null){
-            scrollToPositionOf(track, false);
-        }
     }
 
 
@@ -278,29 +289,6 @@ public class MediaPlayerService extends Service{
     }
 
 
-    public void enableStopAfterTrackFinishes(){
-        mediaPlayerHelper.enabledStopAfterTrackFinishes();
-    }
-
-
-    public boolean isCurrentTrackEmpty(){ return mediaPlayerHelper.getCurrentTrack() == null;}
-
-
-    public void stopPlayingInOneMinute(){
-        mediaPlayerHelper.stopPlayingInThreeMinutes(1);
-    }
-
-
-    public void stopPlayingInThreeMinutes(){
-        mediaPlayerHelper.stopPlayingInThreeMinutes(3);
-    }
-
-
-    public void resetElapsedTimeOnMainView(){
-        mainActivity.resetElapsedTime();
-    }
-
-
     public void updateViewsOnTrackAssigned(){
         mediaNotificationManager.updateNotification();
         mainActivity.setTrackDetails(mediaPlayerHelper.getCurrentTrack(), 0);
@@ -313,16 +301,7 @@ public class MediaPlayerService extends Service{
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         playlistHelper.onSetActivity(mainActivity);
-    }
-
-
-    public void setAlbumArtOnMainView(Bitmap albumArt){
-        mainActivity.setAlbumArt(albumArt);
-    }
-
-
-    public void setBlankAlbumArt(){
-        mainActivity.setBlankAlbumArt();
+        preferencesHelper.assignPreferences();
     }
 
 
@@ -337,47 +316,23 @@ public class MediaPlayerService extends Service{
     }
 
 
-    public boolean isPlaying(){
-        return mediaPlayerHelper.isPlaying();
+    public void enableShuffle(){
+        getPlaylistManager().enableShuffle();
+        preferencesHelper.saveShuffleState(true);
+        mainActivity.notifyShuffleEnabled();
     }
 
 
-    public void enableShuffle(){
-        getPlaylistManager().enableShuffle();
-        mainActivity.notifyShuffleEnabled();
+    public void disableShuffle(){
+        getPlaylistManager().disableShuffle();
+        preferencesHelper.saveShuffleState(false);
+        mainActivity.notifyShuffleDisabled();
     }
 
 
     public boolean isShuffleEnabled(){
         return getPlaylistManager().isShuffleEnabled();
     }
-
-
-    public void disableShuffle(){
-        getPlaylistManager().disableShuffle();
-        mainActivity.notifyShuffleDisabled();
-    }
-
-
-    public void playTrack(){
-        mediaPlayerHelper.playTrack();
-    }
-
-
-    public void stopUpdatingElapsedTimeOnView(){
-        mediaPlayerHelper.stopUpdatingElapsedTimeOnView();
-    }
-
-
-    public void setElapsedTimeOnView(int elapsedTime){
-        mainActivity.setElapsedTime(elapsedTime);
-    }
-
-
-    int getTrackCount(){
-        return playlistHelper.getTrackCount();
-    }
-
 
 
     private void moveToForeground(){
@@ -407,56 +362,16 @@ public class MediaPlayerService extends Service{
     }
 
 
-    public boolean hasEncounteredError(){
-        return mediaPlayerHelper.hasEncounteredError();
-    }
-
-
-    public Track getCurrentTrack(){
-        return mediaPlayerHelper.getCurrentTrack();
-    }
-
-
-    public Bitmap getAlbumArt(){
-        return albumArtRetriever.getCurrentAlbumArt();
-    }
-
-
-    public AlbumArtRetriever getAlbumArtRetriever(){
-        return albumArtRetriever;
-    }
-
-
-    public void notifyMainViewThatFileDoesNotExist(Track track){
-        mainActivity.toastFileDoesNotExistError(track);
-    }
-
-
-    String getCurrentUrl(){
-        return mediaPlayerHelper.getCurrentUrl();
-    }
-
-
     public void updateViewsForConnecting(){
         broadcastHelper.notifyViewOfConnectingStatus();
         mediaNotificationManager.updateNotification();
     }
 
 
-    public void notifyViewOfMediaPlayerStop(){
-         mainActivity.notifyMediaPlayerStopped();
-     }
-
-
     public void setCpuWakeLock(){
         if (checkSelfPermission(Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
             mediaPlayerHelper.setCpuWakeLock(getApplicationContext());
         }
-    }
-
-
-    public void updateNotification(){
-        mediaNotificationManager.updateNotification();
     }
 
 

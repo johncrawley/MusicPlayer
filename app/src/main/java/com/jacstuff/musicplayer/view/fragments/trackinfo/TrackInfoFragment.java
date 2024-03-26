@@ -4,7 +4,6 @@ import static java.lang.String.format;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 import com.jacstuff.musicplayer.view.utils.TimeConverter;
 

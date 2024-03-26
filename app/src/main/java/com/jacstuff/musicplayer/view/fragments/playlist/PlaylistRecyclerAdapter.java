@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.service.db.playlist.Playlist;
+import com.jacstuff.musicplayer.service.db.entities.Playlist;
 
 import java.util.ArrayList;
 import java.util.List;

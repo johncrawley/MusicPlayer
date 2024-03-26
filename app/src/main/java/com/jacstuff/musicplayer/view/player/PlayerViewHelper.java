@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
-import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.view.fragments.options.StopOptionsFragment;
 import com.jacstuff.musicplayer.view.utils.FragmentHelper;
 import com.jacstuff.musicplayer.view.utils.TimeConverter;

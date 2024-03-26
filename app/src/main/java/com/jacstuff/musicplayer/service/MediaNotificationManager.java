@@ -21,7 +21,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

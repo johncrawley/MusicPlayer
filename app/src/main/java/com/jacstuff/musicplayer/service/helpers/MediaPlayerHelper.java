@@ -6,7 +6,7 @@ import android.os.PowerManager;
 import android.util.Log;
 
 import com.jacstuff.musicplayer.service.MediaPlayerService;
-import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 
 import java.io.IOException;
 import java.util.concurrent.Executors;

@@ -9,7 +9,7 @@ import android.database.SQLException;
 
 import com.jacstuff.musicplayer.service.db.AbstractRepository;
 import com.jacstuff.musicplayer.service.db.DbContract;
-import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 
 import java.util.ArrayList;
 import java.util.List;

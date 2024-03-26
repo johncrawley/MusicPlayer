@@ -1,6 +1,8 @@
 package com.jacstuff.musicplayer.service.db.playlist;
 
 
+import com.jacstuff.musicplayer.service.db.entities.Playlist;
+
 import java.util.List;
 
 public interface PlaylistRepository {

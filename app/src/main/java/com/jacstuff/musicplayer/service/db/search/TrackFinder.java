@@ -1,6 +1,6 @@
 package com.jacstuff.musicplayer.service.db.search;
 
-import com.jacstuff.musicplayer.service.db.track.Track;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.playlist.TrackLoader;
 
 import java.util.Arrays;
