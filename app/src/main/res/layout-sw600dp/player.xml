@@ -17,7 +17,7 @@
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:textAlignment="center"
-        android:textSize="@dimen/track_name_text_size"
+        android:textSize="@dimen/track_name_text_size_tablet"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -56,17 +56,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/track_detail_text_margin_vertical"
             android:textAlignment="center"
-            android:textSize="@dimen/album_text_size" />
+            android:textSize="@dimen/album_text_size_tablet" />
 
         <TextView
             android:id="@+id/artistTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/artist_text_margin_top"
+            android:layout_marginTop="@dimen/artist_text_margin_top_tablet"
             android:layout_marginBottom="@dimen/artist_text_margin_bottom"
             android:textAlignment="center"
-            android:textSize="@dimen/artist_text_size" />
-
+            android:textSize="@dimen/artist_text_size_tablet" />
     </LinearLayout>
 
 
@@ -75,7 +74,7 @@
         android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:progressDrawable="@drawable/seek_bar"
+        android:progressDrawable="@drawable/seek_bar_tablet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/trackDetailsLayout"
@@ -91,7 +90,7 @@
         android:layout_marginBottom="@dimen/track_time_margin_bottom_small"
         android:text="@string/elapsed_time_label"
         android:fontFamily="@font/poe_monospace_djj6"
-        android:textSize="@dimen/track_time_text_size_small"
+        android:textSize="@dimen/track_time_text_size_tablet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/trackTimeSeekBar"

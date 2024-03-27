@@ -198,7 +198,7 @@ public class PlayerViewHelper {
 
 
     private void setupPlayerButtonPanelViews(){
-        playerButtonPanel = mainActivity.findViewById(R.id.buttonLayout);
+        playerButtonPanel = mainActivity.findViewById(R.id.playerButtonsInclude);
         previousTrackButton = setupImageButton(R.id.previousTrackButton, this::previousTrack);
         nextTrackButton     = setupImageButton(R.id.nextTrackButton, this::nextTrack);
         playButton  = setupImageButton(R.id.playButton, this::playTrack);

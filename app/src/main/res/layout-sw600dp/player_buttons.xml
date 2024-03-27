@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/buttonLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:layout_marginBottom="@dimen/button_panel_margin_bottom">
+
+    <ImageButton
+        android:id="@+id/previousTrackButton"
+        android:layout_width="@dimen/player_button_size_tablet"
+        android:layout_height="@dimen/player_button_size_tablet"
+        android:contentDescription="@string/previous_track_button_content_description"
+        android:paddingBottom="@dimen/button_padding"
+        app:srcCompat="@mipmap/ic_action_previous" />
+
+    <ImageButton
+        android:id="@+id/playButton"
+        android:layout_width="@dimen/player_button_size_tablet"
+        android:layout_height="@dimen/player_button_size_tablet"
+        android:contentDescription="@string/play_button_content_description"
+        android:paddingBottom="@dimen/button_padding"
+        app:srcCompat="@mipmap/ic_action_play" />
+
+    <ImageButton
+        android:id="@+id/pauseButton"
+        android:layout_width="@dimen/player_button_size_tablet"
+        android:layout_height="@dimen/player_button_size_tablet"
+        android:contentDescription="@string/pause_button_content_description"
+        android:paddingBottom="@dimen/button_padding"
+        android:visibility="gone"
+        app:srcCompat="@mipmap/ic_action_pause" />
+
+    <ImageButton
+        android:id="@+id/stopButton"
+        android:layout_width="@dimen/player_button_size_tablet"
+        android:layout_height="@dimen/player_button_size_tablet"
+        android:contentDescription="@string/stop_button_content_description"
+        android:paddingBottom="@dimen/button_padding"
+        android:tintMode="src_in"
+        app:srcCompat="@mipmap/ic_action_stop" />
+
+    <ImageButton
+        android:id="@+id/nextTrackButton"
+        android:layout_width="@dimen/player_button_size_tablet"
+        android:layout_height="@dimen/player_button_size_tablet"
+        android:contentDescription="@string/next_track_button_content_description"
+        android:paddingBottom="@dimen/button_padding"
+        app:srcCompat="@mipmap/ic_action_next" />
+
+    <ImageButton
+        android:id="@+id/turnShuffleOffButton"
+        android:layout_width="@dimen/player_button_size_tablet"
+        android:layout_height="@dimen/player_button_size_tablet"
+        android:contentDescription="@string/shuffle_off_button_content_description"
+        android:paddingBottom="@dimen/button_padding"
+        app:srcCompat="@mipmap/ic_action_shuffle" />
+
+    <ImageButton
+        android:id="@+id/turnShuffleOnButton"
+        android:layout_width="@dimen/player_button_size_tablet"
+        android:layout_height="@dimen/player_button_size_tablet"
+        android:visibility="gone"
+        android:contentDescription="@string/shuffle_on_button_content_description"
+        android:paddingBottom="@dimen/button_padding"
+        app:tint="@color/image_button_shuffle_on_tint"
+        app:srcCompat="@mipmap/ic_action_enable_shuffle" />
+
+</LinearLayout>
