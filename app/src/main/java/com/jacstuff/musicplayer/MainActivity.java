@@ -17,17 +17,22 @@ import android.Manifest;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,6 +58,8 @@ import com.jacstuff.musicplayer.view.art.AlbumArtHelper;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
 import com.jacstuff.musicplayer.view.viewmodel.MainViewModel;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -103,6 +110,65 @@ public class MainActivity extends AppCompatActivity {
         setupTabLayout();
         initPlayerViewHelper();
         startMediaPlayerService();
+        openFile();
+    }
+
+    private void log(String msg){
+
+        System.out.println("^^^ MainActivity: " + msg);
+    }
+
+    public void openFile() {
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            String path = intent.getDataString();
+            Uri uri = intent.getData();
+            if (path == null) {
+                log("openFile() intent data string is null");
+            } else {
+                log("openFile() intent data string: " + path);
+                log("openFile() intent data: " + intent.getStringExtra(Intent.ACTION_VIEW));
+                if(uri != null) {
+                    System.out.println("^^^ uri: " + uri.getPath());
+                    playOpenedFile(uri);
+                }
+            }
+        }
+    }
+
+
+    private void playOpenedFile(Uri uri){
+        try {
+            MediaPlayer mediaPlayer = new MediaPlayer();
+
+            mediaPlayer.setDataSource(getApplicationContext(), uri);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            new Handler(Looper.getMainLooper()).postDelayed(()->{
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            }, 5000);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+
+    private void playOpenedFile(String dataSourcePath){
+        try {
+            MediaPlayer mediaPlayer = new MediaPlayer();
+
+            mediaPlayer.setDataSource(getApplicationContext(), Uri.parse(dataSourcePath));
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            new Handler(Looper.getMainLooper()).postDelayed(()->{
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            }, 5000);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
 
