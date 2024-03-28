@@ -133,6 +133,13 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
+    @Override
+    public void addTrackToHistory(Track track){
+        trackHistory.add(track);
+    }
+
+
+
     private void calculateAndDisplayNewTracksStats(MediaPlayerService mediaPlayerService){
         mediaPlayerService.displayPlaylistRefreshedMessage(0);
     }

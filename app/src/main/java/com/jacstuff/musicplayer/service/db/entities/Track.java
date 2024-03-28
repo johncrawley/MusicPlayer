@@ -1,5 +1,7 @@
 package com.jacstuff.musicplayer.service.db.entities;
 
+import android.net.Uri;
+
 public class Track {
 
     private final String pathname, title, artist, album, genre;
@@ -11,6 +13,7 @@ public class Track {
     private final long duration;
     private final String year;
     private final String bitrate;
+    private Uri uri;
 
 
     private Track(Builder builder){
@@ -26,6 +29,7 @@ public class Track {
         this.genre = builder.genre;
         this.year = builder.year;
         this.bitrate = builder.bitrate;
+        this.uri = builder.uri;
         createOrderedStr();
         createSearchStr();
     }
@@ -58,6 +62,11 @@ public class Track {
     private void createSearchStr(){
         searchStr = artist + " " + album + " " + title;
         searchStr = searchStr.toLowerCase();
+    }
+
+
+    public boolean isUsingUri(){
+        return uri != null;
     }
 
 
@@ -107,6 +116,8 @@ public class Track {
 
     public String getPathname(){return pathname;}
 
+    public Uri getUri(){return uri;}
+
 
     public String getDisc(){return disc;}
 
@@ -142,6 +153,7 @@ public class Track {
         private int index;
         private String year;
         private String bitrate;
+        private Uri uri;
 
         public Track build(){
             return new Track(this);
@@ -168,8 +180,15 @@ public class Track {
             return this;
         }
 
+
         public Builder withYear(String year){
             this.year = year;
+            return this;
+        }
+
+
+        public Builder withUri(Uri uri){
+            this.uri = uri;
             return this;
         }
 

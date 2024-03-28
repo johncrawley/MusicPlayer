@@ -8,6 +8,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 
@@ -15,7 +16,8 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.entities.Track;
-import com.jacstuff.musicplayer.service.helpers.AlbumArtRetriever;
+import com.jacstuff.musicplayer.service.helpers.art.AlbumArtConsumer;
+import com.jacstuff.musicplayer.service.helpers.art.AlbumArtRetriever;
 import com.jacstuff.musicplayer.service.helpers.BroadcastHelper;
 import com.jacstuff.musicplayer.service.helpers.MediaPlayerHelper;
 import com.jacstuff.musicplayer.service.helpers.PlaylistHelper;
@@ -24,7 +26,7 @@ import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 
 import java.util.List;
 
-public class MediaPlayerService extends Service{
+public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     private MediaNotificationManager mediaNotificationManager;
     private MainActivity mainActivity;
@@ -159,6 +161,8 @@ public class MediaPlayerService extends Service{
 
     public boolean isCurrentTrackEmpty(){ return mediaPlayerHelper.getCurrentTrack() == null;}
 
+    public void playUri(Uri uri){mediaPlayerHelper.playTrackFrom(getApplicationContext(), uri);}
+
     public void stopPlayingInOneMinute(){
         mediaPlayerHelper.stopPlayingInThreeMinutes(1);
     }
@@ -209,7 +213,8 @@ public class MediaPlayerService extends Service{
 
     public void notifyViewOfMediaPlayerStop(){ mainActivity.notifyMediaPlayerStopped(); }
 
-    public void setAlbumArtOnMainView(Bitmap albumArt){
+    @Override
+    public void setArt(Bitmap albumArt){
         mainActivity.setAlbumArt(albumArt);
     }
 

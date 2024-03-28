@@ -22,6 +22,7 @@ public interface PlaylistManager {
     Optional<Track> getPreviousTrack();
     Track selectTrack(int index);
     void assignCurrentIndexIfApplicable(Track track);
+    void addTrackToHistory(Track track);
 
     void addToTrackHistory(Track track);
     void addTracksFromStorage(MediaPlayerService mediaPlayerService);

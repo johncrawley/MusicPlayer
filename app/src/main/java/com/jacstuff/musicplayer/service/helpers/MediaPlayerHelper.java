@@ -1,12 +1,15 @@
 package com.jacstuff.musicplayer.service.helpers;
 
 import android.content.Context;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.PowerManager;
 import android.util.Log;
 
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
+import com.jacstuff.musicplayer.service.helpers.art.AlbumArtRetriever;
 
 import java.io.IOException;
 import java.util.concurrent.Executors;
@@ -19,7 +22,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     private final MediaPlayerService mediaPlayerService;
     private MediaPlayer mediaPlayer;
-    private enum MediaPlayerState { PAUSED, PLAYING, STOPPED, FINISHED}
     private MediaPlayerState currentState = MediaPlayerState.STOPPED;
     private boolean shouldNextTrackPlayAfterCurrentTrackEnds = true;
     public boolean hasEncounteredError;
@@ -98,11 +100,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    public void startUpdatingElapsedTimeOnView(){
-        updateElapsedTimeFuture = executorService.scheduleAtFixedRate(this::updateElapsedTimeOnView, 0L, 200L, TimeUnit.MILLISECONDS);
-    }
-
-
     public void assignTrack(Track track){
         currentTrack = track;
         elapsedTime = 0;
@@ -165,24 +162,8 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    private void releaseAndResetMediaPlayer(){
-        try {
-            if (mediaPlayer != null) {
-                mediaPlayer.reset();
-                mediaPlayer.release();
-                mediaPlayer = null;
-            }
-        }catch (RuntimeException e){
-            Log.i("MediaPlayerHelper", "releaseAndResetMediaPlayerAndWifiLock() exception:  " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-
-    //NB try-with-resources requires API 29 (version code Q), and min is currently API 26
     private void assignAlbumArt(Track track){
         AlbumArtRetriever albumArtRetriever = mediaPlayerService.getAlbumArtRetriever();
-
         try{
             albumArtRetriever.assignAlbumArt(track);
         }
@@ -213,6 +194,28 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     public Track getCurrentTrack(){
         return currentTrack;
+    }
+
+
+    public void playTrackFrom(Context context, Uri uri){
+        try (MediaMetadataRetriever retriever = new MediaMetadataRetriever()){
+            retriever.setDataSource(context, uri);
+            Track track = Track.Builder
+                    .newInstance()
+                    .withTitle(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE))
+                    .withAlbum(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM))
+                    .withArtist(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST))
+                    .withDisc(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER))
+                    .withBitrate(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE))
+                    .withYear(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR))
+                    .withGenre(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE))
+                    .withUri(uri)
+                    .build();
+            loadTrack(track);
+
+        }catch(IOException | IllegalArgumentException e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -299,31 +302,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    private void startTrack(){
-        resetErrorStatus();
-        try {
-            isPreparingTrack.set(true);
-            stopPlayer();
-            createMediaPlayer();
-            mediaPlayer.setDataSource(currentTrack.getPathname());
-            mediaPlayer.setOnPreparedListener(this);
-            mediaPlayer.prepare();
-            startUpdatingElapsedTimeOnView();
-            currentState = MediaPlayerState.PLAYING;
-            mediaPlayerService.notifyMainViewOfMediaPlayerPlaying();
-        }catch (IOException e){
-            log("IO exception trying to start track: " + currentTrack.getPathname());
-            e.printStackTrace();
-            onError();
-            hasEncounteredError = true;
-            mediaPlayerService.displayErrorOnMainView(currentTrack);
-        }finally{
-            isPreparingTrack.set(false);
-            mediaPlayerService.updateNotification();
-        }
-    }
-
-
     public void pauseMediaPlayer(){
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
@@ -341,14 +319,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    public void createMediaPlayer(){
-        mediaPlayer = new MediaPlayer();
-        currentState = MediaPlayerState.STOPPED;
-        mediaPlayer.setOnCompletionListener(this::onTrackFinished);
-        setupErrorListener();
-    }
-
-
     private void onTrackFinished(MediaPlayer mediaPlayer){
         currentState = MediaPlayerState.FINISHED;
         stopUpdatingElapsedTimeOnView();
@@ -360,21 +330,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         else{
             stop(true);
         }
-    }
-
-
-    private void stopPlayer(){
-        releaseAndResetMediaPlayer();
-        mediaPlayerService.updateNotification();
-    }
-
-
-    void stopRunningMediaPlayer(){
-        if(mediaPlayer != null && (mediaPlayer.isPlaying() || currentState == MediaPlayerState.PAUSED)){
-            mediaPlayer.stop();
-            mediaPlayer.reset();
-        }
-        currentState = MediaPlayerState.STOPPED;
     }
 
 
@@ -424,4 +379,78 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
+    void stopRunningMediaPlayer(){
+        if(mediaPlayer != null && (mediaPlayer.isPlaying() || currentState == MediaPlayerState.PAUSED)){
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+        }
+        currentState = MediaPlayerState.STOPPED;
+    }
+
+
+    private void startTrack(){
+        resetErrorStatus();
+        try {
+            isPreparingTrack.set(true);
+            stopPlayer();
+            createMediaPlayer();
+            setDataSourceFromCurrentTrack();
+            mediaPlayer.setOnPreparedListener(this);
+            mediaPlayer.prepare();
+            startUpdatingElapsedTimeOnView();
+            currentState = MediaPlayerState.PLAYING;
+            mediaPlayerService.notifyMainViewOfMediaPlayerPlaying();
+        }catch (IOException e){
+            log("IO exception trying to start track: " + currentTrack.getPathname());
+            e.printStackTrace();
+            onError();
+            hasEncounteredError = true;
+            mediaPlayerService.displayErrorOnMainView(currentTrack);
+        }finally{
+            isPreparingTrack.set(false);
+            mediaPlayerService.updateNotification();
+        }
+    }
+
+
+    private void stopPlayer(){
+        releaseAndResetMediaPlayer();
+        mediaPlayerService.updateNotification();
+    }
+
+
+    private void releaseAndResetMediaPlayer(){
+        try {
+            if (mediaPlayer != null) {
+                mediaPlayer.reset();
+                mediaPlayer.release();
+                mediaPlayer = null;
+            }
+        }catch (RuntimeException e){
+            Log.i("MediaPlayerHelper", "releaseAndResetMediaPlayerAndWifiLock() exception:  " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    public void createMediaPlayer(){
+        mediaPlayer = new MediaPlayer();
+        currentState = MediaPlayerState.STOPPED;
+        mediaPlayer.setOnCompletionListener(this::onTrackFinished);
+        setupErrorListener();
+    }
+
+
+    private void setDataSourceFromCurrentTrack() throws IOException{
+        if(currentTrack.isUsingUri()){
+            mediaPlayer.setDataSource(mediaPlayerService.getApplicationContext(), currentTrack.getUri());
+            return;
+        }
+        mediaPlayer.setDataSource(currentTrack.getPathname());
+    }
+
+
+    public void startUpdatingElapsedTimeOnView(){
+        updateElapsedTimeFuture = executorService.scheduleAtFixedRate(this::updateElapsedTimeOnView, 0L, 200L, TimeUnit.MILLISECONDS);
+    }
 }

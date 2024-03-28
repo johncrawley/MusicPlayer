@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.service.helpers;
+package com.jacstuff.musicplayer.service.helpers.art;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,33 +6,30 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 
 import java.io.IOException;
 
 public class AlbumArtRetriever {
 
-    private final MediaPlayerService mediaPlayerService;
+    private final AlbumArtConsumer artConsumer;
     private final Context context;
     private Bitmap currentAlbumArt;
     private Bitmap blankAlbumArt;
 
 
-    public AlbumArtRetriever(MediaPlayerService mediaPlayerService, Context context){
-        this.mediaPlayerService = mediaPlayerService;
+    public AlbumArtRetriever(AlbumArtConsumer consumer, Context context){
+        this.artConsumer = consumer;
         this.context = context;
         loadBlankAlbumArt();
     }
 
 
     public void assignAlbumArt(Track track) throws IOException, IllegalArgumentException{
-        try {
-            MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+        try (MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever()){
             mediaMetadataRetriever.setDataSource(track.getPathname());
             currentAlbumArt = retrieveAlbumArt(mediaMetadataRetriever);
-            mediaPlayerService.setAlbumArtOnMainView(currentAlbumArt);
-            mediaMetadataRetriever.close();
+            artConsumer.setArt(currentAlbumArt);
         }catch(IOException | IllegalArgumentException e){
             currentAlbumArt = blankAlbumArt;
             throw e;
