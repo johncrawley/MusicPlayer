@@ -1,10 +1,11 @@
 package com.jacstuff.musicplayer.view.trackplayer;
 
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -13,13 +14,14 @@ import com.jacstuff.musicplayer.OpenTrackActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.PlayTrackService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
+import com.jacstuff.musicplayer.service.playtrack.TrackPlayerHelper;
 import com.jacstuff.musicplayer.view.utils.TimeConverter;
 
 import java.util.Arrays;
 import java.util.List;
 
 
-public class TrackPlayerViewHelper {
+public class TrackPlayerViewHelper implements TrackPlayerView{
 
     private final OpenTrackActivity activity;
     private PlayTrackService playTrackService;
@@ -30,16 +32,18 @@ public class TrackPlayerViewHelper {
     private SeekBar trackTimeSeekBar;
     private boolean isTrackTimeSeekBarHeld = false;
     private String totalTrackTime = "0:00";
-    private ViewGroup playerButtonPanel;
+    private TrackPlayerHelper trackPlayerHelper;
 
 
     public TrackPlayerViewHelper(OpenTrackActivity openTrackActivity){
         activity = openTrackActivity;
-
     }
+
 
     public void setService(PlayTrackService playTrackService){
         this.playTrackService = playTrackService;
+        trackPlayerHelper = playTrackService.getTrackPlayerHelper();
+        trackPlayerHelper.setTrackPlayerView(this);
     }
 
 
@@ -52,7 +56,7 @@ public class TrackPlayerViewHelper {
 
 
     public void playTrack() {
-        playTrackService.playTrack();
+        trackPlayerHelper.loadAndStartTrack();
     }
 
 
@@ -72,19 +76,8 @@ public class TrackPlayerViewHelper {
 
     public void stopTrack(){
         resetElapsedTime();
-        playTrackService.stop();
+        trackPlayerHelper.stop(true);
     }
-
-
-    public void updateViews(int numberOfTracks, boolean isCurrentTrackNull){
-        if(numberOfTracks == 0 && isCurrentTrackNull){
-            setVisibilityOnPlayerViews(View.INVISIBLE);
-            return;
-        }
-        setVisibilityOnPlayerViews(View.VISIBLE);
-        setPlayPauseAndTrackSeekBarVisibility();
-    }
-
 
 
     public void resetElapsedTime(){
@@ -92,19 +85,7 @@ public class TrackPlayerViewHelper {
     }
 
 
-    public void setTrackDetails(final Track track, int elapsedTime){
-        activity.runOnUiThread(()-> {
-            playerButtonPanel.setVisibility(View.VISIBLE);
-            String titleText = track.getTitle();
-            trackTitle.setText(titleText.isEmpty()? activity.getString(R.string.no_tracks_found) : titleText);
-            trackAlbum.setText(track.getAlbum());
-            trackArtist.setText(track.getArtist());
-            setTrackTimeInfo(elapsedTime, track.getDuration());
-            trackTimeSeekBar.setProgress(elapsedTime);
-        });
-    }
-
-
+    @Override
     public void setElapsedTime(long elapsedMilliseconds){
         setElapsedTime(TimeConverter.convert(elapsedMilliseconds));
         activity.runOnUiThread(()->{
@@ -151,7 +132,7 @@ public class TrackPlayerViewHelper {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int progress = Math.min(seekBar.getMax() - 500, seekBar.getProgress());
-                playTrackService.seek(progress);
+                trackPlayerHelper.seek(progress);
                 isTrackTimeSeekBarHeld = false;
                 setPlayerControlsEnabled(true);
             }
@@ -176,14 +157,13 @@ public class TrackPlayerViewHelper {
 
     private void initTrackDetailViews(){
         trackTime = activity.findViewById(R.id.trackTime);
-        trackTitle =  activity.findViewById(R.id.trackTitle);
-        trackAlbum =  activity.findViewById(R.id.albumTextView);
-        trackArtist = activity.findViewById(R.id.artistTextView);
+        trackTitle =  activity.findViewById(R.id.trackTitleText);
+        trackAlbum =  activity.findViewById(R.id.albumText);
+        trackArtist = activity.findViewById(R.id.artistText);
     }
 
 
     private void setupPlayerButtonPanelViews(){
-        playerButtonPanel = activity.findViewById(R.id.playerButtonsInclude);
         playButton  = setupImageButton(R.id.playButton, this::playTrack);
         pauseButton = setupImageButton(R.id.pauseButton, this::pauseTrack);
         stopButton  = setupImageButton(R.id.stopButton, this::stopTrack);
@@ -210,19 +190,28 @@ public class TrackPlayerViewHelper {
     }
 
 
-    public void setVisibilityOnPlayerViews(int visibility){
-        activity.runOnUiThread(()->{
-            trackTitle.setVisibility(visibility);
-            trackAlbum.setVisibility(visibility);
-            trackArtist.setVisibility(visibility);
-            trackTime.setVisibility(visibility);
-            playerButtonPanel.setVisibility(visibility);
-        });
-    }
+    @Override
+    public void updateViewsOnTrackAssigned() {
 
+    }
 
     public void setBlankTrackInfo(){
         activity.runOnUiThread(()-> trackTitle.setText(""));
+    }
+
+    @Override
+    public void setBlankTrackInfoOnMainView() {
+
+    }
+
+    @Override
+    public void updateForConnecting() {
+
+    }
+
+    @Override
+    public void stopUpdatingElapsedTimeOnView() {
+
     }
 
 
@@ -239,7 +228,44 @@ public class TrackPlayerViewHelper {
         });
     }
 
+    @Override
+    public void displayError(Track track) {
 
+    }
+
+
+    @Override
+    public void notifyThatFileDoesNotExist(Track track) {
+
+    }
+
+
+    @Override
+    public void setAlbumArt(Bitmap bitmap) {
+        if(bitmap == null){
+            return;
+        }
+        activity.runOnUiThread(()-> {
+            ImageView albumArtView = activity.findViewById(R.id.albumArtImageView);
+            albumArtView.setImageBitmap(bitmap);
+            // viewModel.currentAlbumArt = updatedAlbumArt;
+        });
+    }
+
+
+    @Override
+    public void displayInfoFrom(Track track) {
+        activity.runOnUiThread(()-> {
+            String titleText = track.getTitle();
+            trackTitle.setText(titleText.isEmpty()? activity.getString(R.string.no_tracks_found) : titleText);
+            trackAlbum.setText(track.getAlbum());
+            trackArtist.setText(track.getArtist());
+            setTrackTimeInfo(0, track.getDuration());
+            trackTimeSeekBar.setProgress(0);
+        });
+    }
+
+    @Override
     public void notifyMediaPlayerStopped(){
         activity.runOnUiThread(()->{
             playButton.setVisibility(View.VISIBLE);
@@ -250,6 +276,7 @@ public class TrackPlayerViewHelper {
     }
 
 
+    @Override
     public void notifyMediaPlayerPaused(){
         activity.runOnUiThread(()->{
             playButton.setVisibility(View.VISIBLE);

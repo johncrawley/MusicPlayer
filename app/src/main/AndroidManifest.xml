@@ -29,6 +29,17 @@
                 <category android:name="android.intent.category.APP_MUSIC" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".OpenTrackActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MUSIC_PLAYER" />
+                <category android:name="android.intent.category.APP_MUSIC" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -67,6 +78,14 @@
         <service
             android:name=".service.MediaPlayerService"
             android:label="MediaPlayerService"
+            android:enabled="true"
+            android:foregroundServiceType="mediaPlayback"
+            android:stopWithTask="true" />
+
+
+        <service
+            android:name=".service.PlayTrackService"
+            android:label="PlayTrackService"
             android:enabled="true"
             android:foregroundServiceType="mediaPlayback"
             android:stopWithTask="true" />

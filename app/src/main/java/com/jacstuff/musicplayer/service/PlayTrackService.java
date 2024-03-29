@@ -6,15 +6,18 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 
+import com.jacstuff.musicplayer.OpenTrackActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.helpers.art.AlbumArtConsumer;
 import com.jacstuff.musicplayer.service.helpers.art.AlbumArtRetriever;
 import com.jacstuff.musicplayer.service.playtrack.PlayTrackBroadcastHelper;
 import com.jacstuff.musicplayer.service.playtrack.PlayTrackNotificationManager;
 import com.jacstuff.musicplayer.service.playtrack.TrackPlayerHelper;
+import com.jacstuff.musicplayer.view.trackplayer.TrackPlayerView;
 
 public class PlayTrackService extends Service implements AlbumArtConsumer {
 
@@ -23,8 +26,15 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
     private TrackPlayerHelper trackPlayerHelper;
     private PlayTrackBroadcastHelper playTrackBroadcastHelper;
     private AlbumArtRetriever albumArtRetriever;
+    private OpenTrackActivity activity;
+
 
     public PlayTrackService() {
+    }
+
+
+    public void setActivity(OpenTrackActivity openTrackActivity){
+        this.activity = openTrackActivity;
     }
 
 
@@ -32,12 +42,17 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
     public void onCreate() {
         super.onCreate();
         trackPlayerHelper = new TrackPlayerHelper(this);
-        trackPlayerHelper.createMediaPlayer();
         playTrackBroadcastHelper = new PlayTrackBroadcastHelper(this);
         playTrackNotificationManager = new PlayTrackNotificationManager(getApplicationContext(), this, trackPlayerHelper);
         albumArtRetriever = new AlbumArtRetriever(this, getApplicationContext());
         moveToForeground();
     }
+
+
+    public void playUri(Uri uri){
+        trackPlayerHelper.playTrackFrom(getApplicationContext(), uri);
+    }
+
 
     public void setArt(Bitmap bitmap){
 
@@ -47,6 +62,7 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
     public void playTrack(){
 
     }
+
 
     public void stop(){
 

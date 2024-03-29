@@ -442,10 +442,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     private void setDataSourceFromCurrentTrack() throws IOException{
-        if(currentTrack.isUsingUri()){
-            mediaPlayer.setDataSource(mediaPlayerService.getApplicationContext(), currentTrack.getUri());
-            return;
-        }
         mediaPlayer.setDataSource(currentTrack.getPathname());
     }
 

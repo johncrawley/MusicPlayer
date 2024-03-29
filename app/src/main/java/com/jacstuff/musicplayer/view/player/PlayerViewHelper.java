@@ -28,7 +28,6 @@ public class PlayerViewHelper {
     private boolean isTrackTimeSeekBarHeld = false;
     private String totalTrackTime = "0:00";
     private ViewGroup playerButtonPanel;
-
     private final MainActivity mainActivity;
     private MediaPlayerService mediaPlayerService;
 
@@ -57,6 +56,7 @@ public class PlayerViewHelper {
     }
 
 
+
     public void pauseTrack() {
         mainActivity.disableViewForAWhile(playButton, 300);
         mediaPlayerService.pause();
@@ -73,7 +73,6 @@ public class PlayerViewHelper {
         mainActivity.disableViewForAWhile(nextTrackButton);
         mediaPlayerService.loadNextTrack();
     }
-
 
 
     public void updateViews(int numberOfTracks, boolean isCurrentTrackNull){

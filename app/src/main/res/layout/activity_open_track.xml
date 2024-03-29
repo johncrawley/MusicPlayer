@@ -4,16 +4,120 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <include
-        android:id="@+id/playerInclude"
-        layout="@layout/player"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/trackTitleText"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Title"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/albumArtImageView"
+        android:contentDescription="@string/album_art_content_description"
+        android:scaleType="fitXY"
+        android:background="@drawable/app_icon"
+        app:layout_constraintTop_toBottomOf="@+id/trackTitleText"
+        app:layout_constraintBottom_toTopOf="@id/albumText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/albumText"
+        android:text="Album"
+        app:layout_constraintTop_toBottomOf="@+id/albumArtImageView"
+        app:layout_constraintBottom_toTopOf="@id/artistText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/artistText"
+        android:text="Artist"
+        app:layout_constraintTop_toBottomOf="@id/albumText"
+        app:layout_constraintBottom_toBottomOf="@id/trackTimeSeekBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+
+
+    <SeekBar
+        android:id="@+id/trackTimeSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progressDrawable="@drawable/seek_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/artistText"
+        app:layout_constraintBottom_toTopOf="@id/trackTime"
+        />
+
+    <TextView
+        android:id="@+id/trackTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="@dimen/track_time_margin_bottom_small"
+        android:text="@string/elapsed_time_label"
+        android:fontFamily="@font/poe_monospace_djj6"
+        android:textSize="@dimen/track_time_text_size_small"
+        app:layout_constraintTop_toBottomOf="@+id/trackTimeSeekBar"
+        app:layout_constraintBottom_toTopOf="@id/buttonsLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/playButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/play_button_content_description"
+            android:paddingBottom="@dimen/button_padding"
+            app:srcCompat="@mipmap/ic_action_play" />
+
+        <ImageButton
+            android:id="@+id/pauseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/pause_button_content_description"
+            android:paddingBottom="@dimen/button_padding"
+            android:visibility="gone"
+            app:srcCompat="@mipmap/ic_action_pause" />
+
+        <ImageButton
+            android:id="@+id/stopButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/stop_button_content_description"
+            android:paddingBottom="@dimen/button_padding"
+            android:tintMode="src_in"
+            app:srcCompat="@mipmap/ic_action_stop" />
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

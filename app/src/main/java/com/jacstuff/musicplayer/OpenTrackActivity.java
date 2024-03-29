@@ -12,11 +12,9 @@ import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.jacstuff.musicplayer.service.MediaPlayerService;
-import com.jacstuff.musicplayer.service.db.entities.Track;
+import com.jacstuff.musicplayer.service.PlayTrackService;
 import com.jacstuff.musicplayer.service.playtrack.TrackPlayerHelper;
 import com.jacstuff.musicplayer.view.art.AlbumArtHelper;
-import com.jacstuff.musicplayer.view.player.PlayerViewHelper;
 import com.jacstuff.musicplayer.view.trackplayer.TrackPlayerViewHelper;
 import com.jacstuff.musicplayer.view.utils.ThemeHelper;
 import com.jacstuff.musicplayer.view.viewmodel.MainViewModel;
@@ -26,13 +24,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class OpenTrackActivity extends AppCompatActivity {
 
-    private MediaPlayerService mediaPlayerService;
-    private Track selectedTrack;
     private MainViewModel viewModel;
     private ThemeHelper themeHelper;
     private AlbumArtHelper albumArtHelper;
     private TrackPlayerHelper trackPlayerHelper;
     TrackPlayerViewHelper trackPlayerViewHelper;
+    private PlayTrackService playTrackService;
 
     private Uri savedUri;
     private AtomicBoolean isServiceConnected = new AtomicBoolean(false);
@@ -40,11 +37,12 @@ public class OpenTrackActivity extends AppCompatActivity {
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
-            MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
-            mediaPlayerService = binder.getService();
+            PlayTrackService.LocalBinder binder = (PlayTrackService.LocalBinder) service;
+            playTrackService = binder.getService();
 
            // albumArtHelper = new AlbumArtHelper(MainActivity.this);
-           // mediaPlayerService.setActivity(MainActivity.this);
+            playTrackService.setActivity(OpenTrackActivity.this);
+            trackPlayerViewHelper.setService(playTrackService);
             isServiceConnected.set(true);
             playSavedUri();
         }
@@ -70,16 +68,19 @@ public class OpenTrackActivity extends AppCompatActivity {
 
     private void playSavedUri(){
         if(savedUri != null){
-            mediaPlayerService.playUri(savedUri);
+            log("entered playSavedUri() going to play the track from the service");
+            playTrackService.playUri(savedUri);
+            savedUri = null;
         }
     }
 
 
     private void startMediaPlayerService(){
-        Intent mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
+        Intent mediaPlayerServiceIntent = new Intent(this, PlayTrackService.class);
         getApplicationContext().startForegroundService(mediaPlayerServiceIntent);
         getApplicationContext().bindService(mediaPlayerServiceIntent, serviceConnection, 0);
     }
+
 
     private void initPlayerViewHelper(){
         if(trackPlayerViewHelper == null){
@@ -92,18 +93,17 @@ public class OpenTrackActivity extends AppCompatActivity {
     private void openUri(){
         Intent intent = getIntent();
         if (intent != null) {
-            String path = intent.getDataString();
             Uri uri = intent.getData();
             if(isServiceConnected.get()){
-                mediaPlayerService.playUri(uri);
+                log("openUri() going to play the track from the URI immediately");
+                playTrackService.playUri(uri);
             }
             else{
+                log("saving uri");
                 savedUri = uri;
             }
         }
     }
-
-
 
 
     public void openFile() {
@@ -145,5 +145,6 @@ public class OpenTrackActivity extends AppCompatActivity {
     private void log(String msg){
         System.out.println("^^^ OpenTrackActivity: " + msg);
     }
+
 
 }

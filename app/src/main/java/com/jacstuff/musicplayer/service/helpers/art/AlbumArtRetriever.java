@@ -37,7 +37,7 @@ public class AlbumArtRetriever {
     }
 
 
-    private Bitmap retrieveAlbumArt(MediaMetadataRetriever mediaMetadataRetriever){
+    public static Bitmap retrieveAlbumArt(MediaMetadataRetriever mediaMetadataRetriever){
         byte[] coverArt = mediaMetadataRetriever.getEmbeddedPicture();
         if (coverArt != null) {
             return BitmapFactory.decodeByteArray(coverArt, 0, coverArt.length);
