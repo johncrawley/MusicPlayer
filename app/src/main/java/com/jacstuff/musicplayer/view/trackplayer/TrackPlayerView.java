@@ -8,7 +8,6 @@ public interface TrackPlayerView {
    void updateViewsOnTrackAssigned();
    void setBlankTrackInfo();
    void setBlankTrackInfoOnMainView();
-   void updateForConnecting();
    void stopUpdatingElapsedTimeOnView();
    void notifyMediaPlayerPlaying();
    void notifyMediaPlayerStopped();

@@ -72,6 +72,7 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
 
     }
 
+
     public boolean isPlaying(){
         return false;
     }

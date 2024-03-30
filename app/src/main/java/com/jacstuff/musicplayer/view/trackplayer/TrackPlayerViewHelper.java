@@ -56,13 +56,13 @@ public class TrackPlayerViewHelper implements TrackPlayerView{
 
 
     public void playTrack() {
-        trackPlayerHelper.loadAndStartTrack();
+        trackPlayerHelper.playOrResume();
     }
 
 
     public void pauseTrack() {
         disableViewForAWhile(playButton, 300);
-        playTrackService.pause();
+        trackPlayerHelper.pause();
     }
 
 
@@ -71,7 +71,6 @@ public class TrackPlayerViewHelper implements TrackPlayerView{
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(()->view.setEnabled(true), delayTime);
     }
-
 
 
     public void stopTrack(){
@@ -195,19 +194,17 @@ public class TrackPlayerViewHelper implements TrackPlayerView{
 
     }
 
+
     public void setBlankTrackInfo(){
         activity.runOnUiThread(()-> trackTitle.setText(""));
     }
+
 
     @Override
     public void setBlankTrackInfoOnMainView() {
 
     }
 
-    @Override
-    public void updateForConnecting() {
-
-    }
 
     @Override
     public void stopUpdatingElapsedTimeOnView() {
@@ -264,6 +261,7 @@ public class TrackPlayerViewHelper implements TrackPlayerView{
             trackTimeSeekBar.setProgress(0);
         });
     }
+
 
     @Override
     public void notifyMediaPlayerStopped(){

@@ -88,6 +88,35 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
+    public void playOrResume(){
+        if(currentState == MediaPlayerState.PAUSED){
+            resume();
+        }
+        else{
+            loadAndStartTrack();
+        }
+    }
+
+
+    public void pause(){
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+            stopUpdatingElapsedTimeOnView();
+            currentState = MediaPlayerState.PAUSED;
+            trackPlayerView.notifyMediaPlayerPaused();
+        }
+    }
+
+
+    void resume(){
+        currentState = MediaPlayerState.PLAYING;
+        mediaPlayer.start();
+        startUpdatingElapsedTimeOnView();
+        trackPlayerView.notifyMediaPlayerPlaying();
+        service.updateNotification();
+    }
+
+
     public void loadAndStartTrack(){
         if(currentTrack == null){
             log("loadTrack() track is null, returning");
@@ -201,12 +230,6 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    private void stopPlayer(){
-        releaseAndResetMediaPlayer();
-        service.updateNotification();
-    }
-
-
     void setStateToStopped(){
         currentState = MediaPlayerState.STOPPED;
     }
@@ -233,8 +256,24 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
         stop(true);
     }
 
+
     public void stop(boolean shouldUpdateMainView){
         stop(shouldUpdateMainView, true);
+    }
+
+
+    public void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
+        stopPlayer();
+        if(shouldUpdateMainView){
+            trackPlayerView.notifyMediaPlayerStopped();
+        }
+    }
+
+
+    private void stopPlayer(){
+        releaseAndResetMediaPlayer();
+        service.updateNotification();
+        setStateToStopped();
     }
 
 
@@ -268,14 +307,6 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     public String getCurrentUrl(){
         return "";
-    }
-
-
-    public void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
-        stopPlayer();
-        if(shouldUpdateMainView){
-            trackPlayerView.notifyMediaPlayerStopped();
-        }
     }
 
 
