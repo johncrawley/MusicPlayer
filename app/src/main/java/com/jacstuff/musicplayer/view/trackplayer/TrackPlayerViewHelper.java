@@ -170,7 +170,7 @@ public class TrackPlayerViewHelper implements TrackPlayerView{
 
 
     private void setPlayPauseAndTrackSeekBarVisibility(){
-        if(playTrackService.isPlaying()){
+        if(trackPlayerHelper.isPlaying()){
             playButton.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
             trackTimeSeekBar.setVisibility(View.VISIBLE);

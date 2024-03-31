@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.jacstuff.musicplayer.service.PlayTrackService;
@@ -61,6 +62,7 @@ public class OpenTrackActivity extends AppCompatActivity {
         //setupViewModel();
         initPlayerViewHelper();
         startMediaPlayerService();
+       // handleBackButton();
         openUri();
     }
 
@@ -75,11 +77,24 @@ public class OpenTrackActivity extends AppCompatActivity {
     }
 
 
+    public void handleBackButton(){
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                playTrackService.stopSelf();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
+
+    }
+
+
     private void startMediaPlayerService(){
         Intent mediaPlayerServiceIntent = new Intent(this, PlayTrackService.class);
-        getApplicationContext().startForegroundService(mediaPlayerServiceIntent);
+        getApplicationContext().startService(mediaPlayerServiceIntent);
         getApplicationContext().bindService(mediaPlayerServiceIntent, serviceConnection, 0);
     }
+
 
 
     private void initPlayerViewHelper(){

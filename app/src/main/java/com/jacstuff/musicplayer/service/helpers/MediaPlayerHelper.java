@@ -78,9 +78,8 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     public void onDestroy(){
         releaseMediaPlayerAndLocks();
-        mediaPlayer.release();
-        mediaPlayer = null;
     }
+
 
 
     private void releaseMediaPlayerAndLocks(){

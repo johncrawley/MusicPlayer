@@ -17,7 +17,7 @@ import android.os.Looper;
 
 import androidx.core.app.NotificationCompat;
 
-import com.jacstuff.musicplayer.MainActivity;
+import com.jacstuff.musicplayer.OpenTrackActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.PlayTrackService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
@@ -28,9 +28,9 @@ public class PlayTrackNotificationManager {
 
     private final Context context;
     private final PlayTrackService playTrackService;
-    final static int NOTIFICATION_ID = 1001;
+    public final static int PLAY_TRACK_NOTIFICATION_ID = 100201;
     private PendingIntent pendingIntent;
-    final static String NOTIFICATION_CHANNEL_ID = "com.jcrawley.music-player-play-track-notification";
+    final static String NOTIFICATION_CHANNEL_ID = "com.jcrawley.music-player-play-track";
     private final AtomicBoolean hasErrorNotificationBeenReplaced = new AtomicBoolean(false);
     private final TrackPlayerHelper trackPlayerHelper;
 
@@ -39,7 +39,6 @@ public class PlayTrackNotificationManager {
         this.playTrackService = playTrackService;
         this.trackPlayerHelper = trackPlayerHelper;
     }
-
 
 
     public Notification createNotification(String heading, String channelName){
@@ -69,7 +68,7 @@ public class PlayTrackNotificationManager {
 
 
     void setupNotificationClickForActivity(){
-        Intent resultIntent = new Intent(context, MainActivity.class);
+        Intent resultIntent = new Intent(context, OpenTrackActivity.class);
         resultIntent.setAction(Intent.ACTION_MAIN);
         resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         pendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_IMMUTABLE);
@@ -110,13 +109,13 @@ public class PlayTrackNotificationManager {
         String trackInfo = parseTrackDetails(track);
         Notification notification = createNotification(status, trackInfo);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFICATION_ID, notification);
+     //   notificationManager.notify(PLAY_TRACK_NOTIFICATION_ID, notification);
     }
 
 
     public void dismissNotification(){
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(NOTIFICATION_ID);
+        notificationManager.cancel(PLAY_TRACK_NOTIFICATION_ID);
     }
 
 

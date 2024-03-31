@@ -1,6 +1,7 @@
 package com.jacstuff.musicplayer.service;
 
-import static com.jacstuff.musicplayer.service.MediaNotificationManager.NOTIFICATION_ID;
+
+import static com.jacstuff.musicplayer.service.playtrack.PlayTrackNotificationManager.PLAY_TRACK_NOTIFICATION_ID;
 
 import android.app.Notification;
 import android.app.Service;
@@ -17,8 +18,6 @@ import com.jacstuff.musicplayer.service.helpers.art.AlbumArtRetriever;
 import com.jacstuff.musicplayer.service.playtrack.PlayTrackBroadcastHelper;
 import com.jacstuff.musicplayer.service.playtrack.PlayTrackNotificationManager;
 import com.jacstuff.musicplayer.service.playtrack.TrackPlayerHelper;
-import com.jacstuff.musicplayer.view.trackplayer.TrackPlayerView;
-
 public class PlayTrackService extends Service implements AlbumArtConsumer {
 
     private PlayTrackNotificationManager playTrackNotificationManager;
@@ -26,7 +25,6 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
     private TrackPlayerHelper trackPlayerHelper;
     private PlayTrackBroadcastHelper playTrackBroadcastHelper;
     private AlbumArtRetriever albumArtRetriever;
-    private OpenTrackActivity activity;
 
 
     public PlayTrackService() {
@@ -34,7 +32,6 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
 
 
     public void setActivity(OpenTrackActivity openTrackActivity){
-        this.activity = openTrackActivity;
     }
 
 
@@ -48,6 +45,12 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
         moveToForeground();
     }
 
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        System.out.println("onTaskRemoved called");
+        super.onTaskRemoved(rootIntent);
+        this.stopSelf();
+    }
 
     public void playUri(Uri uri){
         trackPlayerHelper.playTrackFrom(getApplicationContext(), uri);
@@ -59,43 +62,22 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
     }
 
 
-    public void playTrack(){
-
-    }
-
-
-    public void stop(){
-
-    }
-
-    public void seek(int progress){
-
-    }
-
-
-    public boolean isPlaying(){
-        return false;
-    }
-
-
     public Bitmap getAlbumArtForNotification(){
         return albumArtRetriever.getAlbumArtForNotification();
     }
 
+
     public void updateNotification(){
-        playTrackNotificationManager.updateNotification();
-    }
-
-
-    public void notifyViewOfMediaPlayerStop(){
-
+        if(playTrackNotificationManager != null) {
+            playTrackNotificationManager.updateNotification();
+        }
     }
 
 
     private void moveToForeground() {
         playTrackNotificationManager.init();
-        Notification notification = playTrackNotificationManager.createNotification(getCurrentStatus(), "");
-        startForeground(NOTIFICATION_ID, notification);
+      //  Notification notification = playTrackNotificationManager.createNotification(getCurrentStatus(), "");
+      //  startForeground(PLAY_TRACK_NOTIFICATION_ID, notification);
     }
 
 
@@ -104,9 +86,15 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
     }
 
 
+    private void log(String msg){
+        System.out.println("^^^ PlayTrackService: " + msg);
+    }
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        log("Entered onDestroy()");
         playTrackBroadcastHelper.onDestroy();
         trackPlayerHelper.stop(false, false);
         trackPlayerHelper.onDestroy();

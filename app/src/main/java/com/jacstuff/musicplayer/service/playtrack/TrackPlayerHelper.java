@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.PowerManager;
 import android.util.Log;
 
+import androidx.activity.OnBackPressedCallback;
+
 import com.jacstuff.musicplayer.service.PlayTrackService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.helpers.MediaPlayerState;
@@ -106,6 +108,7 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
             trackPlayerView.notifyMediaPlayerPaused();
         }
     }
+
 
 
     void resume(){
@@ -211,7 +214,7 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     private void onError(){
         setStateToStopped();
-        service.notifyViewOfMediaPlayerStop();
+        trackPlayerView.notifyMediaPlayerStopped();
         releaseAndResetMediaPlayer();
     }
 
@@ -225,8 +228,6 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     public void onDestroy(){
         releaseMediaPlayerAndLocks();
-        mediaPlayer.release();
-        mediaPlayer = null;
     }
 
 
