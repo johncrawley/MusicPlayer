@@ -1,23 +1,68 @@
 package com.jacstuff.musicplayer.view.tab;
 
+import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
+
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
+import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.view.viewmodel.MainViewModel;
 
 public class TabHelper {
 
     private final MainViewModel viewModel;
+    private final TabLayout tabLayout;
+    private SharedPreferences sharedPreferences;
+    private TabsViewStateAdapter tabsViewStateAdapter;
 
-    public TabHelper(MainViewModel viewModel){
+    public TabHelper(MainViewModel viewModel, AppCompatActivity activity){
         this.viewModel = viewModel;
+        tabLayout = activity.findViewById(R.id.tabLayout);
+        ViewPager2 tabViewPager = activity.findViewById(R.id.pager);
+        if(tabLayout == null){
+            return;
+        }
+        tabsViewStateAdapter = new TabsViewStateAdapter(activity.getSupportFragmentManager(), activity.getLifecycle());
+        tabViewPager.setAdapter(tabsViewStateAdapter);
+        setupTabLayout(tabViewPager);
+        sharedPreferences = getDefaultSharedPreferences(activity);
     }
 
-    public void setupTabLayout(TabLayout tabLayout, ViewPager2 pager){
+
+    public void onDestroy(){
+        if(tabsViewStateAdapter != null) {
+            tabsViewStateAdapter = null;
+        }
+    }
+
+
+    public void switchToTracksTab(){
+      switchToTab(0);
+    }
+
+
+    public void switchToAlbumsTab(){
+       switchToTab(3);
+    }
+
+
+    private void switchToTab(int index){
+        if(sharedPreferences.getBoolean("autoSwitchTabsAfterPlaylistSelection", true)){
+            TabLayout.Tab tab = tabLayout.getTabAt(index);
+            if(tab != null){
+                new Handler(Looper.getMainLooper()).postDelayed(tab::select, 200);
+            }
+        }
+    }
+
+
+    private void setupTabLayout(ViewPager2 pager){
         refreshSelectedTabWhenPagerSwiped(pager, tabLayout);
         setupTabSelectedListener(tabLayout, pager);
         initTabSelection(tabLayout);
@@ -45,7 +90,7 @@ public class TabHelper {
         selectTabAtIndex(tabLayout, 4);
         new Handler(Looper.getMainLooper())
                 .postDelayed(()-> selectTabAtIndex(tabLayout, previousIndex),
-                        250);
+                        300);
     }
 
 

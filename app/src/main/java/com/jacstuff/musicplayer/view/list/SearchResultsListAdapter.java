@@ -105,17 +105,4 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     }
 
 
-    public void changePositionTo(int newPosition){
-        notifyItemChanged(selectedPosition);
-        selectedPosition = newPosition;
-        notifyItemChanged(selectedPosition);
-    }
-
-
-    public void setIndexToScrollTo(int index){
-        this.indexToScrollTo = index;
-    }
-
-
-
 }

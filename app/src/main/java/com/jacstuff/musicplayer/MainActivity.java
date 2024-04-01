@@ -20,7 +20,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,7 +29,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -56,7 +54,6 @@ import com.jacstuff.musicplayer.view.art.AlbumArtHelper;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
 import com.jacstuff.musicplayer.view.viewmodel.MainViewModel;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -69,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
     public static final  String BUNDLE_KEY_ARTIST_UPDATES = "bundle_key_artist_updates";
     public static final String SEND_ALBUMS_TO_FRAGMENT = "send_albums_to_fragment";
     public static final String SEND_ARTISTS_TO_FRAGMENT = "send_artists_to_fragment";
-    private TabsViewStateAdapter tabsViewStateAdapter;
+    //private TabsViewStateAdapter tabsViewStateAdapter;
     private MediaPlayerService mediaPlayerService;
-    private TabLayout tabLayout;
+    //private TabLayout tabLayout;
     private Track selectedTrack;
     private SearchViewHelper searchViewHelper;
     private MainViewModel viewModel;
@@ -81,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private PlayerViewHelper playerViewHelper;
     private Playlist playlist;
     private Uri savedUri;
+    private TabHelper tabHelper;
     private AtomicBoolean isServiceConnected = new AtomicBoolean(false);
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -110,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         assignTheme();
         setContentView(R.layout.activity_main);
         setupViewModel();
-        setupTabLayout();
+        tabHelper = new TabHelper(viewModel, this);
         initPlayerViewHelper();
         startMediaPlayerService();
     }
@@ -362,9 +360,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        if(tabsViewStateAdapter != null) {
-            tabsViewStateAdapter = null;
-        }
+        tabHelper.onDestroy();
+
     }
 
 
@@ -397,18 +394,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewModel(){
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-    }
-
-
-    private void setupTabLayout(){
-        tabLayout = findViewById(R.id.tabLayout);
-        ViewPager2 tabViewPager = findViewById(R.id.pager);
-        if(tabLayout == null){
-            return;
-        }
-        tabsViewStateAdapter = new TabsViewStateAdapter(getSupportFragmentManager(), getLifecycle());
-        tabViewPager.setAdapter(tabsViewStateAdapter);
-        new TabHelper(viewModel).setupTabLayout(tabLayout, tabViewPager);
     }
 
 
@@ -495,14 +480,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void switchToTracksTab(){
-        TabLayout.Tab tab = tabLayout.getTabAt(0);
-        if(tab != null){
-            tab.select();
-        }
-    }
-
-
     public void updateAlbumsList(ArrayList<String> albums){
         sendArrayListToFragment(SEND_ALBUMS_TO_FRAGMENT, BUNDLE_KEY_ALBUM_UPDATES, albums);
     }
@@ -531,19 +508,27 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(requestKey.toString(), bundle));
     }
 
+    public void loadTracksFromPlaylist(Playlist playlist){
+        mediaPlayerService.loadPlaylist(playlist);
+        tabHelper.switchToTracksTab();
+    }
+
 
     public void loadTracksFromArtist(String artistName){
         mediaPlayerService.loadTracksFromArtist(artistName);
+        tabHelper.switchToAlbumsTab();
     }
 
 
     public void loadTracksFromAlbum(String albumName){
         mediaPlayerService.loadTracksFromAlbum(albumName);
+        tabHelper.switchToTracksTab();
     }
 
 
     public void loadTracksFromGenre(String genreName){
         mediaPlayerService.loadTracksFromGenre(genreName);
+        tabHelper.switchToTracksTab();
     }
 
 
@@ -655,10 +640,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void loadPlaylist(Playlist playlist, boolean shouldSwitchToTracksTab){
-        mediaPlayerService.loadPlaylist(playlist);
-        if(shouldSwitchToTracksTab){
-            switchToTracksTab();
-        }
-    }
 }

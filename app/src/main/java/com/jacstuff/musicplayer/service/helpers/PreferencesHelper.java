@@ -10,7 +10,6 @@ import com.jacstuff.musicplayer.service.MediaPlayerService;
 public class PreferencesHelper {
 
     private final Context context;
-
     private final String SHUFFLE_ENABLED_PREF = "isShuffleEnabled";
 
     public PreferencesHelper(Context context){
@@ -47,8 +46,9 @@ public class PreferencesHelper {
         }
     }
 
+
     public boolean areDuplicateTracksIgnored(){
-        return getPrefs().getBoolean("ignoreDuplicateTracks", false);
+        return getPrefs().getBoolean("ignoreDuplicateTracks", true);
     }
 
 

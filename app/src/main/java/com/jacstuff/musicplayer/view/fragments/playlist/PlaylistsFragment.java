@@ -180,11 +180,18 @@ public class PlaylistsFragment extends Fragment {
         if(mainActivity == null || playlist == null){
             return;
         }
-        mainActivity.loadPlaylist(playlist, false);
+       load(playlist, mainActivity);
+    }
+
+
+    private void load(Playlist playlist, MainActivity mainActivity){
+        mainActivity.loadTracksFromPlaylist(playlist);
         notifyOtherFragmentsToDeselectItems();
         notifyTracksFragmentOfPlaylistLoaded(playlist.isUserPlaylist());
         toastLoaded();
     }
+
+
 
 
     private void notifyTracksFragmentOfPlaylistLoaded(boolean isUserPlaylist){
