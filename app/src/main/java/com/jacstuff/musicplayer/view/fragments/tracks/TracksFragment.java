@@ -215,7 +215,6 @@ public class TracksFragment extends Fragment{
     }
 
 
-
     private void setupRecyclerView(View parentView, Playlist playlist){
         List<Track> tracks = playlist.getTracks();
 
@@ -297,6 +296,10 @@ public class TracksFragment extends Fragment{
 
 
     private void scrollToOffsetPosition(int index, boolean isSearchResult){
+        if(index == previousIndex + 1 || index == previousIndex -1){
+            recyclerView.smoothScrollToPosition(index);
+            return;
+        }
         //could use: smoothScrollToPosition(calculatedScrollIndex)
         // but it would take too long for large list
         int offsetSetPosition = calculateIndexWithOffset(index, isSearchResult);
