@@ -51,6 +51,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private Map<String, Integer> trackPathsToIndexesMap;
     private Map<String, Integer> allTracksPathsToIndexesMap;
     public static long ALL_TRACKS_PLAYLIST_ID = -10L;
+    private String currentPlaylistName = "";
 
 
     public PlaylistManagerImpl(Context context, TrackLoader trackLoader){
@@ -92,6 +93,20 @@ public class PlaylistManagerImpl implements PlaylistManager {
         initTrackList();
         calculateAndDisplayNewTracksStats(mediaPlayerService);
         loadAllTracksIfNoPlaylistLoaded();
+        reloadCurrentPlaylistAfterRefresh();
+    }
+
+
+    private void reloadCurrentPlaylistAfterRefresh(){
+        if(currentPlaylistName.isBlank()){
+            return;
+        }
+        switch (currentPlaylist.getType()){
+            case ARTIST -> loadTracksFromArtist(currentPlaylistName);
+            case ALBUM -> loadTracksFromAlbum(currentPlaylistName);
+            case GENRE -> loadTracksFromGenre(currentPlaylistName);
+            default -> {}
+        }
     }
 
 
@@ -138,8 +153,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         trackHistory.add(track);
     }
 
-
-
+    
     private void calculateAndDisplayNewTracksStats(MediaPlayerService mediaPlayerService){
         mediaPlayerService.displayPlaylistRefreshedMessage(0);
     }
@@ -351,6 +365,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(playlistStore == null){
             return false;
         }
+        currentPlaylistName = name;
         tracks = sortingConsumer.apply(playlistStore.getTracks());
         playlistStore.setTracks(tracks);
         assignIndexesToTracks();
