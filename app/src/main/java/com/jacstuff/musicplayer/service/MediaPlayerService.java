@@ -48,7 +48,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         mediaPlayerHelper.createMediaPlayer();
         playlistHelper = new PlaylistHelper(this);
         broadcastHelper = new BroadcastHelper(this);
-        preferencesHelper = new PreferencesHelper(this, getApplicationContext());
+        preferencesHelper = new PreferencesHelper(getApplicationContext());
         mediaNotificationManager = new MediaNotificationManager(getApplicationContext(), this);
         playlistHelper.setMediaNotificationManager(mediaNotificationManager);
         albumArtRetriever = new AlbumArtRetriever(this, getApplicationContext());
@@ -308,7 +308,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         playlistHelper.onSetActivity(mainActivity);
-        preferencesHelper.assignPreferences();
+        preferencesHelper.assignPreferences(this);
     }
 
 

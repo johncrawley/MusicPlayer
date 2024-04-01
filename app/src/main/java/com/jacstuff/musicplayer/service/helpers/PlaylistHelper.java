@@ -176,7 +176,7 @@ public class PlaylistHelper {
 
 
     private void autoLoadNextTrack(){
-        mediaPlayerService.getPreferencesHelper().loadNextTrackAutomatically();
+        mediaPlayerService.getPreferencesHelper().loadNextTrackAutomatically(mediaPlayerService);
     }
 
 

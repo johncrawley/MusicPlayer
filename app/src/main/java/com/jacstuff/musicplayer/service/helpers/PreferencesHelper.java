@@ -9,20 +9,17 @@ import com.jacstuff.musicplayer.service.MediaPlayerService;
 
 public class PreferencesHelper {
 
-
-    private final MediaPlayerService mediaPlayerService;
     private final Context context;
 
     private final String SHUFFLE_ENABLED_PREF = "isShuffleEnabled";
 
-    public PreferencesHelper(MediaPlayerService mediaPlayerService, Context context){
+    public PreferencesHelper(Context context){
         this.context = context;
-        this.mediaPlayerService = mediaPlayerService;
     }
 
 
-    public void assignPreferences(){
-        assignShuffleState();
+    public void assignPreferences(MediaPlayerService mediaPlayerService){
+        assignShuffleState(mediaPlayerService);
     }
 
 
@@ -33,7 +30,7 @@ public class PreferencesHelper {
     }
 
 
-    private void assignShuffleState(){
+    private void assignShuffleState(MediaPlayerService mediaPlayerService){
         boolean isShuffleEnabled = getPrefs().getBoolean(SHUFFLE_ENABLED_PREF, false);
         if(isShuffleEnabled){
             mediaPlayerService.enableShuffle();
@@ -44,10 +41,14 @@ public class PreferencesHelper {
     }
 
 
-    public void loadNextTrackAutomatically(){
-        if(getPrefs().getBoolean("autoNextTrackOnPlaylistLoaded", true)){
+    public void loadNextTrackAutomatically(MediaPlayerService mediaPlayerService) {
+        if (getPrefs().getBoolean("autoNextTrackOnPlaylistLoaded", true)) {
             mediaPlayerService.loadNextTrack();
         }
+    }
+
+    public boolean areDuplicateTracksIgnored(){
+        return getPrefs().getBoolean("ignoreDuplicateTracks", false);
     }
 
 

@@ -75,6 +75,9 @@ public class Track {
     }
 
 
+    public String getDuplicateIdentifier(){ return artist + "-" + title + "-" + duration;}
+
+
     public String getSearchString(){
         return searchStr;
     }

@@ -13,12 +13,15 @@ import com.jacstuff.musicplayer.service.db.entities.Album;
 import com.jacstuff.musicplayer.service.db.entities.Artist;
 import com.jacstuff.musicplayer.service.db.entities.Genre;
 import com.jacstuff.musicplayer.service.db.entities.Track;
+import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -34,11 +37,14 @@ public class TrackLoader {
     private int albumCount;
     private int genreCount;
     private Map<String, Integer> columnMap;
+    private final PreferencesHelper preferencesHelper;
+    private final Set<String> existingAllTracksIdentifiers = new HashSet<>();
 
 
     public TrackLoader(Context context){
         this.context  = context;
         albums = new HashMap<>();
+        preferencesHelper = new PreferencesHelper(context);
     }
 
 
@@ -151,11 +157,13 @@ public class TrackLoader {
 
     private void addTracksData(){
         Cursor cursor = createCursorForFilesystemTracks();
+        boolean areDuplicatesIgnored = preferencesHelper.areDuplicateTracksIgnored();;
+        existingAllTracksIdentifiers.clear();
         if(cursor != null){
             long startTime = System.currentTimeMillis();
             setupColumnMap(cursor);
             while(cursor.moveToNext()){
-                addTrack(cursor);
+                addTrack(cursor, areDuplicatesIgnored);
             }
             long duration = System.currentTimeMillis() - startTime;
             log("tracks loaded in " + duration + "ms number of total tracks: " + cursor.getCount());
@@ -207,7 +215,7 @@ public class TrackLoader {
     }
 
 
-    private void addTrack(Cursor cursor) {
+    private void addTrack(Cursor cursor, boolean areDuplicatesIgnored) {
         String path = getValueFrom(cursor, MediaStore.Audio.Media.DATA);
         if (!isContainingCorrectPath(path)) {
             return;
@@ -216,7 +224,7 @@ public class TrackLoader {
         String artistName = getValueFrom(cursor, MediaStore.Audio.Media.ARTIST);
         String year = getValueFrom(cursor, MediaStore.Audio.Media.YEAR);
         String genreName = getGenre(cursor);
-        String bitrate = getBitrate(cursor); //getValueFrom(cursor, MediaStore.Audio.Media.BITRATE);
+        String bitrate = getBitrate(cursor);
         Track track = new Track(
                 path,
                 getValueFrom(cursor, MediaStore.Audio.Media.TITLE),
@@ -228,11 +236,24 @@ public class TrackLoader {
                 getTrackNumber(cursor),
                 bitrate
         );
-        tracks.add(track);
+
+        if(shouldTrackBeAdded(track, areDuplicatesIgnored)){
+            tracks.add(track);
+            addToArtist(track, artistName);
+        }
         addToAlbum(track, albumName, artistName);
-        addToArtist(track, artistName);
         addAlbumToArtist(albumName, artistName);
         addToGenre(track, genreName);
+    }
+
+
+    boolean shouldTrackBeAdded(Track track, boolean areDuplicatesIgnored){
+        String identifier = track.getDuplicateIdentifier();
+        if(!areDuplicatesIgnored || !existingAllTracksIdentifiers.contains(identifier)){
+            existingAllTracksIdentifiers.add(identifier);
+            return true;
+        }
+        return false;
     }
 
 
