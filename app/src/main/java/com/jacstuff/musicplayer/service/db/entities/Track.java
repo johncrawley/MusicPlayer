@@ -65,11 +65,6 @@ public class Track {
     }
 
 
-    public boolean isUsingUri(){
-        return uri != null;
-    }
-
-
     public String getOrderedString(){
         return orderedStr;
     }

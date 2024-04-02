@@ -40,10 +40,8 @@ public class PreferencesHelper {
     }
 
 
-    public void loadNextTrackAutomatically(MediaPlayerService mediaPlayerService) {
-        if (getPrefs().getBoolean("autoNextTrackOnPlaylistLoaded", true)) {
-            mediaPlayerService.loadNextTrack();
-        }
+    public boolean isNextTrackLoadedAutomatically() {
+        return getPrefs().getBoolean("autoNextTrackOnPlaylistLoaded", true);
     }
 
 

@@ -72,11 +72,11 @@ public class PlaylistHelper {
 
     public void loadTrackDataFromFilesystem(){
         isScanningForTracks.set(true);
-        executorService.execute(()->{
+        executorService.execute(() -> {
             playlistManager.addTracksFromStorage(mediaPlayerService);
             playlistManager.loadAllTracksPlaylist();
             mediaPlayerService.updateListViews(playlistManager);
-            mediaPlayerService.setCurrentTrackAndUpdatePlayerViewVisibility();
+            mediaPlayerService.setFirstTrackAndUpdateViewVisibility();
             isScanningForTracks.set(false);
         });
     }
@@ -100,7 +100,7 @@ public class PlaylistHelper {
             mediaPlayerService.updateListViews(playlistManager);
             initTrackFinder();
             trackFinder.initCache();
-            mediaPlayerService.setCurrentTrackAndUpdatePlayerViewVisibility();
+            mediaPlayerService.setCurrentTrackAndUpdateViewVisibility();
             isScanningForTracks.set(false);
         });
     }
@@ -176,7 +176,9 @@ public class PlaylistHelper {
 
 
     private void autoLoadNextTrack(){
-        mediaPlayerService.getPreferencesHelper().loadNextTrackAutomatically(mediaPlayerService);
+        if(mediaPlayerService.getPreferencesHelper().isNextTrackLoadedAutomatically()){
+            mediaPlayerService.loadNextTrack();
+        }
     }
 
 

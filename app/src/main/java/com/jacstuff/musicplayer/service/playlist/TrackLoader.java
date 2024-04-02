@@ -236,7 +236,6 @@ public class TrackLoader {
                 getTrackNumber(cursor),
                 bitrate
         );
-
         if(shouldTrackBeAdded(track, areDuplicatesIgnored)){
             tracks.add(track);
             addToArtist(track, artistName);

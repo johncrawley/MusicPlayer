@@ -8,7 +8,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 
@@ -86,6 +85,24 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     }
 
 
+    public void setActivity(MainActivity mainActivity){
+        this.mainActivity = mainActivity;
+        playlistHelper.onSetActivity(mainActivity);
+        preferencesHelper.assignPreferences(this);
+    }
+
+
+    public void updateViews(PlaylistManager playlistManager){
+        Track currentTrack = mediaPlayerHelper.getCurrentTrack();
+        if(currentTrack != null){
+            mainActivity.setTrackDetails(currentTrack, 0);
+            mainActivity.setElapsedTime(mediaPlayerHelper.getElapsedTime());
+            mainActivity.setAlbumArt(albumArtRetriever.getCurrentAlbumArt());
+        }
+        updateListViews(playlistManager);
+    }
+
+
     public void updateListViews(PlaylistManager playlistManager){
         updateViewTrackList(playlistManager);
         mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
@@ -101,13 +118,23 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public PreferencesHelper getPreferencesHelper(){ return preferencesHelper;}
 
 
-    public void setCurrentTrackAndUpdatePlayerViewVisibility(){
+    public void setFirstTrackAndUpdateViewVisibility(){
+       setCurrentTrackAndUpdatePlayerViewVisibility(this::loadFirstTrack);
+    }
+
+
+    public void setCurrentTrackAndUpdateViewVisibility(){
+        setCurrentTrackAndUpdatePlayerViewVisibility(this::loadNextTrack);
+    }
+
+
+    private void setCurrentTrackAndUpdatePlayerViewVisibility(Runnable runnable){
         if(!isCurrentTrackEmpty()){
             mainActivity.showPlayerViews();
             return;
         }
         if(getPlaylistManager().hasAnyTracks()){
-            loadNextTrack();
+            runnable.run();
             return;
         }
         mainActivity.hidePlayerViews();
@@ -160,8 +187,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public Bitmap getAlbumArtForNotification(){ return albumArtRetriever.getAlbumArtForNotification(); }
 
     public boolean isCurrentTrackEmpty(){ return mediaPlayerHelper.getCurrentTrack() == null;}
-
-    public void playUri(Uri uri){mediaPlayerHelper.playTrackFrom(getApplicationContext(), uri);}
 
     public void stopPlayingInOneMinute(){
         mediaPlayerHelper.stopPlayingInThreeMinutes(1);
@@ -268,9 +293,21 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         mainActivity.setTrackDetails(mediaPlayerHelper.getCurrentTrack(), 0);
     }
 
+    private void log(String msg){
+        System.out.println("^^^ MediaPlayerService: " + msg);
+    }
+
 
     public void loadNextTrack(){
         Track track = getPlaylistManager().getNextTrack();
+        log("Entered loadNextTrack() track title: " + track.getTitle() + " index: " + track.getIndex());
+        mediaPlayerHelper.loadNext(track);
+    }
+
+
+    public void loadFirstTrack(){
+        Track track = getPlaylistManager().getFirstTrack();
+        log("Entered loadNextTrack() track title: " + track.getTitle() + " index: " + track.getIndex());
         mediaPlayerHelper.loadNext(track);
     }
 
@@ -302,24 +339,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         if(mediaPlayerHelper.isPaused()){
             mainActivity.hideTrackSeekBar();
         }
-    }
-
-
-    public void setActivity(MainActivity mainActivity){
-        this.mainActivity = mainActivity;
-        playlistHelper.onSetActivity(mainActivity);
-        preferencesHelper.assignPreferences(this);
-    }
-
-
-    public void updateViews(PlaylistManager playlistManager){
-        Track currentTrack = mediaPlayerHelper.getCurrentTrack();
-        if(currentTrack != null){
-            mainActivity.setTrackDetails(currentTrack, 0);
-            mainActivity.setElapsedTime(mediaPlayerHelper.getElapsedTime());
-            mainActivity.setAlbumArt(albumArtRetriever.getCurrentAlbumArt());
-        }
-        updateListViews(playlistManager);
     }
 
 

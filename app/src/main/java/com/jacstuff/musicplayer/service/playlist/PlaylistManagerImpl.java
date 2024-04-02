@@ -153,7 +153,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         trackHistory.add(track);
     }
 
-    
+
     private void calculateAndDisplayNewTracksStats(MediaPlayerService mediaPlayerService){
         mediaPlayerService.displayPlaylistRefreshedMessage(0);
     }
@@ -446,10 +446,21 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public Track getNextTrack(){
+        return getTrack(this::getNextTrackOnList);
+    }
+
+
+    @Override
+    public Track getFirstTrack(){
+       return getTrack(this::getFirstTrackOnList);
+    }
+
+
+    private Track getTrack(Supplier<Track> supplier){
         if(!queuedTracks.isEmpty()){
             return queuedTracks.removeLast();
         }
-        return isShuffleEnabled ? getNextRandomUnPlayedTrack() : getNextTrackOnList();
+        return isShuffleEnabled ? getNextRandomUnPlayedTrack() : supplier.get();
     }
 
 
@@ -501,6 +512,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
         trackHistory.removeHistoriesAfterCurrent();
         trackHistory.add(currentTrack);
         return currentTrack;
+    }
+
+
+    private Track getFirstTrackOnList(){
+        currentIndex = -1;
+        return getNextTrackOnList();
     }
 
 

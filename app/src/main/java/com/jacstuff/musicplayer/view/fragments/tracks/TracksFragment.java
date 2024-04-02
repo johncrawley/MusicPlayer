@@ -227,6 +227,7 @@ public class TracksFragment extends Fragment{
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(trackListAdapter);
         updatePlaylistInfoView(playlist);
+        setVisibilityOnNoTracksFoundText(playlist.getTracks());
     }
 
 

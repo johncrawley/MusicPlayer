@@ -19,6 +19,7 @@ public interface PlaylistManager {
 
     Playlist getCurrentPlaylist();
     Track getNextTrack();
+    Track getFirstTrack();
     Optional<Track> getPreviousTrack();
     Track selectTrack(int index);
     void assignCurrentIndexIfApplicable(Track track);
