@@ -18,8 +18,8 @@ public interface PlaylistManager {
     ArrayList<String> getGenreNames();
 
     Playlist getCurrentPlaylist();
-    Track getNextTrack();
-    Track getFirstTrack();
+    Optional<Track> getNextTrack();
+    Optional<Track> getFirstTrack();
     Optional<Track> getPreviousTrack();
     Track selectTrack(int index);
     void assignCurrentIndexIfApplicable(Track track);

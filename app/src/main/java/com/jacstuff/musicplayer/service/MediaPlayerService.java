@@ -293,20 +293,14 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         mainActivity.setTrackDetails(mediaPlayerHelper.getCurrentTrack(), 0);
     }
 
-    private void log(String msg){
-        System.out.println("^^^ MediaPlayerService: " + msg);
-    }
-
 
     public void loadNextTrack(){
-        Track track = getPlaylistManager().getNextTrack();
-        mediaPlayerHelper.loadNext(track);
+        getPlaylistManager().getNextTrack().ifPresent(mediaPlayerHelper::loadNext);
     }
 
 
     public void loadFirstTrack(){
-        Track track = getPlaylistManager().getFirstTrack();
-        mediaPlayerHelper.loadNext(track);
+        getPlaylistManager().getFirstTrack().ifPresent(mediaPlayerHelper::loadNext);
     }
 
 

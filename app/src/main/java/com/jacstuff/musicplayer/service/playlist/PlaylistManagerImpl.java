@@ -445,14 +445,14 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
-    public Track getNextTrack(){
-        return getTrack(this::getNextTrackOnList);
+    public Optional<Track> getNextTrack(){
+        return Optional.ofNullable(getTrack(this::getNextTrackOnList));
     }
 
 
     @Override
-    public Track getFirstTrack(){
-       return getTrack(this::getFirstTrackOnList);
+    public Optional<Track> getFirstTrack(){
+       return Optional.ofNullable(getTrack(this::getFirstTrackOnList));
     }
 
 
