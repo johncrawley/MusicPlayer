@@ -1,12 +1,14 @@
 package com.jacstuff.musicplayer.view.fragments.trackinfo;
 
-import static java.lang.String.format;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowMetrics;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +41,40 @@ public class TrackInfoFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         setupTextViews(view);
         setupButtons(view);
+        //
+        setScrollViewHeight(view);
+    }
+
+
+    private void setScrollViewHeight(View parentView){
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                parentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                setupScrollViewHeight(parentView);
+            }
+        });
+    }
+
+
+    private void setupScrollViewHeight(View parentView){
+        ScrollView scrollView = parentView.findViewById(R.id.trackInfoScrollView);
+        LinearLayout trackInfoLayout = parentView.findViewById(R.id.trackInfoLayout);
+
+        if(getView() == null){
+            return;
+        }
+        int height = Math.min(trackInfoLayout.getHeight(), getDisplayHeight() / 2);
+        scrollView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, height));
+    }
+
+
+    private int getDisplayHeight(){
+        if(getActivity() == null){
+            return 700;
+        }
+        WindowMetrics windowMetrics = getActivity().getWindowManager().getCurrentWindowMetrics();
+        return windowMetrics.getBounds().height();
     }
 
 

@@ -2,4 +2,5 @@
 <resources>
     <attr name="list_item_focused"/>
     <attr name="seek_bar_background"/>
+    <attr name="track_info_background"/>
 </resources>
