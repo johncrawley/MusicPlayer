@@ -6,11 +6,13 @@ import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setL
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ALBUM;
+import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,6 +34,7 @@ public class AlbumsFragment extends Fragment {
     private RecyclerView recyclerView;
     private StringListAdapter listAdapter;
     private View parentView;
+    private TextView noAlbumsFoundTextView;
 
 
     public AlbumsFragment() {
@@ -49,6 +52,7 @@ public class AlbumsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.albumsRecyclerView);
+        noAlbumsFoundTextView = parentView.findViewById(R.id.noAlbumsFoundTextView);
         refreshList();
         setupFragmentListener();
     }
@@ -66,18 +70,25 @@ public class AlbumsFragment extends Fragment {
         listAdapter.setItems(albumNames);
         listAdapter.deselectCurrentlySelectedItem();
         listAdapter.resetSelections();
+        setVisibilityOnNoAlbumsFoundText(albumNames);
     }
 
 
     private void refreshList(){
-        List<String> albums = getMainActivity().getAlbumNames();
-        if(this.parentView == null || albums == null){
+        List<String> albumNames = getMainActivity().getAlbumNames();
+        setVisibilityOnNoAlbumsFoundText(albumNames);
+        if(this.parentView == null || albumNames == null){
             return;
         }
-        listAdapter = new StringListAdapter(albums, this::loadTracksFromAlbum, this::showOptionsDialog);
+        listAdapter = new StringListAdapter(albumNames, this::loadTracksFromAlbum, this::showOptionsDialog);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);
+    }
+
+
+    private void setVisibilityOnNoAlbumsFoundText(List<String> tracks){
+        setVisibilityOnNoItemsFoundText(tracks, recyclerView, noAlbumsFoundTextView);
     }
 
 

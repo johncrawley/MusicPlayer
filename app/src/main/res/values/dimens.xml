@@ -52,7 +52,7 @@
     <dimen name="album_art_padding_bottom">52dp</dimen>
     <dimen name="list_margin_top">0dp</dimen>
     <dimen name="list_margin_bottom">0dp</dimen>
-    <dimen name="no_tracks_found_text_size">18sp</dimen>
+    <dimen name="no_list_items_found_text_size">18sp</dimen>
     <dimen name="playlist_info_text_size">14sp</dimen>
     <dimen name="track_info_text_size">12sp</dimen>
     <dimen name="track_info_text_vertical_margin">4dp</dimen>

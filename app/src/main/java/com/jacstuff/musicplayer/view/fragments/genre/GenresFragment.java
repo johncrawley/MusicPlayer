@@ -4,11 +4,13 @@ import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.send
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.GENRE_UPDATES;
+import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,7 @@ public class GenresFragment extends Fragment {
     private RecyclerView recyclerView;
     private StringListAdapter listAdapter;
     private View parentView;
+    private TextView noGenresFoundTextView;
 
 
     public GenresFragment() {
@@ -47,6 +50,7 @@ public class GenresFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.genresRecyclerView);
+        noGenresFoundTextView = parentView.findViewById(R.id.noGenresFoundTextView);
         refreshList();
         setupFragmentListener();
     }
@@ -60,19 +64,21 @@ public class GenresFragment extends Fragment {
 
 
     private void loadGenres(Bundle bundle){
-        ArrayList<String> albumNames =  bundle.getStringArrayList(GENRE_UPDATES.toString());
-        listAdapter.setItems(albumNames);
+        ArrayList<String> genreNames =  bundle.getStringArrayList(GENRE_UPDATES.toString());
+        listAdapter.setItems(genreNames);
         listAdapter.deselectCurrentlySelectedItem();
         listAdapter.resetSelections();
+        setVisibilityOnNoGenresFoundText(genreNames);
     }
 
 
     private void refreshList(){
-        List<String> genres = getMainActivity().getGenreNames();
-        if(this.parentView == null || genres == null){
+        List<String> genreNames = getMainActivity().getGenreNames();
+        setVisibilityOnNoGenresFoundText(genreNames);
+        if(this.parentView == null || genreNames == null){
             return;
         }
-        listAdapter = new StringListAdapter(genres, this::loadTracksFromGenre);
+        listAdapter = new StringListAdapter(genreNames, this::loadTracksFromGenre);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);
@@ -94,6 +100,12 @@ public class GenresFragment extends Fragment {
     private void toastLoaded(){
         Toast.makeText(getContext(), getString(R.string.toast_genre_tracks_loaded), Toast.LENGTH_SHORT).show();
     }
+
+
+    private void setVisibilityOnNoGenresFoundText(List<String> tracks){
+        setVisibilityOnNoItemsFoundText(tracks, recyclerView, noGenresFoundTextView);
+    }
+
 
 
 }

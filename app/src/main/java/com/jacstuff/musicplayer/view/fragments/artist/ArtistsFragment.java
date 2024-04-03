@@ -6,11 +6,13 @@ import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setL
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ARTIST;
+import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -31,6 +33,7 @@ public class ArtistsFragment extends Fragment {
     private RecyclerView recyclerView;
     private StringListAdapter listAdapter;
     private View parentView;
+    private TextView noArtistsFoundTextView;
 
     public ArtistsFragment() {
         // Required empty public constructor
@@ -47,6 +50,7 @@ public class ArtistsFragment extends Fragment {
     public void onViewCreated(@androidx.annotation.NonNull View view, Bundle savedInstanceState){
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.artistsRecyclerView);
+        noArtistsFoundTextView = parentView.findViewById(R.id.noArtistsFoundTextView);
         refreshArtistsList();
         setupFragmentListener();
     }
@@ -62,15 +66,17 @@ public class ArtistsFragment extends Fragment {
     private void populateArtistsList(Bundle bundle){
         ArrayList<String> artistNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ARTIST_UPDATES);
         listAdapter.setItems(artistNames);
+        setVisibilityOnNoArtistsFoundText(artistNames);
     }
 
 
     private void refreshArtistsList(){
-        List<String> artists = getMainActivity().getArtistNames();
-        if(this.parentView == null || artists == null){
+        List<String> artistNames = getMainActivity().getArtistNames();
+        setVisibilityOnNoArtistsFoundText(artistNames);
+        if(this.parentView == null || artistNames == null){
             return;
         }
-        listAdapter = new StringListAdapter(artists, this::loadTracksAndAlbumsFromArtist, this::showOptionsDialog);
+        listAdapter = new StringListAdapter(artistNames, this::loadTracksAndAlbumsFromArtist, this::showOptionsDialog);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);
@@ -90,6 +96,10 @@ public class ArtistsFragment extends Fragment {
         FragmentManagerHelper.showDialog(this, ArtistOptionsFragment.newInstance(), "artist_options", bundle);
     }
 
+
+    private void setVisibilityOnNoArtistsFoundText(List<String> tracks){
+        setVisibilityOnNoItemsFoundText(tracks, recyclerView, noArtistsFoundTextView);
+    }
 
     private MainActivity getMainActivity(){
         return (MainActivity)getActivity();

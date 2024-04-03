@@ -10,6 +10,7 @@ import static com.jacstuff.musicplayer.view.fragments.MessageKey.IS_USER_PLAYLIS
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_USER_PLAYLIST_LOADED;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.getBoolean;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.getInt;
+import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -199,7 +200,6 @@ public class TracksFragment extends Fragment{
     }
 
 
-
     public void scrollToAndSelectListPosition(int index, boolean isSearchResult){
         if(trackListAdapter == null){
             return;
@@ -272,11 +272,7 @@ public class TracksFragment extends Fragment{
 
 
     private void setVisibilityOnNoTracksFoundText(List<Track> tracks){
-        if(tracks == null){
-            return;
-        }
-        recyclerView.setVisibility(tracks.isEmpty()? View.GONE : View.VISIBLE);
-        noTracksFoundTextView.setVisibility(tracks.isEmpty() ? View.VISIBLE : View.GONE);
+        setVisibilityOnNoItemsFoundText(tracks, recyclerView, noTracksFoundTextView);
     }
 
 
