@@ -29,6 +29,7 @@ import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.List;
+import java.util.Optional;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -46,8 +47,6 @@ public class TracksFragment extends Fragment{
     private View addTracksToPlaylistButtonOuterLayout;
     private TextView noTracksFoundTextView, playlistInfoTextView;
     private boolean isFirstScroll;
-
-
     private final int SCROLL_OFFSET = 4;
 
     public TracksFragment() {
@@ -70,8 +69,6 @@ public class TracksFragment extends Fragment{
         setupAddTracksButton(view);
         getMainActivity().notifyTracksFragmentReady();
         setListeners();
-        scrollToAndSelectListPosition(0, false);
-        handleSavedScroll();
     }
 
 
@@ -137,7 +134,7 @@ public class TracksFragment extends Fragment{
 
 
     public void scrollToAndSelectListPosition(int index){
-        scrollToAndSelectListPosition(index, false);
+        scrollToIndex(index, false);
     }
 
 
@@ -161,23 +158,20 @@ public class TracksFragment extends Fragment{
     }
 
 
-    private void handleSavedScroll(){
-        if(getMainActivity().isTracksFragmentScrollIndexSaved()){
-            scrollToAndSelectListPosition(getMainActivity().getSavedScrollIndex());
-        }
-    }
-
-
     private void scrollToCurrentTrack(Bundle bundle){
         int index = getInt(bundle, MessageKey.TRACK_INDEX);
         boolean isSearchResult = getBoolean(bundle, MessageKey.IS_SEARCH_RESULT);
         saveScrollIndex(index);
+        scrollToIndex(index, isSearchResult);
+    }
+
+
+    private void scrollToIndex(int index, boolean isSearchResult){
         if(isFirstScroll){
             handleFirstScroll(index, isSearchResult);
+            return;
         }
-        else{
-            scrollToAndSelectListPosition(index, isSearchResult);
-        }
+        scrollToAndSelectListPosition(index, isSearchResult);
     }
 
 
@@ -217,7 +211,6 @@ public class TracksFragment extends Fragment{
 
     private void setupRecyclerView(View parentView, Playlist playlist){
         List<Track> tracks = playlist.getTracks();
-
         if(parentView == null ||tracks == null){
             return;
         }
@@ -245,15 +238,17 @@ public class TracksFragment extends Fragment{
 
 
     private void addTracksToPlaylist(){
-        var mainActivity = getMainActivity();
-        if(mainActivity != null){
-            mainActivity.getSearchViewHelper().showSearch(true);
-        }
+        getMain().ifPresent(m -> m.getSearchViewHelper().showSearch(true));
     }
 
 
     private MainActivity getMainActivity(){
         return (MainActivity)getActivity();
+    }
+
+
+    private Optional<MainActivity> getMain(){
+        return Optional.ofNullable((MainActivity) getActivity());
     }
 
 
@@ -293,6 +288,7 @@ public class TracksFragment extends Fragment{
 
 
     private void scrollToOffsetPosition(int index, boolean isSearchResult){
+        int indexDiff = index - previousIndex;
         if(index == previousIndex + 1 || index == previousIndex -1){
             recyclerView.smoothScrollToPosition(index);
             return;
@@ -301,6 +297,15 @@ public class TracksFragment extends Fragment{
         // but it would take too long for large list
         int offsetSetPosition = calculateIndexWithOffset(index, isSearchResult);
         recyclerView.scrollToPosition(offsetSetPosition);
+    }
+
+
+    private int getFirstVisiblePosition(){
+        LinearLayoutManager layoutManager = (LinearLayoutManager)recyclerView.getLayoutManager();
+        if(layoutManager != null){
+            return layoutManager.findFirstVisibleItemPosition();
+        }
+        return 0;
     }
 
 

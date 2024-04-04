@@ -20,12 +20,10 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
 import android.os.IBinder;
@@ -35,7 +33,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.material.tabs.TabLayout;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
@@ -47,7 +44,6 @@ import com.jacstuff.musicplayer.view.fragments.tracks.TrackOptionsDialog;
 import com.jacstuff.musicplayer.view.player.PlayerViewHelper;
 import com.jacstuff.musicplayer.view.playlist.AddTrackToPlaylistViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
-import com.jacstuff.musicplayer.view.tab.TabsViewStateAdapter;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.utils.ThemeHelper;
 import com.jacstuff.musicplayer.view.art.AlbumArtHelper;
@@ -57,6 +53,7 @@ import com.jacstuff.musicplayer.view.viewmodel.MainViewModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
@@ -66,9 +63,7 @@ public class MainActivity extends AppCompatActivity {
     public static final  String BUNDLE_KEY_ARTIST_UPDATES = "bundle_key_artist_updates";
     public static final String SEND_ALBUMS_TO_FRAGMENT = "send_albums_to_fragment";
     public static final String SEND_ARTISTS_TO_FRAGMENT = "send_artists_to_fragment";
-    //private TabsViewStateAdapter tabsViewStateAdapter;
     private MediaPlayerService mediaPlayerService;
-    //private TabLayout tabLayout;
     private Track selectedTrack;
     private SearchViewHelper searchViewHelper;
     private MainViewModel viewModel;
@@ -77,9 +72,8 @@ public class MainActivity extends AppCompatActivity {
     private AddTrackToPlaylistViewHelper addTrackToPlaylistViewHelper;
     private PlayerViewHelper playerViewHelper;
     private Playlist playlist;
-    private Uri savedUri;
     private TabHelper tabHelper;
-    private AtomicBoolean isServiceConnected = new AtomicBoolean(false);
+    private final AtomicBoolean isServiceConnected = new AtomicBoolean(false);
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -95,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
             setupOptionsMenuForCurrentTrack();
             isServiceConnected.set(true);
         }
+
         @Override public void onServiceDisconnected(ComponentName arg0) {
             isServiceConnected.set(false);
         }
@@ -407,7 +402,13 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         putInt(bundle, MessageKey.TRACK_INDEX, currentTrackIndex);
         sendMessage(NOTIFY_TO_REQUEST_UPDATED_PLAYLIST, bundle);
+        log("Entered updateTracksList, after sending message to tracks fragment to go to index");
         runOnUiThread(()-> updateViews(playlist.getTracks(), currentTrack));
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ MainActivity: " + msg);
     }
 
 
@@ -604,6 +605,11 @@ public class MainActivity extends AppCompatActivity {
 
     public MediaPlayerService getMediaPlayerService(){
         return this.mediaPlayerService;
+    }
+
+
+    public Optional<MediaPlayerService> getMpService(){
+        return Optional.ofNullable(mediaPlayerService);
     }
 
 
