@@ -11,18 +11,21 @@
     <ScrollView
         android:id="@+id/trackInfoScrollView"
         android:layout_width="wrap_content"
+        android:layout_marginVertical="2dp"
         android:layout_height="500dp">
 
         <LinearLayout
             android:id="@+id/trackInfoLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="4dp"
             android:background="?attr/track_info_background"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/track_info_text_layout_margin"
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/trackLabel"
@@ -30,14 +33,12 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
                     android:text="@string/track_info_title"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     />
                 <TextView
                     android:id="@+id/track"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     android:layout_marginHorizontal="@dimen/track_info_text_value_horizontal_margin"
                     />
             </LinearLayout>
@@ -45,6 +46,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/track_info_text_layout_margin"
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/artistLabel"
@@ -52,14 +54,12 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
                     android:text="@string/track_info_artist"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     />
                 <TextView
                     android:id="@+id/artist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     android:layout_marginHorizontal="@dimen/track_info_text_value_horizontal_margin"
                     />
             </LinearLayout>
@@ -67,6 +67,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/track_info_text_layout_margin"
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/albumLabel"
@@ -74,14 +75,12 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
                     android:text="@string/track_info_album"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     />
                 <TextView
                     android:id="@+id/album"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     android:layout_marginHorizontal="@dimen/track_info_text_value_horizontal_margin"
                     />
             </LinearLayout>
@@ -89,6 +88,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/track_info_text_layout_margin"
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/trackNumberLabel"
@@ -96,14 +96,12 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
                     android:text="@string/track_info_track_number"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     />
                 <TextView
                     android:id="@+id/trackNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     android:layout_marginHorizontal="@dimen/track_info_text_value_horizontal_margin"
                     />
             </LinearLayout>
@@ -111,6 +109,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/track_info_text_layout_margin"
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/discLabel"
@@ -118,15 +117,12 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
                     android:text="@string/track_info_disc"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     />
                 <TextView
                     android:id="@+id/disc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:textSize="@dimen/track_info_text_size"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     android:layout_marginHorizontal="@dimen/track_info_text_value_horizontal_margin"
                     />
             </LinearLayout>
@@ -134,51 +130,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/genreLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/track_info_text_size"
-                    android:text="@string/track_info_genre"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
-                    />
-                <TextView
-                    android:id="@+id/genre"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/track_info_text_size"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
-                    android:layout_marginHorizontal="@dimen/track_info_text_value_horizontal_margin"
-                    />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/yearLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/track_info_text_size"
-                    android:text="@string/track_info_year"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
-                    />
-                <TextView
-                    android:id="@+id/year"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/track_info_text_size"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
-                    android:layout_marginHorizontal="@dimen/track_info_text_value_horizontal_margin"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/track_info_text_layout_margin"
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/lengthLabel"
@@ -186,14 +138,12 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
                     android:text="@string/track_info_length"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     />
                 <TextView
                     android:id="@+id/length"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     android:layout_marginHorizontal="@dimen/track_info_text_value_horizontal_margin"
                     />
             </LinearLayout>
@@ -201,21 +151,42 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/track_info_text_layout_margin"
                 android:orientation="horizontal">
                 <TextView
-                    android:id="@+id/pathLabel"
+                    android:id="@+id/genreLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
-                    android:text="@string/track_info_path"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
+                    android:text="@string/track_info_genre"
                     />
                 <TextView
-                    android:id="@+id/path"
+                    android:id="@+id/genre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
+                    android:layout_marginHorizontal="@dimen/track_info_text_value_horizontal_margin"
+                    />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/track_info_text_layout_margin"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/yearLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/track_info_text_size"
+                    android:text="@string/track_info_year"
+                    />
+                <TextView
+                    android:id="@+id/year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/track_info_text_size"
                     android:layout_marginHorizontal="@dimen/track_info_text_value_horizontal_margin"
                     />
             </LinearLayout>
@@ -223,6 +194,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/track_info_text_layout_margin"
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/bitrateLabel"
@@ -230,29 +202,44 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
                     android:text="@string/track_info_bitrate"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     />
                 <TextView
                     android:id="@+id/bitrate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/track_info_text_size"
-                    android:layout_marginVertical="@dimen/track_info_text_vertical_margin"
                     android:layout_marginHorizontal="@dimen/track_info_text_value_horizontal_margin"
                     />
             </LinearLayout>
 
-
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/track_info_text_layout_margin"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/pathLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/track_info_text_size"
+                    android:text="@string/track_info_path"
+                    />
+                <TextView
+                    android:id="@+id/path"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/track_info_text_size"
+                    android:layout_marginHorizontal="@dimen/track_info_text_value_horizontal_margin"
+                    />
+            </LinearLayout>
 
         </LinearLayout>
-
     </ScrollView>
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:gravity="center">
 
         <Button
@@ -260,7 +247,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
-            android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"
             android:text="@android:string/ok" />
 
     </LinearLayout>
