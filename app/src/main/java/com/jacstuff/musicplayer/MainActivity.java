@@ -11,6 +11,7 @@ import static com.jacstuff.musicplayer.view.fragments.Message.SCROLL_TO_CURRENT_
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.putBoolean;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.putInt;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.sendFragmentMessage;
+import static com.jacstuff.musicplayer.view.utils.FragmentHelper.sendArrayListToFragment;
 
 import android.Manifest;
 
@@ -53,7 +54,6 @@ import com.jacstuff.musicplayer.view.viewmodel.MainViewModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
@@ -402,13 +402,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         putInt(bundle, MessageKey.TRACK_INDEX, currentTrackIndex);
         sendMessage(NOTIFY_TO_REQUEST_UPDATED_PLAYLIST, bundle);
-        log("Entered updateTracksList, after sending message to tracks fragment to go to index");
         runOnUiThread(()-> updateViews(playlist.getTracks(), currentTrack));
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ MainActivity: " + msg);
     }
 
 
@@ -428,18 +422,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public boolean isTracksFragmentScrollIndexSaved(){
-        return viewModel.isTracksFragmentIndexSaved;
-    }
-
-
     public void cancelSavedScrollIndex(){
         viewModel.isTracksFragmentIndexSaved = false;
-    }
-
-
-    public int getSavedScrollIndex(){
-        return viewModel.tracksFragmentSavedIndex;
     }
 
 
@@ -482,32 +466,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void updateAlbumsList(ArrayList<String> albums){
-        sendArrayListToFragment(SEND_ALBUMS_TO_FRAGMENT, BUNDLE_KEY_ALBUM_UPDATES, albums);
+        sendArrayListToFragment(this, SEND_ALBUMS_TO_FRAGMENT, BUNDLE_KEY_ALBUM_UPDATES, albums);
     }
 
 
     public void updateArtistsList(ArrayList<String> artists){
-        sendArrayListToFragment(SEND_ARTISTS_TO_FRAGMENT, BUNDLE_KEY_ARTIST_UPDATES, artists);
+        sendArrayListToFragment(this, SEND_ARTISTS_TO_FRAGMENT, BUNDLE_KEY_ARTIST_UPDATES, artists);
     }
 
 
     public void updateGenresList(ArrayList<String> genres){
-        sendArrayListToFragment(Message.SEND_GENRES_TO_FRAGMENT, MessageKey.GENRE_UPDATES, genres);
+        sendArrayListToFragment(this, Message.SEND_GENRES_TO_FRAGMENT, MessageKey.GENRE_UPDATES, genres);
     }
 
-
-    private void sendArrayListToFragment(String requestKey, String itemKey, ArrayList<String> arrayList){
-        Bundle bundle = new Bundle();
-        bundle.putStringArrayList(itemKey, arrayList);
-        runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(requestKey, bundle));
-    }
-
-
-    private void sendArrayListToFragment(Message requestKey, MessageKey itemKey, ArrayList<String> arrayList){
-        Bundle bundle = new Bundle();
-        bundle.putStringArrayList(itemKey.toString(), arrayList);
-        runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(requestKey.toString(), bundle));
-    }
 
     public void loadTracksFromPlaylist(Playlist playlist){
         mediaPlayerService.loadPlaylist(playlist);
@@ -605,11 +576,6 @@ public class MainActivity extends AppCompatActivity {
 
     public MediaPlayerService getMediaPlayerService(){
         return this.mediaPlayerService;
-    }
-
-
-    public Optional<MediaPlayerService> getMpService(){
-        return Optional.ofNullable(mediaPlayerService);
     }
 
 

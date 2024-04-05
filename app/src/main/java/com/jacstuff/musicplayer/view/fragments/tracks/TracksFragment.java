@@ -1,6 +1,5 @@
 package com.jacstuff.musicplayer.view.fragments.tracks;
 
-
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 import static com.jacstuff.musicplayer.view.fragments.Message.DESELECT_CURRENT_TRACK_ITEM;
 import static com.jacstuff.musicplayer.view.fragments.Message.ENSURE_SELECTED_TRACK_IS_VISIBLE;
@@ -47,7 +46,7 @@ public class TracksFragment extends Fragment{
     private View addTracksToPlaylistButtonOuterLayout;
     private TextView noTracksFoundTextView, playlistInfoTextView;
     private boolean isFirstScroll;
-    private final int SCROLL_OFFSET = 4;
+    private LinearLayoutManager layoutManager;
 
     public TracksFragment() {
         // Required empty public constructor
@@ -130,6 +129,7 @@ public class TracksFragment extends Fragment{
     public void selectTrack(Track track){
         int position = track.getIndex();
         getMainActivity().selectTrack(position);
+        previousIndex = position;
     }
 
 
@@ -216,7 +216,8 @@ public class TracksFragment extends Fragment{
         }
         recyclerView = parentView.findViewById(R.id.recyclerView);
         trackListAdapter = new TrackListAdapter(tracks, this::selectTrack, this::createTrackOptionsFragment);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(trackListAdapter);
         updatePlaylistInfoView(playlist);
@@ -288,24 +289,27 @@ public class TracksFragment extends Fragment{
 
 
     private void scrollToOffsetPosition(int index, boolean isSearchResult){
-        int indexDiff = index - previousIndex;
-        if(index == previousIndex + 1 || index == previousIndex -1){
+        if(isShortJumpTo(index)) {
             recyclerView.smoothScrollToPosition(index);
-            return;
         }
-        //could use: smoothScrollToPosition(calculatedScrollIndex)
-        // but it would take too long for large list
-        int offsetSetPosition = calculateIndexWithOffset(index, isSearchResult);
-        recyclerView.scrollToPosition(offsetSetPosition);
+        else {
+            int offsetSetPosition = calculateIndexWithOffset(index, isSearchResult);
+            recyclerView.scrollToPosition(offsetSetPosition);
+        }
+        previousIndex = index;
+    }
+
+
+    private boolean isShortJumpTo(int index){
+        int indexDiff = Math.abs(index - previousIndex);
+        int visiblePositionDiff = Math.abs(index - getFirstVisiblePosition());
+        int smoothScrollLimit = 15;
+        return indexDiff < smoothScrollLimit && visiblePositionDiff < smoothScrollLimit;
     }
 
 
     private int getFirstVisiblePosition(){
-        LinearLayoutManager layoutManager = (LinearLayoutManager)recyclerView.getLayoutManager();
-        if(layoutManager != null){
-            return layoutManager.findFirstVisibleItemPosition();
-        }
-        return 0;
+        return layoutManager == null ? 0 : layoutManager.findFirstVisibleItemPosition();
     }
 
 
@@ -319,11 +323,7 @@ public class TracksFragment extends Fragment{
 
 
     private int calculateIndexWithOffset(int index, boolean isSearchResult){
-        int offsetIndex = isSearchResult && previousIndex < index ?
-                Math.max(0, index - SCROLL_OFFSET)
-                : getBoundedIndexWithOffset(index);
-        previousIndex = index;
-        return offsetIndex;
+        return isSearchResult ? index : getBoundedIndexWithOffset(index);
     }
 
 
@@ -334,7 +334,12 @@ public class TracksFragment extends Fragment{
 
 
     private int getScrollOffset(int index){
-        return previousIndex == 0 ? 0 : index > previousIndex ? SCROLL_OFFSET : -SCROLL_OFFSET;
+        if(Math.abs(previousIndex - index) < 2){
+            return 0;
+        }
+        int scrollOffset = 4;
+        return previousIndex == 0 ? 0 :
+                index > getFirstVisiblePosition() ? scrollOffset : -scrollOffset;
     }
 
 }
