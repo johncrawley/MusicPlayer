@@ -1,9 +1,6 @@
-package com.jacstuff.musicplayer.service;
+package com.jacstuff.musicplayer.trackplayer.service;
 
 
-import static com.jacstuff.musicplayer.service.playtrack.PlayTrackNotificationManager.PLAY_TRACK_NOTIFICATION_ID;
-
-import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,18 +8,16 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 
-import com.jacstuff.musicplayer.OpenTrackActivity;
+import com.jacstuff.musicplayer.trackplayer.OpenTrackActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.helpers.art.AlbumArtConsumer;
 import com.jacstuff.musicplayer.service.helpers.art.AlbumArtRetriever;
-import com.jacstuff.musicplayer.service.playtrack.PlayTrackBroadcastHelper;
-import com.jacstuff.musicplayer.service.playtrack.PlayTrackNotificationManager;
-import com.jacstuff.musicplayer.service.playtrack.TrackPlayerHelper;
+
 public class PlayTrackService extends Service implements AlbumArtConsumer {
 
     private PlayTrackNotificationManager playTrackNotificationManager;
     private final IBinder binder = new LocalBinder();
-    private TrackPlayerHelper trackPlayerHelper;
+    private TrackPlayer trackPlayer;
     private PlayTrackBroadcastHelper playTrackBroadcastHelper;
     private AlbumArtRetriever albumArtRetriever;
 
@@ -32,18 +27,23 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
 
 
     public void setActivity(OpenTrackActivity openTrackActivity){
+        if(trackPlayer.isTrackLoaded()){
+            trackPlayer.updateView();
+        }
     }
 
 
     @Override
     public void onCreate() {
         super.onCreate();
-        trackPlayerHelper = new TrackPlayerHelper(this);
+        log("Entered onCreate()");
+        trackPlayer = new TrackPlayer(this);
         playTrackBroadcastHelper = new PlayTrackBroadcastHelper(this);
-        playTrackNotificationManager = new PlayTrackNotificationManager(getApplicationContext(), this, trackPlayerHelper);
+        playTrackNotificationManager = new PlayTrackNotificationManager(getApplicationContext(), this, trackPlayer);
         albumArtRetriever = new AlbumArtRetriever(this, getApplicationContext());
-        moveToForeground();
+        playTrackNotificationManager.init();
     }
+
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
@@ -52,8 +52,9 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
         this.stopSelf();
     }
 
+
     public void playUri(Uri uri){
-        trackPlayerHelper.playTrackFrom(getApplicationContext(), uri);
+        trackPlayer.playTrackFrom(getApplicationContext(), uri);
     }
 
 
@@ -74,15 +75,9 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
     }
 
 
-    private void moveToForeground() {
-        playTrackNotificationManager.init();
-      //  Notification notification = playTrackNotificationManager.createNotification(getCurrentStatus(), "");
-      //  startForeground(PLAY_TRACK_NOTIFICATION_ID, notification);
-    }
 
-
-    public TrackPlayerHelper getTrackPlayerHelper(){
-        return trackPlayerHelper;
+    public TrackPlayer getTrackPlayerHelper(){
+        return trackPlayer;
     }
 
 
@@ -96,8 +91,8 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
         super.onDestroy();
         log("Entered onDestroy()");
         playTrackBroadcastHelper.onDestroy();
-        trackPlayerHelper.stop(false, false);
-        trackPlayerHelper.onDestroy();
+        trackPlayer.stop(false, false);
+        trackPlayer.onDestroy();
         playTrackNotificationManager.dismissNotification();
         playTrackNotificationManager = null;
     }
@@ -129,13 +124,13 @@ public class PlayTrackService extends Service implements AlbumArtConsumer {
 
     public String getCurrentStatus(){
         int resId = R.string.status_ready;
-        if(trackPlayerHelper.hasEncounteredError()){
+        if(trackPlayer.hasEncounteredError()){
             resId = R.string.status_error;
         }
-        else if(trackPlayerHelper.isPlaying()){
+        else if(trackPlayer.isPlaying()){
             resId = R.string.status_playing;
         }
-        else if(trackPlayerHelper.isPaused()){
+        else if(trackPlayer.isPaused()){
             resId = R.string.status_paused;
         }
         return getApplicationContext().getString(resId);

@@ -1,21 +1,19 @@
-package com.jacstuff.musicplayer.service.playtrack;
+package com.jacstuff.musicplayer.trackplayer.service;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.PowerManager;
 import android.util.Log;
 
-import androidx.activity.OnBackPressedCallback;
-
-import com.jacstuff.musicplayer.service.PlayTrackService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.helpers.MediaPlayerState;
 import com.jacstuff.musicplayer.service.helpers.art.AlbumArtRetriever;
-import com.jacstuff.musicplayer.view.trackplayer.TrackPlayerView;
+import com.jacstuff.musicplayer.trackplayer.view.OpenTrackView;
 
 import java.io.IOException;
 import java.util.concurrent.Executors;
@@ -24,7 +22,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
+public class TrackPlayer implements MediaPlayer.OnPreparedListener {
 
     private final PlayTrackService service;
     private Track currentTrack;
@@ -33,20 +31,25 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
     private ScheduledFuture<?> updateElapsedTimeFuture;
     private final ScheduledExecutorService executorService;
     private boolean hasEncounteredError;
-    private TrackPlayerView trackPlayerView;
+    private OpenTrackView openTrackView;
     int elapsedTime = 0;
+    private boolean isTrackLoaded;
+    private Bitmap albumArt;
 
     private final AtomicBoolean isPreparingTrack = new AtomicBoolean(false);
 
 
-    public TrackPlayerHelper(PlayTrackService playTrackService){
+    public TrackPlayer(PlayTrackService playTrackService){
+        log("Entered TrackPlayerHelper()");
         this.service = playTrackService;
-        executorService = Executors.newScheduledThreadPool(3);
+        executorService = Executors.newScheduledThreadPool(2);
     }
 
-    public void setTrackPlayerView(TrackPlayerView trackPlayerView){
-        this.trackPlayerView = trackPlayerView;
+
+    public void setTrackPlayerView(OpenTrackView openTrackView){
+        this.openTrackView = openTrackView;
     }
+
 
     private long getDurationFrom(MediaMetadataRetriever retriever){
         var str = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
@@ -58,9 +61,14 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     public void playTrackFrom(Context context, Uri uri){
+        if(isTrackLoaded){
+            return;
+        }
+        log("Entered playTrackFrom()");
         try (MediaMetadataRetriever retriever = new MediaMetadataRetriever()){
             retriever.setDataSource(context, uri);
-            trackPlayerView.setAlbumArt(AlbumArtRetriever.retrieveAlbumArt(retriever));
+            albumArt = AlbumArtRetriever.retrieveAlbumArt(retriever);
+            openTrackView.setAlbumArt(albumArt);
 
             currentTrack = Track.Builder
                     .newInstance()
@@ -75,11 +83,16 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
                     .duration(getDurationFrom(retriever))
                     .build();
             loadAndStartTrack();
-            trackPlayerView.displayInfoFrom(currentTrack);
-
+            openTrackView.displayInfoFrom(currentTrack);
+            isTrackLoaded = true;
         }catch(IOException | IllegalArgumentException e){
             e.printStackTrace();
         }
+    }
+
+
+    public boolean isTrackLoaded(){
+        return isTrackLoaded;
     }
 
 
@@ -87,6 +100,15 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
         if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
             mediaPlayer.seekTo(milliseconds);
         }
+    }
+
+
+    public void updateView(){
+        if(openTrackView == null){
+            return;
+        }
+        openTrackView.setAlbumArt(albumArt);
+        openTrackView.displayInfoFrom(currentTrack);
     }
 
 
@@ -105,17 +127,16 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
             mediaPlayer.pause();
             stopUpdatingElapsedTimeOnView();
             currentState = MediaPlayerState.PAUSED;
-            trackPlayerView.notifyMediaPlayerPaused();
+            openTrackView.notifyMediaPlayerPaused();
         }
     }
-
 
 
     void resume(){
         currentState = MediaPlayerState.PLAYING;
         mediaPlayer.start();
         startUpdatingElapsedTimeOnView();
-        trackPlayerView.notifyMediaPlayerPlaying();
+        openTrackView.notifyMediaPlayerPlaying();
         service.updateNotification();
     }
 
@@ -143,13 +164,13 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
             createAndPrepareMediaPlayer();
             startUpdatingElapsedTimeOnView();
             currentState = MediaPlayerState.PLAYING;
-            trackPlayerView.notifyMediaPlayerPlaying();
+            openTrackView.notifyMediaPlayerPlaying();
         }catch (IOException e){
             log("IO exception trying to start track: " + currentTrack.getPathname());
             e.printStackTrace();
             onError();
             hasEncounteredError = true;
-            trackPlayerView.displayError(currentTrack);
+            openTrackView.displayError(currentTrack);
         }finally{
             isPreparingTrack.set(false);
             service.updateNotification();
@@ -182,7 +203,7 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     private void updateElapsedTimeOnView(){
         elapsedTime = mediaPlayer.getCurrentPosition();
-        trackPlayerView.setElapsedTime(elapsedTime);
+        openTrackView.setElapsedTime(elapsedTime);
     }
 
 
@@ -214,7 +235,7 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     private void onError(){
         setStateToStopped();
-        trackPlayerView.notifyMediaPlayerStopped();
+        openTrackView.notifyMediaPlayerStopped();
         releaseAndResetMediaPlayer();
     }
 
@@ -266,7 +287,7 @@ public class TrackPlayerHelper implements MediaPlayer.OnPreparedListener {
     public void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
         stopPlayer();
         if(shouldUpdateMainView){
-            trackPlayerView.notifyMediaPlayerStopped();
+            openTrackView.notifyMediaPlayerStopped();
         }
     }
 

@@ -1,11 +1,10 @@
-package com.jacstuff.musicplayer.service.playtrack;
+package com.jacstuff.musicplayer.trackplayer.service;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import com.jacstuff.musicplayer.service.PlayTrackService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +66,7 @@ public class PlayTrackBroadcastHelper {
     private final BroadcastReceiver serviceReceiverForPlay = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            runIfAvailable(TrackPlayerHelper::onReceiveBroadcastForPlay);
+            runIfAvailable(TrackPlayer::onReceiveBroadcastForPlay);
         }
     };
 
@@ -75,23 +74,23 @@ public class PlayTrackBroadcastHelper {
     private final BroadcastReceiver serviceReceiverForRequestStatus = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            TrackPlayerHelper trackPlayerHelper = playTrackService.getTrackPlayerHelper();
-            if(trackPlayerHelper == null){
+            TrackPlayer trackPlayer = playTrackService.getTrackPlayerHelper();
+            if(trackPlayer == null){
                 return;
             }
-            String broadcast = trackPlayerHelper.isPlaying() ? ACTION_NOTIFY_VIEW_OF_PLAYING : ACTION_NOTIFY_VIEW_OF_STOP;
+            String broadcast = trackPlayer.isPlaying() ? ACTION_NOTIFY_VIEW_OF_PLAYING : ACTION_NOTIFY_VIEW_OF_STOP;
             sendBroadcast(broadcast);
         }
     };
 
 
-    private void runIfAvailable(Consumer<TrackPlayerHelper> consumer){
+    private void runIfAvailable(Consumer<TrackPlayer> consumer){
         if(playTrackService == null){
             return;
         }
-        TrackPlayerHelper trackPlayerHelper = playTrackService.getTrackPlayerHelper();
-        if(trackPlayerHelper != null){
-            consumer.accept(trackPlayerHelper);
+        TrackPlayer trackPlayer = playTrackService.getTrackPlayerHelper();
+        if(trackPlayer != null){
+            consumer.accept(trackPlayer);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.view.trackplayer;
+package com.jacstuff.musicplayer.trackplayer.view;
 
 import android.graphics.Bitmap;
 import android.os.Handler;
@@ -10,18 +10,18 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 
-import com.jacstuff.musicplayer.OpenTrackActivity;
+import com.jacstuff.musicplayer.trackplayer.OpenTrackActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.service.PlayTrackService;
+import com.jacstuff.musicplayer.trackplayer.service.PlayTrackService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
-import com.jacstuff.musicplayer.service.playtrack.TrackPlayerHelper;
+import com.jacstuff.musicplayer.trackplayer.service.TrackPlayer;
 import com.jacstuff.musicplayer.view.utils.TimeConverter;
 
 import java.util.Arrays;
 import java.util.List;
 
 
-public class TrackPlayerViewHelper implements TrackPlayerView{
+public class OpenTrackViewImpl implements OpenTrackView {
 
     private final OpenTrackActivity activity;
     private PlayTrackService playTrackService;
@@ -32,18 +32,18 @@ public class TrackPlayerViewHelper implements TrackPlayerView{
     private SeekBar trackTimeSeekBar;
     private boolean isTrackTimeSeekBarHeld = false;
     private String totalTrackTime = "0:00";
-    private TrackPlayerHelper trackPlayerHelper;
+    private TrackPlayer trackPlayer;
 
 
-    public TrackPlayerViewHelper(OpenTrackActivity openTrackActivity){
+    public OpenTrackViewImpl(OpenTrackActivity openTrackActivity){
         activity = openTrackActivity;
     }
 
 
     public void setService(PlayTrackService playTrackService){
         this.playTrackService = playTrackService;
-        trackPlayerHelper = playTrackService.getTrackPlayerHelper();
-        trackPlayerHelper.setTrackPlayerView(this);
+        trackPlayer = playTrackService.getTrackPlayerHelper();
+        trackPlayer.setTrackPlayerView(this);
     }
 
 
@@ -56,13 +56,13 @@ public class TrackPlayerViewHelper implements TrackPlayerView{
 
 
     public void playTrack() {
-        trackPlayerHelper.playOrResume();
+        trackPlayer.playOrResume();
     }
 
 
     public void pauseTrack() {
         disableViewForAWhile(playButton, 300);
-        trackPlayerHelper.pause();
+        trackPlayer.pause();
     }
 
 
@@ -75,7 +75,7 @@ public class TrackPlayerViewHelper implements TrackPlayerView{
 
     public void stopTrack(){
         resetElapsedTime();
-        trackPlayerHelper.stop(true);
+        trackPlayer.stop(true);
     }
 
 
@@ -131,7 +131,7 @@ public class TrackPlayerViewHelper implements TrackPlayerView{
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int progress = Math.min(seekBar.getMax() - 500, seekBar.getProgress());
-                trackPlayerHelper.seek(progress);
+                trackPlayer.seek(progress);
                 isTrackTimeSeekBarHeld = false;
                 setPlayerControlsEnabled(true);
             }
@@ -170,7 +170,7 @@ public class TrackPlayerViewHelper implements TrackPlayerView{
 
 
     private void setPlayPauseAndTrackSeekBarVisibility(){
-        if(trackPlayerHelper.isPlaying()){
+        if(trackPlayer.isPlaying()){
             playButton.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
             trackTimeSeekBar.setVisibility(View.VISIBLE);

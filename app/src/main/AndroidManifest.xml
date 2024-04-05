@@ -36,7 +36,7 @@
             android:launchMode="singleTask"
         android:stopWithTask="true"-->
         <activity
-            android:name=".OpenTrackActivity"
+            android:name=".trackplayer.OpenTrackActivity"
             android:configChanges="orientation|keyboardHidden"
             android:exported="true">
             <intent-filter>
@@ -88,7 +88,7 @@
 
 
         <service
-            android:name=".service.PlayTrackService"
+            android:name=".trackplayer.service.PlayTrackService"
             android:label="PlayTrackService"
             android:enabled="true"
             android:foregroundServiceType="mediaPlayback"

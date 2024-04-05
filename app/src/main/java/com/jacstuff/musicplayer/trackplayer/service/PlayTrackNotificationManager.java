@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.service.playtrack;
+package com.jacstuff.musicplayer.trackplayer.service;
 
 import static com.jacstuff.musicplayer.service.helpers.BroadcastHelper.ACTION_PAUSE_PLAYER;
 import static com.jacstuff.musicplayer.service.helpers.BroadcastHelper.ACTION_PLAY;
@@ -17,9 +17,8 @@ import android.os.Looper;
 
 import androidx.core.app.NotificationCompat;
 
-import com.jacstuff.musicplayer.OpenTrackActivity;
+import com.jacstuff.musicplayer.trackplayer.OpenTrackActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.service.PlayTrackService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -32,12 +31,12 @@ public class PlayTrackNotificationManager {
     private PendingIntent pendingIntent;
     final static String NOTIFICATION_CHANNEL_ID = "com.jcrawley.music-player-play-track";
     private final AtomicBoolean hasErrorNotificationBeenReplaced = new AtomicBoolean(false);
-    private final TrackPlayerHelper trackPlayerHelper;
+    private final TrackPlayer trackPlayer;
 
-    public PlayTrackNotificationManager(Context context, PlayTrackService playTrackService, TrackPlayerHelper trackPlayerHelper){
+    public PlayTrackNotificationManager(Context context, PlayTrackService playTrackService, TrackPlayer trackPlayer){
         this.context = context;
         this.playTrackService = playTrackService;
-        this.trackPlayerHelper = trackPlayerHelper;
+        this.trackPlayer = trackPlayer;
     }
 
 
@@ -81,20 +80,20 @@ public class PlayTrackNotificationManager {
         }
         resetErrorStatusAfterDelay();
         new Handler(Looper.getMainLooper()).post(() ->
-                sendNotification(playTrackService.getCurrentStatus(), trackPlayerHelper.getCurrentTrack()));
+                sendNotification(playTrackService.getCurrentStatus(), trackPlayer.getCurrentTrack()));
     }
 
 
     private void resetErrorStatusAfterDelay(){
         int numberOfMillisecondsBeforeResettingStatus = 9_000;
         hasErrorNotificationBeenReplaced.set(true);
-        if(!trackPlayerHelper.hasEncounteredError()){
+        if(!trackPlayer.hasEncounteredError()){
             return;
         }else{
             hasErrorNotificationBeenReplaced.set(false);
         }
         String status = playTrackService.getReadyStatusStr();
-        Track track = trackPlayerHelper.getCurrentTrack();
+        Track track = trackPlayer.getCurrentTrack();
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if(!hasErrorNotificationBeenReplaced.get()){
@@ -147,11 +146,11 @@ public class PlayTrackNotificationManager {
 
 
     private void addPlayButtonTo(NotificationCompat.Builder notification){
-        String currentUrl = trackPlayerHelper.getCurrentUrl();
+        String currentUrl = trackPlayer.getCurrentUrl();
         if(currentUrl == null){
             return;
         }
-        if(!trackPlayerHelper.isPlaying() && !currentUrl.isEmpty()){
+        if(!trackPlayer.isPlaying() && !currentUrl.isEmpty()){
             notification.addAction(android.R.drawable.ic_media_play,
                     context.getString(R.string.notification_button_title_play),
                     createPendingIntentFor(ACTION_PLAY));

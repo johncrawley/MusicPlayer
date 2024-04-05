@@ -1,10 +1,10 @@
-package com.jacstuff.musicplayer.view.trackplayer;
+package com.jacstuff.musicplayer.trackplayer.view;
 
 import android.graphics.Bitmap;
 
 import com.jacstuff.musicplayer.service.db.entities.Track;
 
-public interface TrackPlayerView {
+public interface OpenTrackView {
    void updateViewsOnTrackAssigned();
    void setBlankTrackInfo();
    void setBlankTrackInfoOnMainView();
