@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        android:weightSum="2"
+        android:id="@+id/detailsLayout"
+        app:layout_constraintBottom_toTopOf="@id/trackTimeSeekBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/albumArtImageView"
+                android:contentDescription="@string/album_art_content_description"
+                android:padding="@dimen/album_art_padding"
+                android:background="@drawable/album_art_border"
+                android:cropToPadding="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_marginVertical="@dimen/album_art_margin_vertical"
+                android:scaleType="fitCenter"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/trackTitleText"
+                app:layout_constraintBottom_toTopOf="@id/albumText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/album_art_empty" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/trackTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="12dp"
+                android:gravity="center"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/albumText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@id/artistText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/albumArtImageView"
+
+                />
+
+            <TextView
+                android:id="@+id/artistText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@id/trackTimeSeekBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/albumText"
+
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <SeekBar
+        android:id="@+id/trackTimeSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progressDrawable="@drawable/seek_bar"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailsLayout"
+        app:layout_constraintBottom_toTopOf="@id/trackTime"
+        />
+
+    <TextView
+        android:id="@+id/trackTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="@dimen/track_time_margin_bottom_small"
+        android:text="@string/elapsed_time_label"
+        android:fontFamily="@font/poe_monospace_djj6"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/buttonsLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/playButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/play_button_content_description"
+            android:paddingBottom="@dimen/button_padding"
+            app:srcCompat="@mipmap/ic_action_play" />
+
+        <ImageButton
+            android:id="@+id/pauseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/pause_button_content_description"
+            android:paddingBottom="@dimen/button_padding"
+            android:visibility="gone"
+            app:srcCompat="@mipmap/ic_action_pause" />
+
+        <ImageButton
+            android:id="@+id/stopButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/stop_button_content_description"
+            android:paddingBottom="@dimen/button_padding"
+            android:tintMode="src_in"
+            app:srcCompat="@mipmap/ic_action_stop" />
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

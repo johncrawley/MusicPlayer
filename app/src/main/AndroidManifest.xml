@@ -31,13 +31,11 @@
             </intent-filter>
         </activity>
 
-        <!--
-        android:taskAffinity=""
-            android:launchMode="singleTask"
-        android:stopWithTask="true"-->
+
         <activity
             android:name=".trackplayer.OpenTrackActivity"
             android:configChanges="orientation|keyboardHidden"
+            android:theme="@style/AppTheme_no_action_bar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

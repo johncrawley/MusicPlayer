@@ -9,18 +9,7 @@
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
     tools:context=".MainActivity">
 
-<!--
-    <include
-        android:id="@+id/playerTrackInfoInclude"
-        layout="@layout/player_track_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/playerButtonsInclude"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
--->
+
     <TextView
         android:id="@+id/trackTitle"
         android:layout_width="wrap_content"

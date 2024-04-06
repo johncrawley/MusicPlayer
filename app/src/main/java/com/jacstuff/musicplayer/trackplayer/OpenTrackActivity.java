@@ -91,9 +91,7 @@ public class OpenTrackActivity extends AppCompatActivity {
     private void openUri(){
         Intent intent = getIntent();
         if (intent != null) {
-            Uri uri = intent.getData();
-            log("saving uri");
-            savedUri = uri;
+            savedUri = intent.getData();
         }
     }
 
