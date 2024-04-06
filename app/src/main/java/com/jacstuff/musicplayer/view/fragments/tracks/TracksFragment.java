@@ -22,7 +22,9 @@ import android.widget.TextView;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.db.entities.Track;
+import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
@@ -47,6 +49,7 @@ public class TracksFragment extends Fragment{
     private TextView noTracksFoundTextView, playlistInfoTextView;
     private boolean isFirstScroll;
     private LinearLayoutManager layoutManager;
+    PreferencesHelper preferencesHelper;
 
     public TracksFragment() {
         // Required empty public constructor
@@ -63,6 +66,7 @@ public class TracksFragment extends Fragment{
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         isFirstScroll = true;
         this.parentView = view;
+        preferencesHelper = new PreferencesHelper(getContext());
         initViews();
         setupRecyclerView(view, getMainActivity().getCurrentPlaylist());
         setupAddTracksButton(view);
@@ -92,10 +96,9 @@ public class TracksFragment extends Fragment{
         }
         Playlist playlist = getMainActivity().getPlaylist();
         int currentTrackIndex = getInt(bundle, MessageKey.TRACK_INDEX);
-        List<Track> updatedTracks = playlist.getTracks();
         updatePlaylistInfoView(playlist);
-        refreshTrackList(updatedTracks);
-        setVisibilityOnNoTracksFoundText(updatedTracks);
+        refreshTrackList(playlist);
+        setVisibilityOnNoTracksFoundText(playlist.getTracks());
         setVisibilityOnAddTracksToPlaylistButton(playlist.isUserPlaylist());
         previousIndex = 0;
         // we need to reinitialize the recycler view here
@@ -109,12 +112,16 @@ public class TracksFragment extends Fragment{
 
 
     @SuppressWarnings("notifyDataSetChanged")
-    public void refreshTrackList(List<Track> tracks){
+    public void refreshTrackList(Playlist playlist){
+        List<Track> tracks = playlist.getTracks();
         runOnUIThread( ()->{
             if(tracks == null){
                 return;
             }
-            trackListAdapter.setItems(tracks);
+            trackListAdapter.setItems(playlist,
+                    preferencesHelper.isTrackNumberDisplayed(),
+                    preferencesHelper.isArtistDisplayed());
+
             trackListAdapter.notifyDataSetChanged();
             setVisibilityOnNoTracksFoundText(tracks);
         });
@@ -210,12 +217,11 @@ public class TracksFragment extends Fragment{
 
 
     private void setupRecyclerView(View parentView, Playlist playlist){
-        List<Track> tracks = playlist.getTracks();
-        if(parentView == null ||tracks == null){
+        if(parentView == null || playlist == null || playlist.getTracks() == null){
             return;
         }
         recyclerView = parentView.findViewById(R.id.recyclerView);
-        trackListAdapter = new TrackListAdapter(tracks, this::selectTrack, this::createTrackOptionsFragment);
+        trackListAdapter = new TrackListAdapter(playlist, this::selectTrack, this::createTrackOptionsFragment);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

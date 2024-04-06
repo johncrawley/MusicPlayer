@@ -17,6 +17,7 @@ public final class DbContract {
         public static final String COL_TRACK_NUMBER = "track_number";
         public static final String COL_GENRE = "track_genre";
         public static final String COL_DURATION = "track_duration";
+        public static final String COL_DISC = "track_disc";
         //static final String COL_LENGTH = "length";
     }
 
@@ -54,6 +55,7 @@ public final class DbContract {
         public static final String COL_GENRE = "pl_item_genre";
         public static final String COL_BITRATE = "pl_item_bitrate";
         public static final String COL_YEAR = "pl_item_year";
+        public static final String COL_DISC = "pl_item_disc";
        public static final String COL_DURATION = "pl_item_duration";
     }
 

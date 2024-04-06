@@ -319,7 +319,7 @@ public class TrackPlayer implements MediaPlayer.OnPreparedListener {
 
 
     public boolean isPlaying(){
-        return mediaPlayer.isPlaying();
+        return mediaPlayer != null && mediaPlayer.isPlaying();
     }
 
 

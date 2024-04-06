@@ -130,6 +130,7 @@ public class PlaylistItemRepositoryImpl extends AbstractRepository implements Pl
                 .duration(getLong(DbContract.PlaylistItemsEntry.COL_DURATION))
                 .withGenre(getString(DbContract.PlaylistItemsEntry.COL_GENRE))
                 .withYear(getString(DbContract.PlaylistItemsEntry.COL_YEAR))
+                .withDisc(getString(DbContract.PlaylistItemsEntry.COL_DISC))
                 .withBitrate(getString(DbContract.PlaylistItemsEntry.COL_BITRATE))
                 .build();
     }
@@ -148,6 +149,7 @@ public class PlaylistItemRepositoryImpl extends AbstractRepository implements Pl
         contentValues.put(DbContract.PlaylistItemsEntry.COL_GENRE, track.getGenre());
         contentValues.put(DbContract.PlaylistItemsEntry.COL_YEAR, track.getYear());
         contentValues.put(DbContract.PlaylistItemsEntry.COL_BITRATE, track.getBitrate());
+        contentValues.put(DbContract.PlaylistItemsEntry.COL_DISC, track.getDisc());
         contentValues.put(DbContract.PlaylistItemsEntry.COL_TRACK_NUMBER, track.getTrackNumber());
         return contentValues;
     }

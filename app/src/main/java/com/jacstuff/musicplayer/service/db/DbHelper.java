@@ -35,7 +35,8 @@ public class DbHelper extends SQLiteOpenHelper {
                     + DbContract.TracksEntry.COL_ARTIST_ID + INTEGER + COMMA
                     + DbContract.TracksEntry.COL_TRACK_NUMBER + INTEGER + COMMA
                     + DbContract.TracksEntry.COL_DURATION + INTEGER + COMMA
-                    + DbContract.TracksEntry.COL_GENRE + TEXT
+                    + DbContract.TracksEntry.COL_GENRE + TEXT + COMMA
+                    + DbContract.TracksEntry.COL_DISC + TEXT
                     + CLOSING_BRACKET;
 
 
@@ -87,6 +88,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     + DbContract.PlaylistItemsEntry.COL_GENRE + TEXT + COMMA
                     + DbContract.PlaylistItemsEntry.COL_YEAR + TEXT + COMMA
                     + DbContract.PlaylistItemsEntry.COL_BITRATE + TEXT + COMMA
+                    + DbContract.PlaylistItemsEntry.COL_DISC + TEXT + COMMA
                     + DbContract.PlaylistItemsEntry.COL_DURATION + INTEGER
                     + CLOSING_BRACKET;
 

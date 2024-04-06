@@ -45,6 +45,16 @@ public class PreferencesHelper {
     }
 
 
+    public boolean isTrackNumberDisplayed() {
+        return getPrefs().getBoolean("isTrackNumberDisplayed", true);
+    }
+
+
+    public boolean isArtistDisplayed() {
+        return getPrefs().getBoolean("isArtistDisplayed", false);
+    }
+
+
     public boolean areDuplicateTracksIgnored(){
         return getPrefs().getBoolean("ignoreDuplicateTracks", true);
     }

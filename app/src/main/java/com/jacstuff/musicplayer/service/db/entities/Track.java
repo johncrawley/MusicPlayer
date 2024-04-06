@@ -5,7 +5,7 @@ import android.net.Uri;
 public class Track {
 
     private final String pathname, title, artist, album, genre;
-    private String disc;
+    private String disc = "";
     private String orderedStr;
     private String searchStr;
     private final long id, trackNumber;
@@ -14,6 +14,7 @@ public class Track {
     private final String year;
     private final String bitrate;
     private Uri uri;
+    private String cdAndTrackNumber;
 
 
     private Track(Builder builder){
@@ -32,14 +33,16 @@ public class Track {
         this.uri = builder.uri;
         createOrderedStr();
         createSearchStr();
+        createDiscAndTrackNumSearchStr();
     }
 
 
-    public Track(String path, String title, String artist, String album, String genre, String year, int duration, int trackNumber, String bitrate){
+    public Track(String path, String title, String artist, String album, String disc, String genre, String year, int duration, int trackNumber, String bitrate){
         this.id = -1;
         this.pathname = path;
         this.duration = duration;
         this.title = title;
+        this.disc = disc;
         this.artist = artist;
         this.album = album;
         this.trackNumber = trackNumber;
@@ -48,6 +51,7 @@ public class Track {
         this.bitrate = bitrate;
         createOrderedStr();
         createSearchStr();
+        createDiscAndTrackNumSearchStr();
     }
 
 
@@ -62,6 +66,15 @@ public class Track {
     private void createSearchStr(){
         searchStr = artist + " " + album + " " + title;
         searchStr = searchStr.toLowerCase();
+    }
+
+
+    private void createDiscAndTrackNumSearchStr(){
+        String prefix = trackNumber < 10 ? "000" :
+                trackNumber < 100 ? "00" :
+                        trackNumber < 1000 ? "0" :
+                                "";
+        cdAndTrackNumber = disc + "_" + prefix + trackNumber;
     }
 
 
@@ -108,6 +121,8 @@ public class Track {
 
     public long getTrackNumber(){return trackNumber;}
 
+    public String getCdAndTrackNumber(){return cdAndTrackNumber;}
+
 
     public String getTrackNumberStr(){return String.valueOf(trackNumber);}
 
@@ -143,7 +158,6 @@ public class Track {
 
 
     public static class Builder{
-
         private String pathname, title, artist, album, disc, genre;
         private long id = -1;
         private long trackNumber;

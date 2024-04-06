@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.service.db.entities.Playlist;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
     private final Consumer<Track> clickConsumer, longClickConsumer;
+    private final String ARTIST_TRACK_NAME_SEPARATOR = " - ";
 
 
     class TrackViewHolder extends RecyclerView.ViewHolder {
@@ -58,23 +61,30 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     }
 
 
-    public TrackListAdapter(List<Track> tracks, Consumer<Track> onClick, Consumer<Track> onLongClick){
+    public TrackListAdapter(Playlist playlist, Consumer<Track> onClick, Consumer<Track> onLongClick){
         this.trackNames = new ArrayList<>();
-        this.tracks = tracks;
+        this.tracks = playlist.getTracks();
         clickConsumer = onClick;
         longClickConsumer = onLongClick;
+        boolean isAlbumPlaylist = playlist.getType() == PlaylistType.ALBUM;
         for(Track track : tracks){
-            this.trackNames.add(getStrOf(track));
+            this.trackNames.add(getStrOf(track, false, true, isAlbumPlaylist));
         }
     }
 
 
-    public void setItems(List<Track> tracks){
-        this.tracks = tracks;
+    public void setItems(Playlist playlist, boolean useTrackNumber, boolean useArtist){
+        this.tracks = playlist.getTracks();
+        boolean isAlbumPlaylist = isAlbumPlaylist(playlist);
         if(tracks == null){
             return;
         }
-        trackNames = tracks.stream().map(this::getStrOf).collect(Collectors.toList());
+        trackNames = tracks.stream().map(t -> getStrOf(t, useTrackNumber, useArtist, isAlbumPlaylist)).collect(Collectors.toList());
+    }
+
+
+    private boolean isAlbumPlaylist(Playlist playlist){
+        return playlist.getType() == PlaylistType.ALBUM;
     }
 
 
@@ -86,8 +96,29 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     }
 
 
-    private String getStrOf(Track trackDetails){
-        return trackDetails.getArtist() + " - " +  trackDetails.getTitle();
+    private String getStrOf(Track track, boolean useTrackNumber,  boolean useArtist, boolean isAlbumPlaylist){
+        return isAlbumPlaylist ?
+            getDisplayNameForAlbumTrack(track, useTrackNumber, useArtist)
+            : getDisplayNameFor(track);
+    }
+
+
+    private String getDisplayNameFor(Track track){
+        return track.getArtist() + ARTIST_TRACK_NAME_SEPARATOR + track.getTitle();
+    }
+
+
+    private String getDisplayNameForAlbumTrack(Track track, boolean useTrackNumber, boolean useArtist){
+        String output = "";
+        if(useTrackNumber){
+            output += track.getTrackNumberStr();
+            output += ". ";
+        }
+        if(useArtist){
+            output += track.getArtist();
+            output += ARTIST_TRACK_NAME_SEPARATOR;
+        }
+        return output +  track.getTitle();
     }
 
 

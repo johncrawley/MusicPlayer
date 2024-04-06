@@ -191,7 +191,8 @@ public class TrackLoader {
                 MediaStore.Audio.Media.CD_TRACK_NUMBER,
                 MediaStore.Audio.Media.GENRE,
                 MediaStore.Audio.Media.YEAR,
-                MediaStore.Audio.Media.BITRATE
+                MediaStore.Audio.Media.BITRATE,
+                MediaStore.Audio.Media.DISC_NUMBER
         };
     }
 
@@ -207,6 +208,7 @@ public class TrackLoader {
         addToColumnMap(cursor, MediaStore.Audio.Media.GENRE);
         addToColumnMap(cursor, MediaStore.Audio.Media.YEAR);
         addToColumnMap(cursor, MediaStore.Audio.Media.BITRATE);
+        addToColumnMap(cursor, MediaStore.Audio.Media.DISC_NUMBER);
     }
 
 
@@ -220,29 +222,40 @@ public class TrackLoader {
         if (!isContainingCorrectPath(path)) {
             return;
         }
-        String albumName = getValueFrom(cursor, MediaStore.Audio.Media.ALBUM);
-        String artistName = getValueFrom(cursor, MediaStore.Audio.Media.ARTIST);
-        String year = getValueFrom(cursor, MediaStore.Audio.Media.YEAR);
-        String genreName = getGenre(cursor);
+        String album = getValueFrom(cursor, MediaStore.Audio.Media.ALBUM);
+        String artist = getValueFrom(cursor, MediaStore.Audio.Media.ARTIST);
+        String genre = getGenre(cursor);
         String bitrate = getBitrate(cursor);
+
         Track track = new Track(
                 path,
                 getValueFrom(cursor, MediaStore.Audio.Media.TITLE),
-                artistName,
-                albumName,
-                genreName,
-                year,
+                artist,
+                album,
+                getDiscNumber(cursor),
+                genre,
+                getValueFrom(cursor, MediaStore.Audio.Media.YEAR),
                 getIntValueFrom(cursor, MediaStore.Audio.Media.DURATION),
                 getTrackNumber(cursor),
-                bitrate
-        );
+                bitrate);
+
+        addToTracks(track, areDuplicatesIgnored);
+        addToAlbum(track, album, artist);
+        addAlbumToArtist(album, artist);
+        addToGenre(track, genre);
+    }
+
+
+    private void addToTracks(Track track, boolean areDuplicatesIgnored){
         if(shouldTrackBeAdded(track, areDuplicatesIgnored)){
             tracks.add(track);
-            addToArtist(track, artistName);
+            addToArtist(track, track.getArtist());
         }
-        addToAlbum(track, albumName, artistName);
-        addAlbumToArtist(albumName, artistName);
-        addToGenre(track, genreName);
+    }
+
+
+    private String getDiscNumber(Cursor cursor){
+        return String.valueOf(getDiscNumberFrom(cursor));
     }
 
 
@@ -334,6 +347,15 @@ public class TrackLoader {
     @SuppressWarnings("ConstantConditions")
     private int getIntValueFrom(Cursor cursor, String colName){
         return (int)cursor.getLong(columnMap.get(colName));
+    }
+
+
+    private long getDiscNumberFrom(Cursor cursor){
+        Integer name = columnMap.get(MediaStore.Audio.Media.DISC_NUMBER);
+        if(name == null){
+            return -1;
+        }
+        return Math.max(1, cursor.getLong(name));
     }
 
 

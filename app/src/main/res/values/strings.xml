@@ -146,6 +146,8 @@
     <string name="move_to_next_track_when_playlist_loaded_summary">Enable to automatically select the next track when a playlist is loaded</string>
     <string name="ignore_duplicates_in_all_tracks_title">Hide Duplicates In All-Tracks and Artists Playlists</string>
     <string name="auto_switch_tabs_after_playlist_selection_title">Automatically Switch Tabs After Playlist Selected</string>
+    <string name="is_track_number_displayed_in_album_playlist">Show Track Number In Album Playlist</string>
+    <string name="is_artist_displayed_in_album_playlist">Show Artist In Album Playlist</string>
 
     <string name="theme_blue">Blue</string>
     <string name="theme_light_blue">Light Blue</string>
