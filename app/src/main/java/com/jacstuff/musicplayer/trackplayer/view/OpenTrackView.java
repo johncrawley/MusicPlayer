@@ -17,4 +17,5 @@ public interface OpenTrackView {
    void notifyThatFileDoesNotExist(Track track);
    void setAlbumArt(Bitmap bitmap);
    void displayInfoFrom(Track track);
+   void showPlayOrPauseButton(boolean isPlaying);
 }

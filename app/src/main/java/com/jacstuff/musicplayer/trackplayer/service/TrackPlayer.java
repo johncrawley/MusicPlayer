@@ -64,7 +64,6 @@ public class TrackPlayer implements MediaPlayer.OnPreparedListener {
         if(isTrackLoaded){
             return;
         }
-        log("Entered playTrackFrom()");
         try (MediaMetadataRetriever retriever = new MediaMetadataRetriever()){
             retriever.setDataSource(context, uri);
             albumArt = AlbumArtRetriever.retrieveAlbumArt(retriever);
@@ -109,6 +108,8 @@ public class TrackPlayer implements MediaPlayer.OnPreparedListener {
         }
         openTrackView.setAlbumArt(albumArt);
         openTrackView.displayInfoFrom(currentTrack);
+        openTrackView.setElapsedTime(elapsedTime);
+        openTrackView.showPlayOrPauseButton(isPlaying());
     }
 
 
@@ -318,7 +319,7 @@ public class TrackPlayer implements MediaPlayer.OnPreparedListener {
 
 
     public boolean isPlaying(){
-        return false;
+        return mediaPlayer.isPlaying();
     }
 
 

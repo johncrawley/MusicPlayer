@@ -264,6 +264,13 @@ public class OpenTrackViewImpl implements OpenTrackView {
 
 
     @Override
+    public void showPlayOrPauseButton(boolean isPlaying){
+        playButton.setVisibility(isPlaying?  View.GONE : View.VISIBLE);
+        pauseButton.setVisibility(isPlaying? View.VISIBLE : View.GONE);
+    }
+
+
+    @Override
     public void notifyMediaPlayerStopped(){
         activity.runOnUiThread(()->{
             playButton.setVisibility(View.VISIBLE);
