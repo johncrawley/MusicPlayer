@@ -17,4 +17,14 @@ public class ListUtils {
     }
 
 
+    public static void setVisibilityOnNoItemsFoundText(List<?> tracks, RecyclerView recyclerView, TextView noItemsFoundTextview, String text){
+        boolean isEmpty = tracks == null || tracks.isEmpty();
+        if(isEmpty && !text.isBlank()){
+            noItemsFoundTextview.setText(text);
+        }
+        recyclerView.setVisibility(isEmpty? View.GONE : View.VISIBLE);
+        noItemsFoundTextview.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+    }
+
+
 }

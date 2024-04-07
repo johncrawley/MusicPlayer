@@ -60,7 +60,7 @@ public class PlaylistsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = getContext();
-        View view = inflater.inflate(R.layout.fragment_playlists, container, false);
+        View view = inflater.inflate(R.layout.fragment_tab_playlists, container, false);
         playlistRepository = new PlaylistRepositoryImpl(getContext());
         setupPlaylistRecyclerView(view);
         hasClicked = false;

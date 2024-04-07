@@ -44,7 +44,7 @@ public class AlbumsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_albums, container, false);
+        return inflater.inflate(R.layout.fragment_tab_albums, container, false);
     }
 
 

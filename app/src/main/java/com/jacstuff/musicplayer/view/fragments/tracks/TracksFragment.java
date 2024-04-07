@@ -22,9 +22,7 @@ import android.widget.TextView;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
-import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.db.entities.Track;
-import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
@@ -49,7 +47,6 @@ public class TracksFragment extends Fragment{
     private TextView noTracksFoundTextView, playlistInfoTextView;
     private boolean isFirstScroll;
     private LinearLayoutManager layoutManager;
-    PreferencesHelper preferencesHelper;
 
     public TracksFragment() {
         // Required empty public constructor
@@ -58,7 +55,7 @@ public class TracksFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tracks, container, false);
+        return inflater.inflate(R.layout.fragment_tab_tracks, container, false);
     }
 
 
@@ -66,7 +63,6 @@ public class TracksFragment extends Fragment{
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         isFirstScroll = true;
         this.parentView = view;
-        preferencesHelper = new PreferencesHelper(getContext());
         initViews();
         setupRecyclerView(view, getMainActivity().getCurrentPlaylist());
         setupAddTracksButton(view);
@@ -97,7 +93,7 @@ public class TracksFragment extends Fragment{
         Playlist playlist = getMainActivity().getPlaylist();
         int currentTrackIndex = getInt(bundle, MessageKey.TRACK_INDEX);
         updatePlaylistInfoView(playlist);
-        refreshTrackList(playlist);
+        refreshTrackList(playlist); // required for screen orientation change
         setVisibilityOnNoTracksFoundText(playlist.getTracks());
         setVisibilityOnAddTracksToPlaylistButton(playlist.isUserPlaylist());
         previousIndex = 0;
@@ -118,9 +114,7 @@ public class TracksFragment extends Fragment{
             if(tracks == null){
                 return;
             }
-            trackListAdapter.setItems(playlist,
-                    preferencesHelper.isTrackNumberDisplayed(),
-                    preferencesHelper.isArtistDisplayed());
+            trackListAdapter.setItems(playlist);
 
             trackListAdapter.notifyDataSetChanged();
             setVisibilityOnNoTracksFoundText(tracks);
@@ -274,7 +268,7 @@ public class TracksFragment extends Fragment{
 
 
     private void setVisibilityOnNoTracksFoundText(List<Track> tracks){
-        setVisibilityOnNoItemsFoundText(tracks, recyclerView, noTracksFoundTextView);
+        setVisibilityOnNoItemsFoundText(tracks, recyclerView, noTracksFoundTextView, getString(R.string.no_tracks_found));
     }
 
 

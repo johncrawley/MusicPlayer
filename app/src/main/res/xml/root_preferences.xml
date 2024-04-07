@@ -33,25 +33,10 @@
             app:defaultValue="true"
             app:enabled="true" />
 
-
         <SwitchPreference
             app:key="autoSwitchTabsAfterPlaylistSelection"
             app:title="@string/auto_switch_tabs_after_playlist_selection_title"
             app:defaultValue="true"
-            app:enabled="true" />
-
-
-        <SwitchPreference
-            app:key="isTrackNumberDisplayed"
-            app:title="@string/is_track_number_displayed_in_album_playlist"
-            app:defaultValue="true"
-            app:enabled="true" />
-
-
-        <SwitchPreference
-            app:key="isArtistDisplayed"
-            app:title="@string/is_artist_displayed_in_album_playlist"
-            app:defaultValue="false"
             app:enabled="true" />
 
         <EditTextPreference
