@@ -112,10 +112,17 @@ public class PlayerViewHelper {
             String titleText = track.getTitle();
             trackTitle.setText(titleText.isEmpty()? mainActivity.getString(R.string.no_tracks_found) : titleText);
             trackAlbum.setText(track.getAlbum());
+            setVisibilityOnAlbumText(track);
             trackArtist.setText(track.getArtist());
             setTrackTimeInfo(elapsedTime, track.getDuration());
             trackTimeSeekBar.setProgress(elapsedTime);
         });
+    }
+
+
+    private void setVisibilityOnAlbumText(Track track){
+        boolean isAlbumAndArtistTheSame = track.getAlbum().equals(track.getArtist());
+        trackAlbum.setVisibility(isAlbumAndArtistTheSame ? View.GONE : View.VISIBLE);
     }
 
 
