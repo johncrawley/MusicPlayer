@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     private AlbumArtHelper albumArtHelper;
     private AddTrackToPlaylistViewHelper addTrackToPlaylistViewHelper;
     private PlayerViewHelper playerViewHelper;
-    private Playlist playlist;
     private TabHelper tabHelper;
     private final AtomicBoolean isServiceConnected = new AtomicBoolean(false);
 
@@ -106,8 +105,14 @@ public class MainActivity extends AppCompatActivity {
         tabHelper = new TabHelper(viewModel, this);
         initPlayerViewHelper();
         startMediaPlayerService();
+        checkPath();
     }
 
+    private void checkPath(){
+        if(isServiceConnected.get()){
+            mediaPlayerService.checkPath();
+        }
+    }
 
     private void initPlayerViewHelper(){
         if(playerViewHelper == null){
@@ -144,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         themeHelper.restartActivityIfDifferentThemeSet(this);
         updateArtistsListInCaseMinTracksSettingHasChanged();
+        checkPath();
     }
 
 
@@ -398,16 +404,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void updateTracksList(Playlist playlist, Track currentTrack, int currentTrackIndex){
-        this.playlist = playlist;
         Bundle bundle = new Bundle();
         putInt(bundle, MessageKey.TRACK_INDEX, currentTrackIndex);
         sendMessage(NOTIFY_TO_REQUEST_UPDATED_PLAYLIST, bundle);
         runOnUiThread(()-> updateViews(playlist.getTracks(), currentTrack));
-    }
-
-
-    public Playlist getPlaylist() {
-        return playlist;
     }
 
 

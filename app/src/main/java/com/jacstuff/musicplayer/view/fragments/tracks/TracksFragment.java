@@ -27,8 +27,8 @@ import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -47,6 +47,8 @@ public class TracksFragment extends Fragment{
     private TextView noTracksFoundTextView, playlistInfoTextView;
     private boolean isFirstScroll;
     private LinearLayoutManager layoutManager;
+    private final AtomicBoolean isBeingRefreshed = new AtomicBoolean(false);
+    private Playlist playlist;
 
     public TracksFragment() {
         // Required empty public constructor
@@ -64,16 +66,39 @@ public class TracksFragment extends Fragment{
         isFirstScroll = true;
         this.parentView = view;
         initViews();
-        setupRecyclerView(view, getMainActivity().getCurrentPlaylist());
+        assignPlaylist();
+        setupRecyclerView(view);
         setupAddTracksButton(view);
         getMainActivity().notifyTracksFragmentReady();
         setListeners();
+        selectCurrentTrack();
     }
 
 
     private void initViews(){
+        initRecyclerView();
         noTracksFoundTextView = parentView.findViewById(R.id.noTracksFoundTextView);
         playlistInfoTextView = parentView.findViewById(R.id.playlistNameTextView);
+    }
+
+    private void initRecyclerView(){
+        recyclerView = parentView.findViewById(R.id.recyclerView);
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+
+    private void selectCurrentTrack(){
+        if(getMainActivity() != null && getMainActivity().getMediaPlayerService() != null){
+            int currentIndex = getMainActivity().getMediaPlayerService().getCurrentTrackIndex();
+            scrollToAndSelectListPosition(currentIndex);
+        }
+    }
+
+
+    private void assignPlaylist(){
+        playlist = getMainActivity().getCurrentPlaylist();
     }
 
 
@@ -86,44 +111,15 @@ public class TracksFragment extends Fragment{
     }
 
 
-    public void updateTracksList(Bundle bundle){
-        if(getMainActivity() == null){
-            return;
-        }
-        Playlist playlist = getMainActivity().getPlaylist();
-        int currentTrackIndex = getInt(bundle, MessageKey.TRACK_INDEX);
+    private void updateTracksList(Bundle bundle){
+        isBeingRefreshed.set(true);
+        assignPlaylist();
         updatePlaylistInfoView(playlist);
-        refreshTrackList(playlist); // required for screen orientation change
-        setVisibilityOnNoTracksFoundText(playlist.getTracks());
         setVisibilityOnAddTracksToPlaylistButton(playlist.isUserPlaylist());
         previousIndex = 0;
-        // we need to reinitialize the recycler view here
-        //  because otherwise loading a different playlist will cause a list overlap visual bug
-        if(currentTrackIndex < 0){
-            setupRecyclerView(parentView, playlist);
-            return;
-        }
-        scrollToAndSelectListPosition(currentTrackIndex);
-    }
-
-
-    @SuppressWarnings("notifyDataSetChanged")
-    public void refreshTrackList(Playlist playlist){
-        List<Track> tracks = playlist.getTracks();
-        runOnUIThread( ()->{
-            if(tracks == null){
-                return;
-            }
-            trackListAdapter.setItems(playlist);
-
-            trackListAdapter.notifyDataSetChanged();
-            setVisibilityOnNoTracksFoundText(tracks);
-        });
-    }
-
-
-    private void runOnUIThread(Runnable runnable){
-        new Handler(Looper.getMainLooper()).post(runnable);
+        setupRecyclerView(parentView);
+        scrollToAndSelectListPosition(getInt(bundle, MessageKey.TRACK_INDEX));
+        isBeingRefreshed.set(false);
     }
 
 
@@ -135,7 +131,9 @@ public class TracksFragment extends Fragment{
 
 
     public void scrollToAndSelectListPosition(int index){
-        scrollToIndex(index, false);
+        if(index >= 0) {
+            scrollToIndex(index, false);
+        }
     }
 
 
@@ -210,18 +208,14 @@ public class TracksFragment extends Fragment{
     }
 
 
-    private void setupRecyclerView(View parentView, Playlist playlist){
+    private void setupRecyclerView(View parentView){
         if(parentView == null || playlist == null || playlist.getTracks() == null){
             return;
         }
-        recyclerView = parentView.findViewById(R.id.recyclerView);
         trackListAdapter = new TrackListAdapter(playlist, this::selectTrack, this::createTrackOptionsFragment);
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(trackListAdapter);
         updatePlaylistInfoView(playlist);
-        setVisibilityOnNoTracksFoundText(playlist.getTracks());
+        setVisibilityOnNoTracksFoundText();
     }
 
 
@@ -267,8 +261,15 @@ public class TracksFragment extends Fragment{
     }
 
 
-    private void setVisibilityOnNoTracksFoundText(List<Track> tracks){
-        setVisibilityOnNoItemsFoundText(tracks, recyclerView, noTracksFoundTextView, getString(R.string.no_tracks_found));
+    private void setVisibilityOnNoTracksFoundText(){
+        new Handler(Looper.getMainLooper()).postDelayed(this::showNoTracksIfNotBeingRefreshed, 1000);
+    }
+
+
+    private void showNoTracksIfNotBeingRefreshed(){
+        if(!isBeingRefreshed.get()){
+            setVisibilityOnNoItemsFoundText(playlist.getTracks(), recyclerView, noTracksFoundTextView, getString(R.string.no_tracks_found));
+        }
     }
 
 

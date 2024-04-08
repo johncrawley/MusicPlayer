@@ -89,6 +89,14 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         this.mainActivity = mainActivity;
         playlistHelper.onSetActivity(mainActivity);
         preferencesHelper.assignPreferences(this);
+        checkPath();
+    }
+
+
+    public void checkPath(){
+        if(preferencesHelper != null && preferencesHelper.hasPathChanged()){
+            refreshTrackDataFromFilesystem();
+        }
     }
 
 

@@ -11,9 +11,11 @@ public class PreferencesHelper {
 
     private final Context context;
     private final String SHUFFLE_ENABLED_PREF = "isShuffleEnabled";
+    private String path;
 
     public PreferencesHelper(Context context){
         this.context = context;
+        path = getPathsStr();
     }
 
 
@@ -57,6 +59,18 @@ public class PreferencesHelper {
 
     public boolean areDuplicateTracksIgnored(){
         return getPrefs().getBoolean("ignoreDuplicateTracks", true);
+    }
+
+
+    public boolean hasPathChanged(){
+        boolean hasChanged = !path.equals(getPathsStr());
+        path = getPathsStr();
+        return hasChanged;
+    }
+
+
+    private String getPathsStr(){
+        return getPrefs().getString("tracksPathnameString", "/Music");
     }
 
 
