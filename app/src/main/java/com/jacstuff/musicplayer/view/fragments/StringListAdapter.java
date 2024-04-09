@@ -12,6 +12,7 @@ import com.jacstuff.musicplayer.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.TextViewHolder> {
@@ -22,7 +23,8 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
     private int indexToScrollTo = -1;
     private String currentItem;
     private View longClickedView;
-    private final Consumer<String> clickConsumer, longClickConsumer;
+    private final BiConsumer<String, Integer> clickConsumer;
+    private final Consumer<String> longClickConsumer;
 
 
     class TextViewHolder extends RecyclerView.ViewHolder {
@@ -51,10 +53,17 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
         deselectCurrentlySelectedItem();
         currentlySelectedView = v;
         currentItem = textView.getText().toString();
+
         setIndexToScrollTo(textViewHolder.getLayoutPosition());
         currentlySelectedView.setSelected(true);
+
         selectedPosition = RecyclerView.NO_POSITION;
-        clickConsumer.accept(currentItem);
+        clickConsumer.accept(currentItem, textViewHolder.getBindingAdapterPosition());
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ StringListAdapter: " + msg);
     }
 
 
@@ -81,14 +90,14 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
     }
 
 
-    public StringListAdapter(List<String> items, Consumer<String> clickConsumer, Consumer<String> longClickConsumer){
+    public StringListAdapter(List<String> items, BiConsumer<String, Integer> clickConsumer, Consumer<String> longClickConsumer){
         this.items = new ArrayList<>(items);
         this.clickConsumer = clickConsumer;
         this.longClickConsumer = longClickConsumer;
     }
 
 
-    public StringListAdapter(List<String> items, Consumer<String> clickConsumer){
+    public StringListAdapter(List<String> items, BiConsumer<String, Integer> clickConsumer){
         this(items, clickConsumer, s -> {});
     }
 
@@ -121,6 +130,18 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
         }
     }
 
+    public void selectItemAt(int index){
+        deselectCurrentlySelectedItem();
+        setIndexToScrollTo(index);
+        changePositionTo(index);
+    }
+
+
+    public void changePositionTo(int newPosition){
+        notifyItemChanged(selectedPosition);
+        selectedPosition = newPosition;
+        notifyItemChanged(selectedPosition);
+    }
 
     @Override
     public int getItemCount(){

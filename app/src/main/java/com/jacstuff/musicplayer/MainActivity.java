@@ -42,8 +42,8 @@ import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TrackOptionsDialog;
-import com.jacstuff.musicplayer.view.player.PlayerViewHelper;
-import com.jacstuff.musicplayer.view.playlist.AddTrackToPlaylistViewHelper;
+import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
+import com.jacstuff.musicplayer.view.utils.AddTrackToPlaylistViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.utils.ThemeHelper;
@@ -432,6 +432,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void notifyGenreNotLoaded(String genreName){
+        toast(R.string.unable_to_load_genre_toast_message, genreName);
+    }
+
+
     public void deselectItemsInPlaylistAndArtistTabs(){
         sendMessage(NOTIFY_TO_DESELECT_PLAYLIST_ITEMS);
         sendMessage(NOTIFY_TO_DESELECT_ARTIST_ITEMS);
@@ -607,7 +612,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void addTrackToPlaylist(Playlist playlist){
+    public void addTrackToPlaylist(Playlist playlist, int position){
         mediaPlayerService.addTrackToPlaylist(selectedTrack, playlist);
     }
 

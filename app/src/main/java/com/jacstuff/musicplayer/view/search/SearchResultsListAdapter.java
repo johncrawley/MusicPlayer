@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.view.list;
+package com.jacstuff.musicplayer.view.search;
 
 import android.view.LayoutInflater;
 import android.view.View;

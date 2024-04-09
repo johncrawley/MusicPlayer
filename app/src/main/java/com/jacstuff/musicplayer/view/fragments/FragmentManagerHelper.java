@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 
@@ -47,6 +48,11 @@ public class FragmentManagerHelper {
 
     public static void setListener(Fragment fragment, Message key, Consumer<Bundle> consumer){
         fragment.getParentFragmentManager().setFragmentResultListener(key.toString(), fragment, (requestKey, bundle) -> consumer.accept(bundle));
+    }
+
+
+    public static void sendMessages(Fragment fragment, Message... messages){
+        Arrays.stream(messages).forEach(m -> sendMessage(fragment, m));
     }
 
 

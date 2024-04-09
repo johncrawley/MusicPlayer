@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.view.playlist;
+package com.jacstuff.musicplayer.view.utils;
 
 import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.createShowAnimatorFor;
 

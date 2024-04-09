@@ -35,8 +35,10 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     private BroadcastHelper broadcastHelper;
     private AlbumArtRetriever albumArtRetriever;
     private PreferencesHelper preferencesHelper;
+    private ListIndexManager listIndexManager;
 
     public MediaPlayerService() {
+        listIndexManager = new ListIndexManager();
     }
 
 
@@ -52,6 +54,11 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         playlistHelper.setMediaNotificationManager(mediaNotificationManager);
         albumArtRetriever = new AlbumArtRetriever(this, getApplicationContext());
         moveToForeground();
+    }
+
+
+    public ListIndexManager getListIndexManager(){
+        return listIndexManager;
     }
 
 
@@ -158,7 +165,11 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     }
 
 
-    public void refreshTrackDataFromFilesystem() { playlistHelper.refreshTrackDataFromFilesystem();}
+    public void refreshTrackDataFromFilesystem() {
+        listIndexManager.resetAllIndexes();
+        playlistHelper.refreshTrackDataFromFilesystem();
+    }
+
 
     public List<Track> getTracksForSearch(String str){ return playlistHelper.searchForTracks(str);}
 
@@ -231,6 +242,8 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public void stopUpdatingElapsedTimeOnView(){ mediaPlayerHelper.stopUpdatingElapsedTimeOnView(); }
 
     public void notifyViewOfAlbumNotLoaded(String albumName){ mainActivity.notifyAlbumNotLoaded(albumName);}
+
+    public void notifyViewOfGenreNotLoaded(String genreName){ mainActivity.notifyGenreNotLoaded(genreName);}
 
     public void notifyViewToDeselectPlaylistAndArtistTabs(){ mainActivity.deselectItemsInPlaylistAndArtistTabs(); }
 

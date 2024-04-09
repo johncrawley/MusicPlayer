@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.view.player;
+package com.jacstuff.musicplayer.view.utils;
 
 import android.view.View;
 import android.view.ViewGroup;

@@ -87,8 +87,6 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     }
 
 
-
-
     public void selectItemAt(int index){
         deselectCurrentlySelectedItem();
         setIndexToScrollTo(index);

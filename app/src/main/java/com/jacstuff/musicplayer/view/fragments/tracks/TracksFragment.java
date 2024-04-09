@@ -49,6 +49,7 @@ public class TracksFragment extends Fragment{
     private LinearLayoutManager layoutManager;
     private final AtomicBoolean isBeingRefreshed = new AtomicBoolean(false);
     private Playlist playlist;
+    private String noTracksFoundStr = "";
 
     public TracksFragment() {
         // Required empty public constructor
@@ -65,6 +66,7 @@ public class TracksFragment extends Fragment{
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         isFirstScroll = true;
         this.parentView = view;
+        noTracksFoundStr = getString(R.string.no_tracks_found);
         initViews();
         assignPlaylist();
         setupRecyclerView(view);
@@ -267,8 +269,8 @@ public class TracksFragment extends Fragment{
 
 
     private void showNoTracksIfNotBeingRefreshed(){
-        if(!isBeingRefreshed.get()){
-            setVisibilityOnNoItemsFoundText(playlist.getTracks(), recyclerView, noTracksFoundTextView, getString(R.string.no_tracks_found));
+        if(!isBeingRefreshed.get() || getContext() != null){
+            setVisibilityOnNoItemsFoundText(playlist.getTracks(), recyclerView, noTracksFoundTextView, noTracksFoundStr);
         }
     }
 

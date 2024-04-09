@@ -2,8 +2,11 @@ package com.jacstuff.musicplayer.view.fragments.artist;
 
 import static com.jacstuff.musicplayer.MainActivity.SEND_ARTISTS_TO_FRAGMENT;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
+import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ARTIST;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
@@ -22,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.service.ListIndexManager;
+import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
 
@@ -34,6 +39,7 @@ public class ArtistsFragment extends Fragment {
     private StringListAdapter listAdapter;
     private View parentView;
     private TextView noArtistsFoundTextView;
+    private ListIndexManager listIndexManager;
 
     public ArtistsFragment() {
         // Required empty public constructor
@@ -49,10 +55,43 @@ public class ArtistsFragment extends Fragment {
     @Override
     public void onViewCreated(@androidx.annotation.NonNull View view, Bundle savedInstanceState){
         this.parentView = view;
+        assignListIndexManager();
         recyclerView = parentView.findViewById(R.id.artistsRecyclerView);
         noArtistsFoundTextView = parentView.findViewById(R.id.noArtistsFoundTextView);
         refreshArtistsList();
         setupFragmentListener();
+        selectSavedIndex();
+    }
+
+
+    private void assignListIndexManager(){
+        MediaPlayerService mediaPlayerService = getMainActivity().getMediaPlayerService();
+        if(mediaPlayerService != null){
+            listIndexManager = mediaPlayerService.getListIndexManager();
+        }
+    }
+
+
+    private void assignIndex(int index){
+        if(listIndexManager == null){
+            assignListIndexManager();
+        }
+        if(listIndexManager != null){
+            listIndexManager.setArtistIndex(index);
+        }
+    }
+
+
+    private void selectSavedIndex(){
+        if(listIndexManager != null){
+            listIndexManager.getArtistIndex().ifPresent(this::scrollToAndSelect);
+        }
+    }
+
+
+    private void scrollToAndSelect(int index){
+        listAdapter.selectItemAt(index);
+        recyclerView.scrollToPosition(index);
     }
 
 
@@ -83,10 +122,18 @@ public class ArtistsFragment extends Fragment {
     }
 
 
-    private void loadTracksAndAlbumsFromArtist(String artistName){
+    private void loadTracksAndAlbumsFromArtist(String artistName, int position){
         getMainActivity().loadTracksFromArtist(artistName);
-        sendMessage(this, NOTIFY_TO_DESELECT_PLAYLIST_ITEMS);
+        assignIndex(position);
+        notifyOtherFragmentsToDeselectItems();
         toastLoaded();
+    }
+
+
+    private void notifyOtherFragmentsToDeselectItems(){
+        sendMessages(this,
+                NOTIFY_TO_DESELECT_PLAYLIST_ITEMS,
+                NOTIFY_TO_DESELECT_GENRE_ITEMS); //NB album list will be reloaded anyway
     }
 
 
@@ -100,6 +147,7 @@ public class ArtistsFragment extends Fragment {
     private void setVisibilityOnNoArtistsFoundText(List<String> tracks){
         setVisibilityOnNoItemsFoundText(tracks, recyclerView, noArtistsFoundTextView);
     }
+
 
     private MainActivity getMainActivity(){
         return (MainActivity)getActivity();

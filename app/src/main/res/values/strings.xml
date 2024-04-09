@@ -104,7 +104,8 @@
 
 
     <string name="add_playlist_already_exists_error">This name is already in use</string>
-    <string name="unable_to_load_album_toast_message">Unable to find album: %1$s</string>
+    <string name="unable_to_load_album_toast_message">Unable to load album: %1$s</string>
+    <string name="unable_to_load_genre_toast_message">Unable to load genre: %1$s</string>
     <string name="create_playlist_button_text">Create</string>
     <string name="status_ready">Ready</string>
     <string name="status_error">Error - Unable To Play</string>
@@ -146,6 +147,7 @@
     <string name="move_to_next_track_when_playlist_loaded_summary">Enable to automatically select the next track when a playlist is loaded</string>
     <string name="ignore_duplicates_in_all_tracks_title">Hide Duplicates In All-Tracks and Artists Playlists</string>
     <string name="auto_switch_tabs_after_playlist_selection_title">Automatically Switch Tabs After Playlist Selected</string>
+    <string name="only_show_album_tracks_from_selected_artist">Only show album tracks from the selected artist</string>
 
     <string name="theme_blue">Blue</string>
     <string name="theme_light_blue">Light Blue</string>

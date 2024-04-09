@@ -12,6 +12,7 @@ import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
+import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -50,8 +51,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private Set<String> currentPlaylistFilenames;
     private Map<String, Integer> trackPathsToIndexesMap;
     private Map<String, Integer> allTracksPathsToIndexesMap;
-    public static long ALL_TRACKS_PLAYLIST_ID = -10L;
     private String currentPlaylistName = "";
+    private String currentArtistName = "";
+    private final PreferencesHelper preferencesHelper;
 
 
     public PlaylistManagerImpl(Context context, TrackLoader trackLoader){
@@ -68,6 +70,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         queuedTracks = new ArrayDeque<>();
         currentPlaylistFilenames = new HashSet<>();
         trackPathsToIndexesMap = new HashMap<>();
+        preferencesHelper = new PreferencesHelper(context);
     }
 
 
@@ -188,6 +191,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void loadAllTracksPlaylist(){
+        resetCurrentArtistName();
         initAllTracks();
         setAllTracksIndexes();
         setupUnPlayedIndexes();
@@ -198,6 +202,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void loadUserPlaylist(Playlist playlist){
+        resetCurrentArtistName();
         currentPlaylist = playlist;
         tracks = playlistItemRepository.getTracksForPlaylistId(playlist.getId());
         currentPlaylist.setTracks(tracks);
@@ -334,11 +339,11 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-
     @Override
     public void loadTracksFromArtist(String artistName){
         loadTracksFromGenericPlaylist(artistName, trackLoader::getArtists, this::getSortedTracks);
         currentArtist = trackLoader.getArtists().get(artistName);
+        currentArtistName = currentArtist != null ? currentArtist.getName() : "";
     }
 
 
@@ -350,7 +355,13 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public boolean loadTracksFromGenre(String genreName) {
+        resetCurrentArtistName();
         return loadTracksFromGenericPlaylist(genreName, trackLoader::getGenres, this::getSortedTracks);
+    }
+
+
+    private void resetCurrentArtistName(){
+        currentArtistName = "";
     }
 
 
@@ -401,7 +412,27 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(tracks == null){
             return Collections.emptyList();
         }
-        return tracks.stream().sorted(Comparator.comparing(Track::getCdAndTrackNumber)).collect(Collectors.toList());
+        for(Track track : tracks){
+            boolean isFiltered = filterAlbumTrack(track);
+            log("getSortedAlbumTracks() track name: " + track.getTitle() + " isFiltered: " + isFiltered);
+
+        }
+        return tracks.stream()
+                .filter(this::filterAlbumTrack)
+                .sorted(Comparator.comparing(Track::getCdAndTrackNumber))
+                .collect(Collectors.toList());
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ PlaylistManagerImpl: " + msg);
+    }
+
+
+    private boolean filterAlbumTrack(Track track){
+        return !preferencesHelper.areOnlyAlbumTracksFromSelectedArtistShown()
+                || currentArtistName.isBlank()
+                || track.getArtist().equals(currentArtistName);
     }
 
 

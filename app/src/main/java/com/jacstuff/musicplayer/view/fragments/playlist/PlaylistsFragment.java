@@ -1,12 +1,14 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
+import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_USER_PLAYLIST_LOADED;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.putBoolean;
 
@@ -22,6 +24,8 @@ import android.widget.Toast;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.service.ListIndexManager;
+import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
@@ -33,6 +37,7 @@ import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
@@ -45,11 +50,13 @@ public class PlaylistsFragment extends Fragment {
 
     private Context context;
     private boolean hasClicked;
-    private PlaylistRecyclerAdapter playlistRecyclerAdapter;
+    private PlaylistRecyclerAdapter listAdapter;
     private PlaylistRepository playlistRepository;
     private RecyclerView recyclerView;
     private Set<String> playlistNames;
     private final int INITIAL_PLAYLIST_CAPACITY = 50;
+    private ListIndexManager listIndexManager;
+    private int longClickedPosition;
 
     public PlaylistsFragment() {
         // Required empty public constructor
@@ -65,6 +72,8 @@ public class PlaylistsFragment extends Fragment {
         setupPlaylistRecyclerView(view);
         hasClicked = false;
         setupFragmentListeners();
+        assignListIndexManager();
+        selectSavedIndex();
         return view;
     }
 
@@ -73,7 +82,7 @@ public class PlaylistsFragment extends Fragment {
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE, (bundle)->  showDeletePlaylistDialog());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD, (bundle) -> loadLongClickedPlaylist());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE, (bundle) -> startAddPlaylistFragment());
-        setListener(this, Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS, (bundle) -> playlistRecyclerAdapter.deselectCurrentlySelectedItem());
+        setListener(this, Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
     }
 
 
@@ -83,6 +92,39 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
+
+    private void assignListIndexManager(){
+        MediaPlayerService mediaPlayerService = getMainActivity().getMediaPlayerService();
+        if(mediaPlayerService != null){
+            listIndexManager = mediaPlayerService.getListIndexManager();
+        }
+    }
+
+
+    private void assignIndex(int index){
+        if(listIndexManager == null){
+            assignListIndexManager();
+        }
+        if(listIndexManager != null){
+            listIndexManager.setPlaylistIndex(index);
+        }
+    }
+
+
+    private void selectSavedIndex(){
+        if(listIndexManager != null){
+            listIndexManager.getGenreIndex().ifPresent(this::scrollToAndSelect);
+        }
+    }
+
+
+    private void scrollToAndSelect(int index){
+        listAdapter.selectItemAt(index);
+        recyclerView.scrollToPosition(index);
+    }
+
+
+
     public Set<String> getPlaylistNames(){
         return playlistNames;
     }
@@ -90,7 +132,7 @@ public class PlaylistsFragment extends Fragment {
 
     public void onAddNewPlaylist(){
         hasClicked = false;
-        int previousPlaylistCount =  playlistRecyclerAdapter.getItemCount();
+        int previousPlaylistCount =  listAdapter.getItemCount();
         refreshList();
         toastIfPlaylistAdded(previousPlaylistCount);
     }
@@ -103,7 +145,7 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void toastIfPlaylistAdded(int previousPlaylistCount){
-        if(playlistRecyclerAdapter != null && playlistRecyclerAdapter.getItemCount() > previousPlaylistCount){
+        if(listAdapter != null && listAdapter.getItemCount() > previousPlaylistCount){
             toastPlaylistCreated();
         }
     }
@@ -116,14 +158,12 @@ public class PlaylistsFragment extends Fragment {
 
     private void setupPlaylistRecyclerView(View parentView){
         recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
-        playlistRecyclerAdapter = new PlaylistRecyclerAdapter(getAllPlaylists(),
+        listAdapter = new PlaylistRecyclerAdapter(getAllPlaylists(),
                 this::loadSelectedPlaylist,
                 this::startPlaylistOptionsFragment);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(layoutManager);
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(playlistRecyclerAdapter);
+        recyclerView.setAdapter(listAdapter);
     }
 
 
@@ -136,7 +176,8 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-    private void startPlaylistOptionsFragment(Playlist playlist){
+    private void startPlaylistOptionsFragment(Playlist playlist, int position){
+        longClickedPosition = position;
         Bundle bundle = new Bundle();
         putBoolean(bundle, MessageKey.IS_USER_PLAYLIST, playlist.isUserPlaylist());
         FragmentManagerHelper.showDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
@@ -144,7 +185,7 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void showDeletePlaylistDialog(){
-        Playlist playlist = playlistRecyclerAdapter.getLongClickedPlaylist();
+        Playlist playlist = listAdapter.getLongClickedPlaylist();
         if(playlist == null){
             return;
         }
@@ -159,7 +200,7 @@ public class PlaylistsFragment extends Fragment {
 
     private void deletePlaylistAndSelectFirstPlaylist(Playlist playlist){
         navigateToFirstPlaylistIfDeletedPlaylistIsLoaded(playlist);
-        playlistRecyclerAdapter.clearLongClickedView();
+        listAdapter.clearLongClickedView();
         playlistRepository.deletePlaylist(playlist.getId());
         refreshList();
         showPlaylistDeletedToast();
@@ -167,31 +208,29 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void navigateToFirstPlaylistIfDeletedPlaylistIsLoaded(Playlist playlist){
-        if(playlistRecyclerAdapter.getSelectedPlaylist() == playlist){
+        if(listAdapter.getSelectedPlaylist() == playlist){
             View item = recyclerView.getChildAt(0);
             item.callOnClick();
-            playlistRecyclerAdapter.select(item);
+            listAdapter.select(item);
         }
     }
 
 
-    private void loadSelectedPlaylist(Playlist playlist){
-        MainActivity mainActivity = getMainActivity();
-        if(mainActivity == null || playlist == null){
-            return;
-        }
-       load(playlist, mainActivity);
+    private void loadSelectedPlaylist(Playlist playlist, int position){
+        assignIndex(position);
+        getMain().ifPresent(m -> load(playlist, m));
     }
 
 
     private void load(Playlist playlist, MainActivity mainActivity){
+        if(playlist == null){
+            return;
+        }
         mainActivity.loadTracksFromPlaylist(playlist);
         notifyOtherFragmentsToDeselectItems();
         notifyTracksFragmentOfPlaylistLoaded(playlist.isUserPlaylist());
         toastLoaded();
     }
-
-
 
 
     private void notifyTracksFragmentOfPlaylistLoaded(boolean isUserPlaylist){
@@ -202,19 +241,26 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void loadLongClickedPlaylist(){
-        playlistRecyclerAdapter.selectLongClickedView();
-        loadSelectedPlaylist(playlistRecyclerAdapter.getSelectedPlaylist());
+        listAdapter.selectLongClickedView();
+        loadSelectedPlaylist(listAdapter.getSelectedPlaylist(), longClickedPosition);
     }
 
 
     private void notifyOtherFragmentsToDeselectItems(){
-        sendMessage(this, NOTIFY_TO_DESELECT_ALBUM_ITEMS);
-        sendMessage(this, NOTIFY_TO_DESELECT_ARTIST_ITEMS);
+        sendMessages(this,
+                NOTIFY_TO_DESELECT_ALBUM_ITEMS,
+                NOTIFY_TO_DESELECT_ARTIST_ITEMS,
+                NOTIFY_TO_DESELECT_GENRE_ITEMS);
     }
 
 
     private MainActivity getMainActivity(){
         return (MainActivity) getActivity();
+    }
+
+
+    private Optional<MainActivity> getMain(){
+        return Optional.ofNullable((MainActivity) getActivity());
     }
 
 
@@ -224,7 +270,7 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void refreshList(){
-        playlistRecyclerAdapter.refresh(getAllPlaylists());
+        listAdapter.refresh(getAllPlaylists());
     }
 
 

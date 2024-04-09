@@ -143,13 +143,14 @@ public class PlaylistHelper {
 
     public void loadTracksFromGenre(String genreName){
         boolean isGenreLoaded = playlistManager.loadTracksFromGenre(genreName);
+        mediaPlayerService.updateAlbumsView();
         if(isGenreLoaded){
             mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
             mediaPlayerService.notifyViewToDeselectEverythingButGenre();
             autoLoadNextTrack();
             return;
         }
-        mediaPlayerService.notifyViewOfAlbumNotLoaded(genreName);
+        mediaPlayerService.notifyViewOfGenreNotLoaded(genreName);
     }
 
 
@@ -168,9 +169,7 @@ public class PlaylistHelper {
     public void loadPlaylist(Playlist playlist) {
         playlistManager.loadPlaylist(playlist);
         mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);
-        if (playlist.getId() == PlaylistManagerImpl.ALL_TRACKS_PLAYLIST_ID) {
-            mediaPlayerService.updateAlbumsView();
-        }
+        mediaPlayerService.updateAlbumsView();
         autoLoadNextTrack();
     }
 

@@ -31,6 +31,11 @@ public class PreferencesHelper {
     }
 
 
+    public boolean areOnlyAlbumTracksFromSelectedArtistShown(){
+       return getPrefs().getBoolean("onlyShowAlbumTracksFromSelectedArtist", true);
+    }
+
+
     private void assignShuffleState(MediaPlayerService mediaPlayerService){
         boolean isShuffleEnabled = getPrefs().getBoolean(SHUFFLE_ENABLED_PREF, false);
         if(isShuffleEnabled){

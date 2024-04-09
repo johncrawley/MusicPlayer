@@ -2,8 +2,11 @@ package com.jacstuff.musicplayer.view.fragments.album;
 
 import static com.jacstuff.musicplayer.MainActivity.SEND_ALBUMS_TO_FRAGMENT;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
+import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ALBUM;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
@@ -23,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.service.ListIndexManager;
+import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
 
@@ -35,6 +40,7 @@ public class AlbumsFragment extends Fragment {
     private StringListAdapter listAdapter;
     private View parentView;
     private TextView noAlbumsFoundTextView;
+    private ListIndexManager listIndexManager;
 
 
     public AlbumsFragment() {
@@ -55,6 +61,8 @@ public class AlbumsFragment extends Fragment {
         noAlbumsFoundTextView = parentView.findViewById(R.id.noAlbumsFoundTextView);
         refreshList();
         setupFragmentListener();
+        assignListIndexManager();
+        selectSavedIndex();
     }
 
 
@@ -86,16 +94,54 @@ public class AlbumsFragment extends Fragment {
         recyclerView.setAdapter(listAdapter);
     }
 
+    private void assignListIndexManager(){
+        MediaPlayerService mediaPlayerService = getMainActivity().getMediaPlayerService();
+        if(mediaPlayerService != null){
+            listIndexManager = mediaPlayerService.getListIndexManager();
+        }
+    }
+
+
+    private void assignIndex(int index){
+        if(listIndexManager == null){
+            assignListIndexManager();
+        }
+        if(listIndexManager != null){
+            listIndexManager.setAlbumIndex(index);
+        }
+    }
+
+
+    private void selectSavedIndex(){
+        if(listIndexManager != null){
+            listIndexManager.getArtistIndex().ifPresent(this::scrollToAndSelect);
+        }
+    }
+
+
+    private void scrollToAndSelect(int index){
+        listAdapter.selectItemAt(index);
+        recyclerView.scrollToPosition(index);
+    }
+
 
     private void setVisibilityOnNoAlbumsFoundText(List<String> tracks){
         setVisibilityOnNoItemsFoundText(tracks, recyclerView, noAlbumsFoundTextView);
     }
 
 
-    private void loadTracksFromAlbum(String albumName){
+    private void loadTracksFromAlbum(String albumName, int position){
+        assignIndex(position);
         getMainActivity().loadTracksFromAlbum(albumName);
-        sendMessage(this, NOTIFY_TO_DESELECT_PLAYLIST_ITEMS);
+        notifyOtherFragmentsToDeselectItems();
         toastLoaded();
+    }
+
+
+    private void notifyOtherFragmentsToDeselectItems(){
+        sendMessages(this,
+                NOTIFY_TO_DESELECT_PLAYLIST_ITEMS,
+                NOTIFY_TO_DESELECT_GENRE_ITEMS);
     }
 
 
