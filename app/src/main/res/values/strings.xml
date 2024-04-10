@@ -91,6 +91,7 @@
     <string name="album_art_content_description">Album Art</string>
     <string name="album_art_large_view_content_description">Album Art Expanded View</string>
     <string name="create_playlist_icon_content_description">Create Playlist/</string>
+    <string name="show_all_albums_icon_content_description">Show All Albums/</string>
     <string name="add_tracks_to_playlist_icon_content_description">Add Tracks To Current Playlist/</string>
 
     <string name="button_stop_now">Stop Now</string>

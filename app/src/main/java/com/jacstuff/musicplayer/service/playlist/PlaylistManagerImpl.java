@@ -134,6 +134,20 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
+    public ArrayList<String> getAllAlbumNamesAndClearCurrentArtist(){
+        currentArtist = null;
+        resetCurrentArtistName();
+        return trackLoader.getAllAlbumNames();
+    }
+
+
+    @Override
+    public Optional<String> getCurrentArtistName(){
+        return Optional.ofNullable(currentArtistName);
+    }
+
+
+    @Override
     public ArrayList<String> getArtistNames(){
        return trackLoader.getMainArtistNames();
     }

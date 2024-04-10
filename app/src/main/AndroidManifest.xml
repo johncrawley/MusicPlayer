@@ -31,11 +31,18 @@
             </intent-filter>
         </activity>
 
-
+<!--
+    for playing tracks from the filesystem, i.e. by clicking on an audio file from the
+     "files" app. It works, but still more to do. This activity is disabled by default because, if
+     there is no other installed app, it will take over from the android built-in player by
+     default, and there doesn't seem to be a way to stop this from happening. The android OS default
+     player is fine.
+-->
         <activity
             android:name=".trackplayer.OpenTrackActivity"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/AppTheme_no_action_bar"
+            android:enabled="false"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,11 +1,9 @@
 package com.jacstuff.musicplayer.view.fragments.album;
 
 import static com.jacstuff.musicplayer.MainActivity.SEND_ALBUMS_TO_FRAGMENT;
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
-import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ALBUM;
@@ -15,6 +13,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +29,7 @@ import com.jacstuff.musicplayer.service.ListIndexManager;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
+import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +41,7 @@ public class AlbumsFragment extends Fragment {
     private View parentView;
     private TextView noAlbumsFoundTextView;
     private ListIndexManager listIndexManager;
+    private ImageButton showAllAlbumsButton;
 
 
     public AlbumsFragment() {
@@ -57,8 +58,7 @@ public class AlbumsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         this.parentView = view;
-        recyclerView = parentView.findViewById(R.id.albumsRecyclerView);
-        noAlbumsFoundTextView = parentView.findViewById(R.id.noAlbumsFoundTextView);
+        initViews(parentView);
         refreshList();
         setupFragmentListener();
         assignListIndexManager();
@@ -66,10 +66,27 @@ public class AlbumsFragment extends Fragment {
     }
 
 
+    private void initViews(View parentView){
+        recyclerView = parentView.findViewById(R.id.albumsRecyclerView);
+        noAlbumsFoundTextView = parentView.findViewById(R.id.noAlbumsFoundTextView);
+        ButtonMaker.createImageButton(parentView, R.id.showAllAlbumsButton, this::showAllAlbums);
+    }
+
+
     private void setupFragmentListener(){
         setListener(this, SEND_ALBUMS_TO_FRAGMENT, this::loadAlbums);
         setListener(this, NOTIFY_TO_LOAD_ALBUM, (bundle) -> listAdapter.selectLongClickItem());
         setListener(this, NOTIFY_TO_DESELECT_ALBUM_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
+    }
+
+
+    private void showAllAlbums(){
+       var mps = getMainActivity().getMediaPlayerService();
+       if(mps != null){
+           var playlistManager = mps.getPlaylistManager();
+           List<String> allAlbumNames = playlistManager.getAllAlbumNamesAndClearCurrentArtist();
+
+       }
     }
 
 

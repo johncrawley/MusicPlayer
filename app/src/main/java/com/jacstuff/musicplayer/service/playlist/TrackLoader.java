@@ -33,6 +33,7 @@ public class TrackLoader {
     private Map<String, Album> albums;
     private Map<String, Artist> artists;
     private Map<String, Genre> genres;
+    private ArrayList<String> allAlbumNames = new ArrayList<>();
     private long artistCount;
     private int albumCount;
     private int genreCount;
@@ -81,12 +82,7 @@ public class TrackLoader {
 
 
     public ArrayList<String> getAllAlbumNames(){
-        if(albums == null){
-            return new ArrayList<>();
-        }
-        ArrayList<String> names = new ArrayList<>(albums.keySet());
-        Collections.sort(names);
-        return names;
+        return albums == null ? new ArrayList<>() : allAlbumNames;
     }
 
 
@@ -165,10 +161,17 @@ public class TrackLoader {
             while(cursor.moveToNext()){
                 addTrack(cursor, areDuplicatesIgnored);
             }
+            initAllAlbumNames();
             long duration = System.currentTimeMillis() - startTime;
             log("tracks loaded in " + duration + "ms number of total tracks: " + cursor.getCount());
             cursor.close();
         }
+    }
+
+
+    private void initAllAlbumNames(){
+        allAlbumNames = new ArrayList<>(albums.keySet());
+        Collections.sort(allAlbumNames);
     }
 
 

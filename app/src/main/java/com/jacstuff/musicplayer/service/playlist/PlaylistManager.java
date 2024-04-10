@@ -14,8 +14,11 @@ public interface PlaylistManager {
     boolean hasAnyTracks();
     int getNumberOfTracks();
     ArrayList<String> getAlbumNames();
+    ArrayList<String> getAllAlbumNamesAndClearCurrentArtist();
     ArrayList<String> getArtistNames();
     ArrayList<String> getGenreNames();
+
+    Optional<String> getCurrentArtistName();
 
     Playlist getCurrentPlaylist();
     Optional<Track> getNextTrack();

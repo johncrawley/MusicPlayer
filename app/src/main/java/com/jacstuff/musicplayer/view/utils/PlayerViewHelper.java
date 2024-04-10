@@ -13,8 +13,6 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.view.fragments.options.StopOptionsFragment;
-import com.jacstuff.musicplayer.view.utils.FragmentHelper;
-import com.jacstuff.musicplayer.view.utils.TimeConverter;
 
 import java.util.Arrays;
 import java.util.List;
