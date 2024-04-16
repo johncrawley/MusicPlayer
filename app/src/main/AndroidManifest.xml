@@ -91,7 +91,6 @@
             android:foregroundServiceType="mediaPlayback"
             android:stopWithTask="true" />
 
-
         <service
             android:name=".trackplayer.service.PlayTrackService"
             android:label="PlayTrackService"

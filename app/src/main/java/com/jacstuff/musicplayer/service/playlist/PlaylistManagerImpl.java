@@ -426,20 +426,10 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(tracks == null){
             return Collections.emptyList();
         }
-        for(Track track : tracks){
-            boolean isFiltered = filterAlbumTrack(track);
-            log("getSortedAlbumTracks() track name: " + track.getTitle() + " isFiltered: " + isFiltered);
-
-        }
         return tracks.stream()
                 .filter(this::filterAlbumTrack)
                 .sorted(Comparator.comparing(Track::getCdAndTrackNumber))
                 .collect(Collectors.toList());
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ PlaylistManagerImpl: " + msg);
     }
 
 

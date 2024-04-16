@@ -16,13 +16,12 @@ import java.util.function.Consumer;
 
 public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.TrackViewHolder> {
 
-    private List<Track> tracks;
+    private final List<Track> tracks;
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
     private final Consumer<Track> clickConsumer, longClickConsumer;
     private Playlist playlist;
-
 
 
     class TrackViewHolder extends RecyclerView.ViewHolder {
@@ -59,18 +58,10 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
 
 
     public TrackListAdapter(Playlist playlist, Consumer<Track> onClick, Consumer<Track> onLongClick){
-        log("Entered TrackListAdapter()");
         this.playlist = playlist;
         this.tracks = playlist.getTracks();
         clickConsumer = onClick;
         longClickConsumer = onLongClick;
-    }
-
-
-    public void setItems(Playlist playlist){
-        log("Entered setItems()");
-        this.playlist = playlist;
-        this.tracks = playlist.getTracks();
     }
 
 
@@ -79,11 +70,6 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     public TrackListAdapter.TrackViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.track_list_item_view, parent,false);
         return new TrackViewHolder(view);
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ TrackListAdapter: " + msg);
     }
 
 
@@ -97,6 +83,8 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.Trac
     public void deselectCurrentlySelectedItem(){
         if(currentlySelectedView != null){
             currentlySelectedView.setSelected(false);
+            currentlySelectedView = null;
+            selectedPosition = RecyclerView.NO_POSITION;
         }
     }
 

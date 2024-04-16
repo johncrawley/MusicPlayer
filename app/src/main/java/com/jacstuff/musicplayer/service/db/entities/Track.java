@@ -2,6 +2,8 @@ package com.jacstuff.musicplayer.service.db.entities;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
 public class Track {
 
     private final String pathname, title, artist, album, genre;
@@ -82,19 +84,15 @@ public class Track {
         return orderedStr;
     }
 
-
     public String getDuplicateIdentifier(){ return artist + "-" + title + "-" + duration;}
-
 
     public String getSearchString(){
         return searchStr;
     }
 
-
     public long getDuration(){
         return duration;
     }
-
 
     public String getAlbum() {
         return album;
@@ -106,7 +104,6 @@ public class Track {
 
     public String getBitrate() { return bitrate; }
 
-
     public String getGenre() {
         return genre;
     }
@@ -115,28 +112,21 @@ public class Track {
         return year;
     }
 
-
     public String getTitle(){return title;}
-
 
     public long getTrackNumber(){return trackNumber;}
 
     public String getCdAndTrackNumber(){return cdAndTrackNumber;}
 
-
     public String getTrackNumberStr(){return String.valueOf(trackNumber);}
-
 
     public String getPathname(){return pathname;}
 
     public Uri getUri(){return uri;}
 
-
     public String getDisc(){return disc;}
 
-
     public long getId(){return id;}
-
 
     public void setIndex(int index){
         this.index = index;
@@ -147,6 +137,7 @@ public class Track {
     }
 
 
+    @NonNull
     @Override
     public String toString(){
        return "::: Track name: " +  getTitle()

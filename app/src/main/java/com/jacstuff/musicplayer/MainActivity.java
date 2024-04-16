@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         checkPath();
     }
 
+
     private void checkPath(){
         if(isServiceConnected.get()){
             mediaPlayerService.checkPath();

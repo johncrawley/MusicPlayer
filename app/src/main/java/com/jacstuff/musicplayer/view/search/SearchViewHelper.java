@@ -29,7 +29,7 @@ public class SearchViewHelper {
 
     private final MainActivity mainActivity;
     private final KeyboardHelper keyboardHelper;
-    private RecyclerView searchResultsRecyclerView;
+    private RecyclerView recyclerView;
     private Button addSearchResultButton, enqueueSearchResultButton, playSearchResultButton;
     private SearchResultsListAdapter searchResultsListAdapter;
     private Track selectedSearchResultTrack;
@@ -51,20 +51,20 @@ public class SearchViewHelper {
     }
 
 
-    private void setupSearchViewButtons(){
-        addSearchResultButton       = ButtonMaker.createButton(searchView, R.id.addSelectedButton, this::addSelectedSearchResultToPlaylist);
-        playSearchResultButton      = ButtonMaker.createButton(searchView, R.id.playSelectedButton, this::playSelectedSearchResult);
-        enqueueSearchResultButton   = ButtonMaker.createButton(searchView, R.id.playNextButton, this::addSearchResultToQueue);
-    }
-
-
     private void setupViews() {
         searchView = mainActivity.findViewById(R.id.searchView);
         searchEditText = mainActivity.findViewById(R.id.trackSearchEditText);
-        searchResultsRecyclerView = mainActivity.findViewById(R.id.searchResultsRecyclerView);
-        setupSearchRecyclerView(Collections.emptyList());
-        setupSearchKeyListener();
-        setupSearchViewButtons();
+        recyclerView = mainActivity.findViewById(R.id.searchResultsRecyclerView);
+        setupRecyclerView();
+        setupKeyListener();
+        setupButtons();
+    }
+
+
+    private void setupButtons(){
+        addSearchResultButton       = ButtonMaker.createButton(searchView, R.id.addSelectedButton, this::addSelectedSearchResultToPlaylist);
+        playSearchResultButton      = ButtonMaker.createButton(searchView, R.id.playSelectedButton, this::playSelectedSearchResult);
+        enqueueSearchResultButton   = ButtonMaker.createButton(searchView, R.id.playNextButton, this::addSearchResultToQueue);
     }
 
 
@@ -141,14 +141,11 @@ public class SearchViewHelper {
     }
 
 
-    private void setupSearchRecyclerView(List<Track> tracks){
-        if(tracks == null){
-            return;
-        }
-        searchResultsListAdapter = new SearchResultsListAdapter(tracks, this::onSearchResultSelect);
-        searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
-        searchResultsRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        searchResultsRecyclerView.setAdapter(searchResultsListAdapter);
+    private void setupRecyclerView(){
+        searchResultsListAdapter = new SearchResultsListAdapter(Collections.emptyList(), this::onSearchResultSelect);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(searchResultsListAdapter);
     }
 
 
@@ -174,7 +171,7 @@ public class SearchViewHelper {
     }
 
 
-    private void setupSearchKeyListener(){
+    private void setupKeyListener(){
         KeyListenerHelper.setListener(searchEditText, () ->{
             List<Track> tracks = getTracksForSearch(searchEditText.getText().toString());
             setSearchResults(tracks);
@@ -197,7 +194,7 @@ public class SearchViewHelper {
     }
 
 
-    public void showSearchResultsButtons(){
+    private void showSearchResultsButtons(){
         if(isAddingTrackToPlaylist){
             setButtonVisibilityForAddingTrackToPlaylist();
             return;
@@ -222,7 +219,7 @@ public class SearchViewHelper {
     }
 
 
-    public void playSelectedSearchResult(){
+    private void playSelectedSearchResult(){
         mainActivity.disableViewForAWhile(playSearchResultButton);
         if(selectedSearchResultTrack != null) {
             mediaPlayerService.selectAndPlayTrack(selectedSearchResultTrack);
@@ -231,7 +228,7 @@ public class SearchViewHelper {
     }
 
 
-    public void addSearchResultToQueue(){
+    private void addSearchResultToQueue(){
         if(selectedSearchResultTrack != null){
            mainActivity.enqueue(selectedSearchResultTrack);
         }

@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
@@ -35,7 +37,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     private BroadcastHelper broadcastHelper;
     private AlbumArtRetriever albumArtRetriever;
     private PreferencesHelper preferencesHelper;
-    private ListIndexManager listIndexManager;
+    private final ListIndexManager listIndexManager;
 
     public MediaPlayerService() {
         listIndexManager = new ListIndexManager();
@@ -338,7 +340,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public void scrollToPositionOf(Track track, boolean isSearchResult){
         int trackIndexOnCurrentPlaylist = getPlaylistManager().getCurrentIndexOf(track);
         if(trackIndexOnCurrentPlaylist == - 1){
-            mainActivity.deselectCurrentTrack();
+            new Handler(Looper.getMainLooper()).postDelayed(  ()-> mainActivity.deselectCurrentTrack(), 300);
         }
         else {
             mainActivity.scrollToAndSelectPosition(trackIndexOnCurrentPlaylist, isSearchResult);

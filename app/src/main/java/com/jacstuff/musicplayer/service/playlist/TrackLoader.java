@@ -146,11 +146,6 @@ public class TrackLoader {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ TrackLoader: " + msg);
-    }
-
-
     private void addTracksData(){
         Cursor cursor = createCursorForFilesystemTracks();
         boolean areDuplicatesIgnored = preferencesHelper.areDuplicateTracksIgnored();;
@@ -166,6 +161,11 @@ public class TrackLoader {
             log("tracks loaded in " + duration + "ms number of total tracks: " + cursor.getCount());
             cursor.close();
         }
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ TrackLoader: " + msg);
     }
 
 
