@@ -1,12 +1,13 @@
 package com.jacstuff.musicplayer.view.fragments.album;
 
-import static com.jacstuff.musicplayer.MainActivity.SEND_ALBUMS_TO_FRAGMENT;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ALBUM;
+import static com.jacstuff.musicplayer.view.fragments.Message.SEND_ALBUMS_TO_FRAGMENT;
+import static com.jacstuff.musicplayer.view.fragments.MessageKey.ALBUM_UPDATES;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
 import android.os.Bundle;
@@ -91,7 +92,7 @@ public class AlbumsFragment extends Fragment {
 
 
     private void loadAlbums(Bundle bundle){
-        ArrayList<String> albumNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ALBUM_UPDATES);
+        ArrayList<String> albumNames =  bundle.getStringArrayList(ALBUM_UPDATES.toString());
         listAdapter.setItems(albumNames);
         listAdapter.deselectCurrentlySelectedItem();
         listAdapter.resetSelections();
@@ -110,6 +111,7 @@ public class AlbumsFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);
     }
+
 
     private void assignListIndexManager(){
         MediaPlayerService mediaPlayerService = getMainActivity().getMediaPlayerService();

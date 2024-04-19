@@ -1,14 +1,13 @@
 package com.jacstuff.musicplayer.view.fragments.artist;
 
-import static com.jacstuff.musicplayer.MainActivity.SEND_ARTISTS_TO_FRAGMENT;
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
-import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ARTIST;
+import static com.jacstuff.musicplayer.view.fragments.Message.SEND_ARTISTS_TO_FRAGMENT;
+import static com.jacstuff.musicplayer.view.fragments.MessageKey.ARTIST_UPDATES;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
 import android.os.Bundle;
@@ -103,7 +102,7 @@ public class ArtistsFragment extends Fragment {
 
 
     private void populateArtistsList(Bundle bundle){
-        ArrayList<String> artistNames =  bundle.getStringArrayList(MainActivity.BUNDLE_KEY_ARTIST_UPDATES);
+        ArrayList<String> artistNames =  bundle.getStringArrayList(ARTIST_UPDATES.toString());
         listAdapter.setItems(artistNames);
         setVisibilityOnNoArtistsFoundText(artistNames);
     }

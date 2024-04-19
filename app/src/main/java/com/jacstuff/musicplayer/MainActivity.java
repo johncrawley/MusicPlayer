@@ -1,22 +1,13 @@
 package com.jacstuff.musicplayer;
 
-import static com.jacstuff.musicplayer.view.fragments.Message.DESELECT_CURRENT_TRACK_ITEM;
-import static com.jacstuff.musicplayer.view.fragments.Message.ENSURE_SELECTED_TRACK_IS_VISIBLE;
-import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
-import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
-import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
-import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
-import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_REQUEST_UPDATED_PLAYLIST;
-import static com.jacstuff.musicplayer.view.fragments.Message.SCROLL_TO_CURRENT_TRACK;
+import static com.jacstuff.musicplayer.view.fragments.Message.*;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.putBoolean;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.putInt;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.sendFragmentMessage;
 import static com.jacstuff.musicplayer.view.utils.FragmentHelper.sendArrayListToFragment;
 
 import android.Manifest;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -59,10 +50,6 @@ import java.util.function.Function;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final  String BUNDLE_KEY_ALBUM_UPDATES = "bundle_key_album_updates";
-    public static final  String BUNDLE_KEY_ARTIST_UPDATES = "bundle_key_artist_updates";
-    public static final String SEND_ALBUMS_TO_FRAGMENT = "send_albums_to_fragment";
-    public static final String SEND_ARTISTS_TO_FRAGMENT = "send_artists_to_fragment";
     private MediaPlayerService mediaPlayerService;
     private Track selectedTrack;
     private SearchViewHelper searchViewHelper;
@@ -472,12 +459,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void updateAlbumsList(ArrayList<String> albums){
-        sendArrayListToFragment(this, SEND_ALBUMS_TO_FRAGMENT, BUNDLE_KEY_ALBUM_UPDATES, albums);
+        sendArrayListToFragment(this, SEND_ALBUMS_TO_FRAGMENT, MessageKey.ALBUM_UPDATES, albums);
     }
 
 
     public void updateArtistsList(ArrayList<String> artists){
-        sendArrayListToFragment(this, SEND_ARTISTS_TO_FRAGMENT, BUNDLE_KEY_ARTIST_UPDATES, artists);
+        sendArrayListToFragment(this, SEND_ARTISTS_TO_FRAGMENT, MessageKey.ARTIST_UPDATES, artists);
     }
 
 
