@@ -1,16 +1,21 @@
 package com.jacstuff.musicplayer;
 
+import static android.Manifest.permission.POST_NOTIFICATIONS;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_MEDIA_AUDIO;
 import static com.jacstuff.musicplayer.view.fragments.Message.*;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.putBoolean;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.putInt;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.sendFragmentMessage;
 import static com.jacstuff.musicplayer.view.utils.FragmentHelper.sendArrayListToFragment;
 
-import android.Manifest;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -82,6 +87,21 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
+    private final ActivityResultLauncher<String> requestAudioPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            result -> {
+                if (result) {
+                    refreshTrackData();
+                    askForNotificationPermission();
+                }
+            }
+    );
+
+
+    private final ActivityResultLauncher<String> requestNotificationsPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(), result -> { });
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,18 +132,32 @@ public class MainActivity extends AppCompatActivity {
 
     private void requestPermissions(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestPermissions(new String[]{
-                    Manifest.permission.POST_NOTIFICATIONS,
-                    Manifest.permission.READ_MEDIA_AUDIO
-            }, 1);
-        }else{
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
+            askPermissionFor(READ_MEDIA_AUDIO, requestAudioPermissionLauncher);
+            askPermissionFor(POST_NOTIFICATIONS, requestNotificationsPermissionLauncher);
+            return;
+        }
+        askPermissionFor(READ_EXTERNAL_STORAGE, requestAudioPermissionLauncher);
+    }
+
+
+    private void askPermissionFor(String permission, ActivityResultLauncher<String> resultLauncher){
+        if(checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED){
+            resultLauncher.launch(permission);
         }
     }
 
 
-    public void showAddTrackToPlaylistView(){
-        addTrackToPlaylistViewHelper.showAddTrackToPlaylistView();
+    private void refreshTrackData(){
+        if(isServiceConnected.get() && mediaPlayerService != null){
+            mediaPlayerService.refreshTrackDataFromFilesystem();
+        }
+    }
+
+
+    private void askForNotificationPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            askPermissionFor(POST_NOTIFICATIONS, requestNotificationsPermissionLauncher);
+        }
     }
 
 
@@ -141,9 +175,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public MainViewModel getViewModel(){
-        return viewModel;
-    }
+    public MainViewModel getViewModel(){ return viewModel; }
 
 
     private void updateArtistsListInCaseMinTracksSettingHasChanged(){
@@ -157,28 +189,6 @@ public class MainActivity extends AppCompatActivity {
         return !isPlaylistManagerUnavailable() && mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
     }
 
-
-    public SearchViewHelper getSearchViewHelper(){
-        return searchViewHelper;
-    }
-
-
-    public AddTrackToPlaylistViewHelper getAddTrackToPlaylistViewHelper(){ return addTrackToPlaylistViewHelper; }
-
-
-    public List<String> getAlbumNames(){
-        return getTracksOrEmptyList(PlaylistManager::getAlbumNames);
-    }
-
-
-    public List<String> getGenreNames(){
-        return getTracksOrEmptyList(PlaylistManager::getGenreNames);
-    }
-
-
-    public List<String> getArtistNames(){
-        return getTracksOrEmptyList(PlaylistManager::getArtistNames);
-    }
 
 
     public List<Playlist> getAllUserPlaylists(){
@@ -206,47 +216,70 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public MediaPlayerService getMediaPlayerService(){ return this.mediaPlayerService;}
+
+    public SearchViewHelper getSearchViewHelper(){ return searchViewHelper; }
+
+    public AddTrackToPlaylistViewHelper getAddTrackToPlaylistViewHelper(){ return addTrackToPlaylistViewHelper; }
+
+    public List<String> getAlbumNames(){ return getTracksOrEmptyList(PlaylistManager::getAlbumNames); }
+
+    public List<String> getGenreNames(){ return getTracksOrEmptyList(PlaylistManager::getGenreNames); }
+
+    public List<String> getArtistNames(){ return getTracksOrEmptyList(PlaylistManager::getArtistNames); }
+
+    public void showAddTrackToPlaylistView(){ addTrackToPlaylistViewHelper.showAddTrackToPlaylistView();}
+
     public void hidePlayerViews(){ playerViewHelper.setVisibilityOnPlayerViews(View.INVISIBLE);}
 
-
-    public void showPlayerViews(){
-        playerViewHelper.setVisibilityOnPlayerViews(View.VISIBLE);
-    }
-
+    public void showPlayerViews(){playerViewHelper.setVisibilityOnPlayerViews(View.VISIBLE);}
 
     public void setBlankTrackInfo(){ playerViewHelper.setBlankTrackInfo();}
 
-
     public void notifyMediaPlayerStopped(){ playerViewHelper.notifyMediaPlayerStopped();}
-
 
     public void hideTrackSeekBar(){ playerViewHelper.hideTrackSeekBar();}
 
-
     public void notifyMediaPlayerPaused(){ playerViewHelper.notifyMediaPlayerPaused();}
-
 
     public void notifyShuffleEnabled(){ playerViewHelper.notifyShuffleEnabled(); }
 
-
     public void notifyShuffleDisabled(){ playerViewHelper.notifyShuffleDisabled(); }
-
 
     public void notifyMediaPlayerPlaying(){playerViewHelper.notifyMediaPlayerPlaying(); }
 
+    public void setSelectedTrack(Track track){ this.selectedTrack = track; }
 
     public void setTrackDetails(final Track track, int elapsedTime){ playerViewHelper.setTrackDetails(track, elapsedTime); }
 
-
     public void setAlbumArt(Bitmap coverArtBitmap){ albumArtHelper.changeAlbumArtTo(coverArtBitmap);}
-
 
     public void setBlankAlbumArt(){ albumArtHelper.changeAlbumArtToBlank();}
 
+    public Track getSelectedTrack(){return selectedTrack;}
 
-    public void disableViewForAWhile(View view){
-        disableViewForAWhile(view, 700);
+    public void resetElapsedTime(){playerViewHelper.resetElapsedTime();}
+
+    public void setElapsedTime(long elapsedMilliseconds){playerViewHelper.setElapsedTime(elapsedMilliseconds);}
+
+    public void deselectCurrentTrack() { sendMessage(DESELECT_CURRENT_TRACK_ITEM); }
+
+    public void disableViewForAWhile(View view){disableViewForAWhile(view, 700);}
+
+    public void selectTrack(int index) {mediaPlayerService.selectTrack(index); }
+
+    public void addSelectedTrackToQueue(){enqueue(selectedTrack);}
+
+    public void notifyTrackAddedToPlaylist(){ toast(R.string.toast_track_added_to_playlist); }
+
+    public void notifyTrackAlreadyInPlaylist(){toast(R.string.toast_track_already_in_playlist);}
+
+
+    public void notifyTrackRemovedFromPlaylist(boolean success){
+        toast(success ? R.string.toast_track_removed_from_playlist : R.string.toast_track_removed_from_playlist_fail);
     }
+
+    private void setupViewModel(){ viewModel = new ViewModelProvider(this).get(MainViewModel.class); }
 
 
     public void disableViewForAWhile(View view, int delayTime) {
@@ -256,34 +289,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void selectTrack(int index) {
-        mediaPlayerService.selectTrack(index);
-    }
-
-
-    public void addSelectedTrackToQueue(){
-        enqueue(selectedTrack);
-    }
-
-
     public void enqueue(Track track){
         mediaPlayerService.getPlaylistManager().addTrackToQueue(track);
         toast(R.string.toast_track_added_to_queue);
-    }
-
-
-    public void notifyTrackAddedToPlaylist(){
-        toast(R.string.toast_track_added_to_playlist);
-    }
-
-
-    public void notifyTrackAlreadyInPlaylist(){
-        toast(R.string.toast_track_already_in_playlist);
-    }
-
-
-    public void notifyTrackRemovedFromPlaylist(boolean success){
-        toast(success ? R.string.toast_track_removed_from_playlist : R.string.toast_track_removed_from_playlist_fail);
     }
 
 
@@ -293,11 +301,6 @@ public class MainActivity extends AppCompatActivity {
             case 1 -> toast(R.string.toast_one_track_added_to_playlist);
             default -> toast(getString(R.string.toast_tracks_added_to_playlist, numberOfTracks));
         }
-    }
-
-
-    public void setSelectedTrack(Track track){
-        this.selectedTrack = track;
     }
 
 
@@ -318,11 +321,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public Track getSelectedTrack(){
-        return selectedTrack;
-    }
-
-
     public Playlist getCurrentPlaylist(){
         return mediaPlayerService == null ? new Playlist(-50L, "Empty Playlist", false):
                 mediaPlayerService.getPlaylistManager().getCurrentPlaylist();
@@ -336,21 +334,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void resetElapsedTime(){
-        playerViewHelper.resetElapsedTime();
-    }
-
-
-    public void setElapsedTime(long elapsedMilliseconds){
-        playerViewHelper.setElapsedTime(elapsedMilliseconds);
-    }
-
-
     @Override
     public void onDestroy(){
         super.onDestroy();
         tabHelper.onDestroy();
-
     }
 
 
@@ -366,6 +353,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void toast(int resId){
+        toast(getString(resId));
+    }
+
+
     private void toast(String msg){
         runOnUiThread(()-> Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show());
     }
@@ -373,21 +365,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void toast(int resId, String arg){
         runOnUiThread(()-> Toast.makeText(MainActivity.this, getString(resId, arg), Toast.LENGTH_SHORT).show());
-    }
-
-
-    private void toast(int resId){
-        toast(getString(resId));
-    }
-
-
-    private void setupViewModel(){
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-    }
-
-
-    public void deselectCurrentTrack() {
-        sendMessage(DESELECT_CURRENT_TRACK_ITEM);
     }
 
 
@@ -410,9 +387,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void cancelSavedScrollIndex(){
-        viewModel.isTracksFragmentIndexSaved = false;
-    }
+    public void cancelSavedScrollIndex(){viewModel.isTracksFragmentIndexSaved = false;}
 
 
     public void notifyAlbumNotLoaded(String albumName){
@@ -567,11 +542,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public MediaPlayerService getMediaPlayerService(){
-        return this.mediaPlayerService;
-    }
-
-
     public void scrollToAndSelectPosition(int index, boolean isSearchResult){
         Bundle bundle = new Bundle();
         putInt(bundle, MessageKey.TRACK_INDEX, index);
@@ -603,6 +573,5 @@ public class MainActivity extends AppCompatActivity {
     public void addTrackToPlaylist(Playlist playlist, int position){
         mediaPlayerService.addTrackToPlaylist(selectedTrack, playlist);
     }
-
 
 }
