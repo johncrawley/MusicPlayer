@@ -2,6 +2,7 @@ package com.jacstuff.musicplayer.view.fragments;
 
 public enum MessageKey {
     ALBUM_UPDATES,
+    ALBUM_ARTIST,
     ARTIST_UPDATES,
     GENRE_UPDATES,
     TRACK_INDEX,

@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     private void initPlayerViewHelper(){
         if(playerViewHelper == null){
             playerViewHelper = new PlayerViewHelper(this);
@@ -188,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean isUserPlaylistLoaded(){
         return !isPlaylistManagerUnavailable() && mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
     }
-
 
 
     public List<Playlist> getAllUserPlaylists(){
@@ -278,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
     public void notifyTrackRemovedFromPlaylist(boolean success){
         toast(success ? R.string.toast_track_removed_from_playlist : R.string.toast_track_removed_from_playlist_fail);
     }
+
 
     private void setupViewModel(){ viewModel = new ViewModelProvider(this).get(MainViewModel.class); }
 

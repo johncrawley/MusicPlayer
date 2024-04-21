@@ -10,7 +10,6 @@
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
     tools:context=".MainActivity">
 
-
     <TextView
         android:id="@+id/playlistNameTextView"
         android:layout_width="match_parent"
@@ -25,12 +24,11 @@
     <View
         android:id="@+id/playlistsNameDivider"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/playlistNameTextView" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

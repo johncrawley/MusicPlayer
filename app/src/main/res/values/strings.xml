@@ -8,21 +8,28 @@
     <string name="menu_button_search">Search</string>
     <string name="menu_button_settings">Settings</string>
     <string name="menu_button_about">About</string>
+
     <string name="playlist_refreshed_message">Playlist Refreshed</string>
     <string name="playlist_refreshed_message_new_tracks_count">Playlist Refreshed (%1$d Found)</string>
     <string name="playlist_refreshed_one_new_track">Playlist Refreshed (1 New)</string>
+
     <string name="no_tracks_found">No Tracks Found</string>
     <string name="no_genres_found">No Genres Found</string>
     <string name="no_artists_found">No Artists Found</string>
     <string name="no_albums_found">No Albums Found</string>
     <string name="playlist_is_empty">Playlist Is Empty</string>
+
     <string name="default_playlist_info">All Tracks</string>
+    <string name="default_album_info">All Albums</string>
+    <string name="album_artist">Artist:%1$s</string>
     <string name="playlist_info_playlist_prefix">Playlist:</string>
     <string name="playlist_info_artist_prefix">Artist:</string>
     <string name="playlist_info_album_prefix">Album:</string>
     <string name="playlist_info_genre_prefix">Genre:</string>
+
     <string name="error_playing_track_toast_message">Unable to play the track at %1$s</string>
     <string name="error_loading_track_toast_message">Unable to load the track at %1$s</string>
+
     <string name="elapsed_time_label">Elapsed Time</string>
     <string name="artist_label">Artist</string>
     <string name="album_label">Album</string>
