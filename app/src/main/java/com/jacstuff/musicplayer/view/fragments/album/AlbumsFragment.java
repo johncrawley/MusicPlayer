@@ -102,7 +102,6 @@ public class AlbumsFragment extends Fragment {
             loadAlbums(albumNames);
         }
         setArtistNameFrom(bundle);
-
     }
 
 
