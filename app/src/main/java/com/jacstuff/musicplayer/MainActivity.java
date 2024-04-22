@@ -39,7 +39,7 @@ import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
-import com.jacstuff.musicplayer.view.fragments.tracks.TrackOptionsDialog;
+import com.jacstuff.musicplayer.view.fragments.options.TrackOptionsDialog;
 import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
 import com.jacstuff.musicplayer.view.utils.AddTrackToPlaylistViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
@@ -313,7 +313,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void loadAlbumOfSelectedTrack(){
-        mediaPlayerService.loadAlbumOfTrack(selectedTrack);
+        if(mediaPlayerService == null){
+            return;
+        }
+        var playlistHelper = mediaPlayerService.getPlaylistHelper();
+        if(playlistHelper != null){
+            playlistHelper.loadWholeAlbumOf(selectedTrack);
+        }
         toast(R.string.toast_album_tracks_loaded);
     }
 

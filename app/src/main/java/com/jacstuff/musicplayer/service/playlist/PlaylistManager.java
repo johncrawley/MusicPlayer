@@ -26,7 +26,6 @@ public interface PlaylistManager {
     Optional<Track> getPreviousTrack();
     Track selectTrack(int index);
     void assignCurrentIndexIfApplicable(Track track);
-    void addTrackToHistory(Track track);
 
     void addToTrackHistory(Track track);
     void addTracksFromStorage(MediaPlayerService mediaPlayerService);
@@ -36,6 +35,7 @@ public interface PlaylistManager {
     void loadPlaylist(Playlist playlist);
     void loadAllTracksPlaylist();
     boolean loadTracksFromAlbum(String albumName);
+    boolean loadAllTracksFromAlbum(String albumName);
     boolean loadTracksFromGenre(String genreName);
     void loadTracksFromArtist(String artistName);
 

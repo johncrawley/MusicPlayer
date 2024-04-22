@@ -165,12 +165,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    @Override
-    public void addTrackToHistory(Track track){
-        trackHistory.add(track);
-    }
-
-
     private void calculateAndDisplayNewTracksStats(MediaPlayerService mediaPlayerService){
         mediaPlayerService.displayPlaylistRefreshedMessage(0);
     }
@@ -355,7 +349,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void loadTracksFromArtist(String artistName){
-        loadTracksFromGenericPlaylist(artistName, trackLoader::getArtists, this::getSortedTracks);
+        loadTracksFrom(artistName, trackLoader::getArtist, this::getSortedTracks);
         currentArtist = trackLoader.getArtists().get(artistName);
         currentArtistName = currentArtist != null ? currentArtist.getName() : "";
     }
@@ -363,14 +357,20 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public boolean loadTracksFromAlbum(String albumName) {
-        return loadTracksFromGenericPlaylist(albumName, trackLoader::getAlbums, this::getSortedAlbumTracks);
+        return loadTracksFrom(albumName, trackLoader::getAlbum, this::getSortedArtistAlbumTracks);
+    }
+
+
+    @Override
+    public boolean loadAllTracksFromAlbum(String albumName) {
+        return loadTracksFrom(albumName, trackLoader::getAlbum, this::getSortedAlbumTracks);
     }
 
 
     @Override
     public boolean loadTracksFromGenre(String genreName) {
         resetCurrentArtistName();
-        return loadTracksFromGenericPlaylist(genreName, trackLoader::getGenres, this::getSortedTracks);
+        return loadTracksFrom(genreName, trackLoader::getGenre, this::getSortedTracks);
     }
 
 
@@ -379,23 +379,17 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    private <T extends PlaylistStore> boolean loadTracksFromGenericPlaylist(String name,
-                                                                            Supplier<Map<String,T>> supplier,
-                                                                            Function<List<Track>, List<Track>> sortingConsumer){
-        Map <String, T> map = supplier.get();
-        if(map == null){
-            return false;
-        }
-        T playlistStore = map.get(name);
+    private boolean loadTracksFrom(String name, Function<String, PlaylistStore> function, Function<List<Track>, List<Track>> sortingConsumer){
+        PlaylistStore  playlistStore = function.apply(name);
         if(playlistStore == null){
             return false;
         }
         currentPlaylistName = name;
         tracks = sortingConsumer.apply(playlistStore.getTracks());
-        playlistStore.setTracks(tracks);
         assignIndexesToTracks();
         setupQueue();
         currentPlaylist = playlistStore.getPlaylist();
+        currentPlaylist.setTracks(tracks);
         return true;
     }
 
@@ -422,12 +416,18 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    private List<Track> getSortedAlbumTracks(List<Track> tracks){
-        if(tracks == null){
-            return Collections.emptyList();
-        }
-        return tracks.stream()
+    private List<Track> getSortedArtistAlbumTracks(List<Track> tracks){
+        return tracks == null ? Collections.emptyList() :
+                tracks.stream()
                 .filter(this::filterAlbumTrack)
+                .sorted(Comparator.comparing(Track::getCdAndTrackNumber))
+                .collect(Collectors.toList());
+    }
+
+
+    private List<Track> getSortedAlbumTracks(List<Track> tracks){
+        return tracks == null ? Collections.emptyList() :
+                tracks.stream()
                 .sorted(Comparator.comparing(Track::getCdAndTrackNumber))
                 .collect(Collectors.toList());
     }

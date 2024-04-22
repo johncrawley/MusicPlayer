@@ -172,6 +172,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         playlistHelper.refreshTrackDataFromFilesystem();
     }
 
+    public PlaylistHelper getPlaylistHelper(){ return playlistHelper;}
 
     public List<Track> getTracksForSearch(String str){ return playlistHelper.searchForTracks(str);}
 
@@ -200,8 +201,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public void removeTrackFromCurrentPlaylist(Track track){ playlistHelper.removeTrackFromCurrentPlaylist(track);}
 
     public PlaylistManager getPlaylistManager(){return playlistHelper.getPlaylistManager();}
-
-    public void loadAlbumOfTrack(Track track){playlistHelper.loadAlbumOfTrack(track);}
 
     public void loadArtistOfTrack(Track track){playlistHelper.loadArtistOfTrack(track);}
 

@@ -115,7 +115,6 @@ public class Track {
     public String getTitle(){return title;}
 
     public long getTrackNumber(){return trackNumber;}
-
     public String getCdAndTrackNumber(){return cdAndTrackNumber;}
 
     public String getTrackNumberStr(){return String.valueOf(trackNumber);}

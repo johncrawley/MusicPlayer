@@ -8,20 +8,20 @@ import java.util.Map;
 public class Album implements PlaylistStore {
     private final long id;
     private final String name;
-    private List<Track> allTracks;
+    private List<Track> tracks;
     private final Map<String, Integer> artistsCount;
 
 
     public Album(long id, String name){
         this.id = id;
         this.name = name;
-        allTracks = new ArrayList<>(50);
+        tracks = new ArrayList<>(50);
         artistsCount = new HashMap<>();
     }
 
 
     public void addTrack(Track track) {
-        allTracks.add(track);
+        tracks.add(track);
     }
 
 
@@ -44,19 +44,19 @@ public class Album implements PlaylistStore {
 
 
     public List<Track> getTracks(){
-        return allTracks;
+        return tracks;
     }
 
 
     public void setTracks(List<Track> tracks){
-        this.allTracks = tracks;
+        this.tracks = tracks;
     }
 
 
     @Override
     public Playlist getPlaylist(){
         Playlist playlist = new Playlist(name, PlaylistType.ALBUM);
-        playlist.setTracks(allTracks);
+        playlist.setTracks(tracks);
         return playlist;
     }
 

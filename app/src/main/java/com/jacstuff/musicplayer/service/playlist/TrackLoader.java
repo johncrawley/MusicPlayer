@@ -64,13 +64,28 @@ public class TrackLoader {
     }
 
 
+    public Album getAlbum(String albumName){
+        return albums.get(albumName);
+    }
+
+
     public Map<String, Artist> getArtists(){
         return artists;
     }
 
 
+    public Artist getArtist(String artistName){
+        return artists.get(artistName);
+    }
+
+
     public Map<String, Genre> getGenres(){
         return genres;
+    }
+
+
+    public Genre getGenre(String genreName){
+        return genres.get(genreName);
     }
 
 
@@ -130,7 +145,7 @@ public class TrackLoader {
         if(album == null){
             return Collections.emptyList();
         }
-        return album.getTracks();
+        return new ArrayList<>(album.getTracks());
     }
 
 
