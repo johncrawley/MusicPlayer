@@ -4,6 +4,8 @@ import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_MEDIA_AUDIO;
 import static com.jacstuff.musicplayer.view.fragments.Message.*;
+import static com.jacstuff.musicplayer.view.fragments.MessageKey.ALBUM_ARTIST;
+import static com.jacstuff.musicplayer.view.fragments.MessageKey.ALBUM_UPDATES;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.putBoolean;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.putInt;
 import static com.jacstuff.musicplayer.view.fragments.about.Utils.sendFragmentMessage;
@@ -434,18 +436,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void updateAlbumsList(ArrayList<String> albums){
-        sendArrayListToFragment(this, SEND_ALBUMS_TO_FRAGMENT, MessageKey.ALBUM_UPDATES, albums);
+    public void updateAlbumsList(ArrayList<String> albums, String artist){
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList(ALBUM_UPDATES.toString(), albums);
+        bundle.putString(ALBUM_ARTIST.toString(), artist);
+        runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(LOAD_ALBUMS.toString(), bundle));
     }
 
 
     public void updateArtistsList(ArrayList<String> artists){
-        sendArrayListToFragment(this, SEND_ARTISTS_TO_FRAGMENT, MessageKey.ARTIST_UPDATES, artists);
+        sendArrayListToFragment(this, LOAD_ARTISTS, MessageKey.ARTIST_UPDATES, artists);
     }
 
 
     public void updateGenresList(ArrayList<String> genres){
-        sendArrayListToFragment(this, Message.SEND_GENRES_TO_FRAGMENT, MessageKey.GENRE_UPDATES, genres);
+        sendArrayListToFragment(this, Message.LOAD_GENRES, MessageKey.GENRE_UPDATES, genres);
     }
 
 

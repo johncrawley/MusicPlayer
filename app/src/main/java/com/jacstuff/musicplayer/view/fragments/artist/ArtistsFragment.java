@@ -6,7 +6,7 @@ import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ARTIST;
-import static com.jacstuff.musicplayer.view.fragments.Message.SEND_ARTISTS_TO_FRAGMENT;
+import static com.jacstuff.musicplayer.view.fragments.Message.LOAD_ARTISTS;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.ARTIST_UPDATES;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
@@ -95,7 +95,7 @@ public class ArtistsFragment extends Fragment {
 
 
     private void setupFragmentListener(){
-        setListener(this, SEND_ARTISTS_TO_FRAGMENT, this::populateArtistsList);
+        setListener(this, LOAD_ARTISTS, this::populateArtistsList);
         setListener(this, NOTIFY_TO_LOAD_ARTIST, (bundle) -> listAdapter.selectLongClickItem());
         setListener(this, NOTIFY_TO_DESELECT_ARTIST_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
     }

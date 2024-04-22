@@ -122,7 +122,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     public void updateListViews(PlaylistManager playlistManager){
         updateViewTrackList(playlistManager);
-        mainActivity.updateAlbumsList(playlistManager.getAlbumNames());
+        mainActivity.updateAlbumsList(playlistManager.getAlbumNames(), playlistManager.getCurrentArtistName().orElse(""));
         mainActivity.updateArtistsList(playlistManager.getArtistNames());
         mainActivity.updateGenresList(playlistManager.getGenreNames());
     }
@@ -284,7 +284,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     public void updateArtistView(){mainActivity.updateArtistsList(getPlaylistManager().getArtistNames()); }
 
-    public void updateAlbumsView(){ mainActivity.updateAlbumsList(getPlaylistManager().getAlbumNames()); }
+    public void updateAlbumsView(){ mainActivity.updateAlbumsList(getPlaylistManager().getAlbumNames(), getPlaylistManager().getCurrentArtistName().orElse("")); }
 
     public void setBlankTrackInfoOnMainView(){
         mainActivity.setBlankTrackInfo();

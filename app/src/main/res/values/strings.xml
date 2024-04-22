@@ -21,7 +21,7 @@
 
     <string name="default_playlist_info">All Tracks</string>
     <string name="default_album_info">All Albums</string>
-    <string name="album_artist">Artist:%1$s</string>
+    <string name="album_artist">Artist: %1$s</string>
     <string name="playlist_info_playlist_prefix">Playlist:</string>
     <string name="playlist_info_artist_prefix">Artist:</string>
     <string name="playlist_info_album_prefix">Album:</string>

@@ -6,7 +6,7 @@ import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ALBUM;
-import static com.jacstuff.musicplayer.view.fragments.Message.SEND_ALBUMS_TO_FRAGMENT;
+import static com.jacstuff.musicplayer.view.fragments.Message.LOAD_ALBUMS;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.ALBUM_ARTIST;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.ALBUM_UPDATES;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
@@ -71,35 +71,37 @@ public class AlbumsFragment extends Fragment {
     private void initViews(View parentView){
         recyclerView = parentView.findViewById(R.id.albumsRecyclerView);
         noAlbumsFoundTextView = parentView.findViewById(R.id.noAlbumsFoundTextView);
-        ButtonMaker.createImageButton(parentView, R.id.showAllAlbumsButton, this::showAllAlbums);
+        ButtonMaker.createImageButton(parentView, R.id.showAllAlbumsButton, this::loadAllAlbumNames);
         showAllAlbumsButtonLayout = parentView.findViewById(R.id.showAllAlbumsButtonLayout);
         albumArtistText = parentView.findViewById(R.id.albumsArtistNameTextView);
     }
 
 
     private void setupFragmentListener(){
-        setListener(this, SEND_ALBUMS_TO_FRAGMENT, this::loadAlbumsFrom);
+        setListener(this, LOAD_ALBUMS, this::loadAlbumNamesFrom);
         setListener(this, NOTIFY_TO_LOAD_ALBUM, (bundle) -> listAdapter.selectLongClickItem());
         setListener(this, NOTIFY_TO_DESELECT_ALBUM_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
     }
 
 
-    private void showAllAlbums(){
+    private void loadAllAlbumNames(){
        var mps = getMainActivity().getMediaPlayerService();
        if(mps != null){
            var playlistManager = mps.getPlaylistManager();
            List<String> allAlbumNames = playlistManager.getAllAlbumNamesAndClearCurrentArtist();
             if(allAlbumNames != null){
-                loadAlbums(allAlbumNames);
+                loadAlbumNames(allAlbumNames);
+                showAllAlbumsButtonLayout.setVisibility(View.GONE);
+                albumArtistText.setText(getString(R.string.default_album_info));
             }
        }
     }
 
 
-    private void loadAlbumsFrom(Bundle bundle){
+    private void loadAlbumNamesFrom(Bundle bundle){
         ArrayList<String> albumNames =  bundle.getStringArrayList(ALBUM_UPDATES.toString());
         if(albumNames != null){
-            loadAlbums(albumNames);
+            loadAlbumNames(albumNames);
         }
         setArtistNameFrom(bundle);
     }
@@ -107,13 +109,14 @@ public class AlbumsFragment extends Fragment {
 
     private void setArtistNameFrom(Bundle bundle){
         String artistName = bundle.getString(ALBUM_ARTIST.toString());
-        if(artistName != null){
-            albumArtistText.setText(getString(R.string.album_artist, artistName));
-        }
+        String value = artistName == null || artistName.isBlank() ?
+                getString(R.string.default_album_info)
+                : getString(R.string.album_artist, artistName);
+        albumArtistText.setText(value);
     }
 
 
-    private void loadAlbums(List<String> albumNames){
+    private void loadAlbumNames(List<String> albumNames){
         listAdapter.setItems(albumNames);
         listAdapter.deselectCurrentlySelectedItem();
         listAdapter.resetSelections();
@@ -212,9 +215,11 @@ public class AlbumsFragment extends Fragment {
         var mediaPlayerService = getMainActivity().getMediaPlayerService();
         if(mediaPlayerService != null){
             var playlistManager = mediaPlayerService.getPlaylistManager();
-            return playlistManager.getCurrentArtistName().isPresent();
+            String artistName =  playlistManager.getCurrentArtistName().orElse("");
+            return !artistName.isBlank();
         }
         return false;
     }
+
 
 }
