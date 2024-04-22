@@ -36,6 +36,11 @@ public class PreferencesHelper {
     }
 
 
+    public boolean isTabSwitchedAfterPlaylistLoaded(){
+        return getPrefs().getBoolean("autoSwitchTabsAfterPlaylistSelection", true);
+    }
+
+
     private void assignShuffleState(MediaPlayerService mediaPlayerService){
         boolean isShuffleEnabled = getPrefs().getBoolean(SHUFFLE_ENABLED_PREF, false);
         if(isShuffleEnabled){
@@ -49,16 +54,6 @@ public class PreferencesHelper {
 
     public boolean isNextTrackLoadedAutomatically() {
         return getPrefs().getBoolean("autoNextTrackOnPlaylistLoaded", true);
-    }
-
-
-    public boolean isTrackNumberDisplayed() {
-        return getPrefs().getBoolean("isTrackNumberDisplayed", true);
-    }
-
-
-    public boolean isArtistDisplayed() {
-        return getPrefs().getBoolean("isArtistDisplayed", false);
     }
 
 

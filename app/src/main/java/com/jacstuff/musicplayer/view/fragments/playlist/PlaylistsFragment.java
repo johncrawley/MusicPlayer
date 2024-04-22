@@ -20,7 +20,6 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
@@ -203,7 +202,7 @@ public class PlaylistsFragment extends Fragment {
         listAdapter.clearLongClickedView();
         playlistRepository.deletePlaylist(playlist.getId());
         refreshList();
-        showPlaylistDeletedToast();
+        toast(R.string.delete_playlist_toast_success);
     }
 
 
@@ -264,11 +263,6 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-    private void showPlaylistDeletedToast(){
-        Toast.makeText(getContext(), getString(R.string.delete_playlist_toast_success), Toast.LENGTH_SHORT).show();
-    }
-
-
     private void refreshList(){
         listAdapter.refresh(getAllPlaylists());
     }
@@ -289,15 +283,16 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void toastLoaded(){
-        Toast.makeText(getContext(), getString(R.string.toast_playlist_tracks_loaded), Toast.LENGTH_SHORT).show();
+        getMain().ifPresent(ma -> ma.toastIfTabsNotAutoSwitched(R.string.toast_playlist_tracks_loaded));
     }
 
 
     private void toastPlaylistCreated(){
         new Handler(Looper.getMainLooper())
-                .postDelayed(()->
-                    Toast.makeText(getContext(), getString(R.string.toast_playlist_created), Toast.LENGTH_SHORT).show()
-        , 500);
+                .postDelayed(()-> toast(R.string.toast_playlist_created) , 500);
     }
 
+    private void toast(int strId){
+        getMain().ifPresent(ma -> ma.toast(strId));
+    }
 }

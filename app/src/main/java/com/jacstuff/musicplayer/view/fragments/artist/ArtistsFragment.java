@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -148,13 +147,14 @@ public class ArtistsFragment extends Fragment {
     }
 
 
+    private void toastLoaded(){
+        getMainActivity().toastIfTabsNotAutoSwitched(R.string.toast_artist_tracks_loaded);
+    }
+
+
     private MainActivity getMainActivity(){
         return (MainActivity)getActivity();
     }
 
-
-    private void toastLoaded(){
-        Toast.makeText(getContext(), getString(R.string.toast_artist_tracks_loaded), Toast.LENGTH_SHORT).show();
-    }
 
 }

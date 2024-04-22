@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.entities.Track;
+import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
@@ -67,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
     private PlayerViewHelper playerViewHelper;
     private TabHelper tabHelper;
     private final AtomicBoolean isServiceConnected = new AtomicBoolean(false);
+    private PreferencesHelper preferencesHelper;
+
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -112,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setupViewModel();
         tabHelper = new TabHelper(viewModel, this);
+        preferencesHelper = new PreferencesHelper(getApplicationContext());
         initPlayerViewHelper();
         startMediaPlayerService();
         checkPath();
@@ -320,13 +324,27 @@ public class MainActivity extends AppCompatActivity {
         if(playlistHelper != null){
             playlistHelper.loadWholeAlbumOf(selectedTrack);
         }
-        toast(R.string.toast_album_tracks_loaded);
+
+        toastIfTabsNotAutoSwitched(R.string.toast_album_tracks_loaded);
     }
 
 
     public void loadArtistOfSelectedTrack(){
         mediaPlayerService.loadArtistOfTrack(selectedTrack);
-        toast(R.string.toast_artist_tracks_loaded);
+        toastIfTabsNotAutoSwitched(R.string.toast_artist_tracks_loaded);
+    }
+
+
+    public void toastIfTabsNotAutoSwitched(int strId){
+        log("Entered toastIfTabsNotAutoSwitched() result: " + preferencesHelper.isTabSwitchedAfterPlaylistLoaded());
+        if(!preferencesHelper.isTabSwitchedAfterPlaylistLoaded()){
+            toast(strId);
+        }
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ MainActivity: " + msg);
     }
 
 
@@ -362,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void toast(int resId){
+    public void toast(int resId){
         toast(getString(resId));
     }
 
