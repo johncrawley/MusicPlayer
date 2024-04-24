@@ -13,6 +13,7 @@
     <string name="playlist_refreshed_message_new_tracks_count">Playlist Refreshed (%1$d Found)</string>
     <string name="playlist_refreshed_one_new_track">Playlist Refreshed (1 New)</string>
 
+    <string name="loading_tracks">Loading</string>
     <string name="no_tracks_found">No Tracks Found</string>
     <string name="no_genres_found">No Genres Found</string>
     <string name="no_artists_found">No Artists Found</string>

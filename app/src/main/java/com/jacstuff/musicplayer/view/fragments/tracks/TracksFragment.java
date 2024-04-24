@@ -51,6 +51,7 @@ public class TracksFragment extends Fragment{
     private final AtomicBoolean isBeingRefreshed = new AtomicBoolean(false);
     private Playlist playlist;
     private String noTracksFoundStr = "";
+    private int listRefreshCount;
 
     public TracksFragment() {
         // Required empty public constructor
@@ -79,10 +80,11 @@ public class TracksFragment extends Fragment{
 
 
     private void initViews(){
-        initRecyclerView();
         noTracksFoundTextView = parentView.findViewById(R.id.noTracksFoundTextView);
         playlistInfoTextView = parentView.findViewById(R.id.playlistNameTextView);
+        initRecyclerView();
     }
+
 
     private void initRecyclerView(){
         recyclerView = parentView.findViewById(R.id.recyclerView);
@@ -212,12 +214,17 @@ public class TracksFragment extends Fragment{
 
 
     private void setupRecyclerView(View parentView){
-        if(parentView == null || playlist == null || playlist.getTracks() == null){
+        if(parentView == null
+                || playlist == null
+                || playlist.getTracks() == null
+                || !isMediaPlayerServiceAvailable()){
             return;
         }
+        listRefreshCount++;
         trackListAdapter = new TrackListAdapter(playlist, this::selectTrack, this::createTrackOptionsFragment);
         recyclerView.setAdapter(trackListAdapter);
         updatePlaylistInfoView(playlist);
+        noTracksFoundTextView.setText(getString(R.string.loading_tracks));
         setVisibilityOnNoTracksFoundText();
     }
 
@@ -226,6 +233,16 @@ public class TracksFragment extends Fragment{
         boolean isUserPlaylistLoaded = getBoolean(bundle,IS_USER_PLAYLIST);
         addTracksToPlaylistButtonOuterLayout.setVisibility(isUserPlaylistLoaded ? View.VISIBLE : View.INVISIBLE);
         setVisibilityOnAddTracksToPlaylistButton(isUserPlaylistLoaded );
+    }
+
+
+    private boolean isMediaPlayerServiceAvailable(){
+        MainActivity mainActivity = getMainActivity();
+        if(mainActivity != null){
+            var mps = mainActivity.getMediaPlayerService();
+            return mps != null;
+        }
+        return false;
     }
 
 
@@ -265,14 +282,15 @@ public class TracksFragment extends Fragment{
 
 
     private void setVisibilityOnNoTracksFoundText(){
-        new Handler(Looper.getMainLooper()).postDelayed(this::showNoTracksIfNotBeingRefreshed, 1000);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> showNoTracksIfNotBeingRefreshed(listRefreshCount), 1000);
     }
 
 
-    private void showNoTracksIfNotBeingRefreshed(){
-        if(!isBeingRefreshed.get() || getContext() != null){
-            setVisibilityOnNoItemsFoundText(playlist.getTracks(), recyclerView, noTracksFoundTextView, noTracksFoundStr);
+    private void showNoTracksIfNotBeingRefreshed(int oldRefreshCount){
+        if(isBeingRefreshed.get() || listRefreshCount != oldRefreshCount || getContext() == null){
+            return;
         }
+        setVisibilityOnNoItemsFoundText(playlist.getTracks(), recyclerView, noTracksFoundTextView, noTracksFoundStr);
     }
 
 
