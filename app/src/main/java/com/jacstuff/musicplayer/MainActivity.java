@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             searchViewHelper = new SearchViewHelper(MainActivity.this);
             searchViewHelper.setMediaPlayerService(mediaPlayerService);
             setupOptionsMenuForCurrentTrack();
+            setupFunctionButtons();
             isServiceConnected.set(true);
         }
 
@@ -534,30 +536,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_buttons, menu);
-        return true;
+    private void setupFunctionButtons(){
+        setupImageButton(R.id.searchButton, ()-> searchViewHelper.toggleSearch());
+        setupImageButton(R.id.refreshButton, ()-> mediaPlayerService.refreshTrackDataFromFilesystem());
+        setupImageButton(R.id.configButton, this::startSettingsActivity);
+        setupImageButton(R.id.aboutButton, this::loadAboutDialog);
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.refresh_button) {
-          mediaPlayerService.refreshTrackDataFromFilesystem();
-        }
-        else if(id == R.id.search){
-           searchViewHelper.toggleSearch();
-        }
-        else if(id == R.id.options){
-            startSettingsActivity();
-        }
-        else if(id == R.id.about){
-            loadAboutDialog();
-        }
-        return super.onOptionsItemSelected(item);
+    private void setupImageButton(int buttonId, Runnable runnable){
+        ImageButton button = findViewById(buttonId);
+        button.setOnClickListener(v -> runnable.run());
     }
 
 

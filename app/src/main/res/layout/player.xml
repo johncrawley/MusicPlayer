@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/player_margin_bottom"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginBottom="@dimen/player_margin_bottom"
     tools:context=".MainActivity">
-
 
     <TextView
         android:id="@+id/trackTitle"
@@ -19,34 +18,34 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:textAlignment="center"
         android:textSize="@dimen/track_name_text_size"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/albumArtImageView"
-        android:contentDescription="@string/album_art_content_description"
-        android:padding="@dimen/album_art_padding"
-        android:background="@drawable/album_art_border"
-        android:cropToPadding="true"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:adjustViewBounds="true"
         android:layout_marginVertical="@dimen/album_art_margin_vertical"
+        android:adjustViewBounds="true"
+        android:background="@drawable/album_art_border"
+        android:contentDescription="@string/album_art_content_description"
+        android:cropToPadding="true"
+        android:padding="@dimen/album_art_padding"
         android:scaleType="fitCenter"
+        android:src="@drawable/album_art_empty"
         app:layout_constraintBottom_toTopOf="@+id/trackDetailsLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/trackTitle"
-        android:src="@drawable/album_art_empty" />
+        app:layout_constraintTop_toBottomOf="@id/trackTitle" />
 
     <LinearLayout
         android:id="@+id/trackDetailsLayout"
-        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginHorizontal="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/albumArtImageView">
@@ -55,6 +54,7 @@
             android:id="@+id/albumTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
             android:layout_marginTop="@dimen/track_detail_text_margin_vertical"
             android:textAlignment="center"
             android:textSize="@dimen/album_text_size" />
@@ -63,6 +63,7 @@
             android:id="@+id/artistTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
             android:layout_marginTop="@dimen/artist_text_margin_top"
             android:layout_marginBottom="@dimen/artist_text_margin_bottom"
             android:textAlignment="center"
@@ -73,15 +74,14 @@
 
     <SeekBar
         android:id="@+id/trackTimeSeekBar"
-        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:progressDrawable="@drawable/seek_bar"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/trackTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trackDetailsLayout"
-        app:layout_constraintBottom_toTopOf="@id/trackTime"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/trackDetailsLayout" />
 
     <TextView
         android:id="@+id/trackTime"
@@ -90,13 +90,13 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="@dimen/track_time_margin_bottom_small"
-        android:text="@string/elapsed_time_label"
         android:fontFamily="@font/poe_monospace_djj6"
+        android:text="@string/elapsed_time_label"
         android:textSize="@dimen/track_time_text_size_small"
-        app:layout_constraintTop_toBottomOf="@+id/trackTimeSeekBar"
         app:layout_constraintBottom_toTopOf="@id/playerButtonsInclude"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trackTimeSeekBar" />
 
     <include
         android:id="@+id/playerButtonsInclude"
@@ -106,8 +106,7 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <View
         android:id="@+id/divider2"
@@ -118,15 +117,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/playerButtonsInclude" />
 
-<!--
-    <ImageButton
-        android:id="@+id/testButton"
+
+    <include layout="@layout/functions_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/app_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@android:drawable/sym_def_app_icon"/>
--->
+        android:layout_marginHorizontal="4dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/trackTitle"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

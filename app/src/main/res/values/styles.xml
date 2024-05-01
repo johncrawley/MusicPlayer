@@ -20,6 +20,10 @@
         <item name="list_item_focused">@color/list_item_focused</item>
         <item name="seek_bar_background">@color/seek_bar_background</item>
         <item name="track_info_background">@color/track_info_background</item>
+
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
 

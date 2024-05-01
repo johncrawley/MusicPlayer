@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Music Player</string>
+    <string name="app_name">Music Player!</string>
     <string name="about_info">Version 1.0, 2024\nCreated by John Crawley</string>
     <string name="about_font_heading"><u>Font Information</u></string>
     <string name="about_font_info">Main text: Le Patin Magicien, Freeware \n https://www.fontspace.com/le-patin-magicien-font-f39622\n\n Time elapsed: Poe Monospace, Freeware\n https://www.fontspace.com/poe-monospace-font-f23572 </string>
@@ -30,6 +30,11 @@
 
     <string name="error_playing_track_toast_message">Unable to play the track at %1$s</string>
     <string name="error_loading_track_toast_message">Unable to load the track at %1$s</string>
+
+    <string name="search_button_content_description">Search</string>
+    <string name="refresh_button_content_description">Refresh playlist from file system</string>
+    <string name="settings_button_content_description">Settings</string>
+    <string name="about_button_content_description">About App</string>
 
     <string name="elapsed_time_label">Elapsed Time</string>
     <string name="artist_label">Artist</string>

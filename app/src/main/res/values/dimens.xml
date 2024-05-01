@@ -14,7 +14,7 @@
     <dimen name="track_name_text_size">20sp</dimen>
     <dimen name="track_name_text_size_tablet">26sp</dimen>
     <dimen name="track_detail_text_size_small">14sp</dimen>
-    <dimen name="track_detail_text_margin_vertical">4dp</dimen>
+    <dimen name="track_detail_text_margin_vertical">8dp</dimen>
     <dimen name="album_art_margin_vertical">4dp</dimen>
     <dimen name="album_art_margin_vertical_tablet">6dp</dimen>
     <dimen name="track_detail_small">14sp</dimen>
@@ -58,4 +58,7 @@
     <dimen name="track_info_text_vertical_margin">4dp</dimen>
     <dimen name="track_info_text_layout_margin">2dp</dimen>
     <dimen name="track_info_text_value_horizontal_margin">6dp</dimen>
+
+    <dimen name="function_button_padding">4dp</dimen>
+    <dimen name="function_button_margin">0dp</dimen>
 </resources>
