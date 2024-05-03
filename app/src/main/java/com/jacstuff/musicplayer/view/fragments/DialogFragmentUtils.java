@@ -1,11 +1,16 @@
 package com.jacstuff.musicplayer.view.fragments;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowMetrics;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 public class DialogFragmentUtils {
@@ -18,6 +23,18 @@ public class DialogFragmentUtils {
                 setupScrollViewHeight(fragment, parentView, scrollViewId, layoutId);
             }
         });
+    }
+
+
+    public static void setTransparentBackground(DialogFragment fragment){
+        Dialog dialog = fragment.getDialog();
+        if(dialog == null){
+            return;
+        }
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
     }
 
 

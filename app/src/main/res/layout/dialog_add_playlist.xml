@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:paddingHorizontal="@dimen/dialog_layout_padding_horizontal"
-    android:background="@color/default_dialog_background"
+    android:background="@drawable/dialog_background"
     android:layout_height="match_parent">
 
     <!--

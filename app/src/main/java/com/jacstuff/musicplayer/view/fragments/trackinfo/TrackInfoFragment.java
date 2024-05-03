@@ -7,16 +7,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowMetrics;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
@@ -36,7 +31,7 @@ public class TrackInfoFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_track_info, container, false);
+        return inflater.inflate(R.layout.dialog_track_info, container, false);
     }
 
 
@@ -46,6 +41,7 @@ public class TrackInfoFragment extends DialogFragment {
         setupTextViews(view);
         setupButtons(view);
         setScrollViewHeight(this, view, R.id.trackInfoScrollView, R.id.trackInfoLayout);
+        DialogFragmentUtils.setTransparentBackground(this);
     }
 
 

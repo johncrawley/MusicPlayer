@@ -16,6 +16,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
@@ -32,7 +33,7 @@ public class ArtistOptionsFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_artist_options, container, false);
+        return inflater.inflate(R.layout.dialog_options_artist, container, false);
     }
 
 
@@ -41,6 +42,7 @@ public class ArtistOptionsFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         assignArtistNameFromBundle();
         setupButtons(view);
+        DialogFragmentUtils.setTransparentBackground(this);
     }
 
 

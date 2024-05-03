@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
+import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 
 import java.util.function.Consumer;
 
@@ -27,7 +28,7 @@ public class StopOptionsFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_dialog_options_stop, container, false);
+        return inflater.inflate(R.layout.dialog_options_stop, container, false);
     }
 
 
@@ -35,6 +36,7 @@ public class StopOptionsFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupButtons(view);
+        DialogFragmentUtils.setTransparentBackground(this);
     }
 
 

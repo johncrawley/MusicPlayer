@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.Message;
 
 
@@ -35,7 +36,7 @@ public class PlaylistOptionsFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_playlist_options, container, false);
+        return inflater.inflate(R.layout.dialog_options_playlist, container, false);
     }
 
 
@@ -44,6 +45,7 @@ public class PlaylistOptionsFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         assignArgs();
         setupButtons(view);
+        DialogFragmentUtils.setTransparentBackground(this);
     }
 
 

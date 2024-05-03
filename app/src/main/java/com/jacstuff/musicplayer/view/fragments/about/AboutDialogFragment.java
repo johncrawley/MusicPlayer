@@ -1,8 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.about;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +22,7 @@ public class AboutDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_about, container, false);
+        return inflater.inflate(R.layout.dialog_about, container, false);
     }
 
 
@@ -33,6 +31,7 @@ public class AboutDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         setupButtons(view);
         DialogFragmentUtils.setScrollViewHeight(this, view, R.id.aboutInfoScrollView, R.id.aboutInfoLayout);
+        DialogFragmentUtils.setTransparentBackground(this);
     }
 
 

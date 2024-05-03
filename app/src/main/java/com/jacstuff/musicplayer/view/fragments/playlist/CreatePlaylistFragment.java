@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
+import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.utils.KeyboardHelper;
 
 import androidx.annotation.NonNull;
@@ -44,7 +45,7 @@ public class CreatePlaylistFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_add_playlist, container, false);
+        View rootView = inflater.inflate(R.layout.dialog_add_playlist, container, false);
         playlistRepository = new PlaylistRepositoryImpl(getContext());
         setupKeyboardHelper();
         assignPlaylistNames();
@@ -57,6 +58,7 @@ public class CreatePlaylistFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         setupViews(view);
         setupKeyboardHelper();
+        DialogFragmentUtils.setTransparentBackground(this);
     }
 
 

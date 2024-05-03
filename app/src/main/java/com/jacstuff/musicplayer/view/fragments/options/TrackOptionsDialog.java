@@ -15,6 +15,7 @@ import androidx.fragment.app.DialogFragment;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.entities.Track;
+import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.trackinfo.TrackInfoFragment;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
@@ -32,7 +33,7 @@ public class TrackOptionsDialog extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_dialog_track_options, container, false);
+        return inflater.inflate(R.layout.dialog_options_track, container, false);
     }
 
 
@@ -40,6 +41,7 @@ public class TrackOptionsDialog extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupButtons(view);
+        DialogFragmentUtils.setTransparentBackground(this);
     }
 
 
