@@ -249,6 +249,7 @@ public class TracksFragment extends Fragment{
     private void setupAddTracksButton(View parentView){
         addTracksToPlaylistButtonOuterLayout = parentView.findViewById(R.id.addTracksToPlaylistButtonOuterLayout);
         ButtonMaker.createImageButton(parentView, R.id.addTracksToPlaylistButton, this::addTracksToPlaylist);
+        getMain().ifPresent(ma -> addTracksToPlaylistButtonOuterLayout.setVisibility(ma.isUserPlaylistLoaded() ? View.VISIBLE : View.INVISIBLE));
     }
 
 
