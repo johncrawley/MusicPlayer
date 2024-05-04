@@ -40,6 +40,7 @@ public class TrackOptionsDialog extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        dismissWithoutAMediaPlayerService();
         setupButtons(view);
         DialogFragmentUtils.setTransparentBackground(this);
     }
@@ -89,6 +90,12 @@ public class TrackOptionsDialog extends DialogFragment {
         Button addTrackToPlaylistButton =  ButtonMaker.createButton(parentView, R.id.addTrackToPlaylistButton, this::showAddTrackToPlaylistDialog);
         if(addTrackToPlaylistButton != null) {
             setupVisibilityForUserPlaylistsExist(addTrackToPlaylistButton);
+        }
+    }
+
+    private void dismissWithoutAMediaPlayerService(){
+        if(getMainActivity() == null || getMainActivity().getMediaPlayerService() == null){
+            dismiss();
         }
     }
 
