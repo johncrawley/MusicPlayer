@@ -127,6 +127,18 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
+    public List<Playlist> getAllPlaylists(){
+        return playlistRepository.getAllPlaylists();
+    }
+
+
+    @Override
+    public void deletePlaylist(Playlist playlist){
+        playlistRepository.deletePlaylist(playlist.getId());
+    }
+
+
+    @Override
     public ArrayList<String> getAlbumNames(){
         return currentArtist == null ?
                 trackLoader.getAllAlbumNames() : currentArtist.getAlbumNames();

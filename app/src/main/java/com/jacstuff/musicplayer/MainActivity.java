@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
             searchViewHelper.setMediaPlayerService(mediaPlayerService);
             setupOptionsMenuForCurrentTrack();
             setupFunctionButtons();
+            sendMessage(NOTIFY_PLAYLIST_TAB_TO_RELOAD);
             isServiceConnected.set(true);
         }
 

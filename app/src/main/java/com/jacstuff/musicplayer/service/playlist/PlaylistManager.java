@@ -32,6 +32,8 @@ public interface PlaylistManager {
     void addTrackToQueue(Track track);
 
     List<Playlist> getAllUserPlaylists();
+    List<Playlist> getAllPlaylists();
+    void deletePlaylist(Playlist playlist);
     void loadPlaylist(Playlist playlist);
     void loadAllTracksPlaylist();
     boolean loadTracksFromAlbum(String albumName);

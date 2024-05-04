@@ -26,8 +26,6 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.ListIndexManager;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
-import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
-import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
@@ -50,12 +48,12 @@ public class PlaylistsFragment extends Fragment {
     private Context context;
     private boolean hasClicked;
     private PlaylistRecyclerAdapter listAdapter;
-    private PlaylistRepository playlistRepository;
     private RecyclerView recyclerView;
     private Set<String> playlistNames;
     private final int INITIAL_PLAYLIST_CAPACITY = 50;
     private ListIndexManager listIndexManager;
     private int longClickedPosition;
+    private View parentView;
 
     public PlaylistsFragment() {
         // Required empty public constructor
@@ -67,12 +65,12 @@ public class PlaylistsFragment extends Fragment {
                              Bundle savedInstanceState) {
         context = getContext();
         View view = inflater.inflate(R.layout.fragment_tab_playlists, container, false);
-        playlistRepository = new PlaylistRepositoryImpl(getContext());
         setupPlaylistRecyclerView(view);
         hasClicked = false;
         setupFragmentListeners();
         assignListIndexManager();
         selectSavedIndex();
+        this.parentView = view;
         return view;
     }
 
@@ -82,6 +80,7 @@ public class PlaylistsFragment extends Fragment {
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD, (bundle) -> loadLongClickedPlaylist());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE, (bundle) -> startAddPlaylistFragment());
         setListener(this, Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
+        setListener(this, Message.NOTIFY_PLAYLIST_TAB_TO_RELOAD, (bundle) -> setupPlaylistRecyclerView(parentView));
     }
 
 
@@ -156,6 +155,9 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void setupPlaylistRecyclerView(View parentView){
+        if(parentView == null){
+            return;
+        }
         recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
         listAdapter = new PlaylistRecyclerAdapter(getAllPlaylists(),
                 this::loadSelectedPlaylist,
@@ -200,7 +202,7 @@ public class PlaylistsFragment extends Fragment {
     private void deletePlaylistAndSelectFirstPlaylist(Playlist playlist){
         navigateToFirstPlaylistIfDeletedPlaylistIsLoaded(playlist);
         listAdapter.clearLongClickedView();
-        playlistRepository.deletePlaylist(playlist.getId());
+        delete(playlist);
         refreshList();
         toast(R.string.delete_playlist_toast_success);
     }
@@ -212,6 +214,11 @@ public class PlaylistsFragment extends Fragment {
             item.callOnClick();
             listAdapter.select(item);
         }
+    }
+
+
+    private void delete(Playlist playlist){
+        getMediaPlayerService().ifPresent(mps -> mps.getPlaylistManager().deletePlaylist(playlist));
     }
 
 
@@ -269,10 +276,22 @@ public class PlaylistsFragment extends Fragment {
 
 
     private List<Playlist> getAllPlaylists(){
-        List<Playlist> playlists = new ArrayList<>(INITIAL_PLAYLIST_CAPACITY);
-        playlists.addAll(playlistRepository.getAllPlaylists());
+        List<Playlist> playlists = loadAllPlaylists();
         assignPlaylistNames(playlists);
         return playlists;
+    }
+
+
+    private List<Playlist> loadAllPlaylists(){
+        List<Playlist> playlists = new ArrayList<>(INITIAL_PLAYLIST_CAPACITY);
+        getMediaPlayerService().ifPresent(mps -> playlists.addAll(mps.getPlaylistManager().getAllPlaylists()));
+        return playlists;
+    }
+
+
+    private Optional<MediaPlayerService> getMediaPlayerService(){
+        MainActivity mainActivity = getMainActivity();
+        return mainActivity == null ? Optional.empty() : Optional.ofNullable(mainActivity.getMediaPlayerService());
     }
 
 
