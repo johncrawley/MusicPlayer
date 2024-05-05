@@ -1,9 +1,7 @@
 package com.jacstuff.musicplayer.service.helpers;
 
 import android.content.Context;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.PowerManager;
 import android.util.Log;
 
@@ -102,6 +100,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     public void assignTrack(Track track){
         currentTrack = track;
         elapsedTime = 0;
+        stopUpdatingElapsedTimeOnView();
         if(currentTrack == null){
             return;
         }
@@ -110,12 +109,10 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
             return;
         }
         assignAlbumArt(track);
-        if(hasEncounteredError){
-            log("assignTrack() encountered error after invoking assignAlbumArt()");
-            mediaPlayerService.setBlankAlbumArt();
-        }
         mediaPlayerService.updateViewsOnTrackAssigned();
-        select(currentTrack);
+        if(currentState == MediaPlayerState.PLAYING){
+            updateViewsEnsurePlayerStoppedAndSchedulePlay();
+        }
     }
 
 
@@ -128,9 +125,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         cancelScheduledStoppageOfTrack();
         currentTrack = track;
         assignAlbumArt(track);
-        if(hasEncounteredError){
-            mediaPlayerService.setBlankAlbumArt();
-        }
         updateViewsEnsurePlayerStoppedAndSchedulePlay();
     }
 
@@ -168,9 +162,13 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         }
         catch(IOException e){
             e.printStackTrace();
+            hasEncounteredError = true;
         } catch(RuntimeException e){
             hasEncounteredError = true;
             mediaPlayerService.notifyMainViewThatFileDoesNotExist(track);
+        }
+        if(hasEncounteredError){
+            mediaPlayerService.setBlankAlbumArt();
         }
     }
 
@@ -193,28 +191,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     public Track getCurrentTrack(){
         return currentTrack;
-    }
-
-
-    public void playTrackFrom(Context context, Uri uri){
-        try (MediaMetadataRetriever retriever = new MediaMetadataRetriever()){
-            retriever.setDataSource(context, uri);
-            Track track = Track.Builder
-                    .newInstance()
-                    .withTitle(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE))
-                    .withAlbum(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM))
-                    .withArtist(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST))
-                    .withDisc(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER))
-                    .withBitrate(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE))
-                    .withYear(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR))
-                    .withGenre(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE))
-                    .withUri(uri)
-                    .build();
-            loadTrack(track);
-
-        }catch(IOException | IllegalArgumentException e){
-            e.printStackTrace();
-        }
     }
 
 
@@ -272,23 +248,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    private void select(Track track){
-        MediaPlayerState oldState = currentState;
-        stopTrackIfPlayingOrPaused();
-        currentTrack = track;
-        if(oldState == MediaPlayerState.PLAYING){
-            updateViewsEnsurePlayerStoppedAndSchedulePlay();
-        }
-    }
-
-
-    private void stopTrackIfPlayingOrPaused(){
-        if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED){
-            stop(false);
-        }
-    }
-
-
     public boolean isPaused(){
         return currentState == MediaPlayerState.PAUSED;
     }
@@ -311,7 +270,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     public void stopUpdatingElapsedTimeOnView(){
-        if(updateElapsedTimeFuture == null){
+        if(updateElapsedTimeFuture == null || updateElapsedTimeFuture.isCancelled()){
             return;
         }
         updateElapsedTimeFuture.cancel(false);
