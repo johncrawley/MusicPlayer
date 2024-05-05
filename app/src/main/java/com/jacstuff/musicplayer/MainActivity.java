@@ -38,6 +38,7 @@ import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
+import com.jacstuff.musicplayer.view.fragments.options.AddTrackToPlaylistFragment;
 import com.jacstuff.musicplayer.view.fragments.options.TrackOptionsDialog;
 import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
 import com.jacstuff.musicplayer.view.utils.AddTrackToPlaylistViewHelper;
@@ -234,7 +235,10 @@ public class MainActivity extends AppCompatActivity {
 
     public List<String> getArtistNames(){ return getTracksOrEmptyList(PlaylistManager::getArtistNames); }
 
-    public void showAddTrackToPlaylistView(){ addTrackToPlaylistViewHelper.showAddTrackToPlaylistView();}
+    public void showAddTrackToPlaylistView(){
+        FragmentManagerHelper.showDialog(this, AddTrackToPlaylistFragment.newInstance(), "add_track_to_playlist");
+       // addTrackToPlaylistViewHelper.showAddTrackToPlaylistView();
+    }
 
     public void hidePlayerViews(){ playerViewHelper.setVisibilityOnPlayerViews(View.INVISIBLE);}
 

@@ -29,6 +29,7 @@
     <string name="playlist_info_artist_prefix">Artist:</string>
     <string name="playlist_info_album_prefix">Album:</string>
     <string name="playlist_info_genre_prefix">Genre:</string>
+    <string name="add_track_to_playlist_dialog_title">Add track "%1$s"to a playlist</string>
 
     <string name="error_playing_track_toast_message">Unable to play the track at %1$s</string>
     <string name="error_loading_track_toast_message">Unable to load the track at %1$s</string>

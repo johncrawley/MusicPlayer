@@ -154,7 +154,8 @@ public class TrackOptionsDialog extends DialogFragment {
 
 
     private void showAddTrackToPlaylistDialog(){
-        runThenDismissAfterDelay(MainActivity::showAddTrackToPlaylistView);
+        dismiss();
+        getMainActivity().showAddTrackToPlaylistView();
     }
 
 
