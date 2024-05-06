@@ -54,7 +54,7 @@ public class AlbumOptionsFragment extends DialogFragment {
 
 
     private void setupButtons(View parentView){
-        loadTracksButton = ButtonMaker.createButton(parentView, R.id.loadAlbumTracksButton, this::loadAlbumTracks);
+        loadTracksButton = ButtonMaker.setupButton(parentView, R.id.loadAlbumTracksButton, this::loadAlbumTracks);
         setupAddTracksToPlaylistButton(parentView);
     }
 
@@ -73,7 +73,7 @@ public class AlbumOptionsFragment extends DialogFragment {
 
     private void setupAddTracksToPlaylistButton(View parentView){
         if(getMainActivity().isUserPlaylistLoaded()){
-            addTracksToPlaylistButton = ButtonMaker.createButton(parentView,
+            addTracksToPlaylistButton = ButtonMaker.setupButton(parentView,
                     R.id.addAlbumTracksToCurrentPlaylistButton,
                     this::addAlbumTracksToCurrentPlaylist);
 

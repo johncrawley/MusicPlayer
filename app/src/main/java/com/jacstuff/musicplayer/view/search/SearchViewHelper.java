@@ -62,9 +62,9 @@ public class SearchViewHelper {
 
 
     private void setupButtons(){
-        addSearchResultButton       = ButtonMaker.createButton(searchView, R.id.addSelectedButton, this::addSelectedSearchResultToPlaylist);
-        playSearchResultButton      = ButtonMaker.createButton(searchView, R.id.playSelectedButton, this::playSelectedSearchResult);
-        enqueueSearchResultButton   = ButtonMaker.createButton(searchView, R.id.playNextButton, this::addSearchResultToQueue);
+        addSearchResultButton       = ButtonMaker.setupButton(searchView, R.id.addSelectedButton, this::addSelectedSearchResultToPlaylist);
+        playSearchResultButton      = ButtonMaker.setupButton(searchView, R.id.playSelectedButton, this::playSelectedSearchResult);
+        enqueueSearchResultButton   = ButtonMaker.setupButton(searchView, R.id.playNextButton, this::addSearchResultToQueue);
     }
 
 

@@ -36,7 +36,7 @@ public class AboutDialogFragment extends DialogFragment {
 
 
     private void setupButtons(View parentView){
-        ButtonMaker.createButton(parentView, R.id.dismissAboutDialogButton, this::dismiss);
+        ButtonMaker.setupButton(parentView, R.id.dismissAboutDialogButton, this::dismiss);
     }
 
 

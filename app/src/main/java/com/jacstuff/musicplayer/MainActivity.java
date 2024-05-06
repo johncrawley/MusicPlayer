@@ -38,6 +38,7 @@ import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
+import com.jacstuff.musicplayer.view.fragments.config.ConfigDialogFragment;
 import com.jacstuff.musicplayer.view.fragments.options.AddTrackToPlaylistFragment;
 import com.jacstuff.musicplayer.view.fragments.options.TrackOptionsDialog;
 import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
@@ -542,9 +543,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupFunctionButtons(){
         setupImageButton(R.id.searchButton, ()-> searchViewHelper.toggleSearch());
-        setupImageButton(R.id.refreshButton, ()-> mediaPlayerService.refreshTrackDataFromFilesystem());
-        setupImageButton(R.id.configButton, this::startSettingsActivity);
-        setupImageButton(R.id.aboutButton, this::loadAboutDialog);
+       // setupImageButton(R.id.refreshButton, ()-> mediaPlayerService.refreshTrackDataFromFilesystem());
+        setupImageButton(R.id.configButton, this::loadConfigDialog);
+        //setupImageButton(R.id.aboutButton, this::loadAboutDialog);
     }
 
 
@@ -554,13 +555,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void startSettingsActivity(){
+    public void startSettingsActivity(){
         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(intent);
     }
 
 
-    private void loadAboutDialog(){
+    public void loadConfigDialog(){
+        FragmentManagerHelper.showDialog(this, new ConfigDialogFragment(), "configDialogFragment");
+    }
+
+
+    public void loadAboutDialog(){
         FragmentManagerHelper.showDialog(this, new AboutDialogFragment(), "aboutDialogFragment");
     }
 

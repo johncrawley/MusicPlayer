@@ -47,7 +47,7 @@ public class TrackOptionsDialog extends DialogFragment {
 
 
     private void setupButtons(View parentView){
-        ButtonMaker.createButton(parentView, R.id.enqueueTrackButton, this::enqueueCurrentTrack);
+        ButtonMaker.setupButton(parentView, R.id.enqueueTrackButton, this::enqueueCurrentTrack);
         setupInfoButton(parentView);
         setupLoadAlbumButton(parentView);
         setupLoadArtistButton(parentView);
@@ -79,7 +79,7 @@ public class TrackOptionsDialog extends DialogFragment {
         if(attribute.isBlank() || attribute.equalsIgnoreCase("<unknown>")){
             return;
         }
-        Button button = ButtonMaker.createButton(parentView, buttonId, runnable);
+        Button button = ButtonMaker.setupButton(parentView, buttonId, runnable);
         if(button != null){
             button.setVisibility(View.VISIBLE);
         }
@@ -87,7 +87,7 @@ public class TrackOptionsDialog extends DialogFragment {
 
 
     private void setupAddTrackToPlaylistButton(View parentView){
-        Button addTrackToPlaylistButton =  ButtonMaker.createButton(parentView, R.id.addTrackToPlaylistButton, this::showAddTrackToPlaylistDialog);
+        Button addTrackToPlaylistButton =  ButtonMaker.setupButton(parentView, R.id.addTrackToPlaylistButton, this::showAddTrackToPlaylistDialog);
         if(addTrackToPlaylistButton != null) {
             setupVisibilityForUserPlaylistsExist(addTrackToPlaylistButton);
         }
@@ -109,7 +109,7 @@ public class TrackOptionsDialog extends DialogFragment {
 
 
     private void setupRemoveTrackButton(View parentView){
-        Button removeTrackButton =  ButtonMaker.createButton(parentView, R.id.removeFromPlaylistButton, this::removeSelectedTrackFromPlaylist);
+        Button removeTrackButton =  ButtonMaker.setupButton(parentView, R.id.removeFromPlaylistButton, this::removeSelectedTrackFromPlaylist);
         if(removeTrackButton != null) {
             setupVisibilityForUserPlaylistLoaded(removeTrackButton);
         }

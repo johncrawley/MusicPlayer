@@ -89,7 +89,7 @@ public class TrackInfoFragment extends DialogFragment {
 
 
     private void setupButtons(View parentView){
-        ButtonMaker.createButton(parentView, R.id.dismissTrackInfoDialogButton, this::dismiss);
+        ButtonMaker.setupButton(parentView, R.id.dismissTrackInfoDialogButton, this::dismiss);
     }
 
 

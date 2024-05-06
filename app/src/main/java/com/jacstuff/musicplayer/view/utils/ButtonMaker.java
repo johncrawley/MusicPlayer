@@ -6,7 +6,7 @@ import android.widget.ImageButton;
 
 public class ButtonMaker {
 
-    public static Button createButton(View parentView, int id, Runnable onClickAction){
+    public static Button setupButton(View parentView, int id, Runnable onClickAction){
         Button button = parentView.findViewById(id);
         if(button == null){
             return null;
@@ -23,4 +23,5 @@ public class ButtonMaker {
         button.setOnClickListener((View v)-> onClickAction.run());
         return button;
     }
+
 }

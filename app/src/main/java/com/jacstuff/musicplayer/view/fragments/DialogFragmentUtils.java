@@ -3,6 +3,8 @@ package com.jacstuff.musicplayer.view.fragments;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -12,6 +14,10 @@ import android.widget.ScrollView;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+
+import com.jacstuff.musicplayer.MainActivity;
+
+import java.util.function.Consumer;
 
 public class DialogFragmentUtils {
 
@@ -58,4 +64,17 @@ public class DialogFragmentUtils {
         return windowMetrics.getBounds().height();
     }
 
+
+    public static void runThenDismissAfterDelay(DialogFragment dialogFragment, Consumer<MainActivity> consumer){
+        MainActivity mainActivity = (MainActivity) dialogFragment.getActivity();
+        if(mainActivity != null) {
+            consumer.accept(mainActivity);
+        }
+        dismissAfterDelay(dialogFragment);
+    }
+
+
+    private static void dismissAfterDelay(DialogFragment dialogFragment){
+        new Handler(Looper.getMainLooper()).postDelayed(dialogFragment::dismiss, 200);
+    }
 }

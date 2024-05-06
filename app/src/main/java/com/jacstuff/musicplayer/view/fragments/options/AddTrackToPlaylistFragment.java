@@ -47,7 +47,7 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_add_track_to_playlist, container, false);
         log("Entered onCreateView()");
         setupPlaylistRecyclerView(view);
-        setupTitle();
+        setupTitle(view);
         return view;
     }
 
@@ -56,6 +56,7 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
         System.out.println("^^^ AddTrackToPlaylistFragment: " + msg);
     }
 
+    
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
