@@ -501,8 +501,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void loadTracksFromGenre(String genreName){
-        mediaPlayerService.loadTracksFromGenre(genreName);
-        tabHelper.switchToTracksTab();
+        if(mediaPlayerService != null) {
+            mediaPlayerService.loadTracksFromGenre(genreName);
+            tabHelper.switchToTracksTab();
+        }
     }
 
 

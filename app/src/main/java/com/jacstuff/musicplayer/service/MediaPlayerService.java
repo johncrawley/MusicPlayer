@@ -240,8 +240,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     public void playTrack(){ mediaPlayerHelper.playTrack(); }
 
-    public void stopUpdatingElapsedTimeOnView(){ mediaPlayerHelper.stopUpdatingElapsedTimeOnView(); }
-
     public void notifyViewOfAlbumNotLoaded(String albumName){ mainActivity.notifyAlbumNotLoaded(albumName);}
 
     public void notifyViewOfGenreNotLoaded(String genreName){ mainActivity.notifyGenreNotLoaded(genreName);}
@@ -317,9 +315,17 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
 
     public void loadNextTrack(){
+        log("entered loadNextTrack()");
+        boolean isNull = getPlaylistManager() == null;
+        boolean isTrackNull = isNull || getPlaylistManager().getNextTrack().isEmpty();
+        log("entered loadNextTrack() is playlistManager null: " + isNull + " is track present: " + isTrackNull);
         getPlaylistManager().getNextTrack().ifPresent(mediaPlayerHelper::loadNext);
     }
 
+
+    private void log(String msg){
+        System.out.println("^^^ MediaPlayerService: " + msg);
+    }
 
     public void loadFirstTrack(){
         getPlaylistManager().getFirstTrack().ifPresent(mediaPlayerHelper::loadNext);

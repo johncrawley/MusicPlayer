@@ -53,6 +53,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     public void loadNext(Track track){
+        log("loadNext()");
         resetErrorStatus();
         loadTrack(track == null ? currentTrack : track);
         cancelScheduledStoppageOfTrack();
@@ -65,6 +66,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     void loadTrack(Track track){
+        log("entered loadTrack()");
         if(isPreparingTrack.get()){
             return;
         }
@@ -99,20 +101,31 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     public void assignTrack(Track track){
         currentTrack = track;
-        elapsedTime = 0;
-        stopUpdatingElapsedTimeOnView();
-        if(currentTrack == null){
+        resetElapsedTime();
+        stopUpdatingElapsedTime();
+        if(track == null || track.getPathname() == null){
+            mediaPlayerService.setBlankTrackInfoOnMainView();
+            setStateToStopped();
             return;
         }
-        if(currentTrack.getPathname() == null) {
-            handleNullPathname();
-            return;
-        }
-        assignAlbumArt(track);
+        setupCurrentTrack();
+    }
+
+
+    private void setupCurrentTrack(){
+        assignAlbumArt(currentTrack);
         mediaPlayerService.updateViewsOnTrackAssigned();
-        if(currentState == MediaPlayerState.PLAYING){
-            updateViewsEnsurePlayerStoppedAndSchedulePlay();
+        if(currentState == MediaPlayerState.PAUSED){
+            stopPlayerAndElapsedTime();
         }
+        else if(currentState == MediaPlayerState.PLAYING){
+            stopPlayerAndSchedulePlay();
+        }
+    }
+
+
+    private boolean isTrackPlayingOrPaused(){
+        return currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED;
     }
 
 
@@ -125,15 +138,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         cancelScheduledStoppageOfTrack();
         currentTrack = track;
         assignAlbumArt(track);
-        updateViewsEnsurePlayerStoppedAndSchedulePlay();
-    }
-
-
-    private void handleNullPathname(){
-        if(currentTrack.getPathname() == null){
-            mediaPlayerService.setBlankTrackInfoOnMainView();
-            setStateToStopped();
-        }
+        stopPlayerAndSchedulePlay();
     }
 
 
@@ -201,7 +206,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     public void playTrack(){
         if(currentState == MediaPlayerState.STOPPED || currentState == MediaPlayerState.FINISHED){
-            updateViewsEnsurePlayerStoppedAndSchedulePlay();
+            stopPlayerAndSchedulePlay();
         }
         else if(currentState == MediaPlayerState.PAUSED){
             resume();
@@ -233,13 +238,9 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     public void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
-        if(currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED) {
-            mediaPlayer.stop();
-            currentState = MediaPlayerState.STOPPED;
-            mediaPlayer.reset();
-        }
-        mediaPlayerService.stopUpdatingElapsedTimeOnView();
-        elapsedTime = 0;
+        stopIfPlayingOrPaused();
+        stopUpdatingElapsedTime();
+        resetElapsedTime();
         if(shouldUpdateNotification) {
             mediaPlayerService.updateNotification();
         }
@@ -253,6 +254,20 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
+    private void stopIfPlayingOrPaused(){
+        if(isTrackPlayingOrPaused()) {
+            mediaPlayer.stop();
+            currentState = MediaPlayerState.STOPPED;
+            mediaPlayer.reset();
+        }
+    }
+
+
+    private void resetElapsedTime(){
+        elapsedTime = 0;
+    }
+
+
     public void enabledStopAfterTrackFinishes(){
         if(currentState == MediaPlayerState.PLAYING) {
             shouldNextTrackPlayAfterCurrentTrackEnds = false;
@@ -263,13 +278,13 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     public void pauseMediaPlayer(){
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-            stopUpdatingElapsedTimeOnView();
+            stopUpdatingElapsedTime();
             currentState = MediaPlayerState.PAUSED;
         }
     }
 
 
-    public void stopUpdatingElapsedTimeOnView(){
+    public void stopUpdatingElapsedTime(){
         if(updateElapsedTimeFuture == null || updateElapsedTimeFuture.isCancelled()){
             return;
         }
@@ -279,11 +294,11 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     private void onTrackFinished(MediaPlayer mediaPlayer){
         currentState = MediaPlayerState.FINISHED;
-        stopUpdatingElapsedTimeOnView();
+        stopUpdatingElapsedTime();
         mediaPlayer.reset();
         mediaPlayerService.loadNextTrack();
         if(shouldNextTrackPlayAfterCurrentTrackEnds) {
-            updateViewsEnsurePlayerStoppedAndSchedulePlay();
+            stopPlayerAndSchedulePlay();
         }
         else{
             stop(true);
@@ -322,18 +337,24 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
             resume();
         }
         else if(currentState == MediaPlayerState.STOPPED) {
-            updateViewsEnsurePlayerStoppedAndSchedulePlay();
+            stopPlayerAndSchedulePlay();
         }
     }
 
 
-    private void updateViewsEnsurePlayerStoppedAndSchedulePlay() {
+    private void stopPlayerAndSchedulePlay() {
+        log("^^^ stopPlayerAndSchedulePlay()");
         mediaPlayerService.updateViewsForConnecting();
-        stopRunningMediaPlayer();
-        mediaPlayerService.stopUpdatingElapsedTimeOnView();
-        elapsedTime = 0;
-        shouldNextTrackPlayAfterCurrentTrackEnds = true;
+        stopPlayerAndElapsedTime();
         executorService.schedule(this::startTrack, 1, TimeUnit.MILLISECONDS);
+    }
+
+
+    private void stopPlayerAndElapsedTime(){
+        stopRunningMediaPlayer();
+        stopUpdatingElapsedTime();
+        resetElapsedTime();
+        shouldNextTrackPlayAfterCurrentTrackEnds = true;
     }
 
 
