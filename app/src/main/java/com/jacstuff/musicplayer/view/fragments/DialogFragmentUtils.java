@@ -2,6 +2,7 @@ package com.jacstuff.musicplayer.view.fragments;
 
 import android.app.Dialog;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -62,6 +63,15 @@ public class DialogFragmentUtils {
         }
         WindowMetrics windowMetrics = fragment.getActivity().getWindowManager().getCurrentWindowMetrics();
         return windowMetrics.getBounds().height();
+    }
+
+
+    public static Rect getWindowBounds(Fragment fragment){
+        if(fragment.getActivity() == null){
+            return new Rect(0,0,700, 700);
+        }
+        WindowMetrics windowMetrics = fragment.getActivity().getWindowManager().getCurrentWindowMetrics();
+        return windowMetrics.getBounds();
     }
 
 

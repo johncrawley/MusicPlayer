@@ -1,12 +1,14 @@
 package com.jacstuff.musicplayer.view.fragments.options;
 
-import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,7 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
+import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistRecyclerAdapter;
 
@@ -36,6 +39,7 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
     private RecyclerView recyclerView;
     private Set<String> playlistNames;
     private final int INITIAL_PLAYLIST_CAPACITY = 50;
+    private TextView titleTextView;
 
     public static AddTrackToPlaylistFragment newInstance() {
         return new AddTrackToPlaylistFragment();
@@ -45,7 +49,7 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_add_track_to_playlist, container, false);
-        log("Entered onCreateView()");
+        dismissIfServiceNotReady();
         setupPlaylistRecyclerView(view);
         setupTitle(view);
         return view;
@@ -56,19 +60,68 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
         System.out.println("^^^ AddTrackToPlaylistFragment: " + msg);
     }
 
-    
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         DialogFragmentUtils.setTransparentBackground(this);
+        setListDimensions(view);
         log("entered onViewCreated");
     }
 
 
+    private void dismissIfServiceNotReady(){
+        MainActivity ma = (MainActivity) getActivity();
+        if(ma == null  || ma.getMediaPlayerService() == null){
+            dismiss();
+        }
+    }
+
+
     private void setupTitle(View parentView){
-        TextView titleTextView = parentView.findViewById(R.id.title);
-        String text = getString(R.string.add_track_to_playlist_dialog_title, "placeholder");
+        titleTextView = parentView.findViewById(R.id.title);
+        String title = getCurrentTrackTitle();
+        if(title.isBlank()){
+            return;
+        }
+        String text = getString(R.string.add_track_to_playlist_dialog_title, title);
         titleTextView.setText(text);
+    }
+
+
+    public void setListDimensions(View parentView){
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                parentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                LinearLayout linearLayout = parentView.findViewById(R.id.playlistRecyclerViewLayout);
+                Rect windowBounds = DialogFragmentUtils.getWindowBounds(AddTrackToPlaylistFragment.this);
+                int windowHeight = windowBounds.height();
+                int windowWidth = windowBounds.width();
+                float widthRatio = windowHeight > windowWidth ? 1.5f : 2.3f;
+                float heightRatio = windowHeight > windowWidth ? 2.0f : 2.5f;
+
+                int height = (int)(windowHeight/heightRatio);
+                int width = (int)(windowWidth/widthRatio);
+                linearLayout.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+                var textLayoutParams = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
+                textLayoutParams.setMargins(5,20,5,20);
+                titleTextView.setLayoutParams(textLayoutParams);
+            }
+        });
+    }
+
+
+    private String getCurrentTrackTitle(){
+        String trackTitle = "";
+        MainActivity mainActivity = (MainActivity)getActivity();
+        if(mainActivity != null){
+            Track track = mainActivity.getSelectedTrack();
+            if(track != null){
+                trackTitle = track.getTitle();
+            }
+        }
+        return trackTitle;
     }
 
 
