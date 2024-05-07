@@ -12,6 +12,21 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/search_header">
+
+        <SwitchPreference
+            app:key="dismissSearchAfterSelection"
+            app:title="@string/dismiss_search_after_selection_title"
+            app:defaultValue="true"
+            app:enabled="true" />
+
+        <SwitchPreference
+            app:key="simpleSearchView"
+            app:title="@string/simple_search_enabled_title"
+            app:defaultValue="true"
+            app:enabled="true" />
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/lists_header">
 
         <EditTextPreference

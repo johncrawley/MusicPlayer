@@ -31,6 +31,16 @@ public class PreferencesHelper {
     }
 
 
+    public boolean isSearchViewDismissedAfterSelection(){
+        return getPrefs().getBoolean("dismissSearchAfterSelection", true);
+    }
+
+
+    public boolean isSimpleSearchEnabled(){
+        return getPrefs().getBoolean("simpleSearchView", true);
+    }
+
+
     public boolean areOnlyAlbumTracksFromSelectedArtistShown(){
        return getPrefs().getBoolean("onlyShowAlbumTracksFromSelectedArtist", true);
     }

@@ -155,6 +155,10 @@ public class SearchViewHelper {
             addSelectedSearchResultToPlaylist();
             return;
         }
+        if(isSimpleSearchEnabled()){
+            playSelectedSearchResult();
+            return;
+        }
         showSearchResultsButtons();
     }
 
@@ -195,6 +199,10 @@ public class SearchViewHelper {
 
 
     private void showSearchResultsButtons(){
+        if(isSimpleSearchEnabled()){
+            hideAllSearchResultsButtons();
+            return;
+        }
         if(isAddingTrackToPlaylist){
             setButtonVisibilityForAddingTrackToPlaylist();
             return;
@@ -224,6 +232,7 @@ public class SearchViewHelper {
         if(selectedSearchResultTrack != null) {
             mediaPlayerService.selectAndPlayTrack(selectedSearchResultTrack);
             hasSearchResultBeenPlayed = true;
+            hideSearchAfterSelection();
         }
     }
 
@@ -231,6 +240,20 @@ public class SearchViewHelper {
     private void addSearchResultToQueue(){
         if(selectedSearchResultTrack != null){
            mainActivity.enqueue(selectedSearchResultTrack);
+           hideSearchAfterSelection();
         }
     }
+
+
+    private void hideSearchAfterSelection(){
+        if(mainActivity.getPreferencesHelper().isSearchViewDismissedAfterSelection()){
+            hideSearch();
+        }
+    }
+
+
+    private boolean isSimpleSearchEnabled(){
+        return mainActivity.getPreferencesHelper().isSimpleSearchEnabled();
+    }
+
 }

@@ -348,6 +348,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public PreferencesHelper getPreferencesHelper(){
+        return preferencesHelper;
+    }
+
+
     private void log(String msg){
         System.out.println("^^^ MainActivity: " + msg);
     }
