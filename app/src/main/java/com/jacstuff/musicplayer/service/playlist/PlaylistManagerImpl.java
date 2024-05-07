@@ -505,7 +505,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private Track getTrack(Supplier<Track> supplier){
         if(!queuedTracks.isEmpty()){
-            return queuedTracks.removeLast();
+            Track track = queuedTracks.removeLast();
+            trackHistory.add(track);
+            return track;
         }
         return isShuffleEnabled ? getNextRandomUnPlayedTrack() : supplier.get();
     }

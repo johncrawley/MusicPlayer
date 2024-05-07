@@ -315,17 +315,9 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
 
     public void loadNextTrack(){
-        log("entered loadNextTrack()");
-        boolean isNull = getPlaylistManager() == null;
-        boolean isTrackNull = isNull || getPlaylistManager().getNextTrack().isEmpty();
-        log("entered loadNextTrack() is playlistManager null: " + isNull + " is track present: " + isTrackNull);
         getPlaylistManager().getNextTrack().ifPresent(mediaPlayerHelper::loadNext);
     }
 
-
-    private void log(String msg){
-        System.out.println("^^^ MediaPlayerService: " + msg);
-    }
 
     public void loadFirstTrack(){
         getPlaylistManager().getFirstTrack().ifPresent(mediaPlayerHelper::loadNext);
