@@ -42,7 +42,6 @@ import com.jacstuff.musicplayer.view.fragments.config.ConfigDialogFragment;
 import com.jacstuff.musicplayer.view.fragments.options.AddTrackToPlaylistFragment;
 import com.jacstuff.musicplayer.view.fragments.options.TrackOptionsDialog;
 import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
-import com.jacstuff.musicplayer.view.utils.AddTrackToPlaylistViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.utils.ThemeHelper;
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel viewModel;
     private ThemeHelper themeHelper;
     private AlbumArtHelper albumArtHelper;
-    private AddTrackToPlaylistViewHelper addTrackToPlaylistViewHelper;
     private PlayerViewHelper playerViewHelper;
     private TabHelper tabHelper;
     private final AtomicBoolean isServiceConnected = new AtomicBoolean(false);
@@ -79,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
             playerViewHelper.setMediaPlayerService(mediaPlayerService);
             albumArtHelper = new AlbumArtHelper(MainActivity.this);
             mediaPlayerService.setActivity(MainActivity.this);
-            addTrackToPlaylistViewHelper = new AddTrackToPlaylistViewHelper(MainActivity.this);
             searchViewHelper = new SearchViewHelper(MainActivity.this);
             searchViewHelper.setMediaPlayerService(mediaPlayerService);
             setupOptionsMenuForCurrentTrack();
@@ -229,8 +226,6 @@ public class MainActivity extends AppCompatActivity {
 
     public SearchViewHelper getSearchViewHelper(){ return searchViewHelper; }
 
-    public AddTrackToPlaylistViewHelper getAddTrackToPlaylistViewHelper(){ return addTrackToPlaylistViewHelper; }
-
     public List<String> getAlbumNames(){ return getTracksOrEmptyList(PlaylistManager::getAlbumNames); }
 
     public List<String> getGenreNames(){ return getTracksOrEmptyList(PlaylistManager::getGenreNames); }
@@ -239,7 +234,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void showAddTrackToPlaylistView(){
         FragmentManagerHelper.showDialog(this, AddTrackToPlaylistFragment.newInstance(), "add_track_to_playlist");
-       // addTrackToPlaylistViewHelper.showAddTrackToPlaylistView();
     }
 
     public void hidePlayerViews(){ playerViewHelper.setVisibilityOnPlayerViews(View.INVISIBLE);}
@@ -608,5 +602,4 @@ public class MainActivity extends AppCompatActivity {
     public void addTrackToPlaylist(Playlist playlist, int position){
         mediaPlayerService.addTrackToPlaylist(selectedTrack, playlist);
     }
-
 }

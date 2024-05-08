@@ -17,7 +17,6 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
-import com.jacstuff.musicplayer.view.utils.AddTrackToPlaylistViewHelper;
 import com.jacstuff.musicplayer.view.utils.AnimatorHelper;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 import com.jacstuff.musicplayer.view.utils.KeyboardHelper;
@@ -38,13 +37,11 @@ public class SearchViewHelper {
     private boolean hasSearchResultBeenPlayed = false;
     private OnBackPressedCallback dismissSearchViewOnBackPressedCallback;
     private MediaPlayerService mediaPlayerService;
-    private final AddTrackToPlaylistViewHelper addTrackToPlaylistViewHelper;
     private boolean isAddingTrackToPlaylist;
 
 
     public SearchViewHelper(MainActivity mainActivity){
         this.mainActivity = mainActivity;
-        addTrackToPlaylistViewHelper = mainActivity.getAddTrackToPlaylistViewHelper();
         keyboardHelper = new KeyboardHelper(mainActivity);
         setupViews();
         setupDismissSearchOnBackPressed();
@@ -89,7 +86,6 @@ public class SearchViewHelper {
 
     public void showSearch(boolean isAddingTrackToPlaylist){
         this.isAddingTrackToPlaylist = isAddingTrackToPlaylist;
-        addTrackToPlaylistViewHelper.hideView();
         hideAllSearchResultsButtons();
         Animator animator = createShowAnimatorFor(searchView, ()-> keyboardHelper.showKeyboardAndFocusOn(searchEditText));
         searchView.setVisibility(View.VISIBLE);
