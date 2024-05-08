@@ -226,6 +226,7 @@ public class TracksFragment extends Fragment{
         updatePlaylistInfoView(playlist);
         noTracksFoundTextView.setText(getString(R.string.loading_tracks));
         setVisibilityOnNoTracksFoundText();
+        getMain().ifPresent(ma -> ma.notifyNumberOfTracks(playlist.getTracks().size()));
     }
 
 

@@ -161,6 +161,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void notifyNumberOfTracks(int numberOfTracks){
+        if(playerViewHelper != null){
+            playerViewHelper.notifyNumberOfTracks(numberOfTracks);
+        }
+    }
+
+
     private void askForNotificationPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             askPermissionFor(POST_NOTIFICATIONS, requestNotificationsPermissionLauncher);
@@ -336,7 +343,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void toastIfTabsNotAutoSwitched(int strId){
-        log("Entered toastIfTabsNotAutoSwitched() result: " + preferencesHelper.isTabSwitchedAfterPlaylistLoaded());
         if(!preferencesHelper.isTabSwitchedAfterPlaylistLoaded()){
             toast(strId);
         }
@@ -345,11 +351,6 @@ public class MainActivity extends AppCompatActivity {
 
     public PreferencesHelper getPreferencesHelper(){
         return preferencesHelper;
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ MainActivity: " + msg);
     }
 
 

@@ -218,6 +218,17 @@ public class PlayerViewHelper {
     }
 
 
+    public void notifyNumberOfTracks(int numberOfTracks){
+        if(turnShuffleOnButton == null || turnShuffleOffButton == null){
+            return;
+        }
+        if(numberOfTracks < 2){
+            turnShuffleOffButton.setVisibility(View.INVISIBLE);
+            turnShuffleOnButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+
     private void setupLongClickListenerOnStopButton(){
         stopButton.setOnLongClickListener((View v)->{
             if(mediaPlayerService.isPlaying()){
