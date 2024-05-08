@@ -27,19 +27,13 @@ import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistRecyclerAdapter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.function.Consumer;
 
 public class AddTrackToPlaylistFragment extends DialogFragment {
 
-    private PlaylistRecyclerAdapter listAdapter;
-    private RecyclerView recyclerView;
-    private Set<String> playlistNames;
-    private final int INITIAL_PLAYLIST_CAPACITY = 50;
     private TextView titleTextView;
+    private int numberOfPlaylists;
 
     public static AddTrackToPlaylistFragment newInstance() {
         return new AddTrackToPlaylistFragment();
@@ -56,17 +50,11 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ AddTrackToPlaylistFragment: " + msg);
-    }
-
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         DialogFragmentUtils.setTransparentBackground(this);
-        setListDimensions(view);
-        log("entered onViewCreated");
+        setViewDimensions(view);
     }
 
 
@@ -89,26 +77,57 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
     }
 
 
-    public void setListDimensions(View parentView){
+    public void setViewDimensions(View parentView){
         parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 parentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                LinearLayout linearLayout = parentView.findViewById(R.id.playlistRecyclerViewLayout);
                 Rect windowBounds = DialogFragmentUtils.getWindowBounds(AddTrackToPlaylistFragment.this);
-                int windowHeight = windowBounds.height();
-                int windowWidth = windowBounds.width();
-                float widthRatio = windowHeight > windowWidth ? 1.5f : 2.3f;
-                float heightRatio = windowHeight > windowWidth ? 2.0f : 2.5f;
-
-                int height = (int)(windowHeight/heightRatio);
-                int width = (int)(windowWidth/widthRatio);
-                linearLayout.setLayoutParams(new LinearLayout.LayoutParams(width, height));
-                var textLayoutParams = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
-                textLayoutParams.setMargins(5,20,5,20);
-                titleTextView.setLayoutParams(textLayoutParams);
+                int height = getPlaylistHeight(windowBounds);
+                int width = getPlaylistWidth(windowBounds);
+                setListDimensions(parentView, width, height);
+                setTitleTextDimensions(width);
             }
         });
+    }
+
+
+    private void setListDimensions(View parentView, int width, int height){
+        LinearLayout linearLayout = parentView.findViewById(R.id.playlistRecyclerViewLayout);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+    }
+
+
+    private void setTitleTextDimensions(int width){
+        var textLayoutParams = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
+        textLayoutParams.setMargins(5,20,5,20);
+        titleTextView.setLayoutParams(textLayoutParams);
+    }
+
+
+    private int getPlaylistWidth(Rect windowBounds){
+        int windowHeight = windowBounds.height();
+        int windowWidth = windowBounds.width();
+        float widthRatio = windowHeight > windowWidth ? 1.5f : 2.3f;
+        return (int)(windowWidth/widthRatio);
+    }
+
+
+    private int getPlaylistHeight(Rect windowBounds){
+        int windowHeight = windowBounds.height();
+        int windowWidth = windowBounds.width();
+        float heightRatio = (windowHeight > windowWidth ? getPortraitListHeightRatio() : 2.5f);
+        return (int)(windowHeight/heightRatio);
+    }
+
+
+    private float getPortraitListHeightRatio(){
+        return switch (numberOfPlaylists){
+            case  0,1,2 -> 4.0f;
+            case  3,4,5 -> 3.6f;
+            case  6,7,8 -> 2.4f;
+            default -> 2f;
+        };
     }
 
 
@@ -129,8 +148,8 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
         if(parentView == null){
             return;
         }
-        recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
-        listAdapter = new PlaylistRecyclerAdapter(getAllPlaylists(), this::addTrackToSelectedPlaylist);
+        RecyclerView recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
+        PlaylistRecyclerAdapter listAdapter = new PlaylistRecyclerAdapter(loadUserPlaylists(), this::addTrackToSelectedPlaylist);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);
@@ -143,22 +162,17 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
     }
 
 
-    private List<Playlist> getAllPlaylists(){
-        List<Playlist> playlists = loadAllPlaylists();
-        assignPlaylistNames(playlists);
-        return playlists;
-    }
-
-
     private Optional<MainActivity> getMain(){
         return Optional.ofNullable((MainActivity) getActivity());
     }
 
 
 
-    private List<Playlist> loadAllPlaylists(){
+    private List<Playlist> loadUserPlaylists(){
+        int INITIAL_PLAYLIST_CAPACITY = 50;
         List<Playlist> playlists = new ArrayList<>(INITIAL_PLAYLIST_CAPACITY);
         getMediaPlayerService().ifPresent(mps -> playlists.addAll(mps.getPlaylistManager().getAllUserPlaylists()));
+        numberOfPlaylists = playlists.size();
         return playlists;
     }
 
@@ -169,29 +183,12 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
     }
 
 
-    private void assignPlaylistNames(List<Playlist> playlists){
-        playlistNames = new HashSet<>(INITIAL_PLAYLIST_CAPACITY);
-        playlists.forEach((Playlist pl) -> playlistNames.add(pl.getName().toLowerCase()));
-    }
-
-
-
-    private void runThenDismissAfterDelay(Consumer<MainActivity> consumer){
-        MainActivity mainActivity = (MainActivity) getActivity();
-        if(mainActivity != null) {
-            consumer.accept(mainActivity);
-        }
-        dismissAfterDelay();
-    }
-
-
     private MainActivity getMainActivity(){
         return (MainActivity) getActivity();
     }
 
 
     private void dismissAfterDelay(){
-        log("entered dismissAfterDelay()");
         new Handler(Looper.getMainLooper()).postDelayed(this::dismiss, 200);
     }
 }

@@ -3,7 +3,7 @@ package com.jacstuff.musicplayer.view.fragments.tracks;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 import static com.jacstuff.musicplayer.view.fragments.Message.DESELECT_CURRENT_TRACK_ITEM;
 import static com.jacstuff.musicplayer.view.fragments.Message.ENSURE_SELECTED_TRACK_IS_VISIBLE;
-import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_REQUEST_UPDATED_PLAYLIST;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TRACKS_TAB_TO_RELOAD;
 import static com.jacstuff.musicplayer.view.fragments.Message.SCROLL_TO_CURRENT_TRACK;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.IS_USER_PLAYLIST;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_USER_PLAYLIST_LOADED;
@@ -111,7 +111,7 @@ public class TracksFragment extends Fragment{
         setListener(this, NOTIFY_USER_PLAYLIST_LOADED, this::setVisibilityOnAddTracksToPlaylistButton);
         setListener(this, ENSURE_SELECTED_TRACK_IS_VISIBLE, this::ensureSelectedTrackIsVisible);
         setListener(this, DESELECT_CURRENT_TRACK_ITEM, this::deselectCurrentItem);
-        setListener(this, NOTIFY_TO_REQUEST_UPDATED_PLAYLIST, this::updateTracksList);
+        setListener(this, NOTIFY_TRACKS_TAB_TO_RELOAD, this::updateTracksList);
         setListener(this, SCROLL_TO_CURRENT_TRACK, this::scrollToCurrentTrack);
     }
 

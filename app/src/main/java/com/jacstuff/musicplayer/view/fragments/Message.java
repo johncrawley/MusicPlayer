@@ -1,7 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments;
 
 public enum Message {
-    NOTIFY_TO_REQUEST_UPDATED_PLAYLIST,
+    NOTIFY_TRACKS_TAB_TO_RELOAD,
     LOAD_GENRES,
     LOAD_ARTISTS,
     LOAD_ALBUMS,

@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
             setupOptionsMenuForCurrentTrack();
             setupFunctionButtons();
             sendMessage(NOTIFY_PLAYLIST_TAB_TO_RELOAD);
+            sendMessage(NOTIFY_TRACKS_TAB_TO_RELOAD);
             isServiceConnected.set(true);
         }
 
@@ -408,7 +409,7 @@ public class MainActivity extends AppCompatActivity {
     public void updateTracksList(Playlist playlist, Track currentTrack, int currentTrackIndex){
         Bundle bundle = new Bundle();
         putInt(bundle, MessageKey.TRACK_INDEX, currentTrackIndex);
-        sendMessage(NOTIFY_TO_REQUEST_UPDATED_PLAYLIST, bundle);
+        sendMessage(NOTIFY_TRACKS_TAB_TO_RELOAD, bundle);
         runOnUiThread(()-> updateViews(playlist.getTracks(), currentTrack));
     }
 
