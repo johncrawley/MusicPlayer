@@ -60,7 +60,7 @@ public class Track {
     private void createOrderedStr(){
         String trackNumberPrefix = trackNumber < 10 ? "0" : "";
         String trackStr = trackNumberPrefix + trackNumber;
-        orderedStr = artist + "-" + album + "-" + trackStr;
+        orderedStr = artist + "-" + album + "-" + disc + "-" + trackStr;
         orderedStr = orderedStr.toLowerCase();
     }
 

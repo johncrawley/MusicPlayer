@@ -1,7 +1,6 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory app:title="@string/theme_header">
-
         <ListPreference
             app:defaultValue="green"
             app:entries="@array/theme_color_entries"
@@ -9,11 +8,10 @@
             app:key="theme_color"
             app:title="@string/theme_title"
             app:useSimpleSummaryProvider="true" />
-
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/search_header">
 
+    <PreferenceCategory app:title="@string/search_header">
         <SwitchPreference
             app:key="dismissSearchAfterSelection"
             app:title="@string/dismiss_search_after_selection_title"
@@ -27,8 +25,18 @@
             app:enabled="true" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/lists_header">
 
+    <PreferenceCategory app:title="@string/tracks_header">
+        <EditTextPreference
+            app:key="tracksPathnameString"
+            app:title="@string/include_music_with_pathname"
+            app:summary="@string/include_music_with_pathname_summary"
+            app:defaultValue="/Music"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+
+    <PreferenceCategory app:title="@string/lists_header">
         <EditTextPreference
             app:key="minimumNumberOfTracksForMainArtist"
             app:title="@string/min_number_of_tracks_for_main_artist_title"
@@ -59,15 +67,6 @@
             app:title="@string/only_show_album_tracks_from_selected_artist"
             app:defaultValue="true"
             app:enabled="true" />
-
-        <EditTextPreference
-            app:key="tracksPathnameString"
-            app:title="@string/include_music_with_pathname"
-            app:summary="@string/include_music_with_pathname_summary"
-            app:defaultValue="/Music"
-            app:useSimpleSummaryProvider="true" />
-
     </PreferenceCategory>
-
 
 </PreferenceScreen>

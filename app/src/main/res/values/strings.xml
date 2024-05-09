@@ -158,10 +158,11 @@
     <string name="theme_header">Theme</string>
     <string name="lists_header">Lists</string>
     <string name="search_header">Search</string>
+    <string name="tracks_header">Tracks</string>
 
     <!-- Preferences -->
     <string name="theme_title">Theme</string>
-    <string name="min_number_of_tracks_for_main_artist_title">Min. Tracks To Show Artist</string>
+    <string name="min_number_of_tracks_for_main_artist_title">Minimum tracks an artist needs to be shown in the Artist list</string>
     <string name="min_number_of_tracks_for_main_artist_summary">The minimum number of tracks belonging to an artist for that artist to appear in the artists list.</string>
     <string name="include_music_with_pathname">Load Tracks with Pathname</string>
     <string name="include_music_with_pathname_summary">Only tracks that include the given string will be shown in the All Tracks list.</string>
@@ -170,10 +171,10 @@
     <string name="dismiss_search_after_selection_title">Dismiss search view when a result is selected</string>
     <string name="simple_search_enabled_title">Simplified search view (no option buttons) </string>
 
-    <string name="move_to_next_track_when_playlist_loaded_title">Auto Next Track On Playlist Load</string>
-    <string name="move_to_next_track_when_playlist_loaded_summary">Enable to automatically select the next track when a playlist is loaded</string>
-    <string name="ignore_duplicates_in_all_tracks_title">Hide Duplicates In All-Tracks and Artists Playlists</string>
-    <string name="auto_switch_tabs_after_playlist_selection_title">Automatically Switch Tabs After Playlist Selected</string>
+    <string name="move_to_next_track_when_playlist_loaded_title">Automatically load the next track when a playlist is loaded</string>
+    <string name="move_to_next_track_when_playlist_loaded_summary">Enable to automatically select the next track when a playlist is selected</string>
+    <string name="ignore_duplicates_in_all_tracks_title">Hide duplicates in All-Tracks and Artists playlists</string>
+    <string name="auto_switch_tabs_after_playlist_selection_title">Automatically switch tabs after a playlist is selected</string>
     <string name="only_show_album_tracks_from_selected_artist">Only show album tracks from the selected artist</string>
 
     <string name="theme_blue">Blue</string>
