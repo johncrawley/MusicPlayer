@@ -43,8 +43,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private List<Track> allTracks;
     private final TrackHistory trackHistory;
     private boolean isShuffleEnabled = true;
-    public static String ALL_TRACKS_PLAYLIST = "All Tracks";
-    private Playlist allTracksPlaylist;
     private Playlist currentPlaylist;
     private Artist currentArtist;
     private final ArrayDeque<Track> queuedTracks;
@@ -64,7 +62,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         unPlayedTracks = new ArrayList<>();
         random = new Random(System.currentTimeMillis());
         this.trackLoader = trackLoader;
-        setupDefaultPlaylists();
         initTrackList();
         trackHistory = new TrackHistory();
         queuedTracks = new ArrayDeque<>();
@@ -184,14 +181,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private void initTrackList(){
         tracks = allTracks;
-        allTracksPlaylist.setTracks(allTracks);
+        currentPlaylist = playlistRepository.getAllTracksPlaylist();
+        currentPlaylist.setTracks(allTracks);
         assignIndexesToTracks();
-    }
-
-
-    private void setupDefaultPlaylists(){
-        allTracksPlaylist = new Playlist(ALL_TRACKS_PLAYLIST, PlaylistType.ALL_TRACKS);
-        currentPlaylist = allTracksPlaylist;
     }
 
 
@@ -216,7 +208,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         setAllTracksIndexes();
         setupUnPlayedIndexes();
         trackHistory.reset();
-        currentPlaylist = allTracksPlaylist;
+        currentPlaylist = playlistRepository.getAllTracksPlaylist();
         tracks = allTracks;
     }
 

@@ -11,7 +11,6 @@ import com.jacstuff.musicplayer.service.db.DbUtils;
 import com.jacstuff.musicplayer.service.db.DbContract;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
-import com.jacstuff.musicplayer.service.playlist.PlaylistManagerImpl;
 
 
 import java.util.ArrayList;
@@ -21,12 +20,15 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
 
     private final SQLiteDatabase db;
     private final PlaylistItemRepository playlistItemRepository;
+    public static String ALL_TRACKS_PLAYLIST = "All Tracks";
+    private final Playlist allTracksPlaylist;
 
 
     public PlaylistRepositoryImpl(Context context){
         DbHelper dbHelper = DbHelper.getInstance(context);
         db = dbHelper.getWritableDatabase();
         playlistItemRepository = new PlaylistItemRepositoryImpl(context);
+        allTracksPlaylist = new Playlist(ALL_TRACKS_PLAYLIST, PlaylistType.ALL_TRACKS);
     }
 
 
@@ -51,6 +53,11 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
         playlistItemRepository.deleteAllPlaylistItems(playlistId);
     }
 
+    @Override
+    public Playlist getAllTracksPlaylist(){
+        return allTracksPlaylist;
+    }
+
 
     private void execSql(String query){
         try {
@@ -65,7 +72,7 @@ public class PlaylistRepositoryImpl implements PlaylistRepository {
     @Override
     public List<Playlist> getAllPlaylists() {
         List<Playlist> playlists = new ArrayList<>();
-        playlists.add(new Playlist(PlaylistManagerImpl.ALL_TRACKS_PLAYLIST, PlaylistType.ALL_TRACKS));
+        playlists.add(allTracksPlaylist);
         playlists.addAll(getPlaylistsFromDB());
         return  playlists;
     }

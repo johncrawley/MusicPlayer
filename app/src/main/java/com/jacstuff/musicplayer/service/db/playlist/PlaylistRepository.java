@@ -11,5 +11,6 @@ public interface PlaylistRepository {
     void deletePlaylist(Long playlistId);
     List<Playlist> getAllPlaylists();
     List<Playlist> getAllUserPlaylists();
+    Playlist getAllTracksPlaylist();
 
 }
