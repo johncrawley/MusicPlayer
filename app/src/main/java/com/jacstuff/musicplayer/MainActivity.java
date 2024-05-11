@@ -114,9 +114,7 @@ public class MainActivity extends AppCompatActivity {
         assignTheme();
         setContentView(R.layout.activity_main);
         setupViewModel();
-        tabHelper = new TabHelper(viewModel, this);
-        preferencesHelper = new PreferencesHelper(getApplicationContext());
-        initPlayerViewHelper();
+        initHelpers();
         startMediaPlayerService();
         checkPath();
     }
@@ -129,11 +127,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void initPlayerViewHelper(){
-        if(playerViewHelper == null){
-            playerViewHelper = new PlayerViewHelper(this);
-        }
-        playerViewHelper.setupViews();
+    private void initHelpers(){
+        tabHelper = new TabHelper(viewModel, this);
+        preferencesHelper = new PreferencesHelper(getApplicationContext());
+        playerViewHelper = new PlayerViewHelper(this);
     }
 
 

@@ -19,7 +19,6 @@ import java.util.List;
 
 public class PlayerViewHelper {
 
-
     private TextView trackTime, trackTitle, trackAlbum, trackArtist;
     private ImageButton playButton, pauseButton, stopButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton;
     private SeekBar trackTimeSeekBar;
@@ -32,6 +31,7 @@ public class PlayerViewHelper {
 
     public PlayerViewHelper(MainActivity mainActivity){
         this.mainActivity = mainActivity;
+        setupViews();
     }
 
 
@@ -41,7 +41,7 @@ public class PlayerViewHelper {
     }
 
 
-    public void setupViews(){
+    private void setupViews(){
         setupPlayerButtonPanelViews();
         initTrackDetailViews();
         setupTrackTimeSeekBar();

@@ -53,7 +53,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     public void loadNext(Track track){
-        log("loadNext()");
         resetErrorStatus();
         loadTrack(track == null ? currentTrack : track);
         cancelScheduledStoppageOfTrack();
@@ -66,7 +65,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     void loadTrack(Track track){
-        log("entered loadTrack()");
         if(isPreparingTrack.get()){
             return;
         }
@@ -126,11 +124,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     private boolean isTrackPlayingOrPaused(){
         return currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED;
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ MediaPlayerHelper: " + msg);
     }
 
 
@@ -343,7 +336,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     private void stopPlayerAndSchedulePlay() {
-        log("^^^ stopPlayerAndSchedulePlay()");
         mediaPlayerService.updateViewsForConnecting();
         stopPlayerAndElapsedTime();
         executorService.schedule(this::startTrack, 1, TimeUnit.MILLISECONDS);
@@ -380,7 +372,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
             currentState = MediaPlayerState.PLAYING;
             mediaPlayerService.notifyMainViewOfMediaPlayerPlaying();
         }catch (IOException e){
-            log("IO exception trying to start track: " + currentTrack.getPathname());
             e.printStackTrace();
             onError();
             hasEncounteredError = true;
