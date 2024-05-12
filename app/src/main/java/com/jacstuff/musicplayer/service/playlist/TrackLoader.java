@@ -64,6 +64,10 @@ public class TrackLoader {
     }
 
 
+    public Map<String, Genre> getGenres(){
+        return genres;
+    }
+
     public Album getAlbum(String albumName){
         return albums.get(albumName);
     }
@@ -76,11 +80,6 @@ public class TrackLoader {
 
     public Artist getArtist(String artistName){
         return artists.get(artistName);
-    }
-
-
-    public Map<String, Genre> getGenres(){
-        return genres;
     }
 
 
@@ -163,13 +162,12 @@ public class TrackLoader {
 
     private void addTracksData(){
         Cursor cursor = createCursorForFilesystemTracks();
-        boolean areDuplicatesIgnored = preferencesHelper.areDuplicateTracksIgnored();;
         existingAllTracksIdentifiers.clear();
         if(cursor != null){
             long startTime = System.currentTimeMillis();
             setupColumnMap(cursor);
             while(cursor.moveToNext()){
-                addTrack(cursor, areDuplicatesIgnored);
+                addTrack(cursor);
             }
             initAllAlbumNames();
             long duration = System.currentTimeMillis() - startTime;
@@ -235,7 +233,7 @@ public class TrackLoader {
     }
 
 
-    private void addTrack(Cursor cursor, boolean areDuplicatesIgnored) {
+    private void addTrack(Cursor cursor) {
         String path = getValueFrom(cursor, MediaStore.Audio.Media.DATA);
         if (!isContainingCorrectPath(path)) {
             return;
@@ -257,15 +255,15 @@ public class TrackLoader {
                 getTrackNumber(cursor),
                 bitrate);
 
-        addToTracks(track, areDuplicatesIgnored);
+        addToTracks(track);
         addToAlbum(track, album, artist);
         addAlbumToArtist(album, artist);
         addToGenre(track, genre);
     }
 
 
-    private void addToTracks(Track track, boolean areDuplicatesIgnored){
-        if(shouldTrackBeAdded(track, areDuplicatesIgnored)){
+    private void addToTracks(Track track){
+        if(shouldTrackBeAdded(track)){
             tracks.add(track);
             addToArtist(track, track.getArtist());
         }
@@ -277,13 +275,13 @@ public class TrackLoader {
     }
 
 
-    boolean shouldTrackBeAdded(Track track, boolean areDuplicatesIgnored){
+    boolean shouldTrackBeAdded(Track track){
         String identifier = track.getDuplicateIdentifier();
-        if(!areDuplicatesIgnored || !existingAllTracksIdentifiers.contains(identifier)){
-            existingAllTracksIdentifiers.add(identifier);
-            return true;
+        if(preferencesHelper.areDuplicateTracksIgnored() && existingAllTracksIdentifiers.contains(identifier)){
+            return false;
         }
-        return false;
+        existingAllTracksIdentifiers.add(identifier);
+        return true;
     }
 
 

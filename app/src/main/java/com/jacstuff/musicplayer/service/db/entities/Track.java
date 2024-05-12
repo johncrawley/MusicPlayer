@@ -84,7 +84,7 @@ public class Track {
         return orderedStr;
     }
 
-    public String getDuplicateIdentifier(){ return artist + "-" + title + "-" + duration;}
+    public String getDuplicateIdentifier(){ return artist + "-" + title + "-" + (duration / 1000);}
 
     public String getSearchString(){
         return searchStr;
@@ -115,6 +115,7 @@ public class Track {
     public String getTitle(){return title;}
 
     public long getTrackNumber(){return trackNumber;}
+
     public String getCdAndTrackNumber(){return cdAndTrackNumber;}
 
     public String getTrackNumberStr(){return String.valueOf(trackNumber);}
