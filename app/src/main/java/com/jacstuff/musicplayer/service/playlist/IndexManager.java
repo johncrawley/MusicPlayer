@@ -9,7 +9,7 @@ import java.util.Map;
 public class IndexManager {
 
     private Map<String, Integer> trackPathsToIndexesMap;
-    private Map<String, Integer> allTracksPathsToIndexesMap;
+    private final Map<String, Integer> allTracksPathsToIndexesMap;
 
     public IndexManager(){
         trackPathsToIndexesMap = new HashMap<>();
