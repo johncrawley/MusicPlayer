@@ -26,7 +26,6 @@ public class ListIndexManager {
 
 
     public void setGenreIndex(int index){
-        log("Entered setGenreIndex() index: " + index);
         genreIndex = index;
         albumIndex = -1;
         artistIndex = -1;

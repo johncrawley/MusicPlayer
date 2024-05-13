@@ -6,6 +6,7 @@ import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.search.TrackFinder;
 import com.jacstuff.musicplayer.service.db.entities.Track;
+import com.jacstuff.musicplayer.service.playlist.IndexManager;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManagerImpl;
 import com.jacstuff.musicplayer.service.playlist.PlaylistViewNotifier;
@@ -85,7 +86,7 @@ public class PlaylistHelper {
     public void createPlaylistManagerAndTrackLoader(){
         if(playlistManager == null) {
             trackLoader = new TrackLoader(mediaPlayerService.getApplicationContext());
-            playlistManager = new PlaylistManagerImpl(mediaPlayerService.getApplicationContext(), trackLoader);
+            playlistManager = new PlaylistManagerImpl(mediaPlayerService.getApplicationContext(), trackLoader, new IndexManager());
         }
     }
 

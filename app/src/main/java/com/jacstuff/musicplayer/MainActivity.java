@@ -541,9 +541,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupFunctionButtons(){
         setupImageButton(R.id.searchButton, ()-> searchViewHelper.toggleSearch());
-       // setupImageButton(R.id.refreshButton, ()-> mediaPlayerService.refreshTrackDataFromFilesystem());
         setupImageButton(R.id.configButton, this::loadConfigDialog);
-        //setupImageButton(R.id.aboutButton, this::loadAboutDialog);
     }
 
 

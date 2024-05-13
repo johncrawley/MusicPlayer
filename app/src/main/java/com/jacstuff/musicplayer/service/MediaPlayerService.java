@@ -172,6 +172,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         playlistHelper.refreshTrackDataFromFilesystem();
     }
 
+
     public PlaylistHelper getPlaylistHelper(){ return playlistHelper;}
 
     public List<Track> getTracksForSearch(String str){ return playlistHelper.searchForTracks(str);}

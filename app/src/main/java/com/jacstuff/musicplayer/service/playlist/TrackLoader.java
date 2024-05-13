@@ -41,7 +41,6 @@ public class TrackLoader {
     private final PreferencesHelper preferencesHelper;
     private final Set<String> existingAllTracksIdentifiers = new HashSet<>();
 
-
     public TrackLoader(Context context){
         this.context  = context;
         albums = new HashMap<>();
