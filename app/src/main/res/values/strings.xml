@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Music Player!</string>
-    <string name="about_info">Version 1.0, 2024\nCreated by John Crawley</string>
+    <string name="about_info">Version 1.01, 2024\nCreated by John Crawley</string>
     <string name="about_font_heading"><u>Font Information</u></string>
     <string name="about_font_info">Main text: Le Patin Magicien, Freeware \n https://www.fontspace.com/le-patin-magicien-font-f39622\n\n Time elapsed: Poe Monospace, Freeware\n https://www.fontspace.com/poe-monospace-font-f23572 </string>
     <string name="about_icon_heading"><u>Icon Information</u></string>
