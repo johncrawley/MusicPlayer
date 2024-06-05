@@ -11,7 +11,7 @@ import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManagerImpl;
 import com.jacstuff.musicplayer.service.playlist.PlaylistViewNotifier;
 import com.jacstuff.musicplayer.service.playlist.PlaylistViewNotifierImpl;
-import com.jacstuff.musicplayer.service.playlist.TrackLoader;
+import com.jacstuff.musicplayer.service.loader.TrackLoader;
 
 import java.util.Collections;
 import java.util.List;

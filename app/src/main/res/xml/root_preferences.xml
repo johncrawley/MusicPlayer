@@ -33,6 +33,13 @@
             app:summary="@string/include_music_with_pathname_summary"
             app:defaultValue="/Music"
             app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="excludeTracksWithPathname"
+            app:title="@string/exclude_tracks_with_pathname"
+            app:summary="@string/exclude_tracks_with_pathname_summary"
+            app:defaultValue="/Ringtones,/test/"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
 

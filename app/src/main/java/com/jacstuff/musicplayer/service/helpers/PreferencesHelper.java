@@ -7,11 +7,14 @@ import android.content.SharedPreferences;
 
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 
+import java.util.List;
+
 public class PreferencesHelper {
 
     private final Context context;
     private final String SHUFFLE_ENABLED_PREF = "isShuffleEnabled";
-    private String path;
+    private String path = "";
+    private String excludeStr = "";
 
     public PreferencesHelper(Context context){
         this.context = context;
@@ -73,14 +76,29 @@ public class PreferencesHelper {
 
 
     public boolean hasPathChanged(){
-        boolean hasChanged = !path.equals(getPathsStr());
-        path = getPathsStr();
+        String savedPath = getPathsStr();
+        String savedExcludeStr = getExcludeStr();
+        boolean hasChanged = !path.equals(savedPath) || !excludeStr.equals(savedExcludeStr);
+        path = savedPath;
+        excludeStr = savedExcludeStr;
         return hasChanged;
     }
 
 
-    private String getPathsStr(){
+    public String getPathsStr(){
         return getPrefs().getString("tracksPathnameString", "/Music");
+    }
+
+
+    public String getExcludeStr(){
+        return getPrefs().getString("excludeTracksWithPathname", "/Alarms,/test");
+    }
+
+
+
+    public List<String> getExcludePaths(){
+        String loadedExcludeStr = getExcludeStr();
+        return List.of(loadedExcludeStr.split(","));
     }
 
 

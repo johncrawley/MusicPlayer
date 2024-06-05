@@ -13,6 +13,7 @@ import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
+import com.jacstuff.musicplayer.service.loader.TrackLoader;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
