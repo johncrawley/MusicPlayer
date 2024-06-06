@@ -55,12 +55,12 @@ public class CursorCreator {
            }
            return selection;
        }
-       return selection + "AND instr(" + pathname + ",'" + excludePath + "') < 1";
+       return selection + getExcludeStr(excludePath);
     }
 
 
     public String getExcludeStr(String excludePath){
-       return  "AND instr(" + MediaStore.Audio.Media.DATA + ",'" + excludePath + "') < 1";
+       return  " AND instr(" + MediaStore.Audio.Media.DATA + ",'" + excludePath + "') < 1";
     }
 
 
