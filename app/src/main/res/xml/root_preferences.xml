@@ -28,17 +28,17 @@
 
     <PreferenceCategory app:title="@string/tracks_header">
         <EditTextPreference
-            app:key="tracksPathnameString"
+            app:key="tracksPathnameString_1"
             app:title="@string/include_music_with_pathname"
             app:summary="@string/include_music_with_pathname_summary"
-            app:defaultValue="/Music"
+            app:defaultValue=""
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
             app:key="excludeTracksWithPathname"
             app:title="@string/exclude_tracks_with_pathname"
             app:summary="@string/exclude_tracks_with_pathname_summary"
-            app:defaultValue="/Ringtones,/test/"
+            app:defaultValue=""
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 

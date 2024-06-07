@@ -165,7 +165,7 @@
     <string name="min_number_of_tracks_for_main_artist_title">Minimum tracks an artist needs to be shown in the Artist list</string>
     <string name="min_number_of_tracks_for_main_artist_summary">The minimum number of tracks belonging to an artist for that artist to appear in the artists list.</string>
     <string name="include_music_with_pathname">Load Tracks with Pathname</string>
-    <string name="include_music_with_pathname_summary">Only tracks that include the given string will be shown in the All Tracks list.</string>
+    <string name="include_music_with_pathname_summary">Only tracks that include the given string will be shown in the All Tracks list. </string>
     <string name="exclude_tracks_with_pathname">Exclude Tracks</string>
     <string name="exclude_tracks_with_pathname_summary">Exclude tracks that include the given strings in their path names (separated by commas)</string>
 

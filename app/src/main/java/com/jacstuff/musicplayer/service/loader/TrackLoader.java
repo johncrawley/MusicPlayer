@@ -145,7 +145,9 @@ public class TrackLoader {
 
 
     private void addTracksData(){
-        Cursor cursor = new CursorCreator(context).createCursor();
+        log("Entered addTracksData()");
+        Cursor cursor = new CursorCreator().createCursor(preferencesHelper, context);
+        log("Created cursor");
         existingAllTracksIdentifiers.clear();
         if(cursor != null){
             long startTime = System.currentTimeMillis();
@@ -154,7 +156,9 @@ public class TrackLoader {
             initAllAlbumNames();
             logLoadingStats(cursor, startTime);
             cursor.close();
+            return;
         }
+        log("Cursor was null, no tracks found");
     }
 
 
@@ -191,7 +195,6 @@ public class TrackLoader {
     }
 
 
-
     private void setupColumnMap(Cursor cursor){
         columnMap = new HashMap<>();
         addToColumnMap(cursor, MediaStore.Audio.Media.DATA);
@@ -204,6 +207,7 @@ public class TrackLoader {
         addToColumnMap(cursor, MediaStore.Audio.Media.YEAR);
         addToColumnMap(cursor, MediaStore.Audio.Media.BITRATE);
         addToColumnMap(cursor, MediaStore.Audio.Media.DISC_NUMBER);
+        addToColumnMap(cursor, MediaStore.Audio.Media.RELATIVE_PATH);
     }
 
 
