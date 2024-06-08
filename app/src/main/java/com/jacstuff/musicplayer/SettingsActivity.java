@@ -47,11 +47,11 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         private void setupTracksPathnamePreference(){
-            androidx.preference.EditTextPreference editTextPreference = getPreferenceManager().findPreference("tracksPathnameString");
+            androidx.preference.EditTextPreference editTextPreference = getPreferenceManager().findPreference("tracksPathnameString_1");
             assert editTextPreference != null;
             editTextPreference.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_TEXT);
-                int maxLengthOfInput = 15;
+                int maxLengthOfInput = 25;
                 editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLengthOfInput)});
             });
         }

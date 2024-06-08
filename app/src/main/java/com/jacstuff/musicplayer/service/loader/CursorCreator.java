@@ -2,7 +2,6 @@ package com.jacstuff.musicplayer.service.loader;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.provider.MediaStore;
 
 import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
@@ -14,19 +13,13 @@ public class CursorCreator {
         String includeArg = preferencesHelper.getPathsStr();
         String excludeArg = preferencesHelper.getExcludeStr();
         String sortOrder = MediaStore.Audio.Media.DEFAULT_SORT_ORDER + " ASC";
-        Uri collection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
 
-        try {
-            return context.getContentResolver().query(
-                    collection,
-                    createProjection(),
-                    getSelection(includeArg, excludeArg),
-                    createArgs(includeArg, excludeArg),
-                    sortOrder);
-        }catch (RuntimeException e){
-            e.printStackTrace();
-        }
-        return null;
+        return context.getContentResolver().query(
+                MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL),
+                createProjection(),
+                getSelection(includeArg, excludeArg),
+                createArgs(includeArg, excludeArg),
+                sortOrder);
     }
 
 
@@ -35,34 +28,15 @@ public class CursorCreator {
         String excludePath = excludeArg == null ? "" : excludeArg;
 
         if(excludePath.isBlank() && includePath.isBlank()){
-            log("both include and exclude paths are blank");
             return null;
         }
         if(includePath.isBlank()){
-            log("include path is blank, exclude path: " + excludePath);
             return getExcludeStr();
         }
         if(excludePath.isBlank()){
-            log("exclude path is blank, include path: " + includePath);
             return getIncludeStr();
         }
-        log("neither paths are blank, include: " + includePath + " exclude: " + excludePath);
         return getIncludeStr() + " AND " + getExcludeStr();
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ CursorLoader: " + msg);
-    }
-
-    private String[] createArgs(String... args){
-        for(String arg : args){
-            if(arg != null && !arg.isBlank()){
-                break;
-            }
-            return null;
-        }
-        return args;
     }
 
 

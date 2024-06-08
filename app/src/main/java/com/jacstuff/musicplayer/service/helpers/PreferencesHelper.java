@@ -86,19 +86,12 @@ public class PreferencesHelper {
 
 
     public String getPathsStr(){
-        return getPrefs().getString("tracksPathnameString_1", "Music/");
+        return getPrefs().getString("tracksPathnameString_1", "");
     }
 
 
     public String getExcludeStr(){
         return getPrefs().getString("excludeTracksWithPathname", "");
-    }
-
-
-
-    public List<String> getExcludePaths(){
-        String loadedExcludeStr = getExcludeStr();
-        return List.of(loadedExcludeStr.split(","));
     }
 
 
