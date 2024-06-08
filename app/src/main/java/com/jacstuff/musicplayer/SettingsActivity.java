@@ -36,6 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
             setupTracksPathnamePreference();
         }
 
+
         private void setupNumberPreference(){
             androidx.preference.EditTextPreference editTextPreference = getPreferenceManager().findPreference("minimumNumberOfTracksForMainArtist");
             assert editTextPreference != null;
@@ -46,6 +47,7 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
+
         private void setupTracksPathnamePreference(){
             androidx.preference.EditTextPreference editTextPreference = getPreferenceManager().findPreference("tracksPathnameString_1");
             assert editTextPreference != null;
@@ -55,7 +57,6 @@ public class SettingsActivity extends AppCompatActivity {
                 editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLengthOfInput)});
             });
         }
-
     }
 
 
