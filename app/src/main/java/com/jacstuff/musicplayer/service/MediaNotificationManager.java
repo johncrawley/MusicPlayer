@@ -16,6 +16,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
 
@@ -34,11 +35,16 @@ public class MediaNotificationManager {
     private PendingIntent pendingIntent;
     final static String NOTIFICATION_CHANNEL_ID = "com.jcrawley.musicplayer-notification";
     private final AtomicBoolean hasErrorNotificationBeenReplaced = new AtomicBoolean(false);
-
+    RemoteViews notificationLayout, notificationLayoutExpanded;
 
     MediaNotificationManager(Context context, MediaPlayerService mediaPlayerService){
         this.context = context;
         this.mediaPlayerService = mediaPlayerService;
+
+        // Get the layouts to use in the custom notification
+        notificationLayout = new RemoteViews(context.getPackageName(), R.layout.notification_small);
+        notificationLayoutExpanded = new RemoteViews(context.getPackageName(), R.layout.notification_large);
+
     }
 
 
@@ -56,11 +62,19 @@ public class MediaNotificationManager {
                 .setShowWhen(false)
                 .setOngoing(true);
 
+        Notification customNotification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_baseline_music_note_24)
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setCustomContentView(notificationLayout)
+                .setCustomBigContentView(notificationLayoutExpanded).build();
+
+
         addPreviousButtonTo(notification);
         addPlayButtonTo(notification);
         addPauseButtonTo(notification);
         addNextButtonTo(notification);
-        return notification.build();
+        //return notification.build();
+        return customNotification;
     }
 
 
