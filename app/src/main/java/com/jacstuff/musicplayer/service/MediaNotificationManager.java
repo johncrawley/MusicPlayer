@@ -16,7 +16,9 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
 import androidx.core.app.NotificationCompat;
 
@@ -36,6 +38,7 @@ public class MediaNotificationManager {
     final static String NOTIFICATION_CHANNEL_ID = "com.jcrawley.musicplayer-notification";
     private final AtomicBoolean hasErrorNotificationBeenReplaced = new AtomicBoolean(false);
     RemoteViews notificationLayout, notificationLayoutExpanded;
+    private TextView expandedTitle;
 
     MediaNotificationManager(Context context, MediaPlayerService mediaPlayerService){
         this.context = context;
@@ -44,7 +47,38 @@ public class MediaNotificationManager {
         // Get the layouts to use in the custom notification
         notificationLayout = new RemoteViews(context.getPackageName(), R.layout.notification_small);
         notificationLayoutExpanded = new RemoteViews(context.getPackageName(), R.layout.notification_large);
+        View expandedLayout = notificationLayoutExpanded.apply(context, null);
+        expandedTitle = expandedLayout.findViewById(R.id.notification_song_title);
 
+    }
+
+    Notification createCustomNotification(String heading, String channelName) {
+
+        setupButtonIntent(R.id.nextButton, ACTION_SELECT_NEXT_TRACK);
+        setupButtonIntent(R.id.prevButton, ACTION_SELECT_PREVIOUS_TRACK);
+        setupButtonIntent(R.id.pauseButton, ACTION_PAUSE_PLAYER);
+        setupButtonIntent(R.id.playButton, ACTION_PLAY);
+
+        Notification customNotification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_baseline_music_note_24)
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setCustomContentView(notificationLayout)
+                .setCustomBigContentView(notificationLayoutExpanded)
+                .setNumber(-1)
+                .setOnlyAlertOnce(true)
+                .setContentIntent(pendingIntent)
+                .setShowWhen(false)
+                .setOngoing(true).build();
+
+        return customNotification;
+    }
+
+
+    private void setupButtonIntent(int buttonId, String action){
+        Intent intent = new Intent(action);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        notificationLayoutExpanded.setOnClickPendingIntent(buttonId, pendingSwitchIntent);
     }
 
 
@@ -62,19 +96,11 @@ public class MediaNotificationManager {
                 .setShowWhen(false)
                 .setOngoing(true);
 
-        Notification customNotification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_baseline_music_note_24)
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                .setCustomContentView(notificationLayout)
-                .setCustomBigContentView(notificationLayoutExpanded).build();
-
-
         addPreviousButtonTo(notification);
         addPlayButtonTo(notification);
         addPauseButtonTo(notification);
         addNextButtonTo(notification);
-        //return notification.build();
-        return customNotification;
+        return notification.build();
     }
 
 
@@ -127,6 +153,13 @@ public class MediaNotificationManager {
         Notification notification = createNotification(status, trackInfo);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, notification);
+    }
+
+
+    private void updateCustomNotification(Track track){
+        expandedTitle.setText(track.getTitle());
+        notificationLayoutExpanded.setTextViewText(R.id.notification_song_title, track.getTitle());
+        notificationLayout.setTextViewText(R.id.notification_song_title, track.getTitle());
     }
 
 

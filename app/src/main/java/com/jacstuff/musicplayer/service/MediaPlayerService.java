@@ -5,6 +5,8 @@ import static com.jacstuff.musicplayer.service.MediaNotificationManager.NOTIFICA
 import android.Manifest;
 import android.app.Notification;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -420,5 +422,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         mainActivity.notifyMediaPlayerPaused();
         mediaPlayerHelper.cancelScheduledStoppageOfTrack();
     }
+
 
 }
