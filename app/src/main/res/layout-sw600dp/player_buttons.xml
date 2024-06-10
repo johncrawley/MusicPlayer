@@ -5,67 +5,73 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="horizontal"
-    android:layout_marginBottom="@dimen/button_panel_margin_bottom">
+    android:orientation="horizontal">
 
     <ImageButton
         android:id="@+id/previousTrackButton"
-        android:layout_width="@dimen/player_button_size_tablet"
-        android:layout_height="@dimen/player_button_size_tablet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/previous_track_button_content_description"
+        android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
         android:paddingBottom="@dimen/button_padding"
-        app:srcCompat="@mipmap/ic_action_previous" />
+        app:srcCompat="@drawable/ic_previous" />
 
     <ImageButton
         android:id="@+id/playButton"
-        android:layout_width="@dimen/player_button_size_tablet"
-        android:layout_height="@dimen/player_button_size_tablet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/play_button_content_description"
         android:paddingBottom="@dimen/button_padding"
-        app:srcCompat="@mipmap/ic_action_play" />
+        android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
+        app:srcCompat="@drawable/ic_play" />
 
     <ImageButton
         android:id="@+id/pauseButton"
-        android:layout_width="@dimen/player_button_size_tablet"
-        android:layout_height="@dimen/player_button_size_tablet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/pause_button_content_description"
         android:paddingBottom="@dimen/button_padding"
         android:visibility="gone"
-        app:srcCompat="@mipmap/ic_action_pause" />
+        android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
+        app:srcCompat="@drawable/ic_pause" />
 
     <ImageButton
         android:id="@+id/stopButton"
-        android:layout_width="@dimen/player_button_size_tablet"
-        android:layout_height="@dimen/player_button_size_tablet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/stop_button_content_description"
         android:paddingBottom="@dimen/button_padding"
         android:tintMode="src_in"
-        app:srcCompat="@mipmap/ic_action_stop" />
+        android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
+        app:srcCompat="@drawable/ic_stop" />
 
     <ImageButton
         android:id="@+id/nextTrackButton"
-        android:layout_width="@dimen/player_button_size_tablet"
-        android:layout_height="@dimen/player_button_size_tablet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/next_track_button_content_description"
         android:paddingBottom="@dimen/button_padding"
-        app:srcCompat="@mipmap/ic_action_next" />
+        android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
+        app:srcCompat="@drawable/ic_next" />
 
     <ImageButton
         android:id="@+id/turnShuffleOffButton"
-        android:layout_width="@dimen/player_button_size_tablet"
-        android:layout_height="@dimen/player_button_size_tablet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/shuffle_off_button_content_description"
         android:paddingBottom="@dimen/button_padding"
-        app:srcCompat="@mipmap/ic_action_shuffle" />
+        android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
+        app:srcCompat="@drawable/ic_shuffle" />
 
     <ImageButton
         android:id="@+id/turnShuffleOnButton"
-        android:layout_width="@dimen/player_button_size_tablet"
-        android:layout_height="@dimen/player_button_size_tablet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:visibility="gone"
         android:contentDescription="@string/shuffle_on_button_content_description"
         android:paddingBottom="@dimen/button_padding"
         app:tint="@color/image_button_shuffle_on_tint"
-        app:srcCompat="@mipmap/ic_action_enable_shuffle" />
+        android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
+        app:srcCompat="@drawable/ic_shuffle" />
 
 </LinearLayout>

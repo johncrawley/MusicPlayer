@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/buttonLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="horizontal"
+    android:paddingHorizontal="16dp"
     android:layout_marginBottom="@dimen/button_panel_margin_bottom">
 
     <ImageButton
@@ -13,59 +14,93 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/previous_track_button_content_description"
-        android:paddingBottom="@dimen/button_padding"
-        app:srcCompat="@mipmap/ic_action_previous" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/playPauseButtonLayout"
+        android:padding="@dimen/player_button_padding"
+        app:srcCompat="@drawable/ic_previous" />
 
-    <ImageButton
-        android:id="@+id/playButton"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/play_button_content_description"
-        android:paddingBottom="@dimen/button_padding"
-        app:srcCompat="@mipmap/ic_action_play" />
+        android:id="@+id/playPauseButtonLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/previousTrackButton"
+        app:layout_constraintEnd_toStartOf="@id/stopButton"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/playButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/play_button_content_description"
+            android:padding="@dimen/player_button_padding"
+            app:srcCompat="@drawable/ic_play" />
 
-    <ImageButton
-        android:id="@+id/pauseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/pause_button_content_description"
-        android:paddingBottom="@dimen/button_padding"
-        android:visibility="gone"
-        app:srcCompat="@mipmap/ic_action_pause" />
+        <ImageButton
+            android:id="@+id/pauseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/pause_button_content_description"
+            android:padding="@dimen/player_button_padding"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_pause" />
+    </LinearLayout>
+
 
     <ImageButton
         android:id="@+id/stopButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/stop_button_content_description"
-        android:paddingBottom="@dimen/button_padding"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/playPauseButtonLayout"
+        app:layout_constraintEnd_toStartOf="@id/nextTrackButton"
+        android:padding="@dimen/player_button_padding"
         android:tintMode="src_in"
-        app:srcCompat="@mipmap/ic_action_stop" />
+        app:srcCompat="@drawable/ic_stop" />
 
     <ImageButton
         android:id="@+id/nextTrackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/next_track_button_content_description"
-        android:paddingBottom="@dimen/button_padding"
-        app:srcCompat="@mipmap/ic_action_next" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/stopButton"
+        app:layout_constraintEnd_toStartOf="@id/shuffleButtonLayout"
+        android:padding="@dimen/player_button_padding"
+        app:srcCompat="@drawable/ic_next" />
 
-    <ImageButton
-        android:id="@+id/turnShuffleOffButton"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/shuffle_off_button_content_description"
-        android:paddingBottom="@dimen/button_padding"
-        app:srcCompat="@mipmap/ic_action_shuffle" />
+        android:id="@+id/shuffleButtonLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/nextTrackButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/turnShuffleOffButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/shuffle_off_button_content_description"
+            android:padding="@dimen/player_button_padding"
+            app:srcCompat="@drawable/ic_shuffle" />
 
-    <ImageButton
-        android:id="@+id/turnShuffleOnButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:contentDescription="@string/shuffle_on_button_content_description"
-        android:paddingBottom="@dimen/button_padding"
-        app:tint="@color/image_button_shuffle_on_tint"
-        app:srcCompat="@mipmap/ic_action_enable_shuffle" />
+        <ImageButton
+            android:id="@+id/turnShuffleOnButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:contentDescription="@string/shuffle_on_button_content_description"
+            android:padding="@dimen/player_button_padding"
+            app:tint="@color/image_button_shuffle_on_tint"
+            app:srcCompat="@drawable/ic_shuffle" />
 
-</LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
