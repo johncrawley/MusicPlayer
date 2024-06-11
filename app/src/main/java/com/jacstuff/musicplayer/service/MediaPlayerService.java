@@ -1,12 +1,10 @@
 package com.jacstuff.musicplayer.service;
 
-import static com.jacstuff.musicplayer.service.MediaNotificationManager.NOTIFICATION_ID;
+import static com.jacstuff.musicplayer.service.notifications.MediaNotificationManager.NOTIFICATION_ID;
 
 import android.Manifest;
 import android.app.Notification;
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -25,6 +23,7 @@ import com.jacstuff.musicplayer.service.helpers.BroadcastHelper;
 import com.jacstuff.musicplayer.service.helpers.MediaPlayerHelper;
 import com.jacstuff.musicplayer.service.helpers.PlaylistHelper;
 import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
+import com.jacstuff.musicplayer.service.notifications.MediaNotificationManager;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 
 import java.util.List;
@@ -134,6 +133,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         return mediaPlayerHelper;
     }
 
+
     public PreferencesHelper getPreferencesHelper(){ return preferencesHelper;}
 
 
@@ -197,7 +197,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     public void addTrackToCurrentPlaylist(Track track){ playlistHelper.addTrackToCurrentPlaylist(track);}
 
-    int getTrackCount(){ return playlistHelper.getTrackCount();}
+    public int getTrackCount(){ return playlistHelper.getTrackCount();}
 
     public void addTrackToPlaylist(Track track, Playlist playlist){ playlistHelper.addTrackToPlaylist(track, playlist);}
 
@@ -233,7 +233,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     public boolean hasEncounteredError(){ return mediaPlayerHelper.hasEncounteredError();}
 
-    String getCurrentUrl(){ return mediaPlayerHelper.getCurrentUrl(); }
+    public String getCurrentUrl(){ return mediaPlayerHelper.getCurrentUrl(); }
 
     public Track getCurrentTrack(){ return mediaPlayerHelper.getCurrentTrack(); }
 
@@ -383,7 +383,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     }
 
 
-    String getCurrentStatus(){
+    public String getCurrentStatus(){
         int resId = R.string.status_ready;
         if(mediaPlayerHelper.hasEncounteredError()){
             resId = R.string.status_error;

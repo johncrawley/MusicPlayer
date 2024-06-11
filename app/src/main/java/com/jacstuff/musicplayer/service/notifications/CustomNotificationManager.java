@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.service;
+package com.jacstuff.musicplayer.service.notifications;
 
 import static com.jacstuff.musicplayer.service.helpers.BroadcastHelper.ACTION_PAUSE_PLAYER;
 import static com.jacstuff.musicplayer.service.helpers.BroadcastHelper.ACTION_PLAY;
@@ -13,6 +13,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,23 +25,22 @@ import androidx.core.app.NotificationCompat;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-
-public class MediaNotificationManager {
-
+public class CustomNotificationManager {
     private final Context context;
     private final MediaPlayerService mediaPlayerService;
-    final static int NOTIFICATION_ID = 1001;
+    public final static int NOTIFICATION_ID = 1001;
     private PendingIntent pendingIntent;
     final static String NOTIFICATION_CHANNEL_ID = "com.jcrawley.musicplayer-notification";
     private final AtomicBoolean hasErrorNotificationBeenReplaced = new AtomicBoolean(false);
     RemoteViews notificationLayout, notificationLayoutExpanded;
     private TextView expandedTitle;
 
-    MediaNotificationManager(Context context, MediaPlayerService mediaPlayerService){
+    public CustomNotificationManager(Context context, MediaPlayerService mediaPlayerService){
         this.context = context;
         this.mediaPlayerService = mediaPlayerService;
 
@@ -52,14 +52,14 @@ public class MediaNotificationManager {
 
     }
 
-    Notification createCustomNotification(String heading, String channelName) {
+    public Notification createCustomNotification(String heading, String channelName) {
 
         setupButtonIntent(R.id.nextButton, ACTION_SELECT_NEXT_TRACK);
         setupButtonIntent(R.id.prevButton, ACTION_SELECT_PREVIOUS_TRACK);
         setupButtonIntent(R.id.pauseButton, ACTION_PAUSE_PLAYER);
         setupButtonIntent(R.id.playButton, ACTION_PLAY);
 
-        Notification customNotification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+        return new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_baseline_music_note_24)
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setCustomContentView(notificationLayout)
@@ -69,8 +69,41 @@ public class MediaNotificationManager {
                 .setContentIntent(pendingIntent)
                 .setShowWhen(false)
                 .setOngoing(true).build();
+    }
 
-        return customNotification;
+
+    public void updateAlbumArt(Bitmap bitmap){
+
+    }
+
+
+    public void updateTimeElapsed(int timeElapsed){
+
+    }
+
+
+    public void updateVisibilityOnTrackNavigation(int numberOfTracks){
+
+    }
+
+
+    public void hidePauseButtonOnPlay(){
+
+    }
+
+
+    public void hidePlayButtonOnPause(){
+
+    }
+
+
+    public void updateStatusOnError(){
+
+    }
+
+
+    public void resetErrorStatus(){
+
     }
 
 
@@ -82,29 +115,7 @@ public class MediaNotificationManager {
     }
 
 
-    Notification createNotification(String heading, String channelName){
-        final NotificationCompat.Builder notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(heading)
-                .setContentText(channelName)
-                .setSilent(true)
-                .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
-                .setSmallIcon(R.drawable.ic_baseline_music_note_24)
-                .setLargeIcon(mediaPlayerService.getAlbumArtForNotification())
-                .setNumber(-1)
-                .setOnlyAlertOnce(true)
-                .setContentIntent(pendingIntent)
-                .setShowWhen(false)
-                .setOngoing(true);
-
-        addPreviousButtonTo(notification);
-        addPlayButtonTo(notification);
-        addPauseButtonTo(notification);
-        addNextButtonTo(notification);
-        return notification.build();
-    }
-
-
-    void init(){
+    public void init(){
         setupNotificationChannel();
         setupNotificationClickForActivity();
     }
@@ -124,7 +135,7 @@ public class MediaNotificationManager {
         }
         resetErrorStatusAfterDelay();
         new Handler(Looper.getMainLooper()).post(() ->
-            sendNotification(mediaPlayerService.getCurrentStatus(), mediaPlayerService.getCurrentTrack()));
+                sendNotification(mediaPlayerService.getCurrentStatus(), mediaPlayerService.getCurrentTrack()));
     }
 
 
@@ -150,7 +161,7 @@ public class MediaNotificationManager {
 
     private void sendNotification( String status, Track track){
         String trackInfo = parseTrackDetails(track);
-        Notification notification = createNotification(status, trackInfo);
+        Notification notification = createCustomNotification(status, trackInfo);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, notification);
     }
@@ -163,7 +174,7 @@ public class MediaNotificationManager {
     }
 
 
-    void dismissNotification(){
+    public void dismissNotification(){
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(NOTIFICATION_ID);
     }
@@ -193,61 +204,6 @@ public class MediaNotificationManager {
         channel.setSound(null, null);
         channel.setShowBadge(false);
         notificationManager.createNotificationChannel(channel);
-    }
-
-
-    private void addPlayButtonTo(NotificationCompat.Builder notification){
-        String currentUrl = mediaPlayerService.getCurrentUrl();
-        if(currentUrl == null){
-            return;
-        }
-        if(!mediaPlayerService.isPlaying() && !currentUrl.isEmpty()){
-            notification.addAction(android.R.drawable.ic_media_play,
-                    context.getString(R.string.notification_button_title_play),
-                    createPendingIntentFor(ACTION_PLAY));
-        }
-    }
-
-
-    private void addPauseButtonTo(NotificationCompat.Builder notification){
-        if(mediaPlayerService.isPlaying()){
-            notification.addAction(android.R.drawable.ic_media_pause,
-                    context.getString(R.string.notification_button_title_pause),
-                    createPendingIntentFor(ACTION_PAUSE_PLAYER));
-        }
-    }
-
-
-    private void addPreviousButtonTo(NotificationCompat.Builder notification){
-        if(isThereLessThanTwoTracks()) {
-            return;
-        }
-        notification.addAction(android.R.drawable.ic_media_previous,
-                context.getString(R.string.notification_button_title_previous),
-                createPendingIntentFor(ACTION_SELECT_PREVIOUS_TRACK));
-    }
-
-
-    private void addNextButtonTo(NotificationCompat.Builder notification){
-        if(isThereLessThanTwoTracks()) {
-            return;
-        }
-        notification.addAction(android.R.drawable.ic_media_next,
-                context.getString(R.string.notification_button_title_next),
-                createPendingIntentFor(ACTION_SELECT_NEXT_TRACK));
-    }
-
-
-    private boolean isThereLessThanTwoTracks(){
-        return mediaPlayerService.getTrackCount() < 2;
-    }
-
-
-    private PendingIntent createPendingIntentFor(String action){
-        return PendingIntent.getBroadcast(context,
-                0,
-                new Intent(action),
-                PendingIntent.FLAG_IMMUTABLE);
     }
 
 }
