@@ -75,7 +75,7 @@ public class TabHelper {
             return;
         }
         viewModel.hasFourthTabBeenInitialized = true;
-        moveToTheLastTabAndBack(tabLayout);
+        //moveToTheLastTabAndBack(tabLayout);
     }
 
 

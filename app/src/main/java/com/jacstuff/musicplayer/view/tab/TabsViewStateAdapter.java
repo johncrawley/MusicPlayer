@@ -8,13 +8,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.jacstuff.musicplayer.view.fragments.album.AlbumsFragment;
 import com.jacstuff.musicplayer.view.fragments.artist.ArtistsFragment;
-import com.jacstuff.musicplayer.view.fragments.genre.GenresFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TracksFragment;
 import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistsFragment;
 
 public class TabsViewStateAdapter extends FragmentStateAdapter {
 
-    private final int numberOfFragments = 5;
+    private final int NUMBER_OF_FRAGMENTS = 4;
 
     public TabsViewStateAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
@@ -29,15 +28,15 @@ public class TabsViewStateAdapter extends FragmentStateAdapter {
             case 1 -> new PlaylistsFragment();
             case 2 -> new ArtistsFragment();
             case 3 -> new AlbumsFragment();
-            case 4 -> new GenresFragment();
-            default -> throw new RuntimeException("createFragment() : position exceeded number of fragments (" + numberOfFragments + ") position: " + position);
+            // case 4 -> new GenresFragment();
+            default -> throw new RuntimeException("createFragment() : position exceeded number of fragments (" + NUMBER_OF_FRAGMENTS + ") position: " + position);
         };
     }
 
 
     @Override
     public int getItemCount() {
-        return numberOfFragments;
+        return NUMBER_OF_FRAGMENTS;
     }
 
 
