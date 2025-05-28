@@ -70,6 +70,11 @@ public class PreferencesHelper {
     }
 
 
+    public int getNumberOfRandomTracksToAdd(){
+        return getPrefs().getInt("numberOfRandomTracksToAdd", 5);
+    }
+
+
     public boolean areDuplicateTracksIgnored(){
         return getPrefs().getBoolean("ignoreDuplicateTracks", true);
     }

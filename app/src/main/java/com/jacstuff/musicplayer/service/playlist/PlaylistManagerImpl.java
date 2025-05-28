@@ -394,6 +394,13 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
+    public void addRandomTracksFromArtistToCurrentPlaylist(String artistName, PlaylistViewNotifier playlistViewNotifier){
+        List<Track> tracks = trackLoader.getTracksForArtist(artistName);
+        addTracksToCurrentPlaylist(getSortedTracks(tracks), playlistViewNotifier);
+    }
+
+
+    @Override
     public void addTracksFromAlbumToCurrentPlaylist(String albumName, PlaylistViewNotifier playlistViewNotifier) {
         List<Track> tracks = trackLoader.getTracksForAlbum(albumName);
         addTracksToCurrentPlaylist(getSortedAlbumTracks(tracks), playlistViewNotifier);

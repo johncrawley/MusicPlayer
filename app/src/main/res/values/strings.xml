@@ -108,6 +108,7 @@
     <string name="button_playlist_options_new">New</string>
     <string name="button_artist_options_load">Load</string>
     <string name="button_artist_options_add_tracks_to_playlist">Add To Playlist</string>
+    <string name="button_artist_options_add_random_tracks_to_playlist">Add Random Tracks To Playlist</string>
 
     <string name="album_art_content_description">Album Art</string>
     <string name="album_art_large_view_content_description">Album Art Expanded View</string>
@@ -168,6 +169,8 @@
     <string name="include_music_with_pathname_summary">Only tracks that include the given string will be shown in the All Tracks list. </string>
     <string name="exclude_tracks_with_pathname">Exclude Tracks</string>
     <string name="exclude_tracks_with_pathname_summary">Exclude tracks that include the given strings in their path names (separated by commas)</string>
+    <string name="number_of_random_tracks_to_add">The number of random tracks that are added to a playlist</string>
+    <string name="number_of_random_tracks_to_add_summary">When the user chooses to add random tracks to an artist or album, this is the number of tracks that get added</string>
 
 
     <string name="dismiss_search_after_selection_title">Dismiss search view when a result is selected</string>

@@ -173,6 +173,12 @@ public class PlaylistHelper {
     }
 
 
+    public void addRandomTracksFromAristToCurrentPlaylist(String artistName){
+        playlistManager.addRandomTracksFromArtistToCurrentPlaylist(artistName, playlistViewNotifier);
+        mediaPlayerService.updateViewTrackList(playlistManager);
+    }
+
+
     public void addTracksFromAlbumToCurrentPlaylist(String albumName){
         playlistManager.addTracksFromAlbumToCurrentPlaylist(albumName, playlistViewNotifier);
         mediaPlayerService.updateViewTrackList(playlistManager);

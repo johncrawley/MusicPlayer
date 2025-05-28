@@ -74,6 +74,14 @@
             app:title="@string/only_show_album_tracks_from_selected_artist"
             app:defaultValue="true"
             app:enabled="true" />
+
+        <EditTextPreference
+            app:key="numberOfRandomTracksToAdd"
+            app:title="@string/number_of_random_tracks_to_add"
+            app:summary="@string/number_of_random_tracks_to_add_summary"
+            app:defaultValue="5"
+            app:useSimpleSummaryProvider="true" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>
