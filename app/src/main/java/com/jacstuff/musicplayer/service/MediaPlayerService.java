@@ -1,5 +1,6 @@
 package com.jacstuff.musicplayer.service;
 
+import static com.jacstuff.musicplayer.service.helpers.preferences.PrefKey.IS_SHUFFLE_ENABLED;
 import static com.jacstuff.musicplayer.service.notifications.MediaNotificationManager.NOTIFICATION_ID;
 
 import android.Manifest;
@@ -22,7 +23,7 @@ import com.jacstuff.musicplayer.service.helpers.art.AlbumArtRetriever;
 import com.jacstuff.musicplayer.service.helpers.BroadcastHelper;
 import com.jacstuff.musicplayer.service.helpers.MediaPlayerHelper;
 import com.jacstuff.musicplayer.service.helpers.PlaylistHelper;
-import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
+import com.jacstuff.musicplayer.service.helpers.preferences.PreferencesHelperImpl;
 import com.jacstuff.musicplayer.service.notifications.MediaNotificationManager;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 
@@ -37,7 +38,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     private MediaPlayerHelper mediaPlayerHelper;
     private BroadcastHelper broadcastHelper;
     private AlbumArtRetriever albumArtRetriever;
-    private PreferencesHelper preferencesHelper;
+    private PreferencesHelperImpl preferencesHelper;
     private final ListIndexManager listIndexManager;
 
     public MediaPlayerService() {
@@ -52,7 +53,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         mediaPlayerHelper.createMediaPlayer();
         playlistHelper = new PlaylistHelper(this);
         broadcastHelper = new BroadcastHelper(this);
-        preferencesHelper = new PreferencesHelper(getApplicationContext());
+        preferencesHelper = new PreferencesHelperImpl(getApplicationContext());
         mediaNotificationManager = new MediaNotificationManager(getApplicationContext(), this);
         playlistHelper.setMediaNotificationManager(mediaNotificationManager);
         albumArtRetriever = new AlbumArtRetriever(this, getApplicationContext());
@@ -98,7 +99,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         playlistHelper.onSetActivity(mainActivity);
-        preferencesHelper.assignPreferences(this);
+        setShuffleState(preferencesHelper.getBoolean(IS_SHUFFLE_ENABLED));
         checkPath();
     }
 
@@ -134,7 +135,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     }
 
 
-    public PreferencesHelper getPreferencesHelper(){ return preferencesHelper;}
+    public PreferencesHelperImpl getPreferencesHelper(){ return preferencesHelper;}
 
 
     public void setFirstTrackAndUpdateViewVisibility(){
@@ -358,16 +359,20 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
 
     public void enableShuffle(){
-        getPlaylistManager().enableShuffle();
+        setShuffleState(true);
         preferencesHelper.saveShuffleState(true);
-        mainActivity.notifyShuffleEnabled();
     }
 
 
     public void disableShuffle(){
-        getPlaylistManager().disableShuffle();
+        setShuffleState(false);
         preferencesHelper.saveShuffleState(false);
-        mainActivity.notifyShuffleDisabled();
+    }
+
+
+    private void setShuffleState(boolean isEnabled){
+        getPlaylistManager().setShuffleState(isEnabled);
+        mainActivity.getPlayerViewHelper().notifyShuffleState(isEnabled);
     }
 
 

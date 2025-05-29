@@ -5,9 +5,13 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.EditTextPreference;
 import androidx.preference.PreferenceFragmentCompat;
+
+import com.jacstuff.musicplayer.settings.MinNumberInputFilter;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -32,19 +36,39 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
-            setupNumberPreference();
+            setupMinNumberOfTracksForMainArtistPreference();
+            setupNumberOfRandomTracksToAddPreference();
             setupTracksPathnamePreference();
         }
 
 
-        private void setupNumberPreference(){
-            androidx.preference.EditTextPreference editTextPreference = getPreferenceManager().findPreference("minimumNumberOfTracksForMainArtist");
-            assert editTextPreference != null;
+        private void setupMinNumberOfTracksForMainArtistPreference(){
+            var editTextPreference = findPref("minimumNumberOfTracksForMainArtist");
             editTextPreference.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 int maxLengthOfInput = 2;
                 editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLengthOfInput)});
             });
+        }
+
+
+        private void setupNumberOfRandomTracksToAddPreference(){
+            var pref = findPref("numberOfRandomTracksToAdd");
+            pref.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                int maxLengthOfInput = 3;
+                editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLengthOfInput)
+                    , new MinNumberInputFilter(1, 100)
+                });
+            });
+        }
+
+
+        @NonNull
+        private androidx.preference.EditTextPreference findPref(String key){
+            EditTextPreference pref = getPreferenceManager().findPreference(key);
+            assert pref != null;
+            return pref;
         }
 
 

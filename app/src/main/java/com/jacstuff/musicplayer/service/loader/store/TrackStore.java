@@ -1,7 +1,8 @@
 package com.jacstuff.musicplayer.service.loader.store;
 
 import com.jacstuff.musicplayer.service.db.entities.Track;
-import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
+import com.jacstuff.musicplayer.service.helpers.preferences.PrefKey;
+import com.jacstuff.musicplayer.service.helpers.preferences.PreferencesHelperImpl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,14 +14,14 @@ public class TrackStore {
 
     private List<Track> tracks;
     private final Set<String> existingAllTracksIdentifiers = new HashSet<>();
-    private PreferencesHelper preferencesHelper;
+    private PreferencesHelperImpl preferencesHelper;
 
     public void init(){
         tracks = new ArrayList<>(10_000);
     }
 
 
-    public void setPreferencesHelper(PreferencesHelper preferencesHelper){
+    public void setPreferencesHelper(PreferencesHelperImpl preferencesHelper){
         this.preferencesHelper = preferencesHelper;
     }
 
@@ -53,7 +54,8 @@ public class TrackStore {
 
     boolean shouldTrackBeAdded(Track track){
         String identifier = track.getDuplicateIdentifier();
-        if(preferencesHelper.areDuplicateTracksIgnored() && existingAllTracksIdentifiers.contains(identifier)){
+        var areDuplicatesIgnored = preferencesHelper.getBoolean(PrefKey.ARE_DUPLICATE_TRACKS_IGNORED);
+        if(areDuplicatesIgnored && existingAllTracksIdentifiers.contains(identifier)){
             return false;
         }
         existingAllTracksIdentifiers.add(identifier);

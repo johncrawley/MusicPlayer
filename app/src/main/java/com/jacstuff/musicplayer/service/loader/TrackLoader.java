@@ -8,7 +8,7 @@ import com.jacstuff.musicplayer.service.db.entities.Album;
 import com.jacstuff.musicplayer.service.db.entities.Artist;
 import com.jacstuff.musicplayer.service.db.entities.Genre;
 import com.jacstuff.musicplayer.service.db.entities.Track;
-import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
+import com.jacstuff.musicplayer.service.helpers.preferences.PreferencesHelperImpl;
 import com.jacstuff.musicplayer.service.loader.store.AlbumStore;
 import com.jacstuff.musicplayer.service.loader.store.ArtistStore;
 import com.jacstuff.musicplayer.service.loader.store.GenreStore;
@@ -25,13 +25,13 @@ public class TrackLoader {
     private final ArtistStore artistStore = new ArtistStore();
     private final GenreStore genreStore = new GenreStore();
     private final StatLogger statLogger = new StatLogger();
-    private final PreferencesHelper preferencesHelper;
+    private final PreferencesHelperImpl preferencesHelper;
     private TrackParser trackParser;
 
 
     public TrackLoader(Context context){
         this.context  = context;
-        preferencesHelper = new PreferencesHelper(context);
+        preferencesHelper = new PreferencesHelperImpl(context);
         trackStore.setPreferencesHelper(preferencesHelper);
     }
 

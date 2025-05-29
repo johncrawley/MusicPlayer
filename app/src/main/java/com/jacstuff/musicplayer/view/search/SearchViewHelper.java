@@ -1,5 +1,7 @@
 package com.jacstuff.musicplayer.view.search;
 
+import static com.jacstuff.musicplayer.service.helpers.preferences.PrefKey.IS_SEARCH_DISMISSED_AFTER_SELECTION;
+import static com.jacstuff.musicplayer.service.helpers.preferences.PrefKey.IS_SIMPLE_SEARCH_ENABLED;
 import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.createShowAnimatorFor;
 
 import android.animation.Animator;
@@ -17,6 +19,7 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
+import com.jacstuff.musicplayer.service.helpers.preferences.PrefKey;
 import com.jacstuff.musicplayer.view.utils.AnimatorHelper;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 import com.jacstuff.musicplayer.view.utils.KeyboardHelper;
@@ -242,14 +245,16 @@ public class SearchViewHelper {
 
 
     private void hideSearchAfterSelection(){
-        if(mainActivity.getPreferencesHelper().isSearchViewDismissedAfterSelection()){
+        if(mainActivity.getPreferencesHelper()
+                .getBoolean(IS_SEARCH_DISMISSED_AFTER_SELECTION)){
             hideSearch();
         }
     }
 
 
     private boolean isSimpleSearchEnabled(){
-        return mainActivity.getPreferencesHelper().isSimpleSearchEnabled();
+        return mainActivity.getPreferencesHelper()
+                .getBoolean(IS_SIMPLE_SEARCH_ENABLED);
     }
 
 }

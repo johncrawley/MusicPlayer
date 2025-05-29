@@ -80,6 +80,7 @@
             app:title="@string/number_of_random_tracks_to_add"
             app:summary="@string/number_of_random_tracks_to_add_summary"
             app:defaultValue="5"
+            app:min="0"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>

@@ -1,17 +1,20 @@
 package com.jacstuff.musicplayer.service.loader;
 
+import static com.jacstuff.musicplayer.service.helpers.preferences.PrefKey.EXCLUDED_TRACKS_PATH_STR;
+import static com.jacstuff.musicplayer.service.helpers.preferences.PrefKey.TRACKS_PATH_STR;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
-import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
+import com.jacstuff.musicplayer.service.helpers.preferences.PreferencesHelperImpl;
 
 public class CursorCreator {
 
 
-    public Cursor createCursor(PreferencesHelper preferencesHelper, Context context){
-        String includeArg = preferencesHelper.getPathsStr();
-        String excludeArg = preferencesHelper.getExcludeStr();
+    public Cursor createCursor(PreferencesHelperImpl preferencesHelper, Context context){
+        String includeArg = preferencesHelper.getStr(TRACKS_PATH_STR);
+        String excludeArg = preferencesHelper.getStr(EXCLUDED_TRACKS_PATH_STR);
         String sortOrder = MediaStore.Audio.Media.DEFAULT_SORT_ORDER + " ASC";
 
         return context.getContentResolver().query(

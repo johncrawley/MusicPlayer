@@ -1,6 +1,7 @@
 package com.jacstuff.musicplayer.service.helpers;
 
 import com.jacstuff.musicplayer.MainActivity;
+import com.jacstuff.musicplayer.service.helpers.preferences.PrefKey;
 import com.jacstuff.musicplayer.service.notifications.MediaNotificationManager;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
@@ -194,7 +195,8 @@ public class PlaylistHelper {
 
 
     private void autoLoadNextTrack(){
-        if(mediaPlayerService.getPreferencesHelper().isNextTrackLoadedAutomatically()){
+        if(mediaPlayerService.getPreferencesHelper()
+                .getBoolean(PrefKey.IS_NEXT_TRACK_SELECTED_AFTER_PLAYLIST_LOADED)){
             mediaPlayerService.loadNextTrack();
         }
     }

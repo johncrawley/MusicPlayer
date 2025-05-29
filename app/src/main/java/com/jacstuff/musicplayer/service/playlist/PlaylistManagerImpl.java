@@ -12,7 +12,8 @@ import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
-import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
+import com.jacstuff.musicplayer.service.helpers.preferences.PrefKey;
+import com.jacstuff.musicplayer.service.helpers.preferences.PreferencesHelperImpl;
 import com.jacstuff.musicplayer.service.loader.TrackLoader;
 
 import java.util.ArrayDeque;
@@ -48,8 +49,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private Set<String> currentPlaylistFilenames;
     private String currentPlaylistName = "";
     private String currentArtistName = "";
-    private final PreferencesHelper preferencesHelper;
+    private final PreferencesHelperImpl preferencesHelper;
     private final IndexManager indexManager;
+    private final RandomTrackAppender randomTrackAppender;
 
 
     public PlaylistManagerImpl(Context context, TrackLoader trackLoader, IndexManager indexManager){
@@ -65,7 +67,17 @@ public class PlaylistManagerImpl implements PlaylistManager {
         trackHistory = new TrackHistory();
         queuedTracks = new ArrayDeque<>();
         currentPlaylistFilenames = new HashSet<>();
-        preferencesHelper = new PreferencesHelper(context);
+        preferencesHelper = new PreferencesHelperImpl(context);
+        randomTrackAppender = new RandomTrackAppender(preferencesHelper);
+    }
+
+
+    @Override
+    public void setShuffleState(boolean isEnabled){
+        isShuffleEnabled = isEnabled;
+        if(isEnabled && unPlayedTracks.size() != tracks.size()){
+            unPlayedTracks = new ArrayList<>(tracks);
+        }
     }
 
 
@@ -433,7 +445,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private boolean filterAlbumTrack(Track track){
-        return !preferencesHelper.areOnlyAlbumTracksFromSelectedArtistShown()
+        return !preferencesHelper.getBoolean(PrefKey.ARE_ONLY_ALBUM_TRACKS_FROM_SELECTED_ARTIST_SHOWN)
                 || currentArtistName.isBlank()
                 || track.getArtist().equals(currentArtistName);
     }

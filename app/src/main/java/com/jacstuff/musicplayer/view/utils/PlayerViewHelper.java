@@ -1,5 +1,8 @@
 package com.jacstuff.musicplayer.view.utils;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -78,7 +81,7 @@ public class PlayerViewHelper {
             setVisibilityOnPlayerViews(View.INVISIBLE);
             return;
         }
-        setVisibilityOnPlayerViews(View.VISIBLE);
+        setVisibilityOnPlayerViews(VISIBLE);
         setSeekAndShuffleButtonsVisibility(numberOfTracks);
         setPlayPauseAndTrackSeekBarVisibility();
     }
@@ -88,12 +91,12 @@ public class PlayerViewHelper {
         if(numberOfTracks < 2){
             nextTrackButton.setVisibility(View.INVISIBLE);
             previousTrackButton.setVisibility(View.INVISIBLE);
-            turnShuffleOffButton.setVisibility(View.GONE);
-            turnShuffleOnButton.setVisibility(View.GONE);
+            turnShuffleOffButton.setVisibility(GONE);
+            turnShuffleOnButton.setVisibility(GONE);
         }
         else{
-            nextTrackButton.setVisibility(View.VISIBLE);
-            previousTrackButton.setVisibility(View.VISIBLE);
+            nextTrackButton.setVisibility(VISIBLE);
+            previousTrackButton.setVisibility(VISIBLE);
             setShuffleButtonsVisibility();
         }
     }
@@ -106,7 +109,7 @@ public class PlayerViewHelper {
 
     public void setTrackDetails(final Track track, int elapsedTime){
         mainActivity.runOnUiThread(()-> {
-            playerButtonPanel.setVisibility(View.VISIBLE);
+            playerButtonPanel.setVisibility(VISIBLE);
             String titleText = track.getTitle();
             trackTitle.setText(titleText.isEmpty()? mainActivity.getString(R.string.no_tracks_found) : titleText);
             trackAlbum.setText(track.getAlbum());
@@ -120,7 +123,7 @@ public class PlayerViewHelper {
 
     private void setVisibilityOnAlbumText(Track track){
         boolean isAlbumAndArtistTheSame = track.getAlbum().equals(track.getArtist());
-        trackAlbum.setVisibility(isAlbumAndArtistTheSame ? View.GONE : View.VISIBLE);
+        trackAlbum.setVisibility(isAlbumAndArtistTheSame ? GONE : VISIBLE);
     }
 
 
@@ -248,13 +251,13 @@ public class PlayerViewHelper {
 
     private void setPlayPauseAndTrackSeekBarVisibility(){
         if(mediaPlayerService.isPlaying()){
-            playButton.setVisibility(View.GONE);
-            pauseButton.setVisibility(View.VISIBLE);
-            trackTimeSeekBar.setVisibility(View.VISIBLE);
+            playButton.setVisibility(GONE);
+            pauseButton.setVisibility(VISIBLE);
+            trackTimeSeekBar.setVisibility(VISIBLE);
             return;
         }
-        playButton.setVisibility(View.VISIBLE);
-        pauseButton.setVisibility(View.GONE);
+        playButton.setVisibility(VISIBLE);
+        pauseButton.setVisibility(GONE);
         trackTimeSeekBar.setVisibility(View.INVISIBLE);
     }
 
@@ -289,17 +292,17 @@ public class PlayerViewHelper {
 
     public void notifyMediaPlayerPlaying(){
         mainActivity.runOnUiThread(()->{
-            playButton.setVisibility(View.GONE);
-            pauseButton.setVisibility(View.VISIBLE);
-            trackTimeSeekBar.setVisibility(View.VISIBLE);
+            playButton.setVisibility(GONE);
+            pauseButton.setVisibility(VISIBLE);
+            trackTimeSeekBar.setVisibility(VISIBLE);
         });
     }
 
 
     public void notifyMediaPlayerStopped(){
         mainActivity.runOnUiThread(()->{
-            playButton.setVisibility(View.VISIBLE);
-            pauseButton.setVisibility(View.GONE);
+            playButton.setVisibility(VISIBLE);
+            pauseButton.setVisibility(GONE);
             trackTimeSeekBar.setProgress(0);
             trackTimeSeekBar.setVisibility(View.INVISIBLE);
         });
@@ -308,21 +311,27 @@ public class PlayerViewHelper {
 
     public void notifyMediaPlayerPaused(){
         mainActivity.runOnUiThread(()->{
-            playButton.setVisibility(View.VISIBLE);
-            pauseButton.setVisibility(View.GONE);
+            playButton.setVisibility(VISIBLE);
+            pauseButton.setVisibility(GONE);
         });
     }
 
 
     public void notifyShuffleEnabled(){
-        turnShuffleOnButton.setVisibility(View.GONE);
-        turnShuffleOffButton.setVisibility(View.VISIBLE);
+        turnShuffleOnButton.setVisibility(GONE);
+        turnShuffleOffButton.setVisibility(VISIBLE);
+    }
+
+
+    public void notifyShuffleState(boolean isEnabled){
+        turnShuffleOnButton.setVisibility(isEnabled? GONE : VISIBLE);
+        turnShuffleOnButton.setVisibility(isEnabled? VISIBLE : GONE);
     }
 
 
     public void notifyShuffleDisabled(){
-        turnShuffleOnButton.setVisibility(View.VISIBLE);
-        turnShuffleOffButton.setVisibility(View.GONE);
+        turnShuffleOnButton.setVisibility(VISIBLE);
+        turnShuffleOffButton.setVisibility(GONE);
     }
 
 

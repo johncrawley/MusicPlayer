@@ -32,7 +32,8 @@ import android.widget.Toast;
 
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.entities.Track;
-import com.jacstuff.musicplayer.service.helpers.PreferencesHelper;
+import com.jacstuff.musicplayer.service.helpers.preferences.PrefKey;
+import com.jacstuff.musicplayer.service.helpers.preferences.PreferencesHelperImpl;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private PlayerViewHelper playerViewHelper;
     private TabHelper tabHelper;
     private final AtomicBoolean isServiceConnected = new AtomicBoolean(false);
-    private PreferencesHelper preferencesHelper;
+    private PreferencesHelperImpl preferencesHelper;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initHelpers(){
         tabHelper = new TabHelper(viewModel, this);
-        preferencesHelper = new PreferencesHelper(getApplicationContext());
+        preferencesHelper = new PreferencesHelperImpl(getApplicationContext());
         playerViewHelper = new PlayerViewHelper(this);
     }
 
@@ -240,6 +241,11 @@ public class MainActivity extends AppCompatActivity {
         FragmentManagerHelper.showDialog(this, AddTrackToPlaylistFragment.newInstance(), "add_track_to_playlist");
     }
 
+
+    public PlayerViewHelper getPlayerViewHelper(){
+        return playerViewHelper;
+    }
+
     public void hidePlayerViews(){ playerViewHelper.setVisibilityOnPlayerViews(View.INVISIBLE);}
 
     public void showPlayerViews(){playerViewHelper.setVisibilityOnPlayerViews(View.VISIBLE);}
@@ -340,13 +346,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void toastIfTabsNotAutoSwitched(int strId){
-        if(!preferencesHelper.isTabSwitchedAfterPlaylistLoaded()){
+        if(!preferencesHelper.getBoolean(PrefKey.ARE_TABS_SWITCHED_AFTER_PLAYLIST_SELECTION)){
             toast(strId);
         }
     }
 
 
-    public PreferencesHelper getPreferencesHelper(){
+    public PreferencesHelperImpl getPreferencesHelper(){
         return preferencesHelper;
     }
 

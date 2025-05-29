@@ -53,6 +53,7 @@ public interface PlaylistManager {
 
     void enableShuffle();
     void disableShuffle();
+    void setShuffleState(boolean isEnabled);
     boolean isShuffleEnabled();
 
 }
