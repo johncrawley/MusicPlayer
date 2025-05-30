@@ -258,10 +258,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void notifyMediaPlayerPaused(){ playerViewHelper.notifyMediaPlayerPaused();}
 
-    public void notifyShuffleEnabled(){ playerViewHelper.notifyShuffleEnabled(); }
-
-    public void notifyShuffleDisabled(){ playerViewHelper.notifyShuffleDisabled(); }
-
     public void notifyMediaPlayerPlaying(){playerViewHelper.notifyMediaPlayerPlaying(); }
 
     public void setSelectedTrack(Track track){ this.selectedTrack = track; }

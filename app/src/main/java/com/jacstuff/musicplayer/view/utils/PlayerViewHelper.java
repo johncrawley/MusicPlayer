@@ -216,8 +216,20 @@ public class PlayerViewHelper {
 
 
     private void setupShuffleButtons(MediaPlayerService mediaPlayerService){
-        turnShuffleOnButton =  setupImageButton(R.id.turnShuffleOnButton, mediaPlayerService::enableShuffle);
-        turnShuffleOffButton = setupImageButton(R.id.turnShuffleOffButton, mediaPlayerService::disableShuffle);
+        turnShuffleOnButton =  setupImageButton(R.id.turnShuffleOnButton, this::enableShuffle);
+        turnShuffleOffButton = setupImageButton(R.id.turnShuffleOffButton, this::disableShuffle);
+    }
+
+
+    private void enableShuffle(){
+        mediaPlayerService.enableShuffle();
+        setShuffleState(true);
+    }
+
+
+    private void disableShuffle(){
+        mediaPlayerService.disableShuffle();
+        setShuffleState(false);
     }
 
 
@@ -323,9 +335,11 @@ public class PlayerViewHelper {
     }
 
 
-    public void notifyShuffleState(boolean isEnabled){
-        turnShuffleOnButton.setVisibility(isEnabled? GONE : VISIBLE);
-        turnShuffleOnButton.setVisibility(isEnabled? VISIBLE : GONE);
+    public void setShuffleState(boolean isEnabled){
+        mainActivity.runOnUiThread(()->{
+            turnShuffleOnButton.setVisibility(isEnabled ? GONE : VISIBLE);
+            turnShuffleOffButton.setVisibility(isEnabled ? VISIBLE : GONE);
+        });
     }
 
 

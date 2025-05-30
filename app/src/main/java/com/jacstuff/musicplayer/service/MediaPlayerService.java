@@ -372,7 +372,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     private void setShuffleState(boolean isEnabled){
         getPlaylistManager().setShuffleState(isEnabled);
-        mainActivity.getPlayerViewHelper().notifyShuffleState(isEnabled);
+        mainActivity.getPlayerViewHelper().setShuffleState(isEnabled);
     }
 
 
