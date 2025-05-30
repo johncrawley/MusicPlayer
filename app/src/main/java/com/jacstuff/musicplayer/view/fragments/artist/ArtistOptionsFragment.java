@@ -95,7 +95,7 @@ public class ArtistOptionsFragment extends DialogFragment {
     }
 
 
-    private Button setupButtonAndMakeVisible(View parentView, int buttonId, Runnable runnable){
+    private void setupButtonAndMakeVisible(View parentView, int buttonId, Runnable runnable){
         var button = ButtonMaker.setupButton(parentView,
                 buttonId,
                 runnable);
@@ -103,9 +103,6 @@ public class ArtistOptionsFragment extends DialogFragment {
         if(button != null){
             button.setVisibility(VISIBLE);
         }
-
-
-        return button;
     }
 
 
@@ -133,7 +130,6 @@ public class ArtistOptionsFragment extends DialogFragment {
     private void addRandomTracksToCurrentPlaylist(){
         disableAllButtons();
         getService().getPlaylistHelper().addRandomTracksFromAristToCurrentPlaylist(artistName);
-        dismissAfterPause();
     }
 
 
