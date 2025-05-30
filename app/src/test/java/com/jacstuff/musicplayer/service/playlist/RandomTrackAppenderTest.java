@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.jacstuff.musicplayer.service.db.entities.Track;
-import com.jacstuff.musicplayer.service.helpers.preferences.PreferencesHelper;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,14 +28,12 @@ public class RandomTrackAppenderTest {
     }
 
 
-
     @Test
     public void generatesEmptyListIfInputEmpty(){
         List<Track> emptyList = List.of();
         List<Track> destination = new ArrayList<>();
-        int result = randomTrackAppender.addTracksFrom(emptyList, destination);
-        assertTrue(destination.isEmpty());
-        assertEquals(0, result);
+        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(emptyList, destination);
+        assertTrue(randomTracks.isEmpty());
     }
 
 
@@ -44,11 +41,9 @@ public class RandomTrackAppenderTest {
     public void tracksAreAddedToDestinationList(){
         List<Track> source = createTracks(10);
         addTrackTo(target, "song_12,", "someArtist", 220L);
-        int expectedSize = target.size() + numberOfTracksToCopy;
 
-        int result = randomTrackAppender.addTracksFrom(source, target);
-        assertEquals(expectedSize, target.size());
-        assertEquals(numberOfTracksToCopy, result);
+        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(source, target);
+        assertEquals(numberOfTracksToCopy, randomTracks.size());
     }
 
 
@@ -59,8 +54,8 @@ public class RandomTrackAppenderTest {
         var allTracksCopied = new HashSet<Track>();
 
         for(int i = 0; i < 100; i++){
-            randomTrackAppender.addTracksFrom(source, target);
-            allTracksCopied.addAll(target);
+            var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(source, target);
+            allTracksCopied.addAll(randomTracks);
         }
         assertFalse(allTracksCopied.size() < 10);
     }
@@ -70,21 +65,23 @@ public class RandomTrackAppenderTest {
     public void aTrackIsNotCopiedMoreThanOnce(){
         int expectedNumberOfTracks = 3;
         var source = createTracks(expectedNumberOfTracks);
-        int result = randomTrackAppender.addTracksFrom(source, target);
-        assertEquals(expectedNumberOfTracks, target.size());
-        assertEquals(result, target.size());
+        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(source, target);
+        assertEquals(expectedNumberOfTracks, randomTracks.size());
     }
 
 
     @Test
-    public void resultAlwaysMatchesNumberOfTracksCopied(){
-        var source = createTracks(100);
-        int result1 = randomTrackAppender.addTracksFrom(source, target);
-        assertEquals(numberOfTracksToCopy, result1);
-        int targetSize = target.size();
-        int result2 = randomTrackAppender.addTracksFrom(source, target);
-        int sizeDiff = target.size() - targetSize;
-        assertEquals(sizeDiff, result2);
+    public void lastSourceTracksWillBeCopied(){
+        int sourceSize = 20;
+        int expectedSize = 4;
+        int targetSize = sourceSize - expectedSize;
+        var source = createTracks(sourceSize);
+        var target = createTracks(targetSize);
+        target.forEach(System.out::println);
+        System.out.println("****************************");
+        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(source, target);
+        randomTracks.forEach(System.out::println);
+        assertEquals(expectedSize, randomTracks.size());
     }
 
 
@@ -95,7 +92,7 @@ public class RandomTrackAppenderTest {
         target.addAll(source);
         assertEquals(expectedNumberOfTracks, target.size());
         for(int i = 0; i < 10; i++){
-            randomTrackAppender.addTracksFrom(source, target);
+            randomTrackAppender.getUniqueRandomTracksFrom(source, target);
         }
         assertEquals(expectedNumberOfTracks, target.size());
     }
@@ -105,20 +102,18 @@ public class RandomTrackAppenderTest {
     public void canChangeNumberOfTracksToCopy(){
         int sourceTracks = 15;
         var source = createTracks(sourceTracks);
-        randomTrackAppender.addTracksFrom(source, target);
-        assertEquals(numberOfTracksToCopy, target.size());
+        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(source, target);
+        assertEquals(numberOfTracksToCopy, randomTracks.size());
 
-        target.clear();
         int expectedTracksToCopy = 10;
         preferencesHelper.setNumberOfRandomTracksToAdd(expectedTracksToCopy);
-        randomTrackAppender.addTracksFrom(source, target);
-        assertEquals(expectedTracksToCopy, target.size());
+        randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(source, target);
+        assertEquals(expectedTracksToCopy, randomTracks.size());
 
-        target.clear();
         expectedTracksToCopy = -1;
         preferencesHelper.setNumberOfRandomTracksToAdd(expectedTracksToCopy);
-        randomTrackAppender.addTracksFrom(source, target);
-        assertEquals(1, target.size());
+        randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(source, target);
+        assertEquals(1, randomTracks.size());
     }
 
 
@@ -140,7 +135,7 @@ public class RandomTrackAppenderTest {
 
 
     private Track createTrack(String title, String artist, long id){
-        return Track.Builder.newInstance().createTrackWithPathname("")
+        return Track.Builder.newInstance().createTrackWithPathname("/" + title + ".mp3")
                 .withArtist(artist)
                 .withTitle(title)
                 .withId(id)

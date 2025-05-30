@@ -57,6 +57,28 @@ public class Track {
     }
 
 
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj){
+            return true;
+        }
+        if(obj == null || obj.getClass() != getClass()){
+            return false;
+        }
+        var otherTrack = (Track)obj;
+        if(this.pathname == null || otherTrack.pathname == null){
+            return false;
+        }
+        return this.pathname.equals(otherTrack.getPathname());
+    }
+
+
+    @Override
+    public int hashCode(){
+        return pathname == null ? 0 : pathname.hashCode();
+    }
+
+
     private void createOrderedStr(){
         String trackNumberPrefix = trackNumber < 10 ? "0" : "";
         String trackStr = trackNumberPrefix + trackNumber;

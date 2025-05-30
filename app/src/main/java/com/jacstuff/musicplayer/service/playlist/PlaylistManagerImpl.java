@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -276,22 +277,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    private void addTracksToCurrentPlaylist(List<Track> additionalTracks, PlaylistViewNotifier playlistViewNotifier) {
-        if(!isUserPlaylistLoaded()){
-            return;
-        }
-        int originalNumberOfTracks = tracks.size();
-        additionalTracks.stream()
-                .filter(this::isTrackNotInCurrentPlaylist)
-                .forEach(this::addNewTrackToPlaylist);
-        int numberOfNewTracks = tracks.size() - originalNumberOfTracks;
-        if(numberOfNewTracks > 0) {
-            assignIndexesToTracks();
-        }
-        playlistViewNotifier.notifyViewOfMultipleTracksAddedToPlaylist(numberOfNewTracks);
-    }
-
-
     private void addNewTrackToPlaylist(Track track){
         tracks.add(track);
         unPlayedTracks.add(track);
@@ -407,8 +392,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void addRandomTracksFromArtistToCurrentPlaylist(String artistName, PlaylistViewNotifier playlistViewNotifier){
-        List<Track> tracks = trackLoader.getTracksForArtist(artistName);
-        addTracksToCurrentPlaylist(getSortedTracks(tracks), playlistViewNotifier);
+        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(trackLoader.getTracksForArtist(artistName), tracks);
+        addTracksToCurrentPlaylist(randomTracks, playlistViewNotifier, false);
     }
 
 
@@ -416,6 +401,33 @@ public class PlaylistManagerImpl implements PlaylistManager {
     public void addTracksFromAlbumToCurrentPlaylist(String albumName, PlaylistViewNotifier playlistViewNotifier) {
         List<Track> tracks = trackLoader.getTracksForAlbum(albumName);
         addTracksToCurrentPlaylist(getSortedAlbumTracks(tracks), playlistViewNotifier);
+    }
+
+
+    private void addTracksToCurrentPlaylist(List<Track> additionalTracks, PlaylistViewNotifier playlistViewNotifier) {
+        addTracksToCurrentPlaylist(additionalTracks, playlistViewNotifier, true);
+    }
+
+
+    private void addTracksToCurrentPlaylist(List<Track> additionalTracks, PlaylistViewNotifier playlistViewNotifier, boolean isCheckPerformed) {
+        if(!isUserPlaylistLoaded()){
+            return;
+        }
+        int originalNumberOfTracks = tracks.size();
+        addTracksToPlaylist(additionalTracks, isCheckPerformed);
+        int numberOfNewTracks = tracks.size() - originalNumberOfTracks;
+        if(numberOfNewTracks > 0) {
+            assignIndexesToTracks();
+        }
+        playlistViewNotifier.notifyViewOfMultipleTracksAddedToPlaylist(numberOfNewTracks);
+    }
+
+
+    private void addTracksToPlaylist(List<Track> additionalTracks, boolean isExistingCheckPerformed){
+        Predicate <Track> predicate = isExistingCheckPerformed ? this::isTrackNotInCurrentPlaylist : (Track)-> true;
+        additionalTracks.stream()
+                .filter(predicate)
+                .forEach(this::addNewTrackToPlaylist);
     }
 
 

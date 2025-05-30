@@ -90,7 +90,7 @@ public class ArtistOptionsFragment extends DialogFragment {
 
             setupButtonAndMakeVisible(parentView,
                     R.id.addRandomTracksToCurrentPlaylistButton,
-                    this::addArtistTracksToCurrentPlaylist);
+                    this::addRandomTracksToCurrentPlaylist);
         }
     }
 
@@ -132,7 +132,7 @@ public class ArtistOptionsFragment extends DialogFragment {
 
     private void addRandomTracksToCurrentPlaylist(){
         disableAllButtons();
-        getService().addTracksFromAristToCurrentPlaylist(artistName);
+        getService().getPlaylistHelper().addRandomTracksFromAristToCurrentPlaylist(artistName);
         dismissAfterPause();
     }
 
