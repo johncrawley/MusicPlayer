@@ -1,5 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.album;
 
+import static android.view.View.VISIBLE;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ALBUM;
 
@@ -55,7 +56,7 @@ public class AlbumOptionsFragment extends DialogFragment {
 
     private void setupButtons(View parentView){
         loadTracksButton = ButtonMaker.setupButton(parentView, R.id.loadAlbumTracksButton, this::loadAlbumTracks);
-        setupAddTracksToPlaylistButton(parentView);
+        setupButtonAndMakeVisible(parentView, R.id.addAlbumTracksToCurrentPlaylistButton, this::addAlbumTracksToCurrentPlaylist);;
     }
 
 
@@ -71,18 +72,16 @@ public class AlbumOptionsFragment extends DialogFragment {
     }
 
 
-    private void setupAddTracksToPlaylistButton(View parentView){
-        if(getMainActivity().isUserPlaylistLoaded()){
-            addTracksToPlaylistButton = ButtonMaker.setupButton(parentView,
-                    R.id.addAlbumTracksToCurrentPlaylistButton,
-                    this::addAlbumTracksToCurrentPlaylist);
 
-            if(addTracksToPlaylistButton != null) {
-                addTracksToPlaylistButton.setVisibility(View.VISIBLE);
-            }
+    private void setupButtonAndMakeVisible(View parentView, int buttonId, Runnable runnable){
+        var button = ButtonMaker.setupButton(parentView,
+                buttonId,
+                runnable);
+
+        if(button != null){
+            button.setVisibility(VISIBLE);
         }
     }
-
 
     private void disableAllButtons(){
         loadTracksButton.setEnabled(false);
