@@ -56,7 +56,8 @@ public class AlbumOptionsFragment extends DialogFragment {
 
     private void setupButtons(View parentView){
         loadTracksButton = ButtonMaker.setupButton(parentView, R.id.loadAlbumTracksButton, this::loadAlbumTracks);
-        setupButtonAndMakeVisible(parentView, R.id.addAlbumTracksToCurrentPlaylistButton, this::addAlbumTracksToCurrentPlaylist);;
+        setupButtonAndMakeVisible(parentView, R.id.addAlbumTracksToCurrentPlaylistButton, this::addAlbumTracksToCurrentPlaylist);
+        setupButtonAndMakeVisible(parentView, R.id.addRandomAlbumTracksToCurrentPlaylistButton, this::addRandomAlbumTracksToCurrentPlaylist);
     }
 
 
@@ -95,6 +96,11 @@ public class AlbumOptionsFragment extends DialogFragment {
         disableAllButtons();
         getMainActivity().getMediaPlayerService().addTracksFromAlbumToCurrentPlaylist(albumName);
         dismissAfterPause();
+    }
+
+
+    private void addRandomAlbumTracksToCurrentPlaylist(){
+        getMainActivity().getMediaPlayerService().getPlaylistHelper().addRandomTracksFromAlbumToCurrentPlaylist(albumName);
     }
 
 

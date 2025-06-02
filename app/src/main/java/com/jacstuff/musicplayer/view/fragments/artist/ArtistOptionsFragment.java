@@ -114,21 +114,14 @@ public class ArtistOptionsFragment extends DialogFragment {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^ ArtistOptionsFragment: " + msg);
-    }
-
-
     private void addArtistTracksToCurrentPlaylist(){
         disableAllButtons();
-        log("addArtistTracksToCurrentPlaylist() artistName: " + artistName);
         getService().addTracksFromAristToCurrentPlaylist(artistName);
         dismissAfterPause();
     }
 
 
     private void addRandomTracksToCurrentPlaylist(){
-        disableAllButtons();
         getService().getPlaylistHelper().addRandomTracksFromAristToCurrentPlaylist(artistName);
     }
 

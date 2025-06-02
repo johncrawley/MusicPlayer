@@ -391,9 +391,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     @Override
-    public void addRandomTracksFromArtistToCurrentPlaylist(String artistName, PlaylistViewNotifier playlistViewNotifier){
-        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(trackLoader.getTracksForArtist(artistName), tracks);
-        addTracksToCurrentPlaylist(randomTracks, playlistViewNotifier, false);
+    public void addRandomTracksFromArtistToCurrentPlaylist(String name, PlaylistViewNotifier playlistViewNotifier){
+        addRandomTracksToPlaylist(()-> trackLoader.getTracksForArtist(name), playlistViewNotifier );
     }
 
 
@@ -401,6 +400,18 @@ public class PlaylistManagerImpl implements PlaylistManager {
     public void addTracksFromAlbumToCurrentPlaylist(String albumName, PlaylistViewNotifier playlistViewNotifier) {
         List<Track> tracks = trackLoader.getTracksForAlbum(albumName);
         addTracksToCurrentPlaylist(getSortedAlbumTracks(tracks), playlistViewNotifier);
+    }
+
+
+    @Override
+    public void addRandomTracksFromAlbumToCurrentPlaylist(String name, PlaylistViewNotifier playlistViewNotifier){
+        addRandomTracksToPlaylist(()-> trackLoader.getTracksForAlbum(name), playlistViewNotifier );
+    }
+
+
+    private void addRandomTracksToPlaylist(Supplier<List<Track>> tracksSupplier, PlaylistViewNotifier playlistViewNotifier){
+        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(tracksSupplier.get(), tracks);
+        addTracksToCurrentPlaylist(randomTracks, playlistViewNotifier, false);
     }
 
 

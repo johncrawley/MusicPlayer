@@ -186,6 +186,12 @@ public class PlaylistHelper {
     }
 
 
+    public void addRandomTracksFromAlbumToCurrentPlaylist(String artistName){
+        playlistManager.addRandomTracksFromAlbumToCurrentPlaylist(artistName, playlistViewNotifier);
+        mediaPlayerService.updateViewTrackList(playlistManager);
+    }
+
+
     public void loadPlaylist(Playlist playlist) {
         playlistManager.loadPlaylist(playlist);
         mediaPlayerService.updateViewTrackListAndDeselectList(playlistManager);

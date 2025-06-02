@@ -46,6 +46,7 @@ public interface PlaylistManager {
     void addTracksFromArtistToCurrentPlaylist(String artistName, PlaylistViewNotifier playlistViewNotifier);
     void addRandomTracksFromArtistToCurrentPlaylist(String artistName, PlaylistViewNotifier playlistViewNotifier);
     void addTracksFromAlbumToCurrentPlaylist(String albumName, PlaylistViewNotifier playlistViewNotifier);
+    void addRandomTracksFromAlbumToCurrentPlaylist(String artistName, PlaylistViewNotifier playlistViewNotifier);
     void removeTrackFromCurrentPlaylist(Track track, PlaylistViewNotifier playlistViewNotifier);
 
     int getCurrentIndexOf(Track track);
