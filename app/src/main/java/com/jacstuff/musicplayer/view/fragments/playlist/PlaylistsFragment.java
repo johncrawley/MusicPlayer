@@ -3,6 +3,7 @@ package com.jacstuff.musicplayer.view.fragments.playlist;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+import static com.jacstuff.musicplayer.view.fragments.Message.ADD_RANDOM_TRACKS_TO_PLAYLIST;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD;
@@ -77,6 +78,7 @@ public class PlaylistsFragment extends Fragment {
 
     private void setupFragmentListeners(){
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE, (bundle)->  showDeletePlaylistDialog());
+        setListener(this, ADD_RANDOM_TRACKS_TO_PLAYLIST, (bundle)->  startAddRandomTracksDialogFragment());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD, (bundle) -> loadLongClickedPlaylist());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE, (bundle) -> startAddPlaylistFragment());
         setListener(this, Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
@@ -196,6 +198,12 @@ public class PlaylistsFragment extends Fragment {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.ok, (dialog, whichButton) -> deletePlaylistAndSelectFirstPlaylist(playlist))
                 .setNegativeButton(android.R.string.cancel, null).show();
+    }
+
+
+    private void startAddRandomTracksDialogFragment(){
+        Bundle bundle = new Bundle();
+        FragmentManagerHelper.showDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
     }
 
 

@@ -1,5 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
+
 import static android.view.View.GONE;
 import static com.jacstuff.musicplayer.view.fragments.Message.ADD_RANDOM_TRACKS_TO_PLAYLIST;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
@@ -24,7 +25,7 @@ import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.Message;
 
 
-public class PlaylistOptionsFragment extends DialogFragment {
+public class AddRandomTracksFragment extends DialogFragment {
 
 
     private Button loadPlaylistButton, deletePlaylistButton, addRandomTracksButton;
