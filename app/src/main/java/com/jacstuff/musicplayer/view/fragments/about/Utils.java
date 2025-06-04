@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 
+import java.util.List;
+
 public class Utils {
 
     public static int getInt(Bundle bundle, MessageKey key){
@@ -15,6 +17,11 @@ public class Utils {
 
     public static boolean getBoolean(Bundle bundle, MessageKey key){
         return bundle.getBoolean(key.toString(), false);
+    }
+
+
+    public static List<String> getStrList(Bundle bundle, MessageKey key){
+        return bundle.getStringArrayList(key.toString());
     }
 
     public static void putInt(Bundle bundle, MessageKey messageKey, int value){

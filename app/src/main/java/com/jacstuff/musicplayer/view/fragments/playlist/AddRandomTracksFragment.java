@@ -20,15 +20,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.Message;
+
+import java.util.Optional;
 
 
 public class AddRandomTracksFragment extends DialogFragment {
 
 
-    private Button loadPlaylistButton, deletePlaylistButton, addRandomTracksButton;
+    private Button okButton, cancelButton;
     private boolean isUserPlaylist;
 
 
@@ -39,7 +43,7 @@ public class AddRandomTracksFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_options_playlist, container, false);
+        return inflater.inflate(R.layout.dialog_playlist_add_random_tracks, container, false);
     }
 
 
@@ -60,32 +64,34 @@ public class AddRandomTracksFragment extends DialogFragment {
 
 
     private void setupButtons(View parentView){
-        loadPlaylistButton = setupButton(parentView, R.id.loadPlaylistButton, ()-> sendMessage(NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD));
-        deletePlaylistButton = setupButton(parentView, R.id.removePlaylistButton, ()-> sendMessage(NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE));
-        addRandomTracksButton = setupButton(parentView, R.id.addRandomTracksButton, ()-> sendMessage(ADD_RANDOM_TRACKS_TO_PLAYLIST));
-        hideSomeButtonsWhenUserPlaylistIsLoaded();
+        okButton = setupButton(parentView, R.id.okButton, this::addRandomTracks);
+        cancelButton = setupButton(parentView, R.id.okButton, this::dismissDialog);
 
     }
 
 
-    private void hideSomeButtonsWhenUserPlaylistIsLoaded(){
-        if(!isUserPlaylist){
-            deletePlaylistButton.setVisibility(GONE);
-            addRandomTracksButton.setVisibility(GONE);
-        }
-    }
-
-
-    private void sendMessage(Message key){
+    private void dismissDialog(){
         disableAllButtons();
-        getParentFragmentManager().setFragmentResult(key.toString(), new Bundle());
         dismissAfterPause();
     }
 
 
+    private void addRandomTracks(){
+        disableAllButtons();
+        getService().ifPresent( service -> service.getPlaylistHelper().addRandomTracksFromAristToCurrentPlaylist(""));
+        dismissAfterPause();
+    }
+
+
+    private Optional<MediaPlayerService> getService(){
+        MainActivity mainActivity = (MainActivity) getActivity();
+        return mainActivity == null ? Optional.empty() : Optional.of(mainActivity.getMediaPlayerService());
+    }
+
+
     private void disableAllButtons(){
-        loadPlaylistButton.setEnabled(false);
-        deletePlaylistButton.setEnabled(false);
+        okButton.setEnabled(false);
+        cancelButton.setEnabled(false);
     }
 
 
@@ -99,7 +105,6 @@ public class AddRandomTracksFragment extends DialogFragment {
         button.setOnClickListener((View v)-> runnable.run());
         return button;
     }
-
 
 
 }
