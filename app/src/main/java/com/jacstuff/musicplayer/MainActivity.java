@@ -22,6 +22,9 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
@@ -114,10 +117,20 @@ public class MainActivity extends AppCompatActivity {
         requestPermissions();
         assignTheme();
         setContentView(R.layout.activity_main);
+        setupLayout();
         setupViewModel();
         initHelpers();
         startMediaPlayerService();
         checkPath();
+    }
+
+
+    private void setupLayout() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
     }
 
 
