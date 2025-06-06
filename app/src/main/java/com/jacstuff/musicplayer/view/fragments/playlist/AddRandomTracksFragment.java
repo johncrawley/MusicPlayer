@@ -33,7 +33,7 @@ public class AddRandomTracksFragment extends DialogFragment {
 
 
     private Button okButton, cancelButton;
-    private boolean isUserPlaylist;
+    public static String TAG = "ADD_RANDOM_TRACKS_FRAGMENT";
 
 
     public static PlaylistOptionsFragment newInstance() {
@@ -59,13 +59,12 @@ public class AddRandomTracksFragment extends DialogFragment {
     private void assignArgs(){
         Bundle bundle = getArguments();
         assert bundle != null;
-        isUserPlaylist = getBoolean(bundle, IS_USER_PLAYLIST);
     }
 
 
     private void setupButtons(View parentView){
         okButton = setupButton(parentView, R.id.okButton, this::addRandomTracks);
-        cancelButton = setupButton(parentView, R.id.okButton, this::dismissDialog);
+        cancelButton = setupButton(parentView, R.id.cancelDialogButton, this::dismissDialog);
 
     }
 

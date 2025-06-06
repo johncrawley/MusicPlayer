@@ -21,7 +21,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
+import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
+import com.jacstuff.musicplayer.view.fragments.trackinfo.TrackInfoFragment;
 
 
 public class PlaylistOptionsFragment extends DialogFragment {
@@ -61,9 +63,15 @@ public class PlaylistOptionsFragment extends DialogFragment {
     private void setupButtons(View parentView){
         loadPlaylistButton = setupButton(parentView, R.id.loadPlaylistButton, ()-> sendMessage(NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD));
         deletePlaylistButton = setupButton(parentView, R.id.removePlaylistButton, ()-> sendMessage(NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE));
-        addRandomTracksButton = setupButton(parentView, R.id.addRandomTracksButton, ()-> sendMessage(ADD_RANDOM_TRACKS_TO_PLAYLIST));
+        addRandomTracksButton = setupButton(parentView, R.id.addRandomTracksButton, this::loadAddRandomTracksFragment);
         hideSomeButtonsWhenUserPlaylistIsLoaded();
 
+    }
+
+
+    private void loadAddRandomTracksFragment(){
+        dismiss();
+        FragmentManagerHelper.showDialog(this, new AddRandomTracksFragment(), AddRandomTracksFragment.TAG, new Bundle());
     }
 
 
