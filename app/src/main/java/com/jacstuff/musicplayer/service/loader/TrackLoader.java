@@ -7,6 +7,7 @@ import android.database.Cursor;
 import com.jacstuff.musicplayer.service.db.entities.Album;
 import com.jacstuff.musicplayer.service.db.entities.Artist;
 import com.jacstuff.musicplayer.service.db.entities.Genre;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.helpers.preferences.PreferencesHelperImpl;
 import com.jacstuff.musicplayer.service.loader.store.AlbumStore;
@@ -80,6 +81,17 @@ public class TrackLoader {
 
     public ArrayList<String> getAllGenreNames(){
        return genreStore.getAllGenreNames();
+    }
+
+
+    public List<Track> getTracksFor(PlaylistType playlistType, String name){
+       return switch (playlistType){
+            case ALBUM -> getTracksForAlbum(name);
+            case GENRE -> getGenre(name).getTracks();
+            case ARTIST -> getTracksForArtist(name);
+            case ALL_TRACKS -> trackStore.getTracks();
+           default -> new ArrayList<>();
+        };
     }
 
 

@@ -89,7 +89,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public boolean hasAnyTracks(){
-        return tracks != null && tracks.size() > 0;
+        return tracks != null && !tracks.isEmpty();
     }
 
 
@@ -406,6 +406,23 @@ public class PlaylistManagerImpl implements PlaylistManager {
     @Override
     public void addRandomTracksFromAlbumToCurrentPlaylist(String name, PlaylistViewNotifier playlistViewNotifier){
         addRandomTracksToPlaylist(()-> trackLoader.getTracksForAlbum(name), playlistViewNotifier );
+    }
+
+
+    public void addRandomTracksToCurrentPlaylist(PlaylistType playlistType, List<String> names, PlaylistViewNotifier playlistViewNotifier){
+        addRandomTracksToPlaylist(()-> getTracksFor(playlistType, names), playlistViewNotifier );
+    }
+
+
+    private List<Track> getTracksFor(PlaylistType playlistType, List<String> names){
+        if(playlistType == PlaylistType.ALL_TRACKS){
+            return this.tracks;
+        }
+        var trackList = new ArrayList<Track>();
+        for(var name : names){
+            trackList.addAll(trackLoader.getTracksFor(playlistType, name));
+        }
+        return trackList;
     }
 
 
