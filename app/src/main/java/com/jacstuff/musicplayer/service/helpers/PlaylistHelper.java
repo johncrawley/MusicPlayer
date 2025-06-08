@@ -1,6 +1,7 @@
 package com.jacstuff.musicplayer.service.helpers;
 
 import com.jacstuff.musicplayer.MainActivity;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.helpers.preferences.PrefKey;
 import com.jacstuff.musicplayer.service.notifications.MediaNotificationManager;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
@@ -176,6 +177,12 @@ public class PlaylistHelper {
 
     public void addRandomTracksFromAristToCurrentPlaylist(String artistName){
         playlistManager.addRandomTracksFromArtistToCurrentPlaylist(artistName, playlistViewNotifier);
+        mediaPlayerService.updateViewTrackList(playlistManager);
+    }
+
+
+    public void addRandomTracksToCurrentPlaylist(PlaylistType playlistType, List<String> playlistNames, int numberOfTracks){
+        playlistManager.addRandomTracksToCurrentPlaylist(playlistType, playlistNames, numberOfTracks, playlistViewNotifier);
         mediaPlayerService.updateViewTrackList(playlistManager);
     }
 

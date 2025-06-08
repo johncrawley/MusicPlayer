@@ -409,7 +409,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    public void addRandomTracksToCurrentPlaylist(PlaylistType playlistType, List<String> names, PlaylistViewNotifier playlistViewNotifier){
+    @Override
+    public void addRandomTracksToCurrentPlaylist(PlaylistType playlistType, List<String> names, int numberOfTracks, PlaylistViewNotifier playlistViewNotifier){
         addRandomTracksToPlaylist(()-> getTracksFor(playlistType, names), playlistViewNotifier );
     }
 

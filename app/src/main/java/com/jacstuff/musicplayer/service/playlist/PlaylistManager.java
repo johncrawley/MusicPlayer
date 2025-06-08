@@ -1,6 +1,7 @@
 package com.jacstuff.musicplayer.service.playlist;
 
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 
@@ -12,6 +13,9 @@ public interface PlaylistManager {
 
     boolean isUserPlaylistLoaded();
     boolean hasAnyTracks();
+
+    void addRandomTracksToCurrentPlaylist(PlaylistType playlistType, List<String> names, int numberOfTracks, PlaylistViewNotifier playlistViewNotifier);
+
     int getNumberOfTracks();
     ArrayList<String> getAlbumNames();
     ArrayList<String> getAllAlbumNamesAndClearCurrentArtist();
