@@ -19,10 +19,15 @@ public class RandomTrackAppender {
 
 
     public List<Track> getUniqueRandomTracksFrom(List<Track> sourceTracks, List<Track> existingTracks){
+        return getUniqueRandomTracksFrom(sourceTracks, existingTracks, getNumberOfTracksToCopy());
+    }
+
+
+    public List<Track> getUniqueRandomTracksFrom(List<Track> sourceTracks, List<Track> existingTracks, int numberOfTracksToCopy){
         var source = new ArrayList<>(sourceTracks);
         var destinationTracks = new ArrayList<Track>();
 
-        while(destinationTracks.size() < getNumberOfTracksToCopy() && !source.isEmpty()){
+        while(destinationTracks.size() < numberOfTracksToCopy && !source.isEmpty()){
             int randomIndex = random.nextInt(source.size());
             var randomTrack = source.remove(randomIndex);
             if(!existingTracks.contains(randomTrack)){

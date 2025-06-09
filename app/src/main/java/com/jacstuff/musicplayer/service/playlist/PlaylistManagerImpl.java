@@ -392,7 +392,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void addRandomTracksFromArtistToCurrentPlaylist(String name, PlaylistViewNotifier playlistViewNotifier){
-        addRandomTracksToPlaylist(()-> trackLoader.getTracksForArtist(name), playlistViewNotifier );
+        addRandomTracksToPlaylist(()-> trackLoader.getTracksForArtist(name), getDefaultNumberOfRandomTracksToCopy(), playlistViewNotifier );
     }
 
 
@@ -405,13 +405,13 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void addRandomTracksFromAlbumToCurrentPlaylist(String name, PlaylistViewNotifier playlistViewNotifier){
-        addRandomTracksToPlaylist(()-> trackLoader.getTracksForAlbum(name), playlistViewNotifier );
+        addRandomTracksToPlaylist(()-> trackLoader.getTracksForAlbum(name), getDefaultNumberOfRandomTracksToCopy(), playlistViewNotifier );
     }
 
 
     @Override
     public void addRandomTracksToCurrentPlaylist(PlaylistType playlistType, List<String> names, int numberOfTracks, PlaylistViewNotifier playlistViewNotifier){
-        addRandomTracksToPlaylist(()-> getTracksFor(playlistType, names), playlistViewNotifier );
+        addRandomTracksToPlaylist(()-> getTracksFor(playlistType, names), numberOfTracks, playlistViewNotifier );
     }
 
 
@@ -427,9 +427,14 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    private void addRandomTracksToPlaylist(Supplier<List<Track>> tracksSupplier, PlaylistViewNotifier playlistViewNotifier){
-        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(tracksSupplier.get(), tracks);
+    private void addRandomTracksToPlaylist(Supplier<List<Track>> tracksSupplier, int numberToAdd, PlaylistViewNotifier playlistViewNotifier){
+        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(tracksSupplier.get(), tracks, numberToAdd);
         addTracksToCurrentPlaylist(randomTracks, playlistViewNotifier, false);
+    }
+
+
+    private int getDefaultNumberOfRandomTracksToCopy(){
+        return Math.max(1, preferencesHelper.getInt(PrefKey.NUMBER_OF_RANDOM_TRACKS_TO_ADD));
     }
 
 

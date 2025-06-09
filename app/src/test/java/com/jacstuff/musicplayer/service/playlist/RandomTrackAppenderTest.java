@@ -117,6 +117,19 @@ public class RandomTrackAppenderTest {
     }
 
 
+    @Test
+    public void canExplicitlyStateNumberOfTracksToCopy() {
+        var source = createTracks(50);
+        int firstAmountToCopy = 30;
+        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(source, target, firstAmountToCopy);
+        assertEquals(firstAmountToCopy, randomTracks.size());
+
+        int secondAmountToCopy = 42;
+        randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(source, target, secondAmountToCopy);
+        assertEquals(secondAmountToCopy, randomTracks.size());
+    }
+
+
     private List<Track> createTracks(int numberOfTracksToCreate){
         List<Track> tracks = new ArrayList<>();
         for(int i = 1; i <= numberOfTracksToCreate; i++){

@@ -1,12 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
 
-import static android.view.View.GONE;
-import static com.jacstuff.musicplayer.view.fragments.Message.ADD_RANDOM_TRACKS_TO_PLAYLIST;
-import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
-import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD;
-import static com.jacstuff.musicplayer.view.fragments.MessageKey.IS_USER_PLAYLIST;
-import static com.jacstuff.musicplayer.view.fragments.about.Utils.getBoolean;
+import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,18 +10,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
-import com.jacstuff.musicplayer.view.fragments.Message;
+import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 public class AddRandomTracksFragment extends DialogFragment {
@@ -34,6 +36,10 @@ public class AddRandomTracksFragment extends DialogFragment {
 
     private Button okButton, cancelButton;
     public static String TAG = "ADD_RANDOM_TRACKS_FRAGMENT";
+    private RecyclerView recyclerView;
+    private StringListAdapter listAdapter;
+    private TextView noItemsFoundTextView;
+    private Set<String> selectedGenres = new HashSet<>(100);
 
 
     public static PlaylistOptionsFragment newInstance() {
@@ -50,6 +56,9 @@ public class AddRandomTracksFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        noItemsFoundTextView = view.findViewById(R.id.noGenresFoundTextView);
+        refreshList();
         assignArgs();
         setupButtons(view);
         DialogFragmentUtils.setTransparentBackground(this);
@@ -104,6 +113,39 @@ public class AddRandomTracksFragment extends DialogFragment {
         button.setOnClickListener((View v)-> runnable.run());
         return button;
     }
+
+    private void refreshList(){
+        List<String> genreNames = getMainActivity().getGenreNames();
+        setVisibilityOnNoGenresFoundText(genreNames);
+        if(genreNames == null){
+            return;
+        }
+        listAdapter = new StringListAdapter(genreNames, this::loadTracksFromGenre);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(listAdapter);
+    }
+
+
+    private void loadTracksFromGenre(String name, int position){
+        if(selectedGenres.contains(name)){
+            selectedGenres.remove(name);
+        }
+        else{
+            selectedGenres.add(name);
+        }
+    }
+
+
+    private void setVisibilityOnNoGenresFoundText(List<String> tracks){
+        setVisibilityOnNoItemsFoundText(tracks, recyclerView, noItemsFoundTextView);
+    }
+
+
+    private MainActivity getMainActivity(){
+        return (MainActivity)getActivity();
+    }
+
 
 
 }
