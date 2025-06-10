@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,9 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +43,7 @@ public class AddRandomTracksFragment extends DialogFragment {
     private StringListAdapter listAdapter;
     private TextView noItemsFoundTextView;
     private Set<String> selectedGenres = new HashSet<>(100);
+    private EditText numberOfTracksEditText;
 
 
     public static PlaylistOptionsFragment newInstance() {
@@ -57,7 +61,8 @@ public class AddRandomTracksFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
-        noItemsFoundTextView = view.findViewById(R.id.noGenresFoundTextView);
+        noItemsFoundTextView = view.findViewById(R.id.noItemsFoundTextView);
+        numberOfTracksEditText = view.findViewById(R.id.numberOfTracksEditText);
         refreshList();
         assignArgs();
         setupButtons(view);
@@ -77,6 +82,11 @@ public class AddRandomTracksFragment extends DialogFragment {
 
     }
 
+    private int getNumberOfTracks(){
+        int number = Integer.parseInt(numberOfTracksEditText.getText().toString());
+        return Math.max(1, number);
+    }
+
 
     private void dismissDialog(){
         disableAllButtons();
@@ -86,7 +96,9 @@ public class AddRandomTracksFragment extends DialogFragment {
 
     private void addRandomTracks(){
         disableAllButtons();
-        getService().ifPresent( service -> service.getPlaylistHelper().addRandomTracksFromAristToCurrentPlaylist(""));
+        getService().ifPresent( service ->
+                service.getPlaylistHelper()
+                        .addRandomTracksToCurrentPlaylist(PlaylistType.GENRE, new ArrayList<>(selectedGenres),getNumberOfTracks() ));
         dismissAfterPause();
     }
 

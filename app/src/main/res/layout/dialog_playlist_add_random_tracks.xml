@@ -21,9 +21,9 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/itemsRecyclerView"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="150dp"
         android:layout_margin="8dp"
         android:fadeScrollbars="true"
         android:scrollbars="vertical"
@@ -34,6 +34,19 @@
         app:layout_constraintBottom_toTopOf="@id/numberOfTracksLayout"
         />
 
+    <TextView
+        android:id="@+id/noItemsFoundTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_genres_found"
+        android:textSize="@dimen/no_list_items_found_text_size"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/listLabel"
+        app:layout_constraintBottom_toTopOf="@id/numberOfTracksLayout"
+        />
 
     <LinearLayout
         android:id="@+id/numberOfTracksLayout"
@@ -45,7 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/buttonLayout"
-        app:layout_constraintTop_toBottomOf="@id/itemsRecyclerView">
+        app:layout_constraintTop_toBottomOf="@id/recyclerView">
 
         <TextView
             android:id="@+id/NumberOfTracksLabel"
@@ -55,7 +68,7 @@
             />
 
         <EditText
-            android:id="@+id/editTextNumber"
+            android:id="@+id/numberOfTracksEditText"
             android:layout_width="36dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
@@ -75,7 +88,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/itemsRecyclerView">
+        app:layout_constraintTop_toBottomOf="@id/recyclerView">
 
         <Button
             android:layout_width="wrap_content"
