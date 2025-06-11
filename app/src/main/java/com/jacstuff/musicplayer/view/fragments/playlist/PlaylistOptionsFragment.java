@@ -1,6 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
 import static android.view.View.GONE;
+import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.addStrTo;
 import static com.jacstuff.musicplayer.view.fragments.Message.ADD_RANDOM_TRACKS_TO_PLAYLIST;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD;
@@ -23,6 +24,7 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
+import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.trackinfo.TrackInfoFragment;
 
 
@@ -71,6 +73,8 @@ public class PlaylistOptionsFragment extends DialogFragment {
 
     private void loadAddRandomTracksFragment(){
         dismiss();
+        var bundle =  new Bundle();
+        addStrTo(bundle, MessageKey.PLAYLIST_NAME, "");
         FragmentManagerHelper.showDialog(this, new AddRandomTracksFragment(), AddRandomTracksFragment.TAG, new Bundle());
     }
 

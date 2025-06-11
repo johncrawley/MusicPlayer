@@ -1,6 +1,9 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
 
+import static com.jacstuff.musicplayer.service.db.entities.PlaylistType.GENRE;
+import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.getBundleStr;
+import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_NAME;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
 import android.os.Bundle;
@@ -24,6 +27,7 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
+import com.jacstuff.musicplayer.service.playlist.RandomTrackConfig;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
 
@@ -36,13 +40,12 @@ import java.util.Set;
 
 public class AddRandomTracksFragment extends DialogFragment {
 
-
     private Button okButton, cancelButton;
     public static String TAG = "ADD_RANDOM_TRACKS_FRAGMENT";
     private RecyclerView recyclerView;
     private StringListAdapter listAdapter;
     private TextView noItemsFoundTextView;
-    private Set<String> selectedGenres = new HashSet<>(100);
+    private final Set<String> selectedGenres = new HashSet<>(100);
     private EditText numberOfTracksEditText;
 
 
@@ -69,10 +72,12 @@ public class AddRandomTracksFragment extends DialogFragment {
         DialogFragmentUtils.setTransparentBackground(this);
     }
 
+    private String playlistName;
 
     private void assignArgs(){
         Bundle bundle = getArguments();
         assert bundle != null;
+        playlistName = getBundleStr(bundle, PLAYLIST_NAME);
     }
 
 
@@ -96,9 +101,12 @@ public class AddRandomTracksFragment extends DialogFragment {
 
     private void addRandomTracks(){
         disableAllButtons();
+
+        var randomTrackConfig = new RandomTrackConfig(playlistName, GENRE, new ArrayList<>(selectedGenres), getNumberOfTracks());
+
         getService().ifPresent( service ->
                 service.getPlaylistHelper()
-                        .addRandomTracksToCurrentPlaylist(PlaylistType.GENRE, new ArrayList<>(selectedGenres),getNumberOfTracks() ));
+                        .addRandomTracksToCurrentPlaylist(GENRE, new ArrayList<>(selectedGenres),getNumberOfTracks() ));
         dismissAfterPause();
     }
 

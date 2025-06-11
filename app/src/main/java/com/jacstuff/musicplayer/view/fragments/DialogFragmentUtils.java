@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -86,5 +87,15 @@ public class DialogFragmentUtils {
 
     private static void dismissAfterDelay(DialogFragment dialogFragment){
         new Handler(Looper.getMainLooper()).postDelayed(dialogFragment::dismiss, 200);
+    }
+
+
+    public static void addStrTo(Bundle bundle, MessageKey messageKey, String contents){
+        bundle.putString(messageKey.name(), contents);
+    }
+
+
+    public static String getBundleStr(Bundle bundle, MessageKey messageKey){
+        return bundle.getString(messageKey.name());
     }
 }
