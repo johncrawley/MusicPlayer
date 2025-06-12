@@ -1,5 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
+import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.addStrTo;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
@@ -66,7 +67,7 @@ public class PlaylistsFragment extends Fragment {
                              Bundle savedInstanceState) {
         context = getContext();
         View view = inflater.inflate(R.layout.fragment_tab_playlists, container, false);
-        setupPlaylistRecyclerView(view);
+        setupListView(view);
         hasClicked = false;
         setupFragmentListeners();
         assignListIndexManager();
@@ -82,7 +83,7 @@ public class PlaylistsFragment extends Fragment {
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD, (bundle) -> loadLongClickedPlaylist());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE, (bundle) -> startAddPlaylistFragment());
         setListener(this, Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
-        setListener(this, Message.NOTIFY_PLAYLIST_TAB_TO_RELOAD, (bundle) -> setupPlaylistRecyclerView(parentView));
+        setListener(this, Message.NOTIFY_PLAYLIST_TAB_TO_RELOAD, (bundle) -> setupListView(parentView));
     }
 
 
@@ -156,7 +157,7 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-    private void setupPlaylistRecyclerView(View parentView){
+    private void setupListView(View parentView){
         if(parentView == null){
             return;
         }
@@ -183,6 +184,7 @@ public class PlaylistsFragment extends Fragment {
         longClickedPosition = position;
         Bundle bundle = new Bundle();
         putBoolean(bundle, MessageKey.IS_USER_PLAYLIST, playlist.isUserPlaylist());
+        addStrTo(bundle, MessageKey.PLAYLIST_NAME, listAdapter.getLongClickedPlaylist().getName());
         FragmentManagerHelper.showDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
     }
 

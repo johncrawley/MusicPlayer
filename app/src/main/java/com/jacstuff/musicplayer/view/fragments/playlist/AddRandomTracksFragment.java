@@ -78,6 +78,7 @@ public class AddRandomTracksFragment extends DialogFragment {
         Bundle bundle = getArguments();
         assert bundle != null;
         playlistName = getBundleStr(bundle, PLAYLIST_NAME);
+        System.out.println("playlist name: " + playlistName);
     }
 
 

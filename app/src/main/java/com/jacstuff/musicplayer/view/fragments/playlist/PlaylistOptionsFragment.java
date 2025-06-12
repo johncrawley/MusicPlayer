@@ -33,6 +33,7 @@ public class PlaylistOptionsFragment extends DialogFragment {
 
     private Button loadPlaylistButton, deletePlaylistButton, addRandomTracksButton;
     private boolean isUserPlaylist;
+    private String selectedItem;
 
 
     public static PlaylistOptionsFragment newInstance() {
@@ -73,7 +74,7 @@ public class PlaylistOptionsFragment extends DialogFragment {
 
     private void loadAddRandomTracksFragment(){
         dismiss();
-        var bundle =  new Bundle();
+        var bundle = new Bundle();
         addStrTo(bundle, MessageKey.PLAYLIST_NAME, "");
         FragmentManagerHelper.showDialog(this, new AddRandomTracksFragment(), AddRandomTracksFragment.TAG, new Bundle());
     }
