@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
-import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.playlist.RandomTrackConfig;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
@@ -47,6 +46,7 @@ public class AddRandomTracksFragment extends DialogFragment {
     private TextView noItemsFoundTextView;
     private final Set<String> selectedGenres = new HashSet<>(100);
     private EditText numberOfTracksEditText;
+    private String playlistName;
 
 
     public static PlaylistOptionsFragment newInstance() {
@@ -66,13 +66,12 @@ public class AddRandomTracksFragment extends DialogFragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         noItemsFoundTextView = view.findViewById(R.id.noItemsFoundTextView);
         numberOfTracksEditText = view.findViewById(R.id.numberOfTracksEditText);
-        refreshList();
         assignArgs();
+        refreshList();
         setupButtons(view);
         DialogFragmentUtils.setTransparentBackground(this);
     }
 
-    private String playlistName;
 
     private void assignArgs(){
         Bundle bundle = getArguments();
