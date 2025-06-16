@@ -12,7 +12,8 @@ import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_USER_PLAYLIST_LOADED;
-import static com.jacstuff.musicplayer.view.fragments.about.Utils.putBoolean;
+import static com.jacstuff.musicplayer.view.fragments.Utils.putBoolean;
+import static com.jacstuff.musicplayer.view.fragments.Utils.putLong;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -184,8 +185,13 @@ public class PlaylistsFragment extends Fragment {
         longClickedPosition = position;
         Bundle bundle = new Bundle();
         putBoolean(bundle, MessageKey.IS_USER_PLAYLIST, playlist.isUserPlaylist());
-        addStrTo(bundle, MessageKey.PLAYLIST_NAME, listAdapter.getLongClickedPlaylist().getName());
+        addStrTo(bundle, MessageKey.PLAYLIST_NAME, playlist.getName());
+        putLong(bundle, MessageKey.PLAYLIST_ID, playlist.getId());
         FragmentManagerHelper.showDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ PlaylistsFragment: " + msg);
     }
 
 

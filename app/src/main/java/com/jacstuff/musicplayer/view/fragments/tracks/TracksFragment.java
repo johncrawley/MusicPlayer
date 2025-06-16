@@ -7,8 +7,8 @@ import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TRACKS_TAB_
 import static com.jacstuff.musicplayer.view.fragments.Message.SCROLL_TO_CURRENT_TRACK;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.IS_USER_PLAYLIST;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_USER_PLAYLIST_LOADED;
-import static com.jacstuff.musicplayer.view.fragments.about.Utils.getBoolean;
-import static com.jacstuff.musicplayer.view.fragments.about.Utils.getInt;
+import static com.jacstuff.musicplayer.view.fragments.Utils.getBoolean;
+import static com.jacstuff.musicplayer.view.fragments.Utils.getInt;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
 import android.os.Bundle;

@@ -15,6 +15,7 @@ public interface PlaylistManager {
     boolean hasAnyTracks();
 
     void addRandomTracksToCurrentPlaylist(PlaylistType playlistType, List<String> names, int numberOfTracks, PlaylistViewNotifier playlistViewNotifier);
+    void addRandomTracksToPlaylist(RandomTrackConfig randomTrackConfig);
 
     int getNumberOfTracks();
     ArrayList<String> getAlbumNames();

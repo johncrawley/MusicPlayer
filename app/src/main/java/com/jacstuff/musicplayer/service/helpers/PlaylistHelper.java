@@ -14,6 +14,7 @@ import com.jacstuff.musicplayer.service.playlist.PlaylistManagerImpl;
 import com.jacstuff.musicplayer.service.playlist.PlaylistViewNotifier;
 import com.jacstuff.musicplayer.service.playlist.PlaylistViewNotifierImpl;
 import com.jacstuff.musicplayer.service.loader.TrackLoader;
+import com.jacstuff.musicplayer.service.playlist.RandomTrackConfig;
 
 import java.util.Collections;
 import java.util.List;
@@ -183,6 +184,12 @@ public class PlaylistHelper {
 
     public void addRandomTracksToCurrentPlaylist(PlaylistType playlistType, List<String> playlistNames, int numberOfTracks){
         playlistManager.addRandomTracksToCurrentPlaylist(playlistType, playlistNames, numberOfTracks, playlistViewNotifier);
+        mediaPlayerService.updateViewTrackList(playlistManager);
+    }
+
+
+    public void addRandomTracksToCurrentPlaylist(RandomTrackConfig randomTrackConfig){
+        playlistManager.addRandomTracksToCurrentPlaylist(randomTrackConfig);
         mediaPlayerService.updateViewTrackList(playlistManager);
     }
 

@@ -1,11 +1,8 @@
-package com.jacstuff.musicplayer.view.fragments.about;
+package com.jacstuff.musicplayer.view.fragments;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.jacstuff.musicplayer.view.fragments.Message;
-import com.jacstuff.musicplayer.view.fragments.MessageKey;
 
 import java.util.List;
 
@@ -14,6 +11,7 @@ public class Utils {
     public static int getInt(Bundle bundle, MessageKey key){
         return bundle.getInt(key.toString(), 0);
     }
+
 
     public static boolean getBoolean(Bundle bundle, MessageKey key){
         return bundle.getBoolean(key.toString(), false);
@@ -24,14 +22,26 @@ public class Utils {
         return bundle.getStringArrayList(key.toString());
     }
 
+
     public static void putInt(Bundle bundle, MessageKey messageKey, int value){
         bundle.putInt(messageKey.toString(), value);
+    }
+
+
+    public static void putLong(Bundle bundle, MessageKey messageKey, long value){
+        bundle.putLong(messageKey.toString(), value);
+    }
+
+
+    public static long getLong(Bundle bundle, MessageKey messageKey){
+        return bundle.getLong(messageKey.toString(), -1L);
     }
 
 
     public static void putBoolean(Bundle bundle, MessageKey messageKey, boolean value){
         bundle.putBoolean(messageKey.toString(), value);
     }
+
 
     public static void sendFragmentMessage(AppCompatActivity activity, String messageKey){
         activity.getSupportFragmentManager().setFragmentResult(messageKey, new Bundle());

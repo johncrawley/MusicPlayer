@@ -8,5 +8,6 @@ public enum MessageKey {
     TRACK_INDEX,
     IS_SEARCH_RESULT,
     IS_USER_PLAYLIST,
-    PLAYLIST_NAME
+    PLAYLIST_NAME,
+    PLAYLIST_ID
 }

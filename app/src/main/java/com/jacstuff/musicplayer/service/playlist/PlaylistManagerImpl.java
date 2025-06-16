@@ -457,6 +457,14 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
+
+    public void addRandomTracksToPlaylist(RandomTrackConfig config){
+        var playlist = config.playlistName();
+
+
+    }
+
+
     private void addTracksToPlaylist(List<Track> additionalTracks, boolean isExistingCheckPerformed){
         Predicate <Track> predicate = isExistingCheckPerformed ? this::isTrackNotInCurrentPlaylist : (Track)-> true;
         additionalTracks.stream()

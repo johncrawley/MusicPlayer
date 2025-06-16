@@ -6,7 +6,9 @@ import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.getBun
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.IS_USER_PLAYLIST;
-import static com.jacstuff.musicplayer.view.fragments.about.Utils.getBoolean;
+import static com.jacstuff.musicplayer.view.fragments.Utils.getBoolean;
+import static com.jacstuff.musicplayer.view.fragments.Utils.getLong;
+import static com.jacstuff.musicplayer.view.fragments.Utils.putLong;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +35,7 @@ public class PlaylistOptionsFragment extends DialogFragment {
     private Button loadPlaylistButton, deletePlaylistButton, addRandomTracksButton;
     private boolean isUserPlaylist;
     private String selectedPlaylistName;
+    private long selectedPlaylistId;
 
 
     public static PlaylistOptionsFragment newInstance() {
@@ -60,6 +63,7 @@ public class PlaylistOptionsFragment extends DialogFragment {
         assert bundle != null;
         isUserPlaylist = getBoolean(bundle, IS_USER_PLAYLIST);
         selectedPlaylistName =  getBundleStr(bundle, MessageKey.PLAYLIST_NAME);
+        selectedPlaylistId = getLong(bundle, MessageKey.PLAYLIST_ID);
     }
 
 
@@ -76,7 +80,8 @@ public class PlaylistOptionsFragment extends DialogFragment {
         dismiss();
         var bundle = new Bundle();
         addStrTo(bundle, MessageKey.PLAYLIST_NAME, selectedPlaylistName);
-        FragmentManagerHelper.showDialog(this, new AddRandomTracksFragment(), AddRandomTracksFragment.TAG, new Bundle());
+        putLong(bundle, MessageKey.PLAYLIST_ID, selectedPlaylistId);
+        FragmentManagerHelper.showDialog(this, new AddRandomTracksFragment(), AddRandomTracksFragment.TAG, bundle);
     }
 
 

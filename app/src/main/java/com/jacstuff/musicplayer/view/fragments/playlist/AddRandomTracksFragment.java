@@ -3,7 +3,9 @@ package com.jacstuff.musicplayer.view.fragments.playlist;
 
 import static com.jacstuff.musicplayer.service.db.entities.PlaylistType.GENRE;
 import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.getBundleStr;
+import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_ID;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_NAME;
+import static com.jacstuff.musicplayer.view.fragments.Utils.getLong;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
 import android.os.Bundle;
@@ -47,6 +49,7 @@ public class AddRandomTracksFragment extends DialogFragment {
     private final Set<String> selectedGenres = new HashSet<>(100);
     private EditText numberOfTracksEditText;
     private String playlistName;
+    private long playlistId;
 
 
     public static PlaylistOptionsFragment newInstance() {
@@ -77,7 +80,7 @@ public class AddRandomTracksFragment extends DialogFragment {
         Bundle bundle = getArguments();
         assert bundle != null;
         playlistName = getBundleStr(bundle, PLAYLIST_NAME);
-        System.out.println("playlist name: " + playlistName);
+        playlistId = getLong(bundle, PLAYLIST_ID);
     }
 
 
@@ -102,7 +105,7 @@ public class AddRandomTracksFragment extends DialogFragment {
     private void addRandomTracks(){
         disableAllButtons();
 
-        var randomTrackConfig = new RandomTrackConfig(playlistName, GENRE, new ArrayList<>(selectedGenres), getNumberOfTracks());
+        var randomTrackConfig = new RandomTrackConfig(playlistId, playlistName, GENRE, new ArrayList<>(selectedGenres), getNumberOfTracks());
 
         getService().ifPresent( service ->
                 service.getPlaylistHelper()

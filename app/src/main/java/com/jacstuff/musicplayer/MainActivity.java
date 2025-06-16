@@ -6,9 +6,9 @@ import static android.Manifest.permission.READ_MEDIA_AUDIO;
 import static com.jacstuff.musicplayer.view.fragments.Message.*;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.ALBUM_ARTIST;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.ALBUM_UPDATES;
-import static com.jacstuff.musicplayer.view.fragments.about.Utils.putBoolean;
-import static com.jacstuff.musicplayer.view.fragments.about.Utils.putInt;
-import static com.jacstuff.musicplayer.view.fragments.about.Utils.sendFragmentMessage;
+import static com.jacstuff.musicplayer.view.fragments.Utils.putBoolean;
+import static com.jacstuff.musicplayer.view.fragments.Utils.putInt;
+import static com.jacstuff.musicplayer.view.fragments.Utils.sendFragmentMessage;
 import static com.jacstuff.musicplayer.view.utils.FragmentHelper.sendArrayListToFragment;
 
 import androidx.activity.result.ActivityResultLauncher;
