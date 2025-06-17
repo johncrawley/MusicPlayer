@@ -188,8 +188,8 @@ public class PlaylistHelper {
     }
 
 
-    public void addRandomTracksToCurrentPlaylist(RandomTrackConfig randomTrackConfig){
-        playlistManager.addRandomTracksToCurrentPlaylist(randomTrackConfig);
+    public void addRandomTracksToPlaylist(RandomTrackConfig randomTrackConfig){
+        playlistManager.addRandomTracksToPlaylist(randomTrackConfig);
         mediaPlayerService.updateViewTrackList(playlistManager);
     }
 

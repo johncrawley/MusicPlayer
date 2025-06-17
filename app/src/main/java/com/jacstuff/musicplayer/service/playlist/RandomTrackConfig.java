@@ -4,5 +4,5 @@ import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 
 import java.util.List;
 
-public record RandomTrackConfig (long playlistId, String playlistName, PlaylistType sourcePlaylistType, List<String> selectedItems, int numberOfTracksToAdd){
+public record RandomTrackConfig (long playlistId, String playlistName, PlaylistType sourcePlaylistType, List<String> sourcePlaylistNames, int numberOfTracksToAdd){
 }

@@ -109,7 +109,7 @@ public class AddRandomTracksFragment extends DialogFragment {
 
         getService().ifPresent( service ->
                 service.getPlaylistHelper()
-                        .addRandomTracksToCurrentPlaylist(GENRE, new ArrayList<>(selectedGenres),getNumberOfTracks() ));
+                        .addRandomTracksToPlaylist(randomTrackConfig));
         dismissAfterPause();
     }
 

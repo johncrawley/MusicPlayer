@@ -459,7 +459,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     public void addRandomTracksToPlaylist(RandomTrackConfig config){
-        var playlist = config.playlistName();
+        long playlistId = config.playlistId();
+        var source = getTracksFor(config.sourcePlaylistType(), config.sourcePlaylistNames());
+        var playlistTracks = playlistItemRepository.getTracksForPlaylistId(playlistId);
+        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(source, playlistTracks);
+
+
 
 
     }
