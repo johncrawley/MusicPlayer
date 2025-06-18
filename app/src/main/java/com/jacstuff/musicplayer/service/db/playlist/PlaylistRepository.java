@@ -12,5 +12,4 @@ public interface PlaylistRepository {
     List<Playlist> getAllPlaylists();
     List<Playlist> getAllUserPlaylists();
     Playlist getAllTracksPlaylist();
-
 }

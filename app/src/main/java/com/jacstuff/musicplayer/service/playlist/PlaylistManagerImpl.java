@@ -18,6 +18,7 @@ import com.jacstuff.musicplayer.service.loader.TrackLoader;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -186,6 +187,12 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
+    private boolean isUserPlaylist(long playlistId){
+        return Arrays.stream(PlaylistType.values())
+                .noneMatch(plt -> plt.getDefaultId() == playlistId);
+    }
+
+
     private void calculateAndDisplayNewTracksStats(MediaPlayerService mediaPlayerService){
         mediaPlayerService.displayPlaylistRefreshedMessage(0);
     }
@@ -274,19 +281,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         }
         playlistItemRepository.addPlaylistItem(track, playlistId);
         playlistViewNotifier.notifyViewOfTrackAddedToPlaylist();
-    }
-
-
-    private void addNewTrackToPlaylist(Track track){
-        tracks.add(track);
-        unPlayedTracks.add(track);
-        currentPlaylistFilenames.add(track.getPathname());
-        playlistItemRepository.addPlaylistItem(track, currentPlaylist.getId());
-    }
-
-
-    private boolean isTrackNotInCurrentPlaylist(Track track){
-        return !currentPlaylistFilenames.contains(track.getPathname());
     }
 
 
@@ -429,7 +423,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private void addRandomTracksToPlaylist(Supplier<List<Track>> tracksSupplier, int numberToAdd, PlaylistViewNotifier playlistViewNotifier){
         var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(tracksSupplier.get(), tracks, numberToAdd);
-        addTracksToCurrentPlaylist(randomTracks, playlistViewNotifier, false);
+        addTracksToPlaylist(randomTracks, currentPlaylist.getId(), playlistViewNotifier, false);
     }
 
 
@@ -439,42 +433,68 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void addTracksToCurrentPlaylist(List<Track> additionalTracks, PlaylistViewNotifier playlistViewNotifier) {
-        addTracksToCurrentPlaylist(additionalTracks, playlistViewNotifier, true);
+        addTracksToPlaylist(additionalTracks, currentPlaylist.getId(), playlistViewNotifier, true);
     }
 
 
-    private void addTracksToCurrentPlaylist(List<Track> additionalTracks, PlaylistViewNotifier playlistViewNotifier, boolean isCheckPerformed) {
-        if(!isUserPlaylistLoaded()){
+    @Override
+    public void addRandomTracksToPlaylist(RandomTrackConfig config, PlaylistViewNotifier playlistViewNotifier){
+        var source = getTracksFor(config.sourcePlaylistType(), config.sourcePlaylistNames());
+        var playlistTracks = playlistItemRepository.getTracksForPlaylistId(config.playlistId());
+        log("addRandomTracksToPlaylist() id: " + config.playlistId() + " numberOfTracks: " + config.numberOfTracksToAdd());
+
+        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(source, playlistTracks, config.numberOfTracksToAdd());
+        log("addRandomTracksToPlaylist() number of random tracks: " + randomTracks.size());
+        addTracksToPlaylist(randomTracks, config.playlistId(), playlistViewNotifier, true);
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ PlaylistManagerImpl: " + msg);
+    }
+
+
+    private void addTracksToPlaylist(List<Track> additionalTracks, long playlistId, PlaylistViewNotifier playlistViewNotifier, boolean isCheckPerformed) {
+        if(!isUserPlaylist(playlistId)){
             return;
         }
-        int originalNumberOfTracks = tracks.size();
-        addTracksToPlaylist(additionalTracks, isCheckPerformed);
-        int numberOfNewTracks = tracks.size() - originalNumberOfTracks;
-        if(numberOfNewTracks > 0) {
-            assignIndexesToTracks();
-        }
+        int numberOfNewTracks = addTracksToPlaylist(additionalTracks, playlistId, isCheckPerformed);
+        assignIndexesOnCurrentPlaylist(playlistId, numberOfNewTracks);
         playlistViewNotifier.notifyViewOfMultipleTracksAddedToPlaylist(numberOfNewTracks);
     }
 
 
-
-    public void addRandomTracksToPlaylist(RandomTrackConfig config){
-        long playlistId = config.playlistId();
-        var source = getTracksFor(config.sourcePlaylistType(), config.sourcePlaylistNames());
-        var playlistTracks = playlistItemRepository.getTracksForPlaylistId(playlistId);
-        var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(source, playlistTracks);
-
-
-
-
+    private void assignIndexesOnCurrentPlaylist(long playlistId, int numberOfNewTracks){
+        if(currentPlaylist.getId() == playlistId && numberOfNewTracks > 0){
+            assignIndexesToTracks();
+        }
     }
 
 
-    private void addTracksToPlaylist(List<Track> additionalTracks, boolean isExistingCheckPerformed){
-        Predicate <Track> predicate = isExistingCheckPerformed ? this::isTrackNotInCurrentPlaylist : (Track)-> true;
-        additionalTracks.stream()
-                .filter(predicate)
-                .forEach(this::addNewTrackToPlaylist);
+    private int addTracksToPlaylist(List<Track> additionalTracks, long playlistId, boolean isExistingCheckPerformed){
+        List<Track> playlistTracks = isExistingCheckPerformed ? playlistItemRepository.getTracksForPlaylistId(playlistId) : Collections.emptyList();
+        int numberOfNewTracks = 0;
+        for(Track track : additionalTracks){
+            if(isExistingCheckPerformed && isTrackNotInPlaylist(track, playlistTracks)){
+                numberOfNewTracks += addNewTrackToPlaylist(track, playlistId) ? 1 : 0;
+            }
+        }
+        return numberOfNewTracks;
+    }
+
+
+    private boolean isTrackNotInPlaylist(Track track, List<Track> playlistTracks){
+        return playlistTracks.stream().noneMatch(t -> track.getPathname().equals(t.getPathname()));
+    }
+
+
+    private boolean addNewTrackToPlaylist(Track track, long playlistId){
+        if(playlistId == currentPlaylist.getId()){
+            tracks.add(track);
+            unPlayedTracks.add(track);
+            currentPlaylistFilenames.add(track.getPathname());
+        }
+        return playlistItemRepository.addPlaylistItem(track, playlistId);
     }
 
 
