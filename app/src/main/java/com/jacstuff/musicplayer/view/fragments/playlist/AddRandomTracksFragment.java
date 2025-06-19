@@ -1,10 +1,9 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
-
-import static com.jacstuff.musicplayer.service.db.entities.PlaylistType.GENRE;
 import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.getBundleStr;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_ID;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_NAME;
+import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_TYPE;
 import static com.jacstuff.musicplayer.view.fragments.Utils.getLong;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
@@ -28,9 +27,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.playlist.RandomTrackConfig;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
+import com.jacstuff.musicplayer.view.fragments.list.MultiSelectionStringListAdapter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -44,11 +45,11 @@ public class AddRandomTracksFragment extends DialogFragment {
     private Button okButton, cancelButton;
     public static String TAG = "ADD_RANDOM_TRACKS_FRAGMENT";
     private RecyclerView recyclerView;
-    private StringListAdapter listAdapter;
     private TextView noItemsFoundTextView;
     private final Set<String> selectedGenres = new HashSet<>(100);
     private EditText numberOfTracksEditText;
     private String playlistName;
+    private PlaylistType playlistType;
     private long playlistId;
 
 
@@ -80,6 +81,7 @@ public class AddRandomTracksFragment extends DialogFragment {
         Bundle bundle = getArguments();
         assert bundle != null;
         playlistName = getBundleStr(bundle, PLAYLIST_NAME);
+        playlistType = PlaylistType.valueOf(getBundleStr(bundle, PLAYLIST_TYPE));
         playlistId = getLong(bundle, PLAYLIST_ID);
     }
 
@@ -105,7 +107,7 @@ public class AddRandomTracksFragment extends DialogFragment {
     private void addRandomTracks(){
         disableAllButtons();
 
-        var randomTrackConfig = new RandomTrackConfig(playlistId, playlistName, GENRE, new ArrayList<>(selectedGenres), getNumberOfTracks());
+        var randomTrackConfig = new RandomTrackConfig(playlistId, playlistName, playlistType, new ArrayList<>(selectedGenres), getNumberOfTracks());
 
         getService().ifPresent( service ->
                 service.getPlaylistHelper()
@@ -143,7 +145,8 @@ public class AddRandomTracksFragment extends DialogFragment {
         if(genreNames == null){
             return;
         }
-        listAdapter = new StringListAdapter(genreNames, this::loadTracksFromGenre);
+        //listAdapter = new StringListAdapter(genreNames, this::loadTracksFromGenre, true);
+        MultiSelectionStringListAdapter listAdapter = new MultiSelectionStringListAdapter(genreNames, this::loadTracksFromGenre);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);

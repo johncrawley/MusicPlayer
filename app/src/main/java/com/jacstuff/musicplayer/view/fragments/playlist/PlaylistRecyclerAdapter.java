@@ -26,6 +26,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     private Playlist longClickedPlaylist;
     private View longClickedView;
     private int indexToScrollTo = -1;
+    public boolean isMultiSelectEnabled;
 
 
 
@@ -43,13 +44,28 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
 
     private void onClick(RecyclerView.ViewHolder viewHolder, View v, TextView trackNameTextView){
-        if(currentlySelectedView != null){
-            currentlySelectedView.setSelected(false);
-        }
+        deselectPreviousSelection();
         selectedPlaylist = (Playlist)trackNameTextView.getTag();
         currentlySelectedView = v;
+        toggleSelected();
         currentlySelectedView.setSelected(true);
         onItemClickConsumer.accept(selectedPlaylist, viewHolder.getBindingAdapterPosition());
+    }
+
+
+    private void toggleSelected(){
+        if(isMultiSelectEnabled){
+            currentlySelectedView.setSelected(!currentlySelectedView.isSelected());
+            return;
+        }
+        currentlySelectedView.setSelected(true);
+    }
+
+
+    private void deselectPreviousSelection(){
+        if(currentlySelectedView != null && !isMultiSelectEnabled){
+            currentlySelectedView.setSelected(false);
+        }
     }
 
 
@@ -64,9 +80,18 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     public PlaylistRecyclerAdapter(List<Playlist> playlists,
                                    BiConsumer<Playlist, Integer> onItemClickConsumer,
                                    BiConsumer<Playlist, Integer> onItemLongClickConsumer){
+        this(playlists, onItemClickConsumer, onItemLongClickConsumer, false);
+    }
+
+
+    public PlaylistRecyclerAdapter(List<Playlist> playlists,
+                                   BiConsumer<Playlist, Integer> onItemClickConsumer,
+                                   BiConsumer<Playlist, Integer> onItemLongClickConsumer,
+                                   boolean isMultiSelectEnabled){
         this.playlists = new ArrayList<>(playlists);
         this.onItemClickConsumer = onItemClickConsumer;
         this.onItemLongClickConsumer = onItemLongClickConsumer;
+        this.isMultiSelectEnabled = isMultiSelectEnabled;
     }
 
 
@@ -145,8 +170,8 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
            currentlySelectedView = null;
         }
         longClickedView = null;
-
     }
+
 
     public void selectItemAt(int index){
         deselectCurrentlySelectedItem();

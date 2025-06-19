@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
@@ -80,6 +81,7 @@ public class PlaylistOptionsFragment extends DialogFragment {
         dismiss();
         var bundle = new Bundle();
         addStrTo(bundle, MessageKey.PLAYLIST_NAME, selectedPlaylistName);
+        addStrTo(bundle, MessageKey.PLAYLIST_TYPE, PlaylistType.GENRE.name());
         putLong(bundle, MessageKey.PLAYLIST_ID, selectedPlaylistId);
         FragmentManagerHelper.showDialog(this, new AddRandomTracksFragment(), AddRandomTracksFragment.TAG, bundle);
     }

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/dialog_background"
+    android:padding="8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -15,16 +16,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-
         />
-
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="150dp"
         android:layout_margin="8dp"
+        android:background="@color/background"
         android:fadeScrollbars="true"
         android:scrollbars="vertical"
 
@@ -64,6 +63,7 @@
             android:id="@+id/NumberOfTracksLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:labelFor="@id/numberOfTracksEditText"
             android:text="@string/add_random_tracks_number"
             />
 
@@ -72,6 +72,7 @@
             android:layout_width="36dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
+            android:autofillHints="no"
             android:ems="10"
             android:inputType="number" />
 
@@ -87,8 +88,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerView">
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:layout_width="wrap_content"

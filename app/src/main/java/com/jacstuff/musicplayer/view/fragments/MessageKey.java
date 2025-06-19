@@ -9,5 +9,6 @@ public enum MessageKey {
     IS_SEARCH_RESULT,
     IS_USER_PLAYLIST,
     PLAYLIST_NAME,
-    PLAYLIST_ID
+    PLAYLIST_ID,
+    PLAYLIST_TYPE
 }
