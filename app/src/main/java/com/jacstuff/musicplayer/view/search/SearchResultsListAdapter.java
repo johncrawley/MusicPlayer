@@ -68,7 +68,7 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     @Override
     @NonNull
     public SearchResultsListAdapter.TrackViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.track_list_item_view, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_view, parent,false);
         return new TrackViewHolder(view);
     }
 

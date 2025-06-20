@@ -1,6 +1,5 @@
 package com.jacstuff.musicplayer.view.fragments.list;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +47,7 @@ public class MultiSelectionStringListAdapter extends RecyclerView.Adapter<MultiS
     @Override
     @NonNull
     public TextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.track_list_item_view, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_multi_item_view, parent,false);
         return new TextViewHolder(view);
     }
 
@@ -57,18 +56,12 @@ public class MultiSelectionStringListAdapter extends RecyclerView.Adapter<MultiS
     public void onBindViewHolder(final TextViewHolder holder, int position) {
         final SelectableStringListItem item = items.get(position);
         holder.textView.setText(item.getValue());
-        setBackgroundColor(holder, item);
+        holder.view.setSelected(item.isSelected());
         holder.view.setOnClickListener(v -> {
                 item.toggleSelected();
                 v.setSelected(item.isSelected());
-                setBackgroundColor(holder, item);
                 clickConsumer.accept(item.getValue(), holder.getBindingAdapterPosition());
             });
-    }
-
-
-    private void setBackgroundColor(TextViewHolder holder, SelectableStringListItem item){
-       // holder.view.setBackgroundColor(item.isSelected() ? Color.GRAY : Color.BLACK);
     }
 
 

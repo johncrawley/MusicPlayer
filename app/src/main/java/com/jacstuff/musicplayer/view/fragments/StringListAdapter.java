@@ -105,7 +105,7 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
     @Override
     @NonNull
     public TextViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.track_list_item_view, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_view, parent,false);
         return new TextViewHolder(view);
     }
 
