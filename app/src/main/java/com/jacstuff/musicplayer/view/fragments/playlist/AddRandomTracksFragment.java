@@ -30,7 +30,6 @@ import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.playlist.RandomTrackConfig;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
-import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
 import com.jacstuff.musicplayer.view.fragments.list.MultiSelectionStringListAdapter;
 
 import java.util.ArrayList;
@@ -51,6 +50,9 @@ public class AddRandomTracksFragment extends DialogFragment {
     private String playlistName;
     private PlaylistType playlistType;
     private long playlistId;
+    private int numberOfTracksToAdd = 30;
+    private final int numberOfTracksIncrement = 10;
+    private final int minNumberOfTracksToAdd = 1;
 
 
     public static PlaylistOptionsFragment newInstance() {
@@ -70,10 +72,17 @@ public class AddRandomTracksFragment extends DialogFragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         noItemsFoundTextView = view.findViewById(R.id.noItemsFoundTextView);
         numberOfTracksEditText = view.findViewById(R.id.numberOfTracksEditText);
+        setNumberOfTracksText();
         assignArgs();
         refreshList();
         setupButtons(view);
         DialogFragmentUtils.setTransparentBackground(this);
+    }
+
+
+    private void setNumberOfTracksText(){
+        var numTracksStr = String.valueOf(numberOfTracksToAdd);
+        numberOfTracksEditText.setText(numTracksStr);
     }
 
 
@@ -89,7 +98,24 @@ public class AddRandomTracksFragment extends DialogFragment {
     private void setupButtons(View parentView){
         okButton = setupButton(parentView, R.id.okButton, this::addRandomTracks);
         cancelButton = setupButton(parentView, R.id.cancelDialogButton, this::dismissDialog);
+        setupButton(parentView, R.id.decreaseNumberOfRandomTracksButton, this::decreaseNumberOfRandomTracks);
+        setupButton(parentView, R.id.increaseNumberOfRandomTracksButton, this::increaseNumberOfRandomTracks);
+    }
 
+
+    private void decreaseNumberOfRandomTracks(){
+        numberOfTracksToAdd = Math.max(minNumberOfTracksToAdd, numberOfTracksToAdd - numberOfTracksIncrement );
+        setNumberOfTracksText();
+    }
+
+
+    private void increaseNumberOfRandomTracks(){
+        final int maxNumberOfTracksToAdd = 200;
+        if(numberOfTracksToAdd == minNumberOfTracksToAdd){
+            numberOfTracksToAdd = 0;
+        }
+        numberOfTracksToAdd = Math.min(maxNumberOfTracksToAdd, numberOfTracksToAdd + numberOfTracksIncrement);
+        setNumberOfTracksText();
     }
 
     private int getNumberOfTracks(){
@@ -145,7 +171,6 @@ public class AddRandomTracksFragment extends DialogFragment {
         if(genreNames == null){
             return;
         }
-        //listAdapter = new StringListAdapter(genreNames, this::loadTracksFromGenre, true);
         MultiSelectionStringListAdapter listAdapter = new MultiSelectionStringListAdapter(genreNames, this::loadTracksFromGenre);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

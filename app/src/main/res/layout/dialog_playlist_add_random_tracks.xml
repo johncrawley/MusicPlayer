@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/dialog_background"
@@ -49,11 +50,12 @@
 
     <LinearLayout
         android:id="@+id/numberOfTracksLayout"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:paddingHorizontal="@dimen/dialog_layout_padding_horizontal"
         style="@android:attr/buttonBarStyle"
         android:layout_height="wrap_content"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/buttonLayout"
@@ -63,18 +65,43 @@
             android:id="@+id/NumberOfTracksLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginVertical="12dp"
             android:labelFor="@id/numberOfTracksEditText"
             android:text="@string/add_random_tracks_number"
             />
-
-        <EditText
-            android:id="@+id/numberOfTracksEditText"
-            android:layout_width="36dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:autofillHints="no"
-            android:ems="10"
-            android:inputType="number" />
+            android:orientation="horizontal"
+            >
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="@string/button_text_decrease_random_tracks"
+                android:id="@+id/decreaseNumberOfRandomTracksButton" />
+
+            <EditText
+                android:id="@+id/numberOfTracksEditText"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="8dp"
+                android:minLines="1"
+                android:maxLines="1"
+                android:gravity="center"
+                android:autofillHints="no"
+                android:ems="12"
+                android:inputType="number" />
+
+
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="@string/button_text_increase_random_tracks"
+                android:id="@+id/increaseNumberOfRandomTracksButton" />
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
@@ -107,6 +134,7 @@
             style="@android:attr/buttonBarButtonStyle"
             android:text="@android:string/ok"/>
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

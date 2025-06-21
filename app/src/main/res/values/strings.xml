@@ -27,6 +27,10 @@
     <string name="button_text_refresh_playlist">Refresh</string>
     <string name="button_text_about_app">About</string>
 
+
+    <string name="button_text_decrease_random_tracks">-</string>
+    <string name="button_text_increase_random_tracks">+</string>
+
     <string name="default_playlist_info">All Tracks</string>
     <string name="default_album_info">All Albums</string>
     <string name="album_artist">Artist: %1$s</string>
