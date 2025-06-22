@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,6 +54,8 @@ public class AddRandomTracksFragment extends DialogFragment {
     private int numberOfTracksToAdd = 30;
     private final int numberOfTracksIncrement = 10;
     private final int minNumberOfTracksToAdd = 1;
+    private ToggleButton allTracksToggleButton, artistsToggleButton, genresToggleButton;
+    private List<ToggleButton> toggleButtons;
 
 
     public static PlaylistOptionsFragment newInstance() {
@@ -100,6 +103,56 @@ public class AddRandomTracksFragment extends DialogFragment {
         cancelButton = setupButton(parentView, R.id.cancelDialogButton, this::dismissDialog);
         setupButton(parentView, R.id.decreaseNumberOfRandomTracksButton, this::decreaseNumberOfRandomTracks);
         setupButton(parentView, R.id.increaseNumberOfRandomTracksButton, this::increaseNumberOfRandomTracks);
+        setupToggleButtons(parentView);
+    }
+
+
+    private void setupToggleButtons(View parentView){
+        allTracksToggleButton = setupToggleButton(parentView, R.id.allTracksToggleButton, this::showAllTracks);
+        artistsToggleButton = setupToggleButton(parentView, R.id.artistsToggleButton, this::showArtistsList);
+        genresToggleButton = setupToggleButton(parentView, R.id.genresToggleButton, this::showGenresList);
+        toggleButtons = List.of(allTracksToggleButton, artistsToggleButton, genresToggleButton);
+
+        allTracksToggleButton.setChecked(true);
+
+    }
+
+
+    private ToggleButton setupToggleButton(View parentView, int id, Runnable runnable){
+        ToggleButton toggleButton = parentView.findViewById(id);
+        toggleButton.setChecked(false);
+        toggleButton.setOnClickListener(tb -> {
+            tb.setEnabled(false);
+            enableAndUncheckOtherToggleButtons((ToggleButton) tb);
+            runnable.run();
+        });
+        return toggleButton;
+    }
+
+
+    private void showAllTracks(){
+
+    }
+
+
+    private void showArtistsList(){
+
+    }
+
+
+    private void showGenresList(){
+
+    }
+
+
+    private void enableAndUncheckOtherToggleButtons(ToggleButton toggleButton){
+        toggleButtons.stream()
+                .filter( tb -> tb != toggleButton)
+                .forEach(tb -> {
+                    tb.setChecked(false);
+                    tb.setEnabled(true);
+                });
+
     }
 
 

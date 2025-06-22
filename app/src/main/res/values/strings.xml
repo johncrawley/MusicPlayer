@@ -28,6 +28,9 @@
     <string name="button_text_about_app">About</string>
 
 
+    <string name="toggle_button_all_tracks">All Tracks</string>
+    <string name="toggle_button_artists">Artists</string>
+    <string name="toggle_button_genres">Genres</string>
     <string name="button_text_decrease_random_tracks">-</string>
     <string name="button_text_increase_random_tracks">+</string>
 
