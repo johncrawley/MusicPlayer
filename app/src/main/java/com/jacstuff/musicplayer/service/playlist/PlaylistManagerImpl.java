@@ -409,18 +409,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    private List<Track> getTracksFor(PlaylistType playlistType, List<String> names){
-        if(playlistType == PlaylistType.ALL_TRACKS){
-            return this.tracks;
-        }
-        var trackList = new ArrayList<Track>();
-        for(var name : names){
-            trackList.addAll(trackLoader.getTracksFor(playlistType, name));
-        }
-        return trackList;
-    }
-
-
     private void addRandomTracksToPlaylist(Supplier<List<Track>> tracksSupplier, int numberToAdd, PlaylistViewNotifier playlistViewNotifier){
         var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(tracksSupplier.get(), tracks, numberToAdd);
         addTracksToPlaylist(randomTracks, currentPlaylist.getId(), playlistViewNotifier, false);
@@ -441,16 +429,21 @@ public class PlaylistManagerImpl implements PlaylistManager {
     public void addRandomTracksToPlaylist(RandomTrackConfig config, PlaylistViewNotifier playlistViewNotifier){
         var source = getTracksFor(config.sourcePlaylistType(), config.sourcePlaylistNames());
         var playlistTracks = playlistItemRepository.getTracksForPlaylistId(config.playlistId());
-        log("addRandomTracksToPlaylist() id: " + config.playlistId() + " numberOfTracks: " + config.numberOfTracksToAdd());
 
         var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(source, playlistTracks, config.numberOfTracksToAdd());
-        log("addRandomTracksToPlaylist() number of random tracks: " + randomTracks.size());
         addTracksToPlaylist(randomTracks, config.playlistId(), playlistViewNotifier, true);
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ PlaylistManagerImpl: " + msg);
+    private List<Track> getTracksFor(PlaylistType playlistType, List<String> names){
+        if(playlistType == PlaylistType.ALL_TRACKS){
+            return this.tracks;
+        }
+        var trackList = new ArrayList<Track>();
+        for(var name : names){
+            trackList.addAll(trackLoader.getTracksFor(playlistType, name));
+        }
+        return trackList;
     }
 
 

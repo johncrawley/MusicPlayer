@@ -19,7 +19,6 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
-import com.jacstuff.musicplayer.service.helpers.preferences.PrefKey;
 import com.jacstuff.musicplayer.view.utils.AnimatorHelper;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 import com.jacstuff.musicplayer.view.utils.KeyboardHelper;
@@ -120,15 +119,18 @@ public class SearchViewHelper {
             return;
         }
         keyboardHelper.hideKeyboard(searchView);
-        Animator animator = AnimatorHelper.createHideAnimatorFor(searchView, ()->{
-            searchView.setVisibility(View.GONE);
-            searchEditText.setText("");
-            clearSearchResults();
-            scrollToPositionIfSearchResultHasBeenPlayed();
-            mainActivity.ensureSelectedTrackIsVisible();
-        });
+        Animator animator = AnimatorHelper.createHideAnimatorFor(searchView, this::onSearchViewHidden);
         dismissSearchViewOnBackPressedCallback.setEnabled(false);
         animator.start();
+    }
+
+
+    private void onSearchViewHidden(){
+        searchView.setVisibility(View.GONE);
+        searchEditText.setText("");
+        clearSearchResults();
+        scrollToPositionIfSearchResultHasBeenPlayed();
+        mainActivity.ensureSelectedTrackIsVisible();
     }
 
 

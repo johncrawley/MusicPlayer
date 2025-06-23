@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/dialog_background"
@@ -52,35 +51,36 @@
 
     </LinearLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:layout_margin="8dp"
-        android:background="@color/background"
-        android:fadeScrollbars="true"
-        android:scrollbars="vertical"
-
+        android:layout_height="180dp"
+        android:id="@+id/listsLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toggleButtonLayout"
-        app:layout_constraintBottom_toTopOf="@id/numberOfTracksLayout"
-        />
+        app:layout_constraintBottom_toTopOf="@id/numberOfTracksLayout">
 
-    <TextView
-        android:id="@+id/noItemsFoundTextView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/no_genres_found"
-        android:textSize="@dimen/no_list_items_found_text_size"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/listLabel"
-        app:layout_constraintBottom_toTopOf="@id/numberOfTracksLayout"
-        />
+        <include layout="@layout/recycler_list"
+            android:id="@+id/genresRecyclerLayout"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="parent"
+            />
+
+        <include layout="@layout/recycler_list"
+            android:id="@+id/artistsRecyclerLayout"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <LinearLayout
         android:id="@+id/numberOfTracksLayout"
@@ -93,7 +93,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/buttonLayout"
-        app:layout_constraintTop_toBottomOf="@id/recyclerView">
+        app:layout_constraintTop_toBottomOf="@id/listsLayout">
 
         <TextView
             android:id="@+id/NumberOfTracksLabel"

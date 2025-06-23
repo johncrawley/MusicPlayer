@@ -20,6 +20,7 @@
     <string name="no_genres_found">No Genres Found</string>
     <string name="no_artists_found">No Artists Found</string>
     <string name="no_albums_found">No Albums Found</string>
+    <string name="no_items_found">None Found</string>
     <string name="playlist_is_empty">Playlist Is Empty</string>
 
 

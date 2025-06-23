@@ -1,6 +1,10 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
+import static android.view.View.INVISIBLE;
 import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
+
+import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.createFadeInAnimation;
+import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.createFadeOutAnimation;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -13,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -207,7 +210,7 @@ public class CreatePlaylistFragment extends DialogFragment {
 
 
     private void fadeInCreateButtonIfInvisible(){
-        if(createPlaylistButton.getVisibility() == View.INVISIBLE){
+        if(createPlaylistButton.getVisibility() == INVISIBLE){
             createPlaylistButton.setVisibility(View.VISIBLE);
             createPlaylistButton.startAnimation(fadeIn);
         }
@@ -220,33 +223,9 @@ public class CreatePlaylistFragment extends DialogFragment {
 
 
     private void initAnimations(){
-        initFadeInAnimation();
-        initFadeOutAnimation();
+        fadeIn = createFadeInAnimation(getContext());
+        fadeOut = createFadeOutAnimation(getContext(), ()-> createPlaylistButton.setVisibility(INVISIBLE));
     }
-
-
-    private void initFadeInAnimation(){
-        fadeIn = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
-        fadeIn.setAnimationListener(new Animation.AnimationListener() {
-            @Override public void onAnimationStart(Animation animation) {}
-            @Override public void onAnimationRepeat(Animation animation) {}
-            @Override public void onAnimationEnd(Animation animation) {
-            }
-        });
-    }
-
-
-    private void initFadeOutAnimation(){
-        fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
-        fadeOut.setAnimationListener(new Animation.AnimationListener() {
-            @Override public void onAnimationStart(Animation animation) {}
-            @Override public void onAnimationRepeat(Animation animation) {}
-            @Override public void onAnimationEnd(Animation animation) {
-                createPlaylistButton.setVisibility(View.INVISIBLE);
-            }
-        });
-    }
-
 
 
     private boolean isNameValid(){
@@ -259,7 +238,7 @@ public class CreatePlaylistFragment extends DialogFragment {
             return false;
         }
         boolean isNameUnique =  !playlistNames.contains(getEditText().toLowerCase());
-        playlistAlreadyExistsTextView.setVisibility(isNameUnique ? View.INVISIBLE : View.VISIBLE);
+        playlistAlreadyExistsTextView.setVisibility(isNameUnique ? INVISIBLE : View.VISIBLE);
         return isNameUnique;
     }
 

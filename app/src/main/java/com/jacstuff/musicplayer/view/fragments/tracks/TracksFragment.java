@@ -87,7 +87,7 @@ public class TracksFragment extends Fragment{
 
 
     private void initRecyclerView(){
-        recyclerView = parentView.findViewById(R.id.recyclerView);
+        recyclerView = parentView.findViewById(R.id.genresRecyclerView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
