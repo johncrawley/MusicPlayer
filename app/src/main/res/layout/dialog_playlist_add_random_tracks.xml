@@ -154,19 +154,11 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@android:attr/buttonBarButtonStyle"
             android:layout_margin="@dimen/list_button_margin_horizontal"
-            android:id="@+id/cancelDialogButton"
-            android:text="@android:string/cancel"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/list_button_margin_horizontal"
-            android:id="@+id/okButton"
+            android:id="@+id/addTracksButton"
             android:visibility="visible"
             style="@android:attr/buttonBarButtonStyle"
-            android:text="@android:string/ok"/>
+            android:text="@string/button_add_random_tracks"/>
     </LinearLayout>
 
 

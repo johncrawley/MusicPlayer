@@ -327,6 +327,7 @@ public class MainActivity extends AppCompatActivity {
             case 1 -> toast(R.string.toast_one_track_added_to_playlist);
             default -> toast(getString(R.string.toast_tracks_added_to_playlist, numberOfTracks));
         }
+        sendMessage(Message.TRACKS_ADDED);
     }
 
 
