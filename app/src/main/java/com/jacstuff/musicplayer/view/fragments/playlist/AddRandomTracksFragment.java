@@ -1,11 +1,14 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
+import static android.view.View.VISIBLE;
 import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.getBundleStr;
 import static com.jacstuff.musicplayer.view.fragments.Message.TRACKS_ADDED;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_ID;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_NAME;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_TYPE;
 import static com.jacstuff.musicplayer.view.fragments.Utils.getLong;
+import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.fadeIn;
+import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.fadeOut;
 import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.hideIfVisible;
 import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.switchViews;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
@@ -55,7 +58,7 @@ public class AddRandomTracksFragment extends DialogFragment {
     private final Set<String> selectedArtists = new HashSet<>(100);
     private EditText numberOfTracksEditText;
     private String playlistName;
-    private PlaylistType playlistType;
+    private PlaylistType playlistType = PlaylistType.ALL_TRACKS;
     private long playlistId;
     private int numberOfTracksToAdd = 30;
     private final int numberOfTracksIncrement = 10;
@@ -111,7 +114,6 @@ public class AddRandomTracksFragment extends DialogFragment {
         Bundle bundle = getArguments();
         assert bundle != null;
         playlistName = getBundleStr(bundle, PLAYLIST_NAME);
-        playlistType = PlaylistType.valueOf(getBundleStr(bundle, PLAYLIST_TYPE));
         playlistId = getLong(bundle, PLAYLIST_ID);
     }
 
@@ -161,18 +163,21 @@ public class AddRandomTracksFragment extends DialogFragment {
         playlistType = PlaylistType.ALL_TRACKS;
         hideIfVisible(artistsLayout, getContext());
         hideIfVisible(genresLayout, getContext());
+        fadeInAddButtonIfInVisible();
     }
 
 
     private void showArtistsList(){
         playlistType = PlaylistType.ARTIST;
         switchViews(genresLayout, artistsLayout, getContext());
+        setVisibilityOfAddButtonBasedOn(selectedArtists);
     }
 
 
     private void showGenresList(){
         playlistType = PlaylistType.GENRE;
         switchViews(artistsLayout, genresLayout, getContext());
+        setVisibilityOfAddButtonBasedOn(selectedGenres);
     }
 
 
@@ -261,22 +266,75 @@ public class AddRandomTracksFragment extends DialogFragment {
 
 
     private void toggleGenreSelection(String name, int position){
-        if(selectedGenres.contains(name)){
-            selectedGenres.remove(name);
-        }
-        else{
-            selectedGenres.add(name);
-        }
+        toggleSelection(name, selectedGenres);
     }
 
 
     private void toggleArtistSelection(String name, int position){
-        if(selectedArtists.contains(name)){
-            selectedArtists.remove(name);
+        toggleSelection(name, selectedArtists);
+    }
+
+
+    private void toggleSelection(String name, Set<String> set){
+        if(set.contains(name)){
+            removeSelectionAndFadeOutAddButton(name, set);
         }
         else{
-            selectedArtists.add(name);
+            addSelectionAndFadeInAddButton(name, set);
         }
+    }
+
+
+    private void removeSelectionAndFadeOutAddButton(String name, Set<String> set){
+        set.remove(name);
+        if(set.isEmpty()){
+            fadeOutAndDisableAddTracksButton();
+        }
+    }
+
+
+    private void addSelectionAndFadeInAddButton(String name, Set<String> set){
+        boolean wasEmpty = set.isEmpty();
+        set.add(name);
+        if(wasEmpty){
+            fadeInAndEnableAddTracksButton();
+        }
+    }
+
+
+    private void setVisibilityOfAddButtonBasedOn(Set<String> set){
+        if(!set.isEmpty()){
+            fadeInAddButtonIfInVisible();
+        }
+        else{
+            fadeOutAddButtonIfVisible();
+        }
+    }
+
+
+    private void fadeOutAddButtonIfVisible(){
+        if(addTracksButton.getVisibility() == VISIBLE){
+            fadeOutAndDisableAddTracksButton();
+        }
+    }
+
+
+    private void fadeInAddButtonIfInVisible(){
+        if(addTracksButton.getVisibility() != VISIBLE){
+            fadeInAndEnableAddTracksButton();
+        }
+    }
+
+
+    private void fadeInAndEnableAddTracksButton(){
+        fadeIn(addTracksButton, getContext());
+        addTracksButton.setEnabled(true);
+    }
+
+
+    private void fadeOutAndDisableAddTracksButton(){
+        fadeOut(addTracksButton, getContext());
+        addTracksButton.setEnabled(false);
     }
 
 

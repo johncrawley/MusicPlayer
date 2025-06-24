@@ -74,7 +74,15 @@ public class AnimatorHelper {
     }
 
 
-    private static void fadeIn(View view, Context context){
+    public static void fadeOut(View view, Context context){
+        var animation = createAnimation(context, () -> view.setVisibility(INVISIBLE), R.anim.fade_out);
+        view.clearAnimation();
+        view.setAnimation(animation);
+        view.animate();
+    }
+
+
+    public static void fadeIn(View view, Context context){
         var animation = createFadeInAnimation(context);
         view.clearAnimation();
         view.setVisibility(VISIBLE);
