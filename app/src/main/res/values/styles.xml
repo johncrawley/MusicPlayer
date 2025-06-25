@@ -24,8 +24,10 @@
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
-    </style>
 
+        <item name="toggle_button_background">@color/toggle_button_background</item>
+        <item name="deselected_toggle_button">@color/deselected_toggle_button</item>
+    </style>
 
 
     <style name="AppTheme_no_action_bar" parent="AppTheme">

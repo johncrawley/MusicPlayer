@@ -22,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginVertical="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -31,6 +32,8 @@
             android:id="@+id/allTracksToggleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/toggle_button"
+            android:layout_marginHorizontal="4dp"
             android:textOn="@string/toggle_button_all_tracks"
             android:textOff="@string/toggle_button_all_tracks"
             />
@@ -39,6 +42,8 @@
             android:id="@+id/artistsToggleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/toggle_button"
+            android:layout_marginHorizontal="4dp"
             android:textOn="@string/toggle_button_artists"
             android:textOff="@string/toggle_button_artists" />
 
@@ -46,6 +51,8 @@
             android:id="@+id/genresToggleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/toggle_button"
+            android:layout_marginHorizontal="4dp"
             android:textOn="@string/toggle_button_genres"
             android:textOff="@string/toggle_button_genres"/>
 
@@ -55,6 +62,7 @@
         android:layout_width="0dp"
         android:layout_height="180dp"
         android:id="@+id/listsLayout"
+        android:layout_marginVertical="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toggleButtonLayout"

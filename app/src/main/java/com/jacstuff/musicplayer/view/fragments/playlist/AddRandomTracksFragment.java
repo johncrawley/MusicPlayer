@@ -5,7 +5,6 @@ import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.getBun
 import static com.jacstuff.musicplayer.view.fragments.Message.TRACKS_ADDED;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_ID;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_NAME;
-import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_TYPE;
 import static com.jacstuff.musicplayer.view.fragments.Utils.getLong;
 import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.fadeIn;
 import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.fadeOut;
