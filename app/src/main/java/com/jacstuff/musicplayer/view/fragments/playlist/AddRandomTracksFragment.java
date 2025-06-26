@@ -1,7 +1,10 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.getBundleStr;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_ADD_RANDOM_TRACKS_DIALOG_TO_RELOAD;
 import static com.jacstuff.musicplayer.view.fragments.Message.TRACKS_ADDED;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_ID;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_NAME;
@@ -53,16 +56,17 @@ public class AddRandomTracksFragment extends DialogFragment {
     private Button addTracksButton;
     public static String TAG = "ADD_RANDOM_TRACKS_FRAGMENT";
     private ViewGroup artistsLayout, genresLayout;
-    private final Set<String> selectedGenres = new HashSet<>(100);
-    private final Set<String> selectedArtists = new HashSet<>(100);
+    private Set<String> selectedArtists, selectedGenres;
     private EditText numberOfTracksEditText;
     private String playlistName;
     private PlaylistType playlistType = PlaylistType.ALL_TRACKS;
+    private RecyclerView artistsRecyclerView, genresRecyclerView;
     private long playlistId;
     private int numberOfTracksToAdd = 30;
     private final int numberOfTracksIncrement = 10;
     private final int minNumberOfTracksToAdd = 1;
     private List<ToggleButton> toggleButtons;
+    private ToggleButton allTracksToggleButton, artistsToggleButton, genresToggleButton;
 
 
     public static PlaylistOptionsFragment newInstance() {
@@ -80,19 +84,14 @@ public class AddRandomTracksFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         artistsLayout = view.findViewById(R.id.artistsRecyclerLayout);
-        RecyclerView artistsRecyclerView = artistsLayout.findViewById(R.id.recyclerView);
-        TextView noArtistsFoundTextView = artistsLayout.findViewById(R.id.noItemsFoundText);
-        refreshList(artistsRecyclerView, getMainActivity().getArtistNames(), noArtistsFoundTextView, this::toggleArtistSelection);
-
         genresLayout = view.findViewById(R.id.genresRecyclerLayout);
-        RecyclerView genreRecyclerView = genresLayout.findViewById(R.id.recyclerView);
-        TextView noGenresFoundTextView = genresLayout.findViewById(R.id.noItemsFoundText);
-        refreshList(genreRecyclerView, getMainActivity().getGenreNames(), noGenresFoundTextView, this::toggleGenreSelection);
-
+        selectedArtists = new HashSet<>(200);
+        selectedGenres = new HashSet<>(100);
+        setupButtons(view);
+        setupLists();
         numberOfTracksEditText = view.findViewById(R.id.numberOfTracksEditText);
         setNumberOfTracksText();
         assignArgs();
-        setupButtons(view);
         DialogFragmentUtils.setTransparentBackground(this);
         setupFragmentListener();
         setupTitle(view);
@@ -107,6 +106,41 @@ public class AddRandomTracksFragment extends DialogFragment {
 
     private void setupFragmentListener(){
         setListener(this, TRACKS_ADDED, (bundle)-> addTracksButton.setEnabled(true));
+        setListener(this, NOTIFY_ADD_RANDOM_TRACKS_DIALOG_TO_RELOAD, (bundle)-> {
+            setupLists();
+            setupButtonState();
+        });
+    }
+
+
+    private void setupLists(){
+        artistsRecyclerView = artistsLayout.findViewById(R.id.recyclerView);
+        TextView noArtistsFoundTextView = artistsLayout.findViewById(R.id.noItemsFoundText);
+        refreshList(artistsRecyclerView, getMainActivity().getArtistNames(), noArtistsFoundTextView, this::toggleArtistSelection);
+
+        genresRecyclerView = genresLayout.findViewById(R.id.recyclerView);
+        TextView noGenresFoundTextView = genresLayout.findViewById(R.id.noItemsFoundText);
+        refreshList(genresRecyclerView, getMainActivity().getGenreNames(), noGenresFoundTextView, this::toggleGenreSelection);
+
+    }
+
+
+    private void setupButtonState(){
+        hideButtonIfListIsEmpty(artistsToggleButton, artistsRecyclerView);
+        hideButtonIfListIsEmpty(genresToggleButton, genresRecyclerView);
+
+        setupStateForListAndAddButton(artistsToggleButton, artistsLayout, PlaylistType.ARTIST);
+        setupStateForListAndAddButton(genresToggleButton, genresLayout, PlaylistType.GENRE);
+    }
+
+
+    private void setupStateForListAndAddButton(ToggleButton toggleButton, View listLayout, PlaylistType playlistType){
+        if(toggleButton.isChecked()){
+            fadeIn(listLayout, getContext());
+            allTracksToggleButton.setEnabled(true);
+            this.playlistType = playlistType;
+            addTracksButton.setVisibility(INVISIBLE);
+        }
     }
 
 
@@ -144,13 +178,20 @@ public class AddRandomTracksFragment extends DialogFragment {
 
 
     private void setupToggleButtons(View parentView){
-        ToggleButton allTracksToggleButton = setupToggleButton(parentView, R.id.allTracksToggleButton, this::showAllTracks);
-        ToggleButton artistsToggleButton = setupToggleButton(parentView, R.id.artistsToggleButton, this::showArtistsList);
-        ToggleButton genresToggleButton = setupToggleButton(parentView, R.id.genresToggleButton, this::showGenresList);
+        allTracksToggleButton = setupToggleButton(parentView, R.id.allTracksToggleButton, this::showAllTracks);
+        artistsToggleButton = setupToggleButton(parentView, R.id.artistsToggleButton, this::showArtistsList);
+        genresToggleButton = setupToggleButton(parentView, R.id.genresToggleButton, this::showGenresList);
         toggleButtons = List.of(allTracksToggleButton, artistsToggleButton, genresToggleButton);
 
         allTracksToggleButton.setChecked(true);
         allTracksToggleButton.setEnabled(false);
+    }
+
+
+    private void hideButtonIfListIsEmpty(View button, RecyclerView recyclerView){
+        var adapter = recyclerView.getAdapter();
+        int visibility = adapter == null || adapter.getItemCount() < 1 ? GONE : VISIBLE;
+        button.setVisibility(visibility);
     }
 
 

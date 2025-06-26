@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
             setupFunctionButtons();
             sendMessage(NOTIFY_PLAYLIST_TAB_TO_RELOAD);
             sendMessage(NOTIFY_TRACKS_TAB_TO_RELOAD);
+            sendMessage(NOTIFY_ADD_RANDOM_TRACKS_DIALOG_TO_RELOAD);
             isServiceConnected.set(true);
         }
 

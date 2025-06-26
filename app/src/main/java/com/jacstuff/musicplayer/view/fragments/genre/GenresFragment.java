@@ -93,8 +93,8 @@ public class GenresFragment extends Fragment {
 
 
     private void setupFragmentListener(){
-        setListener(this, Message.LOAD_GENRES.toString(), this::loadGenresToList);
-        setListener(this, Message.NOTIFY_TO_LOAD_GENRE.toString(), (bundle) -> listAdapter.selectLongClickItem());
+        setListener(this, Message.LOAD_GENRES, this::loadGenresToList);
+        setListener(this, Message.NOTIFY_TO_LOAD_GENRE, (bundle) -> listAdapter.selectLongClickItem());
         setListener(this, Message.NOTIFY_TO_DESELECT_GENRE_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
     }
 
