@@ -7,11 +7,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/listLabel"
+        android:id="@+id/dialogTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/list_label_default"
-
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,11 +21,12 @@
         android:id="@+id/toggleButtonLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_marginVertical="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/listsLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/dialogTitleText"
+        app:layout_constraintBottom_toTopOf="@id/numberOfTracksLayout">
 
 
         <ToggleButton
@@ -33,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/toggle_button"
+            android:textColor="@color/toggle_button_text_colors"
             android:layout_marginHorizontal="4dp"
             android:textOn="@string/toggle_button_all_tracks"
             android:textOff="@string/toggle_button_all_tracks"
@@ -43,7 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/toggle_button"
-            android:layout_marginHorizontal="4dp"
+            android:textColor="@color/toggle_button_text_colors"
+            android:layout_margin="4dp"
             android:textOn="@string/toggle_button_artists"
             android:textOff="@string/toggle_button_artists" />
 
@@ -52,6 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/toggle_button"
+            android:textColor="@color/toggle_button_text_colors"
             android:layout_marginHorizontal="4dp"
             android:textOn="@string/toggle_button_genres"
             android:textOff="@string/toggle_button_genres"/>
@@ -59,13 +63,14 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="0dp"
+        android:layout_width="150dp"
         android:layout_height="180dp"
         android:id="@+id/listsLayout"
         android:layout_marginVertical="8dp"
+        android:layout_marginHorizontal="4dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toggleButtonLayout"
+        app:layout_constraintStart_toEndOf="@id/toggleButtonLayout"
+        app:layout_constraintTop_toBottomOf="@id/dialogTitleText"
         app:layout_constraintBottom_toTopOf="@id/numberOfTracksLayout">
 
         <include layout="@layout/recycler_list"
@@ -95,6 +100,7 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:paddingHorizontal="@dimen/dialog_layout_padding_horizontal"
+        android:layout_marginVertical="4dp"
         style="@android:attr/buttonBarStyle"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -107,8 +113,8 @@
             android:id="@+id/NumberOfTracksLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginVertical="12dp"
+            android:textSize="14sp"
+            android:layout_marginVertical="4dp"
             android:labelFor="@id/numberOfTracksEditText"
             android:text="@string/add_random_tracks_number"
             />
@@ -155,6 +161,8 @@
         android:paddingHorizontal="@dimen/dialog_layout_padding_horizontal"
         style="@android:attr/buttonBarStyle"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -162,7 +170,6 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/list_button_margin_horizontal"
             android:id="@+id/addTracksButton"
             android:visibility="visible"
             style="@android:attr/buttonBarButtonStyle"

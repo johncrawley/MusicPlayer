@@ -6,4 +6,5 @@
     <attr name="selected_toggle_button"/>
     <attr name="deselected_toggle_button"/>
     <attr name="toggle_button_background"/>
+    <attr name="toggle_button_text_unchecked"/>
 </resources>
