@@ -21,6 +21,7 @@
         <item name="seek_bar_background">@color/seek_bar_background</item>
         <item name="toggle_button_text_unchecked">@color/toggle_button_text_unchecked</item>
         <item name="track_info_background">@color/track_info_background</item>
+        <item name="dialog_text_color">@color/tab_text</item>
 
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>

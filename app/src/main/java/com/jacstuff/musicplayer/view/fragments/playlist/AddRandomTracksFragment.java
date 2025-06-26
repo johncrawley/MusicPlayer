@@ -95,6 +95,7 @@ public class AddRandomTracksFragment extends DialogFragment {
         setupButtons(view);
         DialogFragmentUtils.setTransparentBackground(this);
         setupFragmentListener();
+        setupTitle(view);
     }
 
 
@@ -114,6 +115,13 @@ public class AddRandomTracksFragment extends DialogFragment {
         assert bundle != null;
         playlistName = getBundleStr(bundle, PLAYLIST_NAME);
         playlistId = getLong(bundle, PLAYLIST_ID);
+    }
+
+
+    private void setupTitle(View parentView){
+        TextView title = parentView.findViewById(R.id.dialogTitleText);
+        String text = getString(R.string.add_random_tracks_to_playlist_dialog_title, playlistName);
+        title.setText(text);
     }
 
 
