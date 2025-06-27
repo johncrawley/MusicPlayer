@@ -35,4 +35,10 @@ public class PlaylistViewNotifierImpl implements PlaylistViewNotifier{
     }
 
 
+    @Override
+    public void notifyViewOfTracksRemovedFromPlaylist() {
+        mainActivity.notifyTracksRemovedFromPlaylist();
+    }
+
+
 }

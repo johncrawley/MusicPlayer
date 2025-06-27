@@ -6,5 +6,6 @@ public interface PlaylistViewNotifier {
     void notifyViewOfTrackAlreadyInPlaylist();
     void notifyViewOfMultipleTracksAddedToPlaylist(int numberOfTracks);
     void notifyViewOfTrackRemovedFromPlaylist(boolean success);
+    void notifyViewOfTracksRemovedFromPlaylist();
 
 }

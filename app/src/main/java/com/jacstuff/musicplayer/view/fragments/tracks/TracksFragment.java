@@ -60,7 +60,13 @@ public class TracksFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        log("Entered onCreateView()");
         return inflater.inflate(R.layout.fragment_tab_tracks, container, false);
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ TracksFragment: " + msg);
     }
 
 
@@ -117,6 +123,7 @@ public class TracksFragment extends Fragment{
 
 
     private void updateTracksList(Bundle bundle){
+        log("Entered updateTracksList()");
         isBeingRefreshed.set(true);
         assignPlaylist();
         updatePlaylistInfoView(playlist);

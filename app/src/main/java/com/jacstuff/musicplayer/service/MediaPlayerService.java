@@ -13,6 +13,7 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.view.View;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
@@ -157,7 +158,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
             runnable.run();
             return;
         }
-        mainActivity.hidePlayerViews();
+        mainActivity.getPlayerViewHelper().setVisibilityOnPlayerViews(View.INVISIBLE);
     }
 
 

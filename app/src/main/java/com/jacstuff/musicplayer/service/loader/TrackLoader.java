@@ -79,6 +79,11 @@ public class TrackLoader {
     }
 
 
+    public void clearTracksFromUserPlaylist(long playlistId){
+
+    }
+
+
     public ArrayList<String> getAllGenreNames(){
        return genreStore.getAllGenreNames();
     }

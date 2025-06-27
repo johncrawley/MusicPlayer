@@ -28,7 +28,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -145,6 +144,20 @@ public class PlaylistManagerImpl implements PlaylistManager {
     @Override
     public void deletePlaylist(Playlist playlist){
         playlistRepository.deletePlaylist(playlist.getId());
+    }
+
+
+    @Override
+    public void clearTracksFromPlaylist(long playlistId, PlaylistViewNotifier playlistViewNotifier){
+        playlistItemRepository.deleteAllPlaylistItems(playlistId);
+        if(currentPlaylist != null && currentPlaylist.getId() == playlistId){
+            tracks.clear();
+            unPlayedTracks.clear();
+            currentPlaylist.setTracks(new ArrayList<>());
+            currentPlaylistFilenames.clear();
+            assignIndexesToTracks();
+            playlistViewNotifier.notifyViewOfTracksRemovedFromPlaylist();
+        }
     }
 
 
@@ -274,7 +287,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(playlistId == currentPlaylist.getId()){
             addTrackToCurrentPlaylist(track, playlistViewNotifier);
         }
-
         if(playlistItemRepository.isTrackAlreadyInPlaylist(track, playlistId)){
             playlistViewNotifier.notifyViewOfTrackAlreadyInPlaylist();
             return;
@@ -403,12 +415,6 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    @Override
-    public void addRandomTracksToCurrentPlaylist(PlaylistType playlistType, List<String> names, int numberOfTracks, PlaylistViewNotifier playlistViewNotifier){
-        addRandomTracksToPlaylist(()-> getTracksFor(playlistType, names), numberOfTracks, playlistViewNotifier );
-    }
-
-
     private void addRandomTracksToPlaylist(Supplier<List<Track>> tracksSupplier, int numberToAdd, PlaylistViewNotifier playlistViewNotifier){
         var randomTracks = randomTrackAppender.getUniqueRandomTracksFrom(tracksSupplier.get(), tracks, numberToAdd);
         addTracksToPlaylist(randomTracks, currentPlaylist.getId(), playlistViewNotifier, false);
@@ -437,13 +443,19 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private List<Track> getTracksFor(PlaylistType playlistType, List<String> names){
         if(playlistType == PlaylistType.ALL_TRACKS){
-            return this.tracks;
+            return this.allTracks;
         }
         var trackList = new ArrayList<Track>();
         for(var name : names){
             trackList.addAll(trackLoader.getTracksFor(playlistType, name));
         }
         return trackList;
+    }
+
+
+    @Override
+    public boolean isPlaylistEmpty(long playlistId){
+        return playlistItemRepository.getNumberOfTracksOf(playlistId) == 0;
     }
 
 

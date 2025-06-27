@@ -85,6 +85,23 @@ public class PlaylistItemRepositoryImpl extends AbstractRepository implements Pl
 
 
     @Override
+    public int getNumberOfTracksOf(long playlistId){
+        String query = "SELECT COUNT (*) FROM "
+                + DbContract.PlaylistItemsEntry.TABLE_NAME
+                + " WHERE " + DbContract.PlaylistItemsEntry.COL_PLAYLIST_ID
+                + " = "  + playlistId
+                + ";";
+
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        int result = cursor.getInt(0);
+        cursor.close();
+        System.out.println("^^^ PlaylistItemRepositoryImpl: getNumberOfTracksInPlaylist() return value : " + result);
+        return result;
+    }
+
+
+    @Override
     public List<Track> getTracksForPlaylistId(long playlistId){
         String query = "SELECT * FROM " + DbContract.PlaylistItemsEntry.TABLE_NAME
                 + " WHERE " + DbContract.PlaylistItemsEntry.COL_PLAYLIST_ID

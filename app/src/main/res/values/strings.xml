@@ -67,6 +67,7 @@
     <string name="toast_tracks_added_to_playlist">%1$d Tracks Were Added To The Playlist</string>
     <string name="toast_one_track_added_to_playlist">1 Track Was Added To The Playlist</string>
     <string name="toast_track_removed_from_playlist">Track Removed From Playlist</string>
+    <string name="toast_tracks_removed_from_playlist">Tracks Removed From Playlist</string>
     <string name="toast_track_removed_from_playlist_fail">The track could not be removed from the playlist</string>
 
     <string name="play_button_content_description">Play</string>
@@ -115,6 +116,7 @@
     <string name="button_playlist_options_load">Load</string>
     <string name="button_playlist_options_remove">Remove</string>
     <string name="button_playlist_add_random_tracks">Add Random Tracks</string>
+    <string name="button_playlist_clear_tracks">Clear Tracks</string>
     <string name="button_playlist_options_new">New</string>
     <string name="button_artist_options_load">Load</string>
     <string name="button_artist_options_add_tracks_to_playlist">Add To Playlist</string>
@@ -134,7 +136,8 @@
     <string name="button_stop_in_one_minute">Stop In One Minute</string>
 
     <string name="delete_confirm_dialog_title">Delete Playlist</string>
-    <string name="delete_confirm_dialog_text">Are you sure you want to delete Playlist %1$s?</string>
+    <string name="delete_confirm_dialog_text">Are you sure you want to delete the Playlist: %1$s?</string>
+    <string name="clear_tracks_confirm_dialog_text">Are you sure you want to remove all tracks from the Playlist: %1$s?</string>
     <string name="delete_playlist_toast_success">Playlist Deleted</string>
 
 

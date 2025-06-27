@@ -260,8 +260,6 @@ public class MainActivity extends AppCompatActivity {
         return playerViewHelper;
     }
 
-    public void hidePlayerViews(){ playerViewHelper.setVisibilityOnPlayerViews(View.INVISIBLE);}
-
     public void showPlayerViews(){playerViewHelper.setVisibilityOnPlayerViews(View.VISIBLE);}
 
     public void setBlankTrackInfo(){ playerViewHelper.setBlankTrackInfo();}
@@ -303,6 +301,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void notifyTrackRemovedFromPlaylist(boolean success){
         toast(success ? R.string.toast_track_removed_from_playlist : R.string.toast_track_removed_from_playlist_fail);
+    }
+
+
+    public void notifyTracksRemovedFromPlaylist(){
+        sendMessage(NOTIFY_TRACKS_TAB_TO_RELOAD);
     }
 
 

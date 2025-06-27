@@ -10,4 +10,5 @@ public interface PlaylistItemRepository {
     void deletePlaylistItem(long  trackId);
     List<Track> getTracksForPlaylistId(long playlistId);
     void deleteAllPlaylistItems(long playlistId);
+    int getNumberOfTracksOf(long playlistId);
 }

@@ -1,7 +1,6 @@
 package com.jacstuff.musicplayer.service.playlist;
 
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
-import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 
@@ -14,7 +13,6 @@ public interface PlaylistManager {
     boolean isUserPlaylistLoaded();
     boolean hasAnyTracks();
 
-    void addRandomTracksToCurrentPlaylist(PlaylistType playlistType, List<String> names, int numberOfTracks, PlaylistViewNotifier playlistViewNotifier);
     void addRandomTracksToPlaylist(RandomTrackConfig randomTrackConfig, PlaylistViewNotifier playlistViewNotifier);
 
     int getNumberOfTracks();
@@ -39,6 +37,7 @@ public interface PlaylistManager {
     List<Playlist> getAllUserPlaylists();
     List<Playlist> getAllPlaylists();
     void deletePlaylist(Playlist playlist);
+    void clearTracksFromPlaylist(long playlistId, PlaylistViewNotifier playlistViewNotifier);
     void loadPlaylist(Playlist playlist);
     void loadAllTracksPlaylist();
     boolean loadTracksFromAlbum(String albumName);
@@ -61,5 +60,7 @@ public interface PlaylistManager {
     void disableShuffle();
     void setShuffleState(boolean isEnabled);
     boolean isShuffleEnabled();
+
+    boolean isPlaylistEmpty(long playlistId);
 
 }

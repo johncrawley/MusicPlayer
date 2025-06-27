@@ -10,6 +10,7 @@ import static com.jacstuff.musicplayer.view.fragments.Utils.getBoolean;
 import static com.jacstuff.musicplayer.view.fragments.Utils.getLong;
 import static com.jacstuff.musicplayer.view.fragments.Utils.putLong;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -22,18 +23,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 
+import java.util.Optional;
+
 
 public class PlaylistOptionsFragment extends DialogFragment {
 
 
-    private Button loadPlaylistButton, deletePlaylistButton, addRandomTracksButton;
+    private Button loadPlaylistButton, deletePlaylistButton, addRandomTracksButton, clearTracksButton;
     private boolean isUserPlaylist;
     private String selectedPlaylistName;
     private long selectedPlaylistId;
@@ -72,8 +77,28 @@ public class PlaylistOptionsFragment extends DialogFragment {
         loadPlaylistButton = setupButton(parentView, R.id.loadPlaylistButton, ()-> sendMessage(NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD));
         deletePlaylistButton = setupButton(parentView, R.id.removePlaylistButton, ()-> sendMessage(NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE));
         addRandomTracksButton = setupButton(parentView, R.id.addRandomTracksButton, this::loadAddRandomTracksFragment);
-        hideSomeButtonsWhenUserPlaylistIsLoaded();
+        clearTracksButton = setupButton(parentView, R.id.clearTracksButton, this::showClearTracksConfirmationDialog);
+        hideSomeButtonsIfPlaylistIsReadOnly();
+        hideClearTracksButtonIfPlaylistIsEmpty();
+    }
 
+
+    private void showClearTracksConfirmationDialog(){
+        if(selectedPlaylistName == null){
+            return;
+        }
+        new AlertDialog.Builder(getContext())
+                .setTitle(getString(R.string.delete_confirm_dialog_title))
+                .setMessage(getResources().getString(R.string.clear_tracks_confirm_dialog_text, selectedPlaylistName))
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.ok, (dialog, whichButton) -> clearTracksFromPlaylist())
+                .setNegativeButton(android.R.string.cancel, null).show();
+    }
+
+
+    private void clearTracksFromPlaylist(){
+        getMediaPlayerService().ifPresent( mps -> mps.getPlaylistHelper().clearTracksFromPlaylist(selectedPlaylistId));
+        dismissAfterPause();
     }
 
 
@@ -87,11 +112,21 @@ public class PlaylistOptionsFragment extends DialogFragment {
     }
 
 
-    private void hideSomeButtonsWhenUserPlaylistIsLoaded(){
+    private void hideSomeButtonsIfPlaylistIsReadOnly(){
         if(!isUserPlaylist){
             deletePlaylistButton.setVisibility(GONE);
             addRandomTracksButton.setVisibility(GONE);
+            clearTracksButton.setVisibility(GONE);
         }
+    }
+
+
+    private void hideClearTracksButtonIfPlaylistIsEmpty(){
+        getMediaPlayerService().ifPresent(mps->{
+            if(mps.getPlaylistManager().isPlaylistEmpty(selectedPlaylistId)){
+                clearTracksButton.setVisibility(GONE);
+            }
+        });
     }
 
 
@@ -117,6 +152,12 @@ public class PlaylistOptionsFragment extends DialogFragment {
         Button button = parentView.findViewById(id);
         button.setOnClickListener((View v)-> runnable.run());
         return button;
+    }
+
+
+    private Optional<MediaPlayerService> getMediaPlayerService(){
+        MainActivity mainActivity = (MainActivity) getActivity();
+        return mainActivity == null ? Optional.empty() : Optional.of(mainActivity.getMediaPlayerService());
     }
 
 
