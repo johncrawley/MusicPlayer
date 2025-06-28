@@ -35,6 +35,19 @@
     <color name="toggle_button_background">#353434</color>
     <color name="toggle_button_text_unchecked">#929292</color>
 
+
+    <!-- default day -->
+    <color name="background_day">#CACACA</color>
+    <color name="track_info_background_day">#C3C2C2</color>
+    <color name="primary_color_day">#E0DFDF</color>
+    <color name="text_day">#2A2A2A</color>
+    <color name="list_item_focused_day">#A5D6A7</color>
+    <color name="button_text_day">#2C2C2C</color>
+    <color name="default_dialog_background_day">#C8C6C6</color>
+    <color name="primary_color_dark_day">#A5D6A7</color>
+
+
+
     <color name="primary_yellow">#E8D424</color>
     <color name="text_yellow">#E8C630</color>
     <color name="color_accent_yellow">#C1A52C</color>

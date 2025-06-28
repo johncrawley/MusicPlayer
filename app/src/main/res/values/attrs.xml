@@ -8,4 +8,5 @@
     <attr name="toggle_button_background"/>
     <attr name="toggle_button_text_unchecked"/>
     <attr name="dialog_text_color"/>
+    <attr name="dialog_background_color"/>
 </resources>

@@ -157,7 +157,12 @@ public class PlaylistOptionsFragment extends DialogFragment {
 
     private Optional<MediaPlayerService> getMediaPlayerService(){
         MainActivity mainActivity = (MainActivity) getActivity();
-        return mainActivity == null ? Optional.empty() : Optional.of(mainActivity.getMediaPlayerService());
+        if(mainActivity == null){
+            return Optional.empty();
+        }
+        var mps = mainActivity.getMediaPlayerService();
+
+        return mps == null ? Optional.empty() : Optional.of(mainActivity.getMediaPlayerService());
     }
 
 
