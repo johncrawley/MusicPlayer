@@ -9,4 +9,12 @@
     <attr name="toggle_button_text_unchecked"/>
     <attr name="dialog_text_color"/>
     <attr name="dialog_background_color"/>
+    <attr name="play_button"/>
+    <attr name="stop_button"/>
+    <attr name="pause_button"/>
+    <attr name="next_track_button"/>
+    <attr name="previous_track_button"/>
+    <attr name="shuffle_button"/>
+    <attr name="options_button"/>
+    <attr name="search_button"/>
 </resources>

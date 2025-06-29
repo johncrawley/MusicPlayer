@@ -32,6 +32,14 @@
         <item name="dialog_background_color">@color/default_dialog_background_day</item>
 
         <item name="android:windowLightStatusBar">true</item>
+        <item name="play_button">@drawable/ic_play_light</item>
+        <item name="pause_button">@drawable/ic_pause_light</item>
+        <item name="stop_button">@drawable/ic_stop_light</item>
+        <item name="previous_track_button">@drawable/ic_prev_light</item>
+        <item name="next_track_button">@drawable/ic_next_light</item>
+        <item name="shuffle_button">@drawable/ic_shuffle_light</item>
+        <item name="options_button">@drawable/ic_config</item>
+        <item name="search_button">@drawable/ic_search</item>
     </style>
 
 
