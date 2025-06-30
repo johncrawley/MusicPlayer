@@ -1,15 +1,15 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.Material3.DayNight">
-        <item name="colorPrimary">@color/primary_color_day</item>
-        <item name="colorPrimaryDark">@color/primary_color_dark_day</item>
+    <style name="AppTheme" parent="Theme.Material3.Dark">
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark</item>
         <item name="colorAccent">@color/color_accent</item>
-        <item name="android:windowBackground">@color/background_day</item>
-        <item name="android:textColor">@color/text_day</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:textColor">@color/text</item>
         <item name="android:buttonTint">@color/primary_color</item>
         <item name="tabTextColor">@color/tab_text</item>
         <item name="tabSelectedTextColor">@color/tab_text_selected</item>
-        <item name="buttonTint">#D5D5D5</item>
+        <item name="buttonTint">#3D3D3D</item>
        <!-- <item name="android:navigationBarColor">@android:color/black</item> -->
         <item name="buttonStyle">@style/customButtonStyle</item>
         <item name="materialButtonStyle">@style/customMaterialOutlineButtonStyle</item>
@@ -17,9 +17,9 @@
         <item name="imageButtonStyle">@style/customImageButtonStyle</item>
         <item name="android:fontFamily">@font/le_patin_magicien_xb7d</item>
         <item name="android:lineSpacingMultiplier">1.3</item>
-        <item name="list_item_focused">@color/list_item_focused_day</item>
+        <item name="list_item_focused">@color/list_item_focused</item>
         <item name="seek_bar_background">@color/seek_bar_background</item>
-        <item name="track_info_background">@color/track_info_background_day</item>
+        <item name="track_info_background">@color/track_info_background</item>
         <item name="dialog_text_color">@color/tab_text</item>
 
         <item name="windowNoTitle">true</item>
@@ -29,20 +29,19 @@
         <item name="toggle_button_background">@color/toggle_button_background</item>
         <item name="deselected_toggle_button">@color/deselected_toggle_button</item>
         <item name="toggle_button_text_unchecked">@color/toggle_button_text_unchecked</item>
-        <item name="dialog_background_color">@color/default_dialog_background_day</item>
 
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="play_button">@drawable/ic_play_light</item>
-        <item name="pause_button">@drawable/ic_pause_light</item>
-        <item name="stop_button">@drawable/ic_stop_light</item>
-        <item name="previous_track_button">@drawable/ic_previous_light</item>
-        <item name="next_track_button">@drawable/ic_next_light</item>
-        <item name="shuffle_button">@drawable/ic_shuffle_light</item>
-        <item name="settings_button">@drawable/ic_settings_light</item>
-        <item name="search_button">@drawable/ic_search_light</item>
+        <item name="dialog_background_color">@color/default_dialog_background</item>
+        <item name="play_button">@drawable/ic_play</item>
+        <item name="pause_button">@drawable/ic_pause</item>
+        <item name="stop_button">@drawable/ic_stop</item>
+        <item name="previous_track_button">@drawable/ic_previous</item>
+        <item name="next_track_button">@drawable/ic_next</item>
+        <item name="shuffle_button">@drawable/ic_shuffle</item>
+        <item name="settings_button">@drawable/ic_settings</item>
+        <item name="search_button">@drawable/ic_search</item>
 
-        <item name="functions_panel_background">@color/functions_panel_background_day</item>
-        <item name="functions_panel_border">@color/functions_panel_border_day</item>
+        <item name="functions_panel_background">@color/functions_panel_background</item>
+        <item name="functions_panel_border">@color/functions_panel_border</item>
     </style>
 
 
@@ -54,7 +53,7 @@
     </style>
 
 
-    <style name="SettingsTheme" parent="Theme.Material3.DayNight">
+    <style name="SettingsTheme" parent="Theme.Material3.Dark">
         <item name="colorPrimary">@color/settings_primary_color</item>
         <item name="colorPrimaryDark">@color/primary_color_dark</item>
         <item name="colorAccent">@color/settings_color_accent</item>
@@ -64,7 +63,7 @@
 
 
     <style name="customMaterialOutlineButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="android:textColor">@color/button_text_day</item>
+        <item name="android:textColor">@color/button_text</item>
         <item name="cornerRadius">15dp</item>
         <item name="strokeWidth">1dp</item>
         <item name="backgroundColor">@color/color_accent</item>
@@ -223,8 +222,8 @@
 
 
     <style name="customImageButtonStyle" parent="Widget.AppCompat.ImageButton">
-        <item name="backgroundTint">@color/background_day</item>
-        <item name="tint">@color/image_button_tint_day</item>
+        <item name="backgroundTint">@color/background</item>
+        <item name="tint">@color/image_button_tint</item>
         <item name="cornerRadius">15dp</item>
     </style>
 

@@ -15,6 +15,10 @@
     <attr name="next_track_button"/>
     <attr name="previous_track_button"/>
     <attr name="shuffle_button"/>
-    <attr name="options_button"/>
+    <attr name="settings_button"/>
     <attr name="search_button"/>
+
+
+    <attr name="functions_panel_background"/>
+    <attr name="functions_panel_border"/>
 </resources>
