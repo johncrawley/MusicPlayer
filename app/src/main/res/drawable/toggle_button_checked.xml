@@ -2,13 +2,13 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="?attr/colorPrimary"/>
+            <solid android:color="?attr/toggle_button_edge_checked"/>
             <corners android:radius="10dp"/>
         </shape>
     </item>
     <item android:bottom="3dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/toggle_button_background"
+            <solid android:color="?attr/toggle_button_background"
                 />
             <corners android:radius="10dp"/>
         </shape>

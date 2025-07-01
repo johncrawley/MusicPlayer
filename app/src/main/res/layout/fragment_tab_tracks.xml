@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:padding="1dp"
                 android:contentDescription="@string/add_tracks_to_playlist_icon_content_description"
-                android:src="@android:drawable/ic_input_add"
+                android:src="?attr/add_button"
                 android:background="?selectableItemBackgroundBorderless" />
 
         </LinearLayout>

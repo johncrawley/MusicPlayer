@@ -10,7 +10,13 @@
         <item name="tabTextColor">@color/tab_text</item>
         <item name="tabSelectedTextColor">@color/tab_text_selected</item>
         <item name="buttonTint">#D5D5D5</item>
+
        <!-- <item name="android:navigationBarColor">@android:color/black</item> -->
+
+        <item name="panel_background">@color/panel_background_day</item>
+
+        <item name="add_button">@drawable/ic_add_light</item>
+
         <item name="buttonStyle">@style/customButtonStyle</item>
         <item name="materialButtonStyle">@style/customMaterialOutlineButtonStyle</item>
         <item name="android:alertDialogTheme">@style/customAlertDialogStyle</item>
@@ -26,9 +32,12 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
 
-        <item name="toggle_button_background">@color/toggle_button_background</item>
-        <item name="deselected_toggle_button">@color/deselected_toggle_button</item>
-        <item name="toggle_button_text_unchecked">@color/toggle_button_text_unchecked</item>
+        <item name="toggle_button_background">@color/toggle_button_background_day</item>
+        <item name="toggle_button_edge_checked">@color/toggle_button_edge_checked_day</item>
+        <item name="toggle_button_edge_unchecked">@color/toggle_button_edge_unchecked_day</item>
+        <item name="toggle_button_text_checked">@color/toggle_button_text_checked_day</item>
+        <item name="toggle_button_text_unchecked">@color/toggle_button_text_unchecked_day</item>
+
         <item name="dialog_background_color">@color/default_dialog_background_day</item>
 
         <item name="android:windowLightStatusBar">true</item>
@@ -40,6 +49,8 @@
         <item name="shuffle_button">@drawable/ic_shuffle_light</item>
         <item name="settings_button">@drawable/ic_settings_light</item>
         <item name="search_button">@drawable/ic_search_light</item>
+
+        <item name="list_background">@color/list_background_day</item>
 
         <item name="functions_panel_background">@color/functions_panel_background_day</item>
         <item name="functions_panel_border">@color/functions_panel_border_day</item>
