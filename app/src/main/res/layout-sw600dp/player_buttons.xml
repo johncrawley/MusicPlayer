@@ -14,7 +14,7 @@
         android:contentDescription="@string/previous_track_button_content_description"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
         android:paddingBottom="@dimen/button_padding"
-        app:srcCompat="@drawable/ic_previous" />
+        app:srcCompat="?attr/previous_track_button" />
 
     <ImageButton
         android:id="@+id/playButton"
@@ -23,7 +23,7 @@
         android:contentDescription="@string/play_button_content_description"
         android:paddingBottom="@dimen/button_padding"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
-        app:srcCompat="@drawable/ic_play" />
+        app:srcCompat="?attr/play_button" />
 
     <ImageButton
         android:id="@+id/pauseButton"
@@ -33,7 +33,7 @@
         android:paddingBottom="@dimen/button_padding"
         android:visibility="gone"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
-        app:srcCompat="@drawable/ic_pause" />
+        app:srcCompat="?attr/pause_button" />
 
     <ImageButton
         android:id="@+id/stopButton"
@@ -41,9 +41,8 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/stop_button_content_description"
         android:paddingBottom="@dimen/button_padding"
-        android:tintMode="src_in"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
-        app:srcCompat="@drawable/ic_stop" />
+        app:srcCompat="?attr/stop_button" />
 
     <ImageButton
         android:id="@+id/nextTrackButton"
@@ -52,7 +51,7 @@
         android:contentDescription="@string/next_track_button_content_description"
         android:paddingBottom="@dimen/button_padding"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
-        app:srcCompat="@drawable/ic_next" />
+        app:srcCompat="?attr/next_track_button" />
 
     <ImageButton
         android:id="@+id/turnShuffleOffButton"
@@ -61,7 +60,7 @@
         android:contentDescription="@string/shuffle_off_button_content_description"
         android:paddingBottom="@dimen/button_padding"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
-        app:srcCompat="@drawable/ic_shuffle" />
+        app:srcCompat="?attr/shuffle_button" />
 
     <ImageButton
         android:id="@+id/turnShuffleOnButton"
@@ -72,6 +71,6 @@
         android:paddingBottom="@dimen/button_padding"
         app:tint="@color/image_button_shuffle_on_tint"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
-        app:srcCompat="@drawable/ic_shuffle" />
+        app:srcCompat="?attr/shuffle_button" />
 
 </LinearLayout>

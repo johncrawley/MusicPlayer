@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/playPauseButtonLayout"
         android:padding="@dimen/player_button_padding"
-        app:srcCompat="@drawable/ic_previous" />
+        app:srcCompat="?attr/previous_track_button" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
             android:contentDescription="@string/pause_button_content_description"
             android:padding="@dimen/player_button_padding"
             android:visibility="gone"
-            app:srcCompat="@drawable/ic_pause" />
+            app:srcCompat="?attr/pause_button" />
     </LinearLayout>
 
 
@@ -59,8 +59,7 @@
         app:layout_constraintStart_toEndOf="@id/playPauseButtonLayout"
         app:layout_constraintEnd_toStartOf="@id/nextTrackButton"
         android:padding="@dimen/player_button_padding"
-        android:tintMode="src_in"
-        app:srcCompat="@drawable/ic_stop" />
+        app:srcCompat="?attr/stop_button" />
 
     <ImageButton
         android:id="@+id/nextTrackButton"
@@ -72,7 +71,7 @@
         app:layout_constraintStart_toEndOf="@id/stopButton"
         app:layout_constraintEnd_toStartOf="@id/shuffleButtonLayout"
         android:padding="@dimen/player_button_padding"
-        app:srcCompat="@drawable/ic_next" />
+        app:srcCompat="?attr/next_track_button" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -89,7 +88,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/shuffle_off_button_content_description"
             android:padding="@dimen/player_button_padding"
-            app:srcCompat="@drawable/ic_shuffle" />
+            app:srcCompat="?attr/shuffle_button" />
 
         <ImageButton
             android:id="@+id/turnShuffleOnButton"
@@ -99,7 +98,7 @@
             android:contentDescription="@string/shuffle_on_button_content_description"
             android:padding="@dimen/player_button_padding"
             app:tint="@color/image_button_shuffle_on_tint"
-            app:srcCompat="@drawable/ic_shuffle" />
+            app:srcCompat="?attr/shuffle_button" />
 
     </LinearLayout>
 
