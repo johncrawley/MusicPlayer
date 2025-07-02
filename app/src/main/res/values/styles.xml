@@ -8,7 +8,7 @@
         <item name="android:textColor">@color/text_day</item>
         <item name="android:buttonTint">@color/primary_color</item>
         <item name="tabTextColor">@color/tab_text</item>
-        <item name="tabSelectedTextColor">@color/tab_text_selected</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_day</item>
         <item name="buttonTint">#D5D5D5</item>
 
        <!-- <item name="android:navigationBarColor">@android:color/black</item> -->
@@ -54,6 +54,8 @@
 
         <item name="functions_panel_background">@color/functions_panel_background_day</item>
         <item name="functions_panel_border">@color/functions_panel_border_day</item>
+
+        <item name="tab_text_color">@color/tab_text_day</item>
     </style>
 
 
@@ -248,7 +250,7 @@
 
 
     <style name="customAlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="android:background">@color/dialog_background</item>
+        <!--<item name="android:background">@color/dialog_background</item> -->
     </style>
 
 

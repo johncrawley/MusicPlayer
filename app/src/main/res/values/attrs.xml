@@ -24,6 +24,7 @@
     <attr name="shuffle_button"/>
 
     <attr name="add_button"/>
+    <attr name="tab_text_color"/>
 
     <attr name="settings_button"/>
     <attr name="search_button"/>

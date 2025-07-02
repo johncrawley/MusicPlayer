@@ -52,6 +52,8 @@
 
         <item name="functions_panel_background">@color/functions_panel_background</item>
         <item name="functions_panel_border">@color/functions_panel_border</item>
+
+        <item name="tab_text_color">@color/tab_text</item>
     </style>
 
 
