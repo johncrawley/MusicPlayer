@@ -54,6 +54,9 @@
         <item name="functions_panel_border">@color/functions_panel_border</item>
 
         <item name="tab_text_color">@color/tab_text</item>
+
+        <item name="album_art_background">@color/album_art_background</item>
+        <item name="album_art_border">@color/album_art_border</item>
     </style>
 
 

@@ -56,6 +56,9 @@
         <item name="functions_panel_border">@color/functions_panel_border_day</item>
 
         <item name="tab_text_color">@color/tab_text_day</item>
+
+        <item name="album_art_background">@color/album_art_background_day</item>
+        <item name="album_art_border">@color/album_art_border_day</item>
     </style>
 
 

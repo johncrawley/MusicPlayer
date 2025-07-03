@@ -26,6 +26,9 @@
     <attr name="add_button"/>
     <attr name="tab_text_color"/>
 
+    <attr name="album_art_background"/>
+    <attr name="album_art_border"/>
+
     <attr name="settings_button"/>
     <attr name="search_button"/>
 
