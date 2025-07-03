@@ -48,12 +48,13 @@
     <!-- default day -->
     <color name="panel_background_day">#D1D5D1</color>
     <color name="background_day">#CACACA</color>
-    <color name="track_info_background_day">#C3C2C2</color>
+    <color name="track_info_background_day">#A6A5A5</color>
     <color name="primary_color_day">#A5D6A7</color>
     <color name="text_day">#2A2A2A</color>
     <color name="list_item_focused_day">#A5D6A7</color>
     <color name="button_text_day">#2C2C2C</color>
-    <color name="default_dialog_background_day">#C8C6C6</color>
+    <color name="default_dialog_background_day">#E3F2FD</color>
+   <!-- <color name="default_dialog_background_day">#C8C6C6</color> -->
     <color name="primary_color_dark_day">#A5D6A7</color>
     <color name="functions_panel_background_day">#C3C2C2</color>
     <color name="functions_panel_border_day">#8A8A8A</color>

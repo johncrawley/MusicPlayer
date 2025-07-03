@@ -40,7 +40,6 @@
 
         <item name="dialog_background_color">@color/default_dialog_background_day</item>
 
-        <item name="android:windowLightStatusBar">true</item>
         <item name="play_button">@drawable/ic_play_light</item>
         <item name="pause_button">@drawable/ic_pause_light</item>
         <item name="stop_button">@drawable/ic_stop_light</item>
@@ -52,13 +51,16 @@
 
         <item name="list_background">@color/list_background_day</item>
 
-        <item name="functions_panel_background">@color/functions_panel_background_day</item>
+        <item name="functions_panel_background">@color/background_day</item>
         <item name="functions_panel_border">@color/functions_panel_border_day</item>
 
         <item name="tab_text_color">@color/tab_text_day</item>
 
         <item name="album_art_background">@color/album_art_background_day</item>
         <item name="album_art_border">@color/album_art_border_day</item>
+
+
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
 
