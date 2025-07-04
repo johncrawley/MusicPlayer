@@ -12,8 +12,7 @@
         <item name="buttonTint">#D5D5D5</item>
 
        <!-- <item name="android:navigationBarColor">@android:color/black</item> -->
-
-        <item name="panel_background">@color/panel_background_day</item>
+        <item name="panel_background">@color/background_day</item>
 
         <item name="add_button">@drawable/ic_add_light</item>
 
@@ -51,9 +50,9 @@
 
         <item name="list_background">@color/list_background_day</item>
 
-        <item name="functions_panel_background">@color/background_day</item>
         <item name="functions_panel_border">@color/functions_panel_border_day</item>
 
+        <item name="tab_layout_background_color">@color/tab_layout_background_day</item>
         <item name="tab_text_color">@color/tab_text_day</item>
 
         <item name="album_art_background">@color/album_art_background_day</item>

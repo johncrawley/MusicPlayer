@@ -32,8 +32,7 @@
     <attr name="settings_button"/>
     <attr name="search_button"/>
 
-    <attr name="functions_panel_background"/> <!-- todo delete this when redundant -->
     <attr name="functions_panel_border"/>
-
+    <attr name="tab_layout_background_color"/>
     <attr name="panel_background"/>
 </resources>

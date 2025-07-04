@@ -7,8 +7,6 @@
         <item name="android:windowBackground">@color/background</item>
         <item name="android:textColor">@color/text</item>
         <item name="android:buttonTint">@color/primary_color</item>
-        <item name="tabTextColor">@color/tab_text</item>
-        <item name="tabSelectedTextColor">@color/tab_text_selected</item>
         <item name="buttonTint">#3D3D3D</item>
        <!-- <item name="android:navigationBarColor">@android:color/black</item> -->
 
@@ -37,7 +35,6 @@
         <item name="toggle_button_text_unchecked">@color/toggle_button_text_unchecked</item>
         <item name="toggle_button_text_checked">@color/primary_color</item>
 
-
         <item name="list_background">@color/list_background</item>
 
         <item name="dialog_background_color">@color/default_dialog_background</item>
@@ -50,10 +47,12 @@
         <item name="settings_button">@drawable/ic_settings</item>
         <item name="search_button">@drawable/ic_search</item>
 
-        <item name="functions_panel_background">@color/functions_panel_background</item>
         <item name="functions_panel_border">@color/functions_panel_border</item>
 
+        <item name="tab_layout_background_color">@color/primary_color_dark</item>
         <item name="tab_text_color">@color/tab_text</item>
+        <item name="tabTextColor">@color/tab_text</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected</item>
 
         <item name="album_art_background">@color/album_art_background</item>
         <item name="album_art_border">@color/album_art_border</item>

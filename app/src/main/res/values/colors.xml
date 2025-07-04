@@ -15,13 +15,17 @@
     <color name="list_item_unfocused">#f2f7f9</color>
     <color name="background">#030404</color>
     <color name="text">#1CAE23</color>
+
     <color name="tab_text">#9A9A9B</color>
     <color name="tab_text_selected">#D9D9DA</color>
+
     <color name="image_button_background_tint">#373737</color>
     <color name="image_button_tint">#DCDCDC</color>
     <color name="image_button_shuffle_on_tint">#737373</color>
+
     <color name="button_text">#D1D1D5</color>
     <color name="button_background_tint">#373737</color>
+
     <color name="dialog_background">#1E1E1E</color>
     <color name="material_edit_text_focussed">#388E3C</color>
     <color name="material_edit_text_hover">#388E3C</color>
@@ -45,17 +49,18 @@
     <color name="album_art_background">#2A2A2A</color>
     <color name="album_art_border">#000</color>
 
+
     <!-- default day -->
-    <color name="panel_background_day">#D1D5D1</color>
-    <color name="background_day">#CACACA</color>
+    <color name="panel_background_day">#C8E6C9</color>
+    <color name="background_day">#C8E6C9</color>
     <color name="track_info_background_day">#A6A5A5</color>
     <color name="primary_color_day">#A5D6A7</color>
     <color name="text_day">#2A2A2A</color>
     <color name="list_item_focused_day">#A5D6A7</color>
     <color name="button_text_day">#2C2C2C</color>
     <color name="default_dialog_background_day">#E3F2FD</color>
-   <!-- <color name="default_dialog_background_day">#C8C6C6</color> -->
-    <color name="primary_color_dark_day">#A5D6A7</color>
+
+    <color name="primary_color_dark_day">#C8E6C9</color>
     <color name="functions_panel_background_day">#C3C2C2</color>
     <color name="functions_panel_border_day">#8A8A8A</color>
     <color name="image_button_tint_day">#000000</color>
@@ -68,11 +73,13 @@
 
     <color name="list_background_day">#C3C2C2</color>
 
+    <color name="tab_layout_background_day">#A5D6A7</color>
     <color name="tab_text_day">#9D9C9C</color>
     <color name="tab_text_selected_day">#2A2A2A</color>
 
     <color name="album_art_background_day">#C5C4C4</color>
     <color name="album_art_border_day">#8E8E8E</color>
+
 
     <!-- themes -->
     <color name="primary_yellow">#E8D424</color>
