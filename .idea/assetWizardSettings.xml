@@ -24,9 +24,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="/tmp/baseline_skip_next_24.xml" />
+                                                <entry key="imagePath" value="/tmp/baseline_add_24.xml" />
                                                 <entry key="opacityPercent" value="80" />
-                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -37,7 +36,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="file:$USER_HOME$/Android/Sdk/icons/material/materialicons/skip_next/baseline_skip_next_24.xml" />
+                                                <entry key="url" value="file:$USER_HOME$/Android/Sdk/icons/material/materialicons/add/baseline_add_24.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -49,7 +48,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="opacityPercent" value="80" />
+                                                <entry key="opacityPercent" value="60" />
+                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -81,8 +81,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_next" />
+                                      <entry key="outputName" value="ic_add" />
                                       <entry key="theme" value="HOLO_DARK" />
+                                      <entry key="themeColor" value="373737" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -326,6 +327,11 @@
                                 </PersistentState>
                               </value>
                             </entry>
+                          </map>
+                        </option>
+                        <option name="values">
+                          <map>
+                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>
