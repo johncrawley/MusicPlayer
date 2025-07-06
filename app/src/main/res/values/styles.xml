@@ -70,13 +70,11 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+
     <style name="SettingsTheme" parent="Theme.Material3.DayNight">
-        <item name="colorPrimary">@color/settings_primary_color</item>
-        <item name="colorPrimaryDark">@color/primary_color_dark</item>
-        <item name="colorAccent">@color/settings_color_accent</item>
-        <item name="android:windowBackground">@color/background</item>
-        <item name="android:textColor">@color/settings_text</item>
+        <item name="colorPrimaryDark">@color/settings_primary_color_dark_day</item>
     </style>
+
 
     <style name="customMaterialOutlineButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textColor">@color/button_text_day</item>

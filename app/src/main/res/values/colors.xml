@@ -81,6 +81,9 @@
     <color name="album_art_border_day">#8E8E8E</color>
 
 
+    <color name="settings_primary_color_dark_day">#626262</color>
+
+
     <!-- themes -->
     <color name="primary_yellow">#E8D424</color>
     <color name="text_yellow">#E8C630</color>
