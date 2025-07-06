@@ -242,16 +242,25 @@
     </style>
 
 
+
     <style name="customButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:textColor">@color/button_text</item>
         <item name="android:backgroundTint">@color/button_background_tint</item>
     </style>
 
 
-
-    <style name="customAlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
-        <!--<item name="android:background">@color/dialog_background</item> -->
+    <style name="dialogButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:textColor">@color/background</item>
+        <item name="android:backgroundTint">@color/background_day</item>
     </style>
+
+
+    <style name="customAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/background_day</item>
+        <item name="android:colorAccent">#0000FF</item>
+    </style>
+
+
 
 
 </resources>

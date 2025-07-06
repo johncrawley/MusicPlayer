@@ -35,4 +35,5 @@
     <attr name="functions_panel_border"/>
     <attr name="tab_layout_background_color"/>
     <attr name="panel_background"/>
+
 </resources>
