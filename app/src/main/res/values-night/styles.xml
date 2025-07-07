@@ -56,6 +56,8 @@
 
         <item name="album_art_background">@color/album_art_background</item>
         <item name="album_art_border">@color/album_art_border</item>
+
+        <item name="alert_warning_drawable">@drawable/ic_warning</item>
     </style>
 
 

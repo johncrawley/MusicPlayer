@@ -36,4 +36,5 @@
     <attr name="tab_layout_background_color"/>
     <attr name="panel_background"/>
 
+    <attr name="alert_warning_drawable"/>
 </resources>

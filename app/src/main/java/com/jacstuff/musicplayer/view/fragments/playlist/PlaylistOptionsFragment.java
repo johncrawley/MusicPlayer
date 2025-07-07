@@ -10,10 +10,14 @@ import static com.jacstuff.musicplayer.view.fragments.Utils.getBoolean;
 import static com.jacstuff.musicplayer.view.fragments.Utils.getLong;
 import static com.jacstuff.musicplayer.view.fragments.Utils.putLong;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +25,14 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
+import com.jacstuff.musicplayer.view.fragments.AlertHelper;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
@@ -87,18 +93,17 @@ public class PlaylistOptionsFragment extends DialogFragment {
         if(selectedPlaylistName == null){
             return;
         }
-        new AlertDialog.Builder(getContext())
-                .setTitle(getString(R.string.delete_confirm_dialog_title))
-                .setMessage(getResources().getString(R.string.clear_tracks_confirm_dialog_text, selectedPlaylistName))
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.ok, (dialog, whichButton) -> clearTracksFromPlaylist())
-                .setNegativeButton(android.R.string.cancel, null).show();
+        dismissAfterPause();
+        AlertHelper.showDialogForPlaylist(getContext(),
+                R.string.clear_tracks_confirm_dialog_title,
+                R.string.clear_tracks_confirm_dialog_text,
+                selectedPlaylistName,
+                this::clearTracksFromPlaylist);
     }
 
 
     private void clearTracksFromPlaylist(){
         getMediaPlayerService().ifPresent( mps -> mps.getPlaylistHelper().clearTracksFromPlaylist(selectedPlaylistId));
-        dismissAfterPause();
     }
 
 

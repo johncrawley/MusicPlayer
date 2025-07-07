@@ -60,6 +60,8 @@
 
 
         <item name="android:windowLightStatusBar">true</item>
+
+        <item name="alert_warning_drawable">@drawable/ic_warning_light</item>
     </style>
 
 

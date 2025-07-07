@@ -29,6 +29,7 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.ListIndexManager;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
+import com.jacstuff.musicplayer.view.fragments.AlertHelper;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
@@ -190,22 +191,16 @@ public class PlaylistsFragment extends Fragment {
         FragmentManagerHelper.showDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
     }
 
-    private void log(String msg){
-        System.out.println("^^^ PlaylistsFragment: " + msg);
-    }
-
 
     private void showDeletePlaylistDialog(){
-        Playlist playlist = listAdapter.getLongClickedPlaylist();
-        if(playlist == null){
-            return;
+        var playlist = listAdapter.getLongClickedPlaylist();
+        if(playlist != null){
+            AlertHelper.showDialogForPlaylist(getContext(),
+                    R.string.delete_confirm_dialog_title,
+                    R.string.delete_confirm_dialog_text,
+                    playlist.getName(),
+                    this::deletePlaylistAndSelectFirstPlaylist);
         }
-        new AlertDialog.Builder(getContext())
-                .setTitle(getString(R.string.delete_confirm_dialog_title))
-                .setMessage(getResources().getString(R.string.delete_confirm_dialog_text, playlist.getName()))
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.ok, (dialog, whichButton) -> deletePlaylistAndSelectFirstPlaylist(playlist))
-                .setNegativeButton(android.R.string.cancel, null).show();
     }
 
 
@@ -215,7 +210,8 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-    private void deletePlaylistAndSelectFirstPlaylist(Playlist playlist){
+    private void deletePlaylistAndSelectFirstPlaylist(){
+        var playlist = listAdapter.getLongClickedPlaylist();
         navigateToFirstPlaylistIfDeletedPlaylistIsLoaded(playlist);
         listAdapter.clearLongClickedView();
         delete(playlist);

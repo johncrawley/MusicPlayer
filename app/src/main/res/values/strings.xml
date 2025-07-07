@@ -137,6 +137,7 @@
 
     <string name="delete_confirm_dialog_title">Delete Playlist</string>
     <string name="delete_confirm_dialog_text">Are you sure you want to delete the Playlist: %1$s?</string>
+    <string name="clear_tracks_confirm_dialog_title">Clear Tracks From Playlist</string>
     <string name="clear_tracks_confirm_dialog_text">Are you sure you want to remove all tracks from the Playlist: %1$s?</string>
     <string name="delete_playlist_toast_success">Playlist Deleted</string>
 
