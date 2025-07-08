@@ -18,14 +18,20 @@ public class PreferencesHelperImpl implements PreferencesHelper{
 
 
     public void saveShuffleState(boolean isShuffleEnabled){
-        getPrefs().edit()
-                .putBoolean(PrefKey.IS_SHUFFLE_ENABLED.getKeyStr(), isShuffleEnabled)
-                .apply();
+        set(PrefKey.IS_SHUFFLE_ENABLED, isShuffleEnabled);
     }
 
 
     public boolean getBoolean(PrefKey prefKey){
         return getPrefs().getBoolean(prefKey.getKeyStr(), prefKey.getDefault());
+    }
+
+
+    @Override
+    public void set(PrefKey prefKey, boolean value){
+        getPrefs().edit()
+                .putBoolean(prefKey.getKeyStr(), value)
+                .apply();
     }
 
 

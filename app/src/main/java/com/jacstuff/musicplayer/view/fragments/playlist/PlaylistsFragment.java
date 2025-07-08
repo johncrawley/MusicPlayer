@@ -1,5 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
+import static com.jacstuff.musicplayer.service.helpers.preferences.PrefKey.ARE_TABS_SWITCHED_AFTER_PLAYLIST_SELECTION;
 import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.addStrTo;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
@@ -15,7 +16,6 @@ import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_USER_PLAYLI
 import static com.jacstuff.musicplayer.view.fragments.Utils.putBoolean;
 import static com.jacstuff.musicplayer.view.fragments.Utils.putLong;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +29,7 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.ListIndexManager;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
+import com.jacstuff.musicplayer.service.helpers.preferences.PrefKey;
 import com.jacstuff.musicplayer.view.fragments.AlertHelper;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
@@ -127,12 +128,6 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-
-    public Set<String> getPlaylistNames(){
-        return playlistNames;
-    }
-
-
     public void onAddNewPlaylist(){
         hasClicked = false;
         int previousPlaylistCount =  listAdapter.getItemCount();
@@ -223,8 +218,10 @@ public class PlaylistsFragment extends Fragment {
     private void navigateToFirstPlaylistIfDeletedPlaylistIsLoaded(Playlist playlist){
         if(listAdapter.getSelectedPlaylist() == playlist){
             View item = recyclerView.getChildAt(0);
+            setAutoSwitchTabs(false);
             item.callOnClick();
             listAdapter.select(item);
+            setAutoSwitchTabs(true);
         }
     }
 
@@ -326,4 +323,12 @@ public class PlaylistsFragment extends Fragment {
     private void toast(int strId){
         getMain().ifPresent(ma -> ma.toast(strId));
     }
+
+
+    public void setAutoSwitchTabs(boolean isEnabled){
+        getMain().ifPresent(ma -> {
+            ma.getPreferencesHelper().set(ARE_TABS_SWITCHED_AFTER_PLAYLIST_SELECTION, isEnabled);
+        });
+    }
+
 }

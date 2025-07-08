@@ -7,6 +7,7 @@ public interface PreferencesHelper {
     int getInt(PrefKey prefKey);
     String getStr(PrefKey prefKey);
     boolean hasPathChanged();
+    void set(PrefKey prefKey, boolean value);
 
 
 }
