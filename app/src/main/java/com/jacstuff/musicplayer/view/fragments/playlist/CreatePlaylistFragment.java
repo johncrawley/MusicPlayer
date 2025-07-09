@@ -131,7 +131,7 @@ public class CreatePlaylistFragment extends DialogFragment {
 
     private void setupCancelButton(View parentView){
         Button cancelButton = parentView.findViewById(R.id.cancelDialogButton);
-        cancelButton.setOnClickListener((View v)->dismiss());
+        cancelButton.setOnClickListener((View v) -> dismiss());
     }
 
 

@@ -10,14 +10,9 @@ import static com.jacstuff.musicplayer.view.fragments.Utils.getBoolean;
 import static com.jacstuff.musicplayer.view.fragments.Utils.getLong;
 import static com.jacstuff.musicplayer.view.fragments.Utils.putLong;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +20,6 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.jacstuff.musicplayer.MainActivity;
@@ -93,17 +87,23 @@ public class PlaylistOptionsFragment extends DialogFragment {
         if(selectedPlaylistName == null){
             return;
         }
-        dismissAfterPause();
         AlertHelper.showDialogForPlaylist(getContext(),
                 R.string.clear_tracks_confirm_dialog_title,
                 R.string.clear_tracks_confirm_dialog_text,
                 selectedPlaylistName,
-                this::clearTracksFromPlaylist);
+                this::clearTracksFromPlaylistAndDismiss);
     }
 
 
-    private void clearTracksFromPlaylist(){
+    private void clearTracksFromPlaylistAndDismiss(){
         getMediaPlayerService().ifPresent( mps -> mps.getPlaylistHelper().clearTracksFromPlaylist(selectedPlaylistId));
+        getMain().ifPresent( ma -> ma.toast(R.string.toast_playlist_tracks_cleared));
+        dismiss();
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ " + msg);
     }
 
 
@@ -163,13 +163,15 @@ public class PlaylistOptionsFragment extends DialogFragment {
     private Optional<MediaPlayerService> getMediaPlayerService(){
         MainActivity mainActivity = (MainActivity) getActivity();
         if(mainActivity == null){
+            log("getMPS() main activity is null!");
             return Optional.empty();
         }
-        var mps = mainActivity.getMediaPlayerService();
-
-        return mps == null ? Optional.empty() : Optional.of(mainActivity.getMediaPlayerService());
+        return Optional.of(mainActivity.getMediaPlayerService());
     }
 
 
+    private Optional<MainActivity> getMain(){
+        return Optional.ofNullable((MainActivity) getActivity());
+    }
 
 }

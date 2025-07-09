@@ -150,6 +150,11 @@ public class PlaylistManagerImpl implements PlaylistManager {
     @Override
     public void clearTracksFromPlaylist(long playlistId, PlaylistViewNotifier playlistViewNotifier){
         playlistItemRepository.deleteAllPlaylistItems(playlistId);
+        wipeCurrentPlaylistIfIdIs(playlistId, playlistViewNotifier);
+    }
+
+
+    public void wipeCurrentPlaylistIfIdIs(long playlistId, PlaylistViewNotifier playlistViewNotifier){
         if(currentPlaylist != null && currentPlaylist.getId() == playlistId){
             tracks.clear();
             unPlayedTracks.clear();
