@@ -27,8 +27,11 @@ import com.jacstuff.musicplayer.service.helpers.PlaylistHelper;
 import com.jacstuff.musicplayer.service.helpers.preferences.PreferencesHelperImpl;
 import com.jacstuff.musicplayer.service.notifications.MediaNotificationManager;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
+import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
@@ -41,6 +44,8 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     private AlbumArtRetriever albumArtRetriever;
     private PreferencesHelperImpl preferencesHelper;
     private final ListIndexManager listIndexManager;
+    private Optional<PlayerViewHelper> playerViewHelper;
+
 
     public MediaPlayerService() {
         listIndexManager = new ListIndexManager();
@@ -105,6 +110,17 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     }
 
 
+    private Optional<PlayerViewHelper> getPlayerViewHelper(){
+        if(playerViewHelper.isEmpty()){
+            if(mainActivity == null){
+                return Optional.empty();
+            }
+            playerViewHelper = Optional.ofNullable(mainActivity.getPlayerViewHelper());
+        }
+        return playerViewHelper;
+    }
+
+
     public void checkPath(){
         if(preferencesHelper != null && preferencesHelper.hasPathChanged()){
             refreshTrackDataFromFilesystem();
@@ -151,7 +167,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     private void setCurrentTrackAndUpdatePlayerViewVisibility(Runnable runnable){
         if(!isCurrentTrackEmpty()){
-            mainActivity.showPlayerViews();
+            playerViewHelperDo(p -> p.setVisibilityOnPlayerViews(View.VISIBLE));
             return;
         }
         if(getPlaylistManager().hasAnyTracks()){
@@ -168,6 +184,11 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
                 mainActivity.notifyMediaPlayerStopped();
             }
         }
+    }
+
+
+    private void playerViewHelperDo(Consumer<PlayerViewHelper> consumer){
+        getPlayerViewHelper().ifPresent(consumer);
     }
 
 
@@ -289,7 +310,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public void updateAlbumsView(){ mainActivity.updateAlbumsList(getPlaylistManager().getAlbumNames(), getPlaylistManager().getCurrentArtistName().orElse("")); }
 
     public void setBlankTrackInfoOnMainView(){
-        mainActivity.setBlankTrackInfo();
+        mainActivity.getPlayerViewHelper().setBlankTrackInfo();
     }
 
     public void displayPlaylistRefreshedMessage(int numberOfNewTracks){ mainActivity.displayPlaylistRefreshedMessage(numberOfNewTracks); }

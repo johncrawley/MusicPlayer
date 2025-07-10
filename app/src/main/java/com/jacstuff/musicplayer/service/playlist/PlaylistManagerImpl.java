@@ -82,19 +82,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
     }
 
 
-    public void enableShuffle(){
-        isShuffleEnabled = true;
-        unPlayedTracks = new ArrayList<>(tracks);
-    }
-
-
     public boolean hasAnyTracks(){
         return tracks != null && !tracks.isEmpty();
-    }
-
-
-    public void disableShuffle(){
-        isShuffleEnabled = false;
     }
 
 

@@ -261,7 +261,6 @@ public class MainActivity extends AppCompatActivity {
         return playerViewHelper;
     }
 
-    public void showPlayerViews(){playerViewHelper.setVisibilityOnPlayerViews(View.VISIBLE);}
 
     public void setBlankTrackInfo(){ playerViewHelper.setBlankTrackInfo();}
 

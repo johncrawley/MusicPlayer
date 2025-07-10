@@ -56,8 +56,6 @@ public interface PlaylistManager {
     int getCurrentIndexOf(Track track);
     int getCurrentIndex();
 
-    void enableShuffle();
-    void disableShuffle();
     void setShuffleState(boolean isEnabled);
     boolean isShuffleEnabled();
 
