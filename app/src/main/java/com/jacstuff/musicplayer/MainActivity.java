@@ -36,7 +36,6 @@ import android.widget.Toast;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.helpers.preferences.PrefKey;
-import com.jacstuff.musicplayer.service.helpers.preferences.PreferencesHelper;
 import com.jacstuff.musicplayer.service.helpers.preferences.PreferencesHelperImpl;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
@@ -262,15 +261,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void setBlankTrackInfo(){ playerViewHelper.setBlankTrackInfo();}
-
-    public void notifyMediaPlayerStopped(){ playerViewHelper.notifyMediaPlayerStopped();}
-
     public void hideTrackSeekBar(){ playerViewHelper.hideTrackSeekBar();}
 
-    public void notifyMediaPlayerPaused(){ playerViewHelper.notifyMediaPlayerPaused();}
-
-    public void notifyMediaPlayerPlaying(){playerViewHelper.notifyMediaPlayerPlaying(); }
 
     public void setSelectedTrack(Track track){ this.selectedTrack = track; }
 
@@ -388,6 +380,7 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy(){
         super.onDestroy();
         tabHelper.onDestroy();
+        playerViewHelper.onDestroy();
     }
 
 

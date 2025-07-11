@@ -142,7 +142,7 @@ public class CustomNotificationManager {
     private void resetErrorStatusAfterDelay(){
         int numberOfMillisecondsBeforeResettingStatus = 9_000;
         hasErrorNotificationBeenReplaced.set(true);
-        if(!mediaPlayerService.hasEncounteredError()){
+        if(mediaPlayerService.hasNotEncounteredError()){
             return;
         }else{
             hasErrorNotificationBeenReplaced.set(false);

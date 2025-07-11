@@ -1,7 +1,10 @@
 package com.jacstuff.musicplayer.service;
 
+import static android.view.View.INVISIBLE;
 import static com.jacstuff.musicplayer.service.helpers.preferences.PrefKey.IS_SHUFFLE_ENABLED;
 import static com.jacstuff.musicplayer.service.notifications.MediaNotificationManager.NOTIFICATION_ID;
+import static com.jacstuff.musicplayer.view.utils.PlayerViewHelper.MediaPlayerNotification.MEDIA_PLAYER_PAUSED;
+import static com.jacstuff.musicplayer.view.utils.PlayerViewHelper.MediaPlayerNotification.MEDIA_PLAYER_STOPPED;
 
 import android.Manifest;
 import android.app.Notification;
@@ -30,8 +33,6 @@ import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
 
 public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
@@ -44,7 +45,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     private AlbumArtRetriever albumArtRetriever;
     private PreferencesHelperImpl preferencesHelper;
     private final ListIndexManager listIndexManager;
-    private Optional<PlayerViewHelper> playerViewHelper;
+    private PlayerViewHelper playerViewHelper;
 
 
     public MediaPlayerService() {
@@ -80,6 +81,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         mediaPlayerHelper.onDestroy();
         mediaNotificationManager.dismissNotification();
         mediaNotificationManager = null;
+        mediaPlayerHelper = null;
     }
 
 
@@ -105,19 +107,9 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public void setActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         playlistHelper.onSetActivity(mainActivity);
+        playerViewHelper = mainActivity.getPlayerViewHelper();
         setShuffleState(preferencesHelper.getBoolean(IS_SHUFFLE_ENABLED));
         checkPath();
-    }
-
-
-    private Optional<PlayerViewHelper> getPlayerViewHelper(){
-        if(playerViewHelper.isEmpty()){
-            if(mainActivity == null){
-                return Optional.empty();
-            }
-            playerViewHelper = Optional.ofNullable(mainActivity.getPlayerViewHelper());
-        }
-        return playerViewHelper;
     }
 
 
@@ -167,28 +159,23 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     private void setCurrentTrackAndUpdatePlayerViewVisibility(Runnable runnable){
         if(!isCurrentTrackEmpty()){
-            playerViewHelperDo(p -> p.setVisibilityOnPlayerViews(View.VISIBLE));
+            playerViewHelper.setVisibilityOnPlayerViews(View.VISIBLE);
             return;
         }
         if(getPlaylistManager().hasAnyTracks()){
             runnable.run();
             return;
         }
-        mainActivity.getPlayerViewHelper().setVisibilityOnPlayerViews(View.INVISIBLE);
+        playerViewHelper.setVisibilityOnPlayerViews(INVISIBLE);
     }
 
 
     public void updateMainViewOfStop(boolean shouldUpdateMainView){
         if(shouldUpdateMainView) {
-            if(mainActivity != null) {
-                mainActivity.notifyMediaPlayerStopped();
+            if(playerViewHelper != null) {
+                playerViewHelper.notify(MEDIA_PLAYER_STOPPED);
             }
         }
-    }
-
-
-    private void playerViewHelperDo(Consumer<PlayerViewHelper> consumer){
-        getPlayerViewHelper().ifPresent(consumer);
     }
 
 
@@ -254,7 +241,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     public void enableStopAfterTrackFinishes(){mediaPlayerHelper.enabledStopAfterTrackFinishes();}
 
-    public boolean hasEncounteredError(){ return mediaPlayerHelper.hasEncounteredError();}
+    public boolean hasNotEncounteredError(){ return mediaPlayerHelper.hasEncounteredError();}
 
     public String getCurrentUrl(){ return mediaPlayerHelper.getCurrentUrl(); }
 
@@ -282,40 +269,53 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     public void notifyMainViewThatFileDoesNotExist(Track track){ mainActivity.toastFileDoesNotExistError(track);}
 
-    public void notifyViewOfMediaPlayerStop(){ mainActivity.notifyMediaPlayerStopped(); }
+    public void notifyViewOfMediaPlayerStop(){ playerViewHelper.notify(MEDIA_PLAYER_STOPPED); }
 
     @Override
     public void setArt(Bitmap albumArt){
         mainActivity.setAlbumArt(albumArt);
     }
 
+
     public void setBlankAlbumArt(){
         mainActivity.setBlankAlbumArt();
     }
 
+
     public Bitmap getAlbumArt(){ return albumArtRetriever.getCurrentAlbumArt();}
+
 
     public void setElapsedTimeOnView(int elapsedTime){ mainActivity.setElapsedTime(elapsedTime);}
 
+
     public void notifyMainViewOfMediaPlayerPlaying(){
-        mainActivity.notifyMediaPlayerPlaying();
+        playerViewHelper.notify(MEDIA_PLAYER_PAUSED);
     }
+
 
     public void displayErrorOnMainView(Track track){
         mainActivity.displayError(track);
     }
 
+
     public void updateArtistView(){mainActivity.updateArtistsList(getPlaylistManager().getArtistNames()); }
 
-    public void updateAlbumsView(){ mainActivity.updateAlbumsList(getPlaylistManager().getAlbumNames(), getPlaylistManager().getCurrentArtistName().orElse("")); }
+
+    public void updateAlbumsView(){
+        var playlistManager = getPlaylistManager();
+        mainActivity.updateAlbumsList(playlistManager.getAlbumNames(), playlistManager.getCurrentArtistName().orElse("")); }
+
 
     public void setBlankTrackInfoOnMainView(){
         mainActivity.getPlayerViewHelper().setBlankTrackInfo();
     }
 
+
     public void displayPlaylistRefreshedMessage(int numberOfNewTracks){ mainActivity.displayPlaylistRefreshedMessage(numberOfNewTracks); }
 
+
     public AlbumArtRetriever getAlbumArtRetriever(){ return albumArtRetriever;}
+
 
     public void updateNotification(){ mediaNotificationManager.updateNotification();}
 
@@ -446,7 +446,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public void pause(){
         mediaPlayerHelper.pauseMediaPlayer();
         mediaNotificationManager.updateNotification();
-        mainActivity.notifyMediaPlayerPaused();
+        playerViewHelper.notify(MEDIA_PLAYER_PAUSED);
         mediaPlayerHelper.cancelScheduledStoppageOfTrack();
     }
 

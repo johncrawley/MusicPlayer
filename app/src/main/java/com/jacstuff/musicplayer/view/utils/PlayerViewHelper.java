@@ -28,13 +28,20 @@ public class PlayerViewHelper {
     private boolean isTrackTimeSeekBarHeld = false;
     private String totalTrackTime = "0:00";
     private ViewGroup playerButtonPanel;
-    private final MainActivity mainActivity;
+    private MainActivity mainActivity;
     private MediaPlayerService mediaPlayerService;
+    public enum MediaPlayerNotification {
+        MEDIA_PLAYER_PLAYING, MEDIA_PLAYER_STOPPED, MEDIA_PLAYER_PAUSED, SHUFFLE_ENABLED, SHUFFLE_DISABLED};
 
 
     public PlayerViewHelper(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         setupViews();
+    }
+
+
+    public void onDestroy(){
+        mainActivity = null;
     }
 
 
@@ -232,7 +239,6 @@ public class PlayerViewHelper {
         setShuffleState(false);
     }
 
-
     public void notifyNumberOfTracks(int numberOfTracks){
         if(turnShuffleOnButton == null || turnShuffleOffButton == null){
             return;
@@ -302,7 +308,22 @@ public class PlayerViewHelper {
     }
 
 
-    public void notifyMediaPlayerPlaying(){
+
+    public void notify(MediaPlayerNotification notification){
+        if(mainActivity == null){
+            return;
+        }
+        switch (notification){
+            case SHUFFLE_ENABLED -> notifyShuffleEnabled();
+            case SHUFFLE_DISABLED -> notifyShuffleDisabled();
+            case MEDIA_PLAYER_PLAYING -> notifyMediaPlayerPlaying();
+            case MEDIA_PLAYER_PAUSED -> notifyMediaPlayerPaused();
+            case MEDIA_PLAYER_STOPPED -> notifyMediaPlayerStopped();
+        }
+    }
+
+
+    private void notifyMediaPlayerPlaying(){
         mainActivity.runOnUiThread(()->{
             playButton.setVisibility(GONE);
             pauseButton.setVisibility(VISIBLE);
@@ -311,7 +332,7 @@ public class PlayerViewHelper {
     }
 
 
-    public void notifyMediaPlayerStopped(){
+    private void notifyMediaPlayerStopped(){
         mainActivity.runOnUiThread(()->{
             playButton.setVisibility(VISIBLE);
             pauseButton.setVisibility(GONE);
@@ -321,7 +342,7 @@ public class PlayerViewHelper {
     }
 
 
-    public void notifyMediaPlayerPaused(){
+    private void notifyMediaPlayerPaused(){
         mainActivity.runOnUiThread(()->{
             playButton.setVisibility(VISIBLE);
             pauseButton.setVisibility(GONE);
@@ -329,7 +350,7 @@ public class PlayerViewHelper {
     }
 
 
-    public void notifyShuffleEnabled(){
+    private void notifyShuffleEnabled(){
         turnShuffleOnButton.setVisibility(GONE);
         turnShuffleOffButton.setVisibility(VISIBLE);
     }
@@ -343,7 +364,7 @@ public class PlayerViewHelper {
     }
 
 
-    public void notifyShuffleDisabled(){
+    private void notifyShuffleDisabled(){
         turnShuffleOnButton.setVisibility(VISIBLE);
         turnShuffleOffButton.setVisibility(GONE);
     }

@@ -132,9 +132,9 @@ public class MediaNotificationManager {
     private void resetErrorStatusAfterDelay(){
         int numberOfMillisecondsBeforeResettingStatus = 9_000;
         hasErrorNotificationBeenReplaced.set(true);
-        if(!mediaPlayerService.hasEncounteredError()){
+        if(mediaPlayerService.hasNotEncounteredError()){
             return;
-        }else{
+        } else{
             hasErrorNotificationBeenReplaced.set(false);
         }
         String status = mediaPlayerService.getReadyStatusStr();
