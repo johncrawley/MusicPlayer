@@ -124,7 +124,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         Track currentTrack = mediaPlayerHelper.getCurrentTrack();
         if(currentTrack != null){
             mainActivity.setTrackDetails(currentTrack, 0);
-            mainActivity.setElapsedTime(mediaPlayerHelper.getElapsedTime());
+            playerViewHelper.setElapsedTime(mediaPlayerHelper.getElapsedTime());
             mainActivity.setAlbumArt(albumArtRetriever.getCurrentAlbumArt());
         }
         updateListViews(playlistManager);
@@ -285,7 +285,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public Bitmap getAlbumArt(){ return albumArtRetriever.getCurrentAlbumArt();}
 
 
-    public void setElapsedTimeOnView(int elapsedTime){ mainActivity.setElapsedTime(elapsedTime);}
+    public void setElapsedTimeOnView(int elapsedTime){ playerViewHelper.setElapsedTime(elapsedTime);}
 
 
     public void notifyMainViewOfMediaPlayerPlaying(){
@@ -307,7 +307,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
 
     public void setBlankTrackInfoOnMainView(){
-        mainActivity.getPlayerViewHelper().setBlankTrackInfo();
+        playerViewHelper.setBlankTrackInfo();
     }
 
 

@@ -276,8 +276,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void resetElapsedTime(){playerViewHelper.resetElapsedTime();}
 
-    public void setElapsedTime(long elapsedMilliseconds){playerViewHelper.setElapsedTime(elapsedMilliseconds);}
-
     public void deselectCurrentTrack() { sendMessage(DESELECT_CURRENT_TRACK_ITEM); }
 
     public void disableViewForAWhile(View view){disableViewForAWhile(view, 700);}

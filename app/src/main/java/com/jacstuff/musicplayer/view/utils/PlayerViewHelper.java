@@ -31,7 +31,7 @@ public class PlayerViewHelper {
     private MainActivity mainActivity;
     private MediaPlayerService mediaPlayerService;
     public enum MediaPlayerNotification {
-        MEDIA_PLAYER_PLAYING, MEDIA_PLAYER_STOPPED, MEDIA_PLAYER_PAUSED, SHUFFLE_ENABLED, SHUFFLE_DISABLED};
+        MEDIA_PLAYER_PLAYING, MEDIA_PLAYER_STOPPED, MEDIA_PLAYER_PAUSED, SHUFFLE_ENABLED, SHUFFLE_DISABLED}
 
 
     public PlayerViewHelper(MainActivity mainActivity){
@@ -47,7 +47,7 @@ public class PlayerViewHelper {
 
     public void setMediaPlayerService(MediaPlayerService mediaPlayerService){
         this.mediaPlayerService = mediaPlayerService;
-        setupShuffleButtons(mediaPlayerService);
+        setupShuffleButtons();
     }
 
 
@@ -64,26 +64,37 @@ public class PlayerViewHelper {
     }
 
 
-
     public void pauseTrack() {
+        if(mainActivity == null){
+            return;
+        }
         mainActivity.disableViewForAWhile(playButton, 300);
         mediaPlayerService.pause();
     }
 
 
     public void previousTrack(){
+        if(mainActivity == null){
+            return;
+        }
         mainActivity.disableViewForAWhile(previousTrackButton);
         mediaPlayerService.loadPreviousTrack();
     }
 
 
     public void nextTrack(){
+        if(mainActivity == null){
+            return;
+        }
         mainActivity.disableViewForAWhile(nextTrackButton);
         mediaPlayerService.loadNextTrack();
     }
 
 
     public void updateViews(int numberOfTracks, boolean isCurrentTrackNull){
+        if(mainActivity == null){
+            return;
+        }
         if(numberOfTracks == 0 && isCurrentTrackNull){
             setVisibilityOnPlayerViews(View.INVISIBLE);
             return;
@@ -94,7 +105,7 @@ public class PlayerViewHelper {
     }
 
 
-    public void setSeekAndShuffleButtonsVisibility(int numberOfTracks){
+    private void setSeekAndShuffleButtonsVisibility(int numberOfTracks){
         if(numberOfTracks < 2){
             nextTrackButton.setVisibility(View.INVISIBLE);
             previousTrackButton.setVisibility(View.INVISIBLE);
@@ -115,6 +126,9 @@ public class PlayerViewHelper {
 
 
     public void setTrackDetails(final Track track, int elapsedTime){
+        if(mainActivity == null){
+            return;
+        }
         mainActivity.runOnUiThread(()-> {
             playerButtonPanel.setVisibility(VISIBLE);
             String titleText = track.getTitle();
@@ -135,6 +149,9 @@ public class PlayerViewHelper {
 
 
     public void setElapsedTime(long elapsedMilliseconds){
+        if(mainActivity == null){
+            return;
+        }
         setElapsedTime(TimeConverter.convert(elapsedMilliseconds));
         mainActivity.runOnUiThread(()->{
             if(!isTrackTimeSeekBarHeld){
@@ -145,6 +162,9 @@ public class PlayerViewHelper {
 
 
     public void setElapsedTime(String elapsedTime){
+        if(mainActivity == null){
+            return;
+        }
         if(!isTrackTimeSeekBarHeld){
             setElapsedTimeOnView(elapsedTime);
         }
@@ -222,7 +242,7 @@ public class PlayerViewHelper {
     }
 
 
-    private void setupShuffleButtons(MediaPlayerService mediaPlayerService){
+    private void setupShuffleButtons(){
         turnShuffleOnButton =  setupImageButton(R.id.turnShuffleOnButton, this::enableShuffle);
         turnShuffleOffButton = setupImageButton(R.id.turnShuffleOffButton, this::disableShuffle);
     }
@@ -240,10 +260,10 @@ public class PlayerViewHelper {
     }
 
     public void notifyNumberOfTracks(int numberOfTracks){
-        if(turnShuffleOnButton == null || turnShuffleOffButton == null){
-            return;
-        }
-        if(numberOfTracks < 2){
+        if(mainActivity != null
+                && turnShuffleOnButton  != null
+                && turnShuffleOffButton != null
+                && numberOfTracks < 2){
             turnShuffleOffButton.setVisibility(View.INVISIBLE);
             turnShuffleOnButton.setVisibility(View.INVISIBLE);
         }
@@ -288,6 +308,9 @@ public class PlayerViewHelper {
 
 
     public void setVisibilityOnPlayerViews(int visibility){
+        if(mainActivity == null){
+            return;
+        }
         mainActivity.runOnUiThread(()->{
             trackTitle.setVisibility(visibility);
             trackAlbum.setVisibility(visibility);
@@ -299,14 +322,19 @@ public class PlayerViewHelper {
 
 
     public void setBlankTrackInfo(){
+        if(mainActivity == null){
+            return;
+        }
         mainActivity.runOnUiThread(()-> trackTitle.setText(""));
     }
 
 
     public void hideTrackSeekBar(){
+        if(mainActivity == null){
+            return;
+        }
         trackTimeSeekBar.setVisibility(View.INVISIBLE);
     }
-
 
 
     public void notify(MediaPlayerNotification notification){
@@ -357,6 +385,9 @@ public class PlayerViewHelper {
 
 
     public void setShuffleState(boolean isEnabled){
+        if(mainActivity == null){
+            return;
+        }
         mainActivity.runOnUiThread(()->{
             turnShuffleOnButton.setVisibility(isEnabled ? GONE : VISIBLE);
             turnShuffleOffButton.setVisibility(isEnabled ? VISIBLE : GONE);
