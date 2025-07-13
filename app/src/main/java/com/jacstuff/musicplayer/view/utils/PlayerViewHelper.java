@@ -15,10 +15,12 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Track;
+import com.jacstuff.musicplayer.service.helpers.MediaPlayerHelper;
 import com.jacstuff.musicplayer.view.fragments.options.StopOptionsFragment;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class PlayerViewHelper {
 
@@ -51,16 +53,20 @@ public class PlayerViewHelper {
     }
 
 
+
     private void setupViews(){
         setupPlayerButtonPanelViews();
         initTrackDetailViews();
-        setupTrackTimeSeekBar();
+        initTrackTimeSeekBar();
         resetElapsedTime();
     }
 
 
     public void playTrack() {
-        mediaPlayerService.playTrack();
+       var mediaPlayerHelper = mediaPlayerService.getMediaPlayerHelper();
+       if(mediaPlayerHelper != null){
+           mediaPlayerHelper.playTrack();
+       }
     }
 
 
@@ -101,7 +107,8 @@ public class PlayerViewHelper {
         }
         setVisibilityOnPlayerViews(VISIBLE);
         setSeekAndShuffleButtonsVisibility(numberOfTracks);
-        setPlayPauseAndTrackSeekBarVisibility();
+        setPlayPauseVisibility();
+        setSeekBarVisibility();
     }
 
 
@@ -181,7 +188,7 @@ public class PlayerViewHelper {
     }
 
 
-    private void setupTrackTimeSeekBar(){
+    private void initTrackTimeSeekBar(){
         trackTimeSeekBar = mainActivity.findViewById(R.id.trackTimeSeekBar);
         trackTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -205,6 +212,7 @@ public class PlayerViewHelper {
                 setPlayerControlsEnabled(true);
             }
         });
+
     }
 
 
@@ -287,16 +295,34 @@ public class PlayerViewHelper {
     }
 
 
-    private void setPlayPauseAndTrackSeekBarVisibility(){
+    private void setPlayPauseVisibility(){
         if(mediaPlayerService.isPlaying()){
             playButton.setVisibility(GONE);
             pauseButton.setVisibility(VISIBLE);
-            trackTimeSeekBar.setVisibility(VISIBLE);
             return;
         }
         playButton.setVisibility(VISIBLE);
         pauseButton.setVisibility(GONE);
-        trackTimeSeekBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void setSeekBarVisibility(){
+        getMediaPlayerHelper().ifPresent(mph -> {
+            if(mph.isPaused() || mph.isPlaying()){
+                trackTimeSeekBar.setVisibility(VISIBLE);
+                setElapsedTime(mph.getElapsedTime());
+                return;
+            }
+            trackTimeSeekBar.setVisibility(View.INVISIBLE);
+
+        });
+    }
+
+
+    private Optional<MediaPlayerHelper> getMediaPlayerHelper(){
+        if(mediaPlayerService == null){
+            return Optional.empty();
+        }
+        return Optional.ofNullable(mediaPlayerService.getMediaPlayerHelper());
     }
 
 

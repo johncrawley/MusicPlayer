@@ -372,7 +372,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
             currentState = MediaPlayerState.PLAYING;
             mediaPlayerService.notifyMainViewOfMediaPlayerPlaying();
         }catch (IOException e){
-            e.printStackTrace();
+            printError(e);
             onError();
             hasEncounteredError = true;
             mediaPlayerService.displayErrorOnMainView(currentTrack);
@@ -380,6 +380,10 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
             isPreparingTrack.set(false);
             mediaPlayerService.updateNotification();
         }
+    }
+
+    private void printError(Exception e){
+        e.printStackTrace();
     }
 
 

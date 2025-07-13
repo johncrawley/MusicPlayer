@@ -4,6 +4,7 @@ import static android.view.View.INVISIBLE;
 import static com.jacstuff.musicplayer.service.helpers.preferences.PrefKey.IS_SHUFFLE_ENABLED;
 import static com.jacstuff.musicplayer.service.notifications.MediaNotificationManager.NOTIFICATION_ID;
 import static com.jacstuff.musicplayer.view.utils.PlayerViewHelper.MediaPlayerNotification.MEDIA_PLAYER_PAUSED;
+import static com.jacstuff.musicplayer.view.utils.PlayerViewHelper.MediaPlayerNotification.MEDIA_PLAYER_PLAYING;
 import static com.jacstuff.musicplayer.view.utils.PlayerViewHelper.MediaPlayerNotification.MEDIA_PLAYER_STOPPED;
 
 import android.Manifest;
@@ -118,6 +119,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
             refreshTrackDataFromFilesystem();
         }
     }
+
 
 
     public void updateViews(PlaylistManager playlistManager){
@@ -251,7 +253,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         return mediaPlayerHelper.isPlaying();
     }
 
-    public void playTrack(){ mediaPlayerHelper.playTrack(); }
 
     public void notifyViewOfAlbumNotLoaded(String albumName){ mainActivity.notifyAlbumNotLoaded(albumName);}
 
@@ -289,7 +290,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
 
     public void notifyMainViewOfMediaPlayerPlaying(){
-        playerViewHelper.notify(MEDIA_PLAYER_PAUSED);
+        playerViewHelper.notify(MEDIA_PLAYER_PLAYING);
     }
 
 
