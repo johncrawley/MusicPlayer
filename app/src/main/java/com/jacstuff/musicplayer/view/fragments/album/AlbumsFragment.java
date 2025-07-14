@@ -70,7 +70,7 @@ public class AlbumsFragment extends Fragment {
     private void initViews(View parentView){
         recyclerView = parentView.findViewById(R.id.albumsRecyclerView);
         noAlbumsFoundTextView = parentView.findViewById(R.id.noAlbumsFoundTextView);
-        ButtonMaker.createImageButton(parentView, R.id.showAllAlbumsButton, this::loadAllAlbumNames);
+        ButtonMaker.initImageButton(parentView, R.id.showAllAlbumsButton, this::loadAllAlbumNames);
         showAllAlbumsButtonLayout = parentView.findViewById(R.id.showAllAlbumsButtonLayout);
         albumArtistText = parentView.findViewById(R.id.albumsArtistNameTextView);
     }

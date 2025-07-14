@@ -57,40 +57,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-
         />
 
-
-    <LinearLayout
-        android:id="@+id/addTracksToPlaylistButtonOuterLayout"
+    <include layout="@layout/add_button_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="@dimen/add_button_margin"
-        android:padding="1dp"
-        android:background="@drawable/add_image_button_outer_layout_background"
-        >
-
-        <LinearLayout
-            android:id="@+id/addTracksToPlaylistButtonLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@drawable/add_image_button_layout_background"
-            >
-            <ImageButton
-                android:id="@+id/addTracksToPlaylistButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="1dp"
-                android:contentDescription="@string/add_tracks_to_playlist_icon_content_description"
-                android:src="?attr/add_button"
-                android:background="?selectableItemBackgroundBorderless" />
-
-        </LinearLayout>
-    </LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

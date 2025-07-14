@@ -29,7 +29,6 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.ListIndexManager;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
-import com.jacstuff.musicplayer.service.helpers.preferences.PrefKey;
 import com.jacstuff.musicplayer.view.fragments.AlertHelper;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
@@ -150,7 +149,7 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void setupButtons(View parentView){
-        ButtonMaker.createImageButton(parentView, R.id.addPlaylistButton, this::startAddPlaylistFragment);
+        ButtonMaker.initImageButton(parentView, R.id.addButton, this::startAddPlaylistFragment);
     }
 
 

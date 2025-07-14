@@ -15,7 +15,7 @@ public class ButtonMaker {
         return button;
     }
 
-    public static ImageButton createImageButton(View parentView, int id, Runnable onClickAction){
+    public static ImageButton initImageButton(View parentView, int id, Runnable onClickAction){
         ImageButton button = parentView.findViewById(id);
         if(button == null){
             return null;

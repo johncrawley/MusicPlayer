@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/addButtonOuterLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:layout_margin="@dimen/add_button_margin"
+    android:padding="1dp"
+    android:background="@drawable/add_image_button_outer_layout_background"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/addButtonLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/add_image_button_layout_background"
+        >
+        <ImageButton
+            android:id="@+id/addButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:contentDescription="@string/add_tracks_to_playlist_icon_content_description"
+            android:src="?attr/add_button"
+            android:background="?selectableItemBackgroundBorderless" />
+
+    </LinearLayout>
+</LinearLayout>
