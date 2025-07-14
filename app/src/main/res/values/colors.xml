@@ -49,37 +49,35 @@
     <color name="album_art_background">#2A2A2A</color>
     <color name="album_art_border">#000</color>
 
-
     <!-- default day -->
-    <color name="panel_background_day">#C8E6C9</color>
-    <color name="background_day">#C8E6C9</color>
+    <color name="primary_color_day">#4CAF50</color>
+    <color name="panel_background_day">#EDEDED</color>
+    <color name="dialog_background_day">#EDEDED</color>
+    <color name="background_day">#EDEDED</color>
     <color name="track_info_background_day">#A6A5A5</color>
-    <color name="primary_color_day">#A5D6A7</color>
     <color name="text_day">#2A2A2A</color>
     <color name="list_item_focused_day">#A5D6A7</color>
     <color name="button_text_day">#2C2C2C</color>
-    <color name="primary_color_dark_day">#C8E6C9</color>
+    <color name="primary_color_dark_day">#388E3C</color>
     <color name="functions_panel_background_day">#C3C2C2</color>
     <color name="functions_panel_border_day">#8A8A8A</color>
     <color name="image_button_tint_day">#000000</color>
 
-    <color name="default_dialog_background_day">#C8E6C9</color>
     <color name="dialog_text_color_day">#595959</color>
-    <color name="list_background_day">#D8EDD9</color>
+    <color name="list_background_day">#F4F4F4</color>
 
-    <color name="toggle_button_background_day">#C8E6C9</color>
+    <color name="toggle_button_background_day">#DFE0DF</color>
     <color name="toggle_button_text_checked_day">#43A047</color>
     <color name="toggle_button_edge_checked_day">#43A047</color>
     <color name="toggle_button_text_unchecked_day">#878686</color>
     <color name="toggle_button_edge_unchecked_day">#A6A5A5</color>
 
-    <color name="tab_layout_background_day">#A5D6A7</color>
-    <color name="tab_text_day">#9D9C9C</color>
-    <color name="tab_text_selected_day">#2A2A2A</color>
+    <color name="tab_layout_background_day">#D5D8DB</color>
+    <color name="tab_text_day">#767676</color>
+    <color name="tab_text_selected_day">#43A047</color>
 
     <color name="album_art_background_day">#C5C4C4</color>
     <color name="album_art_border_day">#8E8E8E</color>
-
 
     <color name="settings_primary_color_dark_day">#626262</color>
 

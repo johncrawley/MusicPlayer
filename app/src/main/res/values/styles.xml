@@ -37,7 +37,7 @@
         <item name="toggle_button_text_checked">@color/toggle_button_text_checked_day</item>
         <item name="toggle_button_text_unchecked">@color/toggle_button_text_unchecked_day</item>
 
-        <item name="dialog_background_color">@color/default_dialog_background_day</item>
+        <item name="dialog_background_color">@color/dialog_background_day</item>
 
         <item name="play_button">@drawable/ic_play_light</item>
         <item name="pause_button">@drawable/ic_pause_light</item>
@@ -59,7 +59,7 @@
         <item name="album_art_border">@color/album_art_border_day</item>
 
 
-        <item name="android:windowLightStatusBar">true</item>
+        <!-- <item name="android:windowLightStatusBar">true</item> -->
 
         <item name="alert_warning_drawable">@drawable/ic_warning_light</item>
     </style>
