@@ -4,11 +4,11 @@
         <item name="colorPrimary">@color/primary_color_day</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_day</item>
         <item name="colorAccent">@color/color_accent</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_day</item>
+        <item name="android:buttonTint">@color/primary_color</item>
         <item name="android:windowBackground">@color/background_day</item>
         <item name="android:textColor">@color/text_day</item>
-        <item name="android:buttonTint">@color/primary_color</item>
         <item name="tabTextColor">@color/tab_text</item>
-        <item name="tabSelectedTextColor">@color/tab_text_selected_day</item>
         <item name="buttonTint">#D5D5D5</item>
 
        <!-- <item name="android:navigationBarColor">@android:color/black</item> -->
@@ -89,10 +89,13 @@
 
     <style name="YellowTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_yellow</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark_yellow_day</item>
         <item name="colorAccent">@color/color_accent_yellow</item>
         <item name="android:textColor">@color/text_yellow</item>
         <item name="android:buttonTint">@color/primary_yellow</item>
         <item name="materialButtonStyle">@style/yellowMaterialButtonStyle</item>
+        <item name="toggle_button_edge_checked">@color/toggle_button_edge_checked_day</item>
+        <item name="toggle_button_text_checked">@color/toggle_button_text_checked_day</item>
     </style>
 
     <style name="yellowMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
@@ -103,10 +106,13 @@
 
     <style name="LightYellowTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_light_yellow</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark_light_yellow_day</item>
         <item name="colorAccent">@color/color_accent_light_yellow</item>
         <item name="android:textColor">@color/text_light_yellow</item>
         <item name="android:buttonTint">@color/primary_light_yellow</item>
         <item name="materialButtonStyle">@style/lightYellowMaterialButtonStyle</item>
+        <item name="toggle_button_edge_checked">@color/toggle_button_edge_checked_day</item>
+        <item name="toggle_button_text_checked">@color/toggle_button_text_checked_day</item>
     </style>
 
     <style name="lightYellowMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
@@ -117,10 +123,13 @@
 
     <style name="GoldTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_gold</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark_gold_day</item>
         <item name="colorAccent">@color/color_accent_gold</item>
         <item name="android:textColor">@color/text_gold</item>
         <item name="android:buttonTint">@color/primary_gold</item>
         <item name="materialButtonStyle">@style/goldMaterialButtonStyle</item>
+        <item name="toggle_button_edge_checked">@color/toggle_button_edge_checked_day</item>
+        <item name="toggle_button_text_checked">@color/toggle_button_text_checked_day</item>
     </style>
 
     <style name="goldMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
@@ -131,10 +140,13 @@
 
     <style name="LightGreenTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_light_green</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark_light_green_day</item>
         <item name="colorAccent">@color/color_accent_light_green</item>
         <item name="android:textColor">@color/text_light_green</item>
         <item name="android:buttonTint">@color/primary_light_green</item>
         <item name="materialButtonStyle">@style/lightGreenMaterialButtonStyle</item>
+        <item name="toggle_button_edge_checked">@color/toggle_button_edge_checked_day</item>
+        <item name="toggle_button_text_checked">@color/toggle_button_text_checked_day</item>
     </style>
 
     <style name="lightGreenMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
@@ -145,11 +157,14 @@
 
     <style name="RedTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_red</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark_red_day</item>
         <item name="colorAccent">@color/color_accent_red</item>
         <item name="android:textColor">@color/text_red</item>
         <item name="android:buttonTint">@color/primary_red</item>
         <item name="materialButtonStyle">@style/materialButtonStyleRed</item>
         <item name="list_item_focused">@color/list_item_focused_red</item>
+        <item name="toggle_button_edge_checked">@color/toggle_button_edge_checked_day</item>
+        <item name="toggle_button_text_checked">@color/toggle_button_text_checked_day</item>
     </style>
 
     <style name="materialButtonStyleRed" parent="customMaterialOutlineButtonStyle">
@@ -160,10 +175,13 @@
 
     <style name="RoseTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_rose</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark_rose_day</item>
         <item name="colorAccent">@color/color_accent_rose</item>
         <item name="android:textColor">@color/text_rose</item>
         <item name="android:buttonTint">@color/primary_rose</item>
         <item name="materialButtonStyle">@style/materialButtonStyleRose</item>
+        <item name="toggle_button_edge_checked">@color/toggle_button_edge_checked_day</item>
+        <item name="toggle_button_text_checked">@color/toggle_button_text_checked_day</item>
     </style>
 
 
@@ -174,19 +192,25 @@
 
     <style name="BlueTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark_blue_day</item>
         <item name="colorAccent">@color/color_accent_blue</item>
         <item name="android:textColor">@color/text_blue</item>
         <item name="android:buttonTint">@color/primary_blue</item>
         <item name="materialButtonStyle">@style/materialButtonStyleBlue</item>
+        <item name="toggle_button_edge_checked">@color/toggle_button_edge_checked_day</item>
+        <item name="toggle_button_text_checked">@color/toggle_button_text_checked_day</item>
     </style>
 
 
     <style name="LightBlueTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_light_blue</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark_light_blue_day</item>
         <item name="colorAccent">@color/color_accent_light_blue</item>
         <item name="android:textColor">@color/text_light_blue</item>
         <item name="android:buttonTint">@color/primary_light_blue</item>
         <item name="materialButtonStyle">@style/materialButtonStyleBlue</item>
+        <item name="toggle_button_edge_checked">@color/toggle_button_edge_checked_day</item>
+        <item name="toggle_button_text_checked">@color/toggle_button_text_checked_day</item>
     </style>
 
 
@@ -197,10 +221,13 @@
 
     <style name="GreyTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_grey</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark_grey_day</item>
         <item name="colorAccent">@color/color_accent_grey</item>
         <item name="android:textColor">@color/text_grey</item>
         <item name="android:buttonTint">@color/primary_grey</item>
         <item name="materialButtonStyle">@style/materialButtonStyleGrey</item>
+        <item name="toggle_button_edge_checked">@color/toggle_button_edge_checked_day</item>
+        <item name="toggle_button_text_checked">@color/toggle_button_text_checked_day</item>
     </style>
 
     <style name="materialButtonStyleGrey" parent="customMaterialOutlineButtonStyle">
@@ -211,10 +238,13 @@
 
     <style name="MagentaTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_magenta</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark_magenta_day</item>
         <item name="colorAccent">@color/color_accent_magenta</item>
         <item name="android:textColor">@color/text_magenta</item>
         <item name="android:buttonTint">@color/primary_magenta</item>
         <item name="materialButtonStyle">@style/materialButtonStyleMagenta</item>
+        <item name="toggle_button_edge_checked">@color/toggle_button_edge_checked_day</item>
+        <item name="toggle_button_text_checked">@color/toggle_button_text_checked_day</item>
     </style>
 
     <style name="materialButtonStyleMagenta" parent="customMaterialOutlineButtonStyle">
@@ -225,10 +255,13 @@
 
     <style name="CyanTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_cyan</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark_cyan_day</item>
         <item name="colorAccent">@color/color_accent_cyan</item>
         <item name="android:textColor">@color/text_cyan</item>
         <item name="android:buttonTint">@color/primary_cyan</item>
         <item name="materialButtonStyle">@style/materialButtonStyleCyan</item>
+        <item name="toggle_button_edge_checked">@color/toggle_button_edge_checked_day</item>
+        <item name="toggle_button_text_checked">@color/toggle_button_text_checked_day</item>
     </style>
 
     <style name="materialButtonStyleCyan" parent="customMaterialOutlineButtonStyle">
@@ -242,7 +275,6 @@
         <item name="tint">@color/image_button_tint_day</item>
         <item name="cornerRadius">15dp</item>
     </style>
-
 
 
     <style name="customButtonStyle" parent="Widget.AppCompat.Button">
