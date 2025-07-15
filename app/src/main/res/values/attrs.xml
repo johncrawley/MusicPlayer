@@ -6,11 +6,9 @@
     <attr name="track_info_background"/>
     <attr name="selected_toggle_button"/>
 
-    <attr name="toggle_button_edge_checked"/>
     <attr name="toggle_button_edge_unchecked"/>
     <attr name="toggle_button_background"/>
     <attr name="toggle_button_text"/>
-    <attr name="toggle_button_text_checked"/>
     <attr name="toggle_button_text_unchecked"/>
 
     <attr name="dialog_text_color"/>
