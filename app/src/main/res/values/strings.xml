@@ -33,8 +33,8 @@
     <string name="toggle_button_all_tracks">All Tracks</string>
     <string name="toggle_button_artists">Artists</string>
     <string name="toggle_button_genres">Genres</string>
-    <string name="button_text_decrease_random_tracks">-</string>
-    <string name="button_text_increase_random_tracks">+</string>
+    <string name="button_text_decrease_random_tracks">&#160;-&#160;</string>
+    <string name="button_text_increase_random_tracks">&#160;+&#160;</string>
     <string name="button_add_random_tracks">Add Tracks</string>
 
     <string name="default_playlist_info">All Tracks</string>

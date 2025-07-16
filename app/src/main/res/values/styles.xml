@@ -18,10 +18,10 @@
 
         <!--
         <item name="buttonStyle">@style/customButtonStyle</item>
-        <item name="materialButtonStyle">@style/customMaterialOutlineButtonStyle</item>
-
         -->
-        <item name="android:alertDialogTheme">@style/customAlertDialogStyle</item>
+        <item name="materialButtonStyle">@style/customMaterialButtonStyle</item>
+
+        <!--<item name="android:alertDialogTheme">@style/customAlertDialogStyle</item> -->
         <item name="imageButtonStyle">@style/customImageButtonStyle</item>
         <item name="android:fontFamily">@font/le_patin_magicien_xb7d</item>
         <item name="android:lineSpacingMultiplier">1.3</item>
@@ -79,46 +79,40 @@
     </style>
 
 
-    <style name="customMaterialOutlineButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="android:textColor">@color/button_text_day</item>
+    <style name="customMaterialButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/background_day</item>
         <item name="cornerRadius">15dp</item>
-        <item name="strokeWidth">1dp</item>
         <item name="backgroundColor">@color/color_accent</item>
-        <item name="strokeColor">@color/button_outline</item>
+    </style>
+
+    <style name="customMaterialButtonStyleDarkText" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/material_button_dark_text</item>
+        <item name="cornerRadius">15dp</item>
+        <item name="backgroundColor">@color/color_accent</item>
     </style>
 
 
     <style name="YellowTheme" parent="AppTheme">
-        <item name="colorPrimary">@color/primary_yellow</item>
+        <item name="colorPrimary">@color/primary_yellow_day</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_yellow_day</item>
         <item name="colorAccent">@color/color_accent_yellow</item>
         <item name="android:textColor">@color/text_yellow_day</item>
         <item name="android:buttonTint">@color/primary_yellow</item>
-        <!-- <item name="materialButtonStyle">@style/yellowMaterialButtonStyle</item> -->
         <item name="list_item_focused">@color/list_item_focused_yellow_day</item>
-    </style>
-
-    <style name="yellowMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
-        <item name="backgroundColor">@color/color_accent_yellow</item>
-        <item name="strokeColor">@color/button_outline_yellow</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_yellow_day</item>
     </style>
 
 
     <style name="LightYellowTheme" parent="AppTheme">
-        <item name="colorPrimary">@color/primary_light_yellow</item>
+        <item name="colorPrimary">@color/primary_light_yellow_day</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_light_yellow_day</item>
         <item name="colorAccent">@color/color_accent_light_yellow</item>
-        <item name="android:textColor">@color/text_light_yellow</item>
+        <item name="android:textColor">@color/text_light_yellow_day</item>
         <item name="android:buttonTint">@color/primary_light_yellow</item>
-        <item name="materialButtonStyle">@style/lightYellowMaterialButtonStyle</item>
         <item name="list_item_focused">@color/list_item_focused_light_yellow_day</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_light_yellow_day</item>
+        <item name="materialButtonStyle">@style/customMaterialButtonStyleDarkText</item>
     </style>
-
-    <style name="lightYellowMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
-        <item name="backgroundColor">@color/color_accent_light_yellow</item>
-        <item name="strokeColor">@color/button_outline_light_yellow</item>
-    </style>
-
 
     <style name="GoldTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_gold</item>
@@ -126,31 +120,19 @@
         <item name="colorAccent">@color/color_accent_gold</item>
         <item name="android:textColor">@color/text_gold</item>
         <item name="android:buttonTint">@color/primary_gold</item>
-        <item name="materialButtonStyle">@style/goldMaterialButtonStyle</item>
         <item name="list_item_focused">@color/list_item_focused_gold_day</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_gold_day</item>
     </style>
-
-    <style name="goldMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
-        <item name="backgroundColor">@color/color_accent_gold</item>
-        <item name="strokeColor">@color/button_outline_gold</item>
-    </style>
-
 
     <style name="LightGreenTheme" parent="AppTheme">
-        <item name="colorPrimary">@color/primary_light_green</item>
+        <item name="colorPrimary">@color/primary_light_green_day</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_light_green_day</item>
         <item name="colorAccent">@color/color_accent_light_green</item>
-        <item name="android:textColor">@color/text_light_green</item>
-        <item name="android:buttonTint">@color/primary_light_green</item>
-        <item name="materialButtonStyle">@style/lightGreenMaterialButtonStyle</item>
+        <item name="android:textColor">@color/text_light_green_day</item>
+        <item name="android:buttonTint">@color/primary_light_green_day</item>
         <item name="list_item_focused">@color/list_item_focused_light_green_day</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_light_green_day</item>
     </style>
-
-    <style name="lightGreenMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
-        <item name="backgroundColor">@color/color_accent_light_green</item>
-        <item name="strokeColor">@color/button_outline_light_green</item>
-    </style>
-
 
     <style name="RedTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_red</item>
@@ -158,15 +140,9 @@
         <item name="colorAccent">@color/color_accent_red</item>
         <item name="android:textColor">@color/text_red</item>
         <item name="android:buttonTint">@color/primary_red</item>
-        <item name="materialButtonStyle">@style/materialButtonStyleRed</item>
         <item name="list_item_focused">@color/list_item_focused_red_day</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_red_day</item>
     </style>
-
-    <style name="materialButtonStyleRed" parent="customMaterialOutlineButtonStyle">
-        <item name="backgroundColor">@color/color_accent_red</item>
-        <item name="strokeColor">@color/button_outline_red</item>
-    </style>
-
 
     <style name="RoseTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_rose</item>
@@ -174,58 +150,39 @@
         <item name="colorAccent">@color/color_accent_rose</item>
         <item name="android:textColor">@color/text_rose</item>
         <item name="android:buttonTint">@color/primary_rose</item>
-        <item name="materialButtonStyle">@style/materialButtonStyleRose</item>
         <item name="list_item_focused">@color/list_item_focused_rose_day</item>
-    </style>
-
-
-    <style name="materialButtonStyleRose" parent="customMaterialOutlineButtonStyle">
-        <item name="backgroundColor">@color/color_accent_rose</item>
-        <item name="strokeColor">@color/button_outline_rose</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_rose_day</item>
     </style>
 
     <style name="BlueTheme" parent="AppTheme">
-        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorPrimary">@color/primary_blue_day</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_blue_day</item>
         <item name="colorAccent">@color/color_accent_blue</item>
-        <item name="android:textColor">@color/text_blue</item>
+        <item name="android:textColor">@color/text_blue_day</item>
         <item name="android:buttonTint">@color/primary_blue</item>
-        <item name="materialButtonStyle">@style/materialButtonStyleBlue</item>
         <item name="list_item_focused">@color/list_item_focused_blue_day</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_blue_day</item>
     </style>
-
 
     <style name="LightBlueTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_light_blue</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_light_blue_day</item>
         <item name="colorAccent">@color/color_accent_light_blue</item>
-        <item name="android:textColor">@color/text_light_blue</item>
+        <item name="android:textColor">@color/text_light_blue_day</item>
         <item name="android:buttonTint">@color/primary_light_blue</item>
-        <item name="materialButtonStyle">@style/materialButtonStyleBlue</item>
         <item name="list_item_focused">@color/list_item_focused_light_blue_day</item>
-    </style>
-
-
-    <style name="materialButtonStyleBlue" parent="customMaterialOutlineButtonStyle">
-        <item name="backgroundColor">@color/color_accent_blue</item>
-        <item name="strokeColor">@color/button_outline_blue</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_light_blue_day</item>
     </style>
 
     <style name="GreyTheme" parent="AppTheme">
-        <item name="colorPrimary">@color/primary_grey</item>
+        <item name="colorPrimary">@color/primary_grey_day</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_grey_day</item>
         <item name="colorAccent">@color/color_accent_grey</item>
-        <item name="android:textColor">@color/text_grey</item>
-        <item name="android:buttonTint">@color/primary_grey</item>
-        <item name="materialButtonStyle">@style/materialButtonStyleGrey</item>
+        <item name="android:textColor">@color/text_grey_day</item>
+        <item name="android:buttonTint">@color/button_grey_day</item>
         <item name="list_item_focused">@color/list_item_focused_grey_day</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_grey_day</item>
     </style>
-
-    <style name="materialButtonStyleGrey" parent="customMaterialOutlineButtonStyle">
-        <item name="backgroundColor">@color/color_accent_grey</item>
-        <item name="strokeColor">@color/button_outline_grey</item>
-    </style>
-
 
     <style name="MagentaTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_magenta</item>
@@ -233,15 +190,9 @@
         <item name="colorAccent">@color/color_accent_magenta</item>
         <item name="android:textColor">@color/text_magenta</item>
         <item name="android:buttonTint">@color/primary_magenta</item>
-        <item name="materialButtonStyle">@style/materialButtonStyleMagenta</item>
         <item name="list_item_focused">@color/list_item_focused_magenta_day</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_magenta_day</item>
     </style>
-
-    <style name="materialButtonStyleMagenta" parent="customMaterialOutlineButtonStyle">
-        <item name="backgroundColor">@color/color_accent_magenta</item>
-        <item name="strokeColor">@color/button_outline_magenta</item>
-    </style>
-
 
     <style name="CyanTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_cyan</item>
@@ -249,15 +200,9 @@
         <item name="colorAccent">@color/color_accent_cyan</item>
         <item name="android:textColor">@color/text_cyan</item>
         <item name="android:buttonTint">@color/primary_cyan</item>
-        <item name="materialButtonStyle">@style/materialButtonStyleCyan</item>
         <item name="list_item_focused">@color/list_item_focused_cyan_day</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_cyan_day</item>
     </style>
-
-    <style name="materialButtonStyleCyan" parent="customMaterialOutlineButtonStyle">
-        <item name="backgroundColor">@color/color_accent_cyan</item>
-        <item name="strokeColor">@color/button_outline_cyan</item>
-    </style>
-
 
     <style name="customImageButtonStyle" parent="Widget.AppCompat.ImageButton">
         <item name="backgroundTint">@color/background_day</item>
@@ -271,19 +216,14 @@
         <item name="android:backgroundTint">@color/button_background_tint</item>
     </style>
 
-
     <style name="dialogButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:textColor">@color/background</item>
         <item name="android:backgroundTint">@color/background_day</item>
     </style>
 
-
     <style name="customAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:background">@color/background_day</item>
         <item name="android:colorAccent">#0000FF</item>
     </style>
-
-
-
 
 </resources>
