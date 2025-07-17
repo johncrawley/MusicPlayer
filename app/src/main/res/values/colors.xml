@@ -66,10 +66,10 @@
     <color name="dialog_text_color_day">#595959</color>
     <color name="list_background_day">#F4F4F4</color>
 
-    <color name="toggle_button_background_day">#EDEEF6</color>
+    <color name="toggle_button_background_day">#EFF0F6</color>
     <color name="toggle_button_text_checked_day">#43A047</color>
     <color name="toggle_button_edge_checked_day">#43A047</color>
-    <color name="toggle_button_text_unchecked_day">#878686</color>
+    <color name="toggle_button_text_unchecked_day">#7A7A7A</color>
     <color name="toggle_button_edge_unchecked_day">#A6A5A5</color>
 
     <color name="tab_layout_background_day">#D5D8DB</color>
@@ -180,20 +180,27 @@
     <color name="tab_text_selected_grey_day">#2D2D2F</color>
 
     <color name="primary_magenta">#C308D8</color>
+    <color name="primary_magenta_day">#A308B4</color>
     <color name="text_magenta">#CC3FFF</color>
+    <color name="text_magenta_day">#350F43</color>
     <color name="color_accent_magenta">#942CC1</color>
     <color name="button_outline_magenta">#A900D8</color>
     <color name="primary_color_dark_magenta_day">#570261</color>
-    <color name="list_item_focused_magenta_day">#F89898</color>
+    <color name="list_item_focused_magenta_day">#F4BEFA</color>
     <color name="tab_text_selected_magenta_day">#C308D8</color>
 
     <color name="primary_cyan">#12CED5</color>
+    <color name="primary_cyan_day">#20CBD1</color>
     <color name="text_cyan">#3FEFFF</color>
+    <color name="text_cyan_day">#0F4247</color>
     <color name="color_accent_cyan">#2CC1C1</color>
     <color name="button_outline_cyan">#00D1D8</color>
-    <color name="primary_color_dark_cyan_day">#025256</color>
-    <color name="list_item_focused_cyan_day">#F89898</color>
-    <color name="tab_text_selected_cyan_day">#12CED5</color>
+    <color name="primary_color_dark_cyan_day">#6CF1F6</color>
+    <color name="list_item_focused_cyan_day">#BBF5FA</color>
+    <color name="tab_text_selected_cyan_day">#02AFB4</color>
+    <color name="toggle_button_background_cyan_day">#717173</color>
+    <color name="toggle_button_text_unchecked_cyan_day">#DBD9D9</color>
+    <color name="toggle_button_edge_unchecked_cyan_day">#858484</color>
 
     <color name="settings_text">#9F9F9F</color>
     <color name="settings_primary_color">#3A983F</color>
