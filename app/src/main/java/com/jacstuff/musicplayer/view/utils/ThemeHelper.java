@@ -31,7 +31,8 @@ public class ThemeHelper {
         themeMap.put("grey", R.style.GreyTheme);
         themeMap.put("magenta", R.style.MagentaTheme);
         themeMap.put("cyan", R.style.CyanTheme);
-        themeMap.put("gold", R.style.GoldTheme);
+        themeMap.put("orange", R.style.OrangeTheme);
+        themeMap.put("gold", R.style.OrangeTheme);
     }
 
 

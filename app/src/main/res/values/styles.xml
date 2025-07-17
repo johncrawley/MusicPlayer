@@ -60,7 +60,6 @@
         <item name="album_art_border">@color/album_art_border_day</item>
 
 
-        <!-- <item name="android:windowLightStatusBar">true</item> -->
 
         <item name="alert_warning_drawable">@drawable/ic_warning_light</item>
     </style>
@@ -103,7 +102,14 @@
     </style>
 
 
-    <style name="LightYellowTheme" parent="AppTheme">
+    <style name="LightTheme" parent="AppTheme">
+        <item name="toggle_button_background">@color/toggle_button_background_light_day</item>
+        <item name="toggle_button_edge_unchecked">@color/toggle_button_edge_unchecked_light_day</item>
+        <item name="toggle_button_text_unchecked">@color/toggle_button_text_unchecked_light_day</item>
+    </style>
+
+
+    <style name="LightYellowTheme" parent="LightTheme">
         <item name="colorPrimary">@color/primary_light_yellow_day</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_light_yellow_day</item>
         <item name="colorAccent">@color/color_accent_light_yellow</item>
@@ -112,16 +118,19 @@
         <item name="list_item_focused">@color/list_item_focused_light_yellow_day</item>
         <item name="tabSelectedTextColor">@color/tab_text_selected_light_yellow_day</item>
         <item name="materialButtonStyle">@style/customMaterialButtonStyleDarkText</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="tab_layout_background_color">@color/tab_layout_background_light_yellow_day</item>
+        <item name="tab_text_color">@color/tab_text_light_yellow_day</item>
     </style>
 
-    <style name="GoldTheme" parent="AppTheme">
-        <item name="colorPrimary">@color/primary_gold</item>
-        <item name="colorPrimaryDark">@color/primary_color_dark_gold_day</item>
-        <item name="colorAccent">@color/color_accent_gold</item>
-        <item name="android:textColor">@color/text_gold</item>
-        <item name="android:buttonTint">@color/primary_gold</item>
-        <item name="list_item_focused">@color/list_item_focused_gold_day</item>
-        <item name="tabSelectedTextColor">@color/tab_text_selected_gold_day</item>
+    <style name="OrangeTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_orange_day</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark_orange_day</item>
+        <item name="colorAccent">@color/color_accent_orange</item>
+        <item name="android:textColor">@color/text_orange_day</item>
+        <item name="android:buttonTint">@color/primary_orange</item>
+        <item name="list_item_focused">@color/list_item_focused_orange_day</item>
+        <item name="tabSelectedTextColor">@color/tab_text_selected_orange_day</item>
     </style>
 
     <style name="LightGreenTheme" parent="AppTheme">
@@ -138,7 +147,7 @@
         <item name="colorPrimary">@color/primary_red</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_red_day</item>
         <item name="colorAccent">@color/color_accent_red</item>
-        <item name="android:textColor">@color/text_red</item>
+        <item name="android:textColor">@color/text_red_day</item>
         <item name="android:buttonTint">@color/primary_red</item>
         <item name="list_item_focused">@color/list_item_focused_red_day</item>
         <item name="tabSelectedTextColor">@color/tab_text_selected_red_day</item>
@@ -148,7 +157,7 @@
         <item name="colorPrimary">@color/primary_rose</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_rose_day</item>
         <item name="colorAccent">@color/color_accent_rose</item>
-        <item name="android:textColor">@color/text_rose</item>
+        <item name="android:textColor">@color/text_rose_day</item>
         <item name="android:buttonTint">@color/primary_rose</item>
         <item name="list_item_focused">@color/list_item_focused_rose_day</item>
         <item name="tabSelectedTextColor">@color/tab_text_selected_rose_day</item>

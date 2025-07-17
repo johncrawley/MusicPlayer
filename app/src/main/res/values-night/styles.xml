@@ -113,17 +113,17 @@
     </style>
 
 
-    <style name="GoldTheme" parent="AppTheme">
-        <item name="colorPrimary">@color/primary_gold</item>
-        <item name="colorAccent">@color/color_accent_gold</item>
-        <item name="android:textColor">@color/text_gold</item>
-        <item name="android:buttonTint">@color/primary_gold</item>
-        <item name="materialButtonStyle">@style/goldMaterialButtonStyle</item>
+    <style name="OrangeTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary_orange</item>
+        <item name="colorAccent">@color/color_accent_orange</item>
+        <item name="android:textColor">@color/text_orange</item>
+        <item name="android:buttonTint">@color/primary_orange</item>
+        <item name="materialButtonStyle">@style/orangeMaterialButtonStyle</item>
     </style>
 
-    <style name="goldMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
-        <item name="backgroundColor">@color/color_accent_gold</item>
-        <item name="strokeColor">@color/button_outline_gold</item>
+    <style name="orangeMaterialButtonStyle" parent="customMaterialOutlineButtonStyle">
+        <item name="backgroundColor">@color/color_accent_orange</item>
+        <item name="strokeColor">@color/button_outline_orange</item>
     </style>
 
 
