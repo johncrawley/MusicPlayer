@@ -11,18 +11,11 @@
         <item name="tabTextColor">@color/tab_text</item>
         <item name="buttonTint">#D5D5D5</item>
 
-       <!-- <item name="android:navigationBarColor">@android:color/black</item> -->
         <item name="panel_background">@color/background_day</item>
-
         <item name="add_button">@drawable/ic_add_light</item>
-
-        <!--
-        <item name="buttonStyle">@style/customButtonStyle</item>
-        -->
         <item name="materialButtonStyle">@style/customMaterialButtonStyle</item>
-
-        <!--<item name="android:alertDialogTheme">@style/customAlertDialogStyle</item> -->
         <item name="imageButtonStyle">@style/customImageButtonStyle</item>
+
         <item name="android:fontFamily">@font/le_patin_magicien_xb7d</item>
         <item name="android:lineSpacingMultiplier">1.3</item>
         <item name="list_item_focused">@color/list_item_focused_day</item>
@@ -102,13 +95,9 @@
     </style>
 
 
-    <style name="LightTheme" parent="AppTheme">
-        <item name="materialButtonStyle">@style/customMaterialButtonStyleDarkText</item>
+    <style name="LightYellowTheme" parent="AppTheme">
         <item name="android:windowLightStatusBar">true</item>
-    </style>
-
-
-    <style name="LightYellowTheme" parent="LightTheme">
+        <item name="materialButtonStyle">@style/customMaterialButtonStyleDarkText</item>
         <item name="colorPrimary">@color/primary_light_yellow_day</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_light_yellow_day</item>
         <item name="colorAccent">@color/color_accent_light_yellow</item>
@@ -116,12 +105,7 @@
         <item name="android:buttonTint">@color/primary_light_yellow</item>
         <item name="list_item_focused">@color/list_item_focused_light_yellow_day</item>
         <item name="tabSelectedTextColor">@color/tab_text_selected_light_yellow_day</item>
-        <item name="tab_layout_background_color">@color/tab_layout_background_light_yellow_day</item>
-        <item name="tab_text_color">@color/tab_text_light_yellow_day</item>
-
-        <item name="toggle_button_background">@color/toggle_button_background_light_day</item>
-        <item name="toggle_button_edge_unchecked">@color/toggle_button_edge_unchecked_light_day</item>
-        <item name="toggle_button_text_unchecked">@color/toggle_button_text_unchecked_light_day</item>
+        <item name="toggle_button_background">@color/toggle_button_background_light_yellow_day</item>
     </style>
 
     <style name="OrangeTheme" parent="AppTheme">
@@ -204,7 +188,7 @@
         <item name="tabSelectedTextColor">@color/tab_text_selected_magenta_day</item>
     </style>
 
-    <style name="CyanTheme" parent="LightTheme">
+    <style name="CyanTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_cyan_day</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_cyan_day</item>
         <item name="colorAccent">@color/color_accent_cyan</item>
@@ -212,10 +196,6 @@
         <item name="android:buttonTint">@color/primary_cyan</item>
         <item name="list_item_focused">@color/list_item_focused_cyan_day</item>
         <item name="tabSelectedTextColor">@color/tab_text_selected_cyan_day</item>
-
-        <item name="toggle_button_background">@color/toggle_button_background_cyan_day</item>
-        <item name="toggle_button_edge_unchecked">@color/toggle_button_edge_unchecked_cyan_day</item>
-        <item name="toggle_button_text_unchecked">@color/toggle_button_text_unchecked_cyan_day</item>
     </style>
 
     <style name="customImageButtonStyle" parent="Widget.AppCompat.ImageButton">
