@@ -50,15 +50,12 @@
     <color name="album_art_border">#000</color>
 
     <!-- default day -->
-    <color name="primary_color_day">#0C8310</color>
     <color name="panel_background_day">#EDEDED</color>
     <color name="dialog_background_day">#E4E3E3</color>
     <color name="background_day">#EDEDED</color>
     <color name="track_info_background_day">#D9DADE</color>
     <color name="text_day">#2A2A2A</color>
-    <color name="list_item_focused_day">#A2E9A2</color>
     <color name="button_text_day">#2C2C2C</color>
-    <color name="primary_color_dark_day">#388E3C</color>
     <color name="functions_panel_background_day">#C3C2C2</color>
     <color name="functions_panel_border_day">#8A8A8A</color>
     <color name="image_button_tint_day">#000000</color>
@@ -67,14 +64,11 @@
     <color name="list_background_day">#F4F4F4</color>
 
     <color name="toggle_button_background_day">#EFF0F6</color>
-    <color name="toggle_button_text_checked_day">#43A047</color>
-    <color name="toggle_button_edge_checked_day">#43A047</color>
     <color name="toggle_button_text_unchecked_day">#7A7A7A</color>
     <color name="toggle_button_edge_unchecked_day">#A6A5A5</color>
 
     <color name="tab_layout_background_day">#D5D8DB</color>
     <color name="tab_text_day">#767676</color>
-    <color name="tab_text_selected_day">#43A047</color>
 
     <color name="album_art_background_day">#C5C4C4</color>
     <color name="album_art_border_day">#8E8E8E</color>
@@ -88,6 +82,17 @@
     <color name="toggle_button_edge_unchecked_light_day">#DBD9D9</color>
 
     <!-- themes -->
+
+    <!-- default green theme (day) -->
+    <color name="primary_color_day">#0C8310</color>
+    <color name="primary_color_dark_day">#388E3C</color>
+    <color name="list_item_focused_day">#C4E7BC</color>
+    <color name="toggle_button_text_checked_day">#43A047</color>
+    <color name="toggle_button_edge_checked_day">#43A047</color>
+    <color name="tab_text_selected_day">#43A047</color>
+    <color name="color_accent_day">#0C8310</color>
+
+
     <color name="primary_yellow">#E8D424</color>
     <color name="primary_yellow_day">#D3BE0B</color>
     <color name="text_yellow">#E8C630</color>
@@ -115,9 +120,10 @@
     <color name="text_orange">#DDA530</color>
     <color name="text_orange_day">#4E3604</color>
     <color name="color_accent_orange">#D6994C</color>
+    <color name="color_accent_orange_day">#EFA841</color>
     <color name="button_outline_orange">#D8A34E</color>
     <color name="primary_color_dark_orange_day">#EB8703</color>
-    <color name="list_item_focused_orange_day">#FFB74D</color>
+    <color name="list_item_focused_orange_day">#FDC87A</color>
     <color name="tab_text_selected_orange_day">#B17425</color>
 
     <color name="primary_light_green">#78F18D</color>
@@ -144,6 +150,7 @@
     <color name="text_rose">#D291D6</color>
     <color name="text_rose_day">#461A49</color>
     <color name="color_accent_rose">#AB81B5</color>
+    <color name="color_accent_rose_day">#DC0A91</color>
     <color name="button_outline_rose">#D066DC</color>
     <color name="primary_color_dark_rose_day">#CA0383</color>
     <color name="list_item_focused_rose_day">#FBD1EC</color>
@@ -190,7 +197,7 @@
     <color name="tab_text_selected_magenta_day">#C308D8</color>
 
     <color name="primary_cyan">#12CED5</color>
-    <color name="primary_cyan_day">#20CBD1</color>
+    <color name="primary_cyan_day">#61DDE2</color>
     <color name="text_cyan">#3FEFFF</color>
     <color name="text_cyan_day">#0F4247</color>
     <color name="color_accent_cyan">#2CC1C1</color>

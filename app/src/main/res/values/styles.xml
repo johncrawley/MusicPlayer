@@ -3,7 +3,7 @@
     <style name="AppTheme" parent="Theme.Material3.DayNight">
         <item name="colorPrimary">@color/primary_color_day</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_day</item>
-        <item name="colorAccent">@color/color_accent</item>
+        <item name="colorAccent">@color/color_accent_day</item>
         <item name="tabSelectedTextColor">@color/tab_text_selected_day</item>
         <item name="android:buttonTint">@color/primary_color</item>
         <item name="android:windowBackground">@color/background_day</item>
@@ -127,7 +127,7 @@
     <style name="OrangeTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_orange_day</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_orange_day</item>
-        <item name="colorAccent">@color/color_accent_orange</item>
+        <item name="colorAccent">@color/color_accent_orange_day</item>
         <item name="android:textColor">@color/text_orange_day</item>
         <item name="android:buttonTint">@color/primary_orange</item>
         <item name="list_item_focused">@color/list_item_focused_orange_day</item>
@@ -157,7 +157,7 @@
     <style name="RoseTheme" parent="AppTheme">
         <item name="colorPrimary">@color/primary_rose</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_rose_day</item>
-        <item name="colorAccent">@color/color_accent_rose</item>
+        <item name="colorAccent">@color/color_accent_rose_day</item>
         <item name="android:textColor">@color/text_rose_day</item>
         <item name="android:buttonTint">@color/primary_rose</item>
         <item name="list_item_focused">@color/list_item_focused_rose_day</item>
