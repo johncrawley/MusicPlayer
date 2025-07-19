@@ -28,6 +28,9 @@
     <string name="button_text_refresh_playlist">Refresh</string>
     <string name="button_text_about_app">About</string>
 
+    <string name="load_genre_dialog_title">Load Tracks of Genre</string>
+    <string name="load_tear_dialog_title">Load Tracks by Year</string>
+
     <string name="toggle_button_all_tracks">All Tracks</string>
     <string name="toggle_button_artists">Artists</string>
     <string name="toggle_button_genres">Genres</string>
