@@ -42,6 +42,7 @@ public class ConfigDialogFragment extends DialogFragment {
     private void setupButtons(View parentView){
         ButtonMaker.setupButton(parentView, R.id.openSettingsButton, this::openSettings);
         ButtonMaker.setupButton(parentView, R.id.refreshTracksButton, this::refreshTracks);
+        ButtonMaker.setupButton(parentView, R.id.loadGenreButton, this::openLoadGenreDialog);
         ButtonMaker.setupButton(parentView, R.id.aboutAppButton, this::openAboutApp);
     }
 
@@ -54,6 +55,12 @@ public class ConfigDialogFragment extends DialogFragment {
     private void openAboutApp(){
         dismiss();
         getMain().ifPresent(MainActivity::loadAboutDialog);
+    }
+
+
+    private void openLoadGenreDialog(){
+        dismiss();
+        getMain().ifPresent(MainActivity::loadGenreDialog);
     }
 
 

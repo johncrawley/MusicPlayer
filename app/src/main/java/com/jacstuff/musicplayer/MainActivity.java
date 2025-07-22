@@ -43,6 +43,7 @@ import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
 import com.jacstuff.musicplayer.view.fragments.config.ConfigDialogFragment;
+import com.jacstuff.musicplayer.view.fragments.genre.GenresFragment;
 import com.jacstuff.musicplayer.view.fragments.options.AddTrackToPlaylistFragment;
 import com.jacstuff.musicplayer.view.fragments.options.TrackOptionsDialog;
 import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
@@ -575,6 +576,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadAboutDialog(){
         FragmentManagerHelper.showDialog(this, new AboutDialogFragment(), "aboutDialogFragment");
+    }
+
+
+    public void loadGenreDialog(){
+        FragmentManagerHelper.showDialog(this, new GenresFragment(), "loadGenreFragment");
     }
 
 
