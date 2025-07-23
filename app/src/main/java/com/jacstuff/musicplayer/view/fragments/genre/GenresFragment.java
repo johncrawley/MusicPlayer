@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
 
 import java.util.List;
@@ -47,7 +48,15 @@ public class GenresFragment extends DialogFragment {
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.recyclerView);
         noGenresFoundTextView = parentView.findViewById(R.id.noItemsFoundText);
+        log("Entered onViewCreated()");
         refreshList();
+        DialogFragmentUtils.setTransparentBackground(this);
+    }
+
+
+
+    private void log(String msg){
+        System.out.println("^^^ GenresFragment: " + msg);
     }
 
 
