@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
             setupFunctionButtons();
             sendMessage(NOTIFY_PLAYLIST_TAB_TO_RELOAD);
             sendMessage(NOTIFY_TRACKS_TAB_TO_RELOAD);
+            sendMessage(NOTIFY_ARTISTS_TAB_TO_RESELECT_ITEM);
+            sendMessage(NOTIFY_ALBUM_TAB_TO_RESELECT_ITEM);
             sendMessage(NOTIFY_ADD_RANDOM_TRACKS_DIALOG_TO_RELOAD);
             isServiceConnected.set(true);
         }
@@ -213,21 +215,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     public boolean isUserPlaylistLoaded(){
-        return !isPlaylistManagerUnavailable() && mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
+        return !isPlaylistManagerUnavailable()
+                && mediaPlayerService.getPlaylistManager().isUserPlaylistLoaded();
     }
 
 
     public List<Playlist> getAllUserPlaylists(){
-        return isPlaylistManagerUnavailable() ? Collections.emptyList() : mediaPlayerService.getPlaylistManager().getAllUserPlaylists();
-    }
-
-
-    private List<String> getTracksOrEmptyList(Function<PlaylistManager, List<String>> function){
-        if(mediaPlayerService == null){
-            return Collections.emptyList();
-        }
-        PlaylistManager playlistManager = mediaPlayerService.getPlaylistManager();
-        return isPlaylistManagerUnavailable() ? Collections.emptyList() : function.apply(playlistManager);
+        return isPlaylistManagerUnavailable() ? Collections.emptyList()
+                : mediaPlayerService.getPlaylistManager().getAllUserPlaylists();
     }
 
 
@@ -252,6 +247,13 @@ public class MainActivity extends AppCompatActivity {
 
     public List<String> getArtistNames(){ return getTracksOrEmptyList(PlaylistManager::getArtistNames); }
 
+
+    private List<String> getTracksOrEmptyList(Function<PlaylistManager, List<String>> function){
+        return isPlaylistManagerUnavailable() ? Collections.emptyList()
+                : function.apply(mediaPlayerService.getPlaylistManager());
+    }
+
+
     public void showAddTrackToPlaylistView(){
         FragmentManagerHelper.showDialog(this, AddTrackToPlaylistFragment.newInstance(), "add_track_to_playlist");
     }
@@ -260,9 +262,6 @@ public class MainActivity extends AppCompatActivity {
     public PlayerViewHelper getPlayerViewHelper(){
         return playerViewHelper;
     }
-
-
-    public void hideTrackSeekBar(){ playerViewHelper.hideTrackSeekBar();}
 
 
     public void setSelectedTrack(Track track){ this.selectedTrack = track; }

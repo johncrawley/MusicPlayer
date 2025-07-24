@@ -376,7 +376,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         mediaNotificationManager.updateNotification();
         mainActivity.setTrackDetails(mediaPlayerHelper.getCurrentTrack(), 0);
         if(mediaPlayerHelper.isPaused()){
-            mainActivity.hideTrackSeekBar();
+            playerViewHelper.hideTrackSeekBar();
         }
     }
 

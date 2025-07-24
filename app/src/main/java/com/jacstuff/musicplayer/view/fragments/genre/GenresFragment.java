@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.service.ListIndexManager;
+import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
 
@@ -31,6 +33,7 @@ public class GenresFragment extends DialogFragment {
     private RecyclerView recyclerView;
     private View parentView;
     private TextView noGenresFoundTextView;
+    private ListIndexManager listIndexManager;
 
     public GenresFragment() {
         // Required empty public constructor
@@ -47,16 +50,17 @@ public class GenresFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         this.parentView = view;
         recyclerView = parentView.findViewById(R.id.recyclerView);
+        assignListIndexManager();
         noGenresFoundTextView = parentView.findViewById(R.id.noItemsFoundText);
-        log("Entered onViewCreated()");
         refreshList();
         DialogFragmentUtils.setTransparentBackground(this);
     }
 
-
-
-    private void log(String msg){
-        System.out.println("^^^ GenresFragment: " + msg);
+    private void assignListIndexManager(){
+        MediaPlayerService mediaPlayerService = getMainActivity().getMediaPlayerService();
+        if(mediaPlayerService != null){
+            listIndexManager = mediaPlayerService.getListIndexManager();
+        }
     }
 
 
@@ -76,6 +80,7 @@ public class GenresFragment extends DialogFragment {
     private void loadTracksFromGenre(String genreName, int position){
         getMainActivity().loadTracksFromGenre(genreName);
         notifyOtherFragmentsToDeselectItems();
+        listIndexManager.setGenreIndex(position);
         toastLoaded();
         dismissAfterDelay();
     }

@@ -29,7 +29,6 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     public boolean isMultiSelectEnabled;
 
 
-
     class PlaylistViewHolder extends RecyclerView.ViewHolder {
 
         TextView trackNameTextView;
@@ -43,9 +42,9 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     }
 
 
-    private void onClick(RecyclerView.ViewHolder viewHolder, View v, TextView trackNameTextView){
+    private void onClick(RecyclerView.ViewHolder viewHolder, View v, TextView textView){
         deselectPreviousSelection();
-        selectedPlaylist = (Playlist)trackNameTextView.getTag();
+        selectedPlaylist = (Playlist)textView.getTag();
         currentlySelectedView = v;
         toggleSelected();
         currentlySelectedView.setSelected(true);
@@ -189,8 +188,9 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
         if(selectedPlaylist == null){
             return;
         }
-        for(int i=0; i< playlists.size(); i++){
-            if(selectedPlaylist.getId().equals(playlists.get(i).getId())){
+        for(int i = 0; i < playlists.size(); i++){
+            var playlistId = playlists.get(i).getId();
+            if(selectedPlaylist.getId().equals(playlistId)){
                 selectedPosition = i;
                 break;
             }

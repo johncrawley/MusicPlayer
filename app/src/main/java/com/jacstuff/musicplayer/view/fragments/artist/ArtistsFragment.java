@@ -2,6 +2,7 @@ package com.jacstuff.musicplayer.view.fragments.artist;
 
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_ARTISTS_TAB_TO_RESELECT_ITEM;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
@@ -70,16 +71,6 @@ public class ArtistsFragment extends Fragment {
     }
 
 
-    private void assignIndex(int index){
-        if(listIndexManager == null){
-            assignListIndexManager();
-        }
-        if(listIndexManager != null){
-            listIndexManager.setArtistIndex(index);
-        }
-    }
-
-
     private void selectSavedIndex(){
         if(listIndexManager != null){
             listIndexManager.getArtistIndex().ifPresent(this::scrollToAndSelect);
@@ -97,6 +88,13 @@ public class ArtistsFragment extends Fragment {
         setListener(this, LOAD_ARTISTS, this::populateArtistsList);
         setListener(this, NOTIFY_TO_LOAD_ARTIST, (bundle) -> listAdapter.selectLongClickItem());
         setListener(this, NOTIFY_TO_DESELECT_ARTIST_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
+        setListener(this, NOTIFY_ARTISTS_TAB_TO_RESELECT_ITEM, (bundle) -> this.reselectItemAfterServiceConnection() );
+    }
+
+
+    private void reselectItemAfterServiceConnection(){
+        assignListIndexManager();
+        selectSavedIndex();
     }
 
 
@@ -125,6 +123,16 @@ public class ArtistsFragment extends Fragment {
         assignIndex(position);
         notifyOtherFragmentsToDeselectItems();
         toastLoaded();
+    }
+
+
+    private void assignIndex(int index){
+        if(listIndexManager == null){
+            assignListIndexManager();
+        }
+        if(listIndexManager != null){
+            listIndexManager.setArtistIndex(index);
+        }
     }
 
 

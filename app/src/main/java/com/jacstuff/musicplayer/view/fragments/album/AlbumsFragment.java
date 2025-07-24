@@ -2,6 +2,7 @@ package com.jacstuff.musicplayer.view.fragments.album;
 
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_ALBUM_TAB_TO_RESELECT_ITEM;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;
@@ -80,6 +81,7 @@ public class AlbumsFragment extends Fragment {
         setListener(this, LOAD_ALBUMS, this::loadAlbumNamesFrom);
         setListener(this, NOTIFY_TO_LOAD_ALBUM, (bundle) -> listAdapter.selectLongClickItem());
         setListener(this, NOTIFY_TO_DESELECT_ALBUM_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
+        setListener(this, NOTIFY_ALBUM_TAB_TO_RESELECT_ITEM, (bundle) -> this.reselectItemAfterServiceConnection());
     }
 
 
@@ -94,6 +96,12 @@ public class AlbumsFragment extends Fragment {
                 albumArtistText.setText(getString(R.string.default_album_info));
             }
        }
+    }
+
+
+    private void reselectItemAfterServiceConnection(){
+        assignListIndexManager();
+        selectSavedIndex();
     }
 
 
@@ -157,7 +165,7 @@ public class AlbumsFragment extends Fragment {
 
     private void selectSavedIndex(){
         if(listIndexManager != null){
-            listIndexManager.getArtistIndex().ifPresent(this::scrollToAndSelect);
+            listIndexManager.getAlbumIndex().ifPresent(this::scrollToAndSelect);
         }
     }
 

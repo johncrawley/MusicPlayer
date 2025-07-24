@@ -9,6 +9,10 @@ public class ListIndexManager {
     private int genreIndex;
     private int playlistIndex;
 
+    public ListIndexManager(){
+        setPlaylistIndex(0);
+    }
+
 
     public void setArtistIndex(int index){
         this.artistIndex = index;
@@ -40,10 +44,6 @@ public class ListIndexManager {
         artistIndex = -1;
     }
 
-
-    private void log(String msg){
-        System.out.println("^^^ ListIndexManager: " + msg);
-    }
 
 
     public Optional<Integer> getAlbumIndex(){
