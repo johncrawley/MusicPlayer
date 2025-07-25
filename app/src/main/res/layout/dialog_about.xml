@@ -39,8 +39,19 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textSize="16sp"
-                android:text="@string/about_info"
-                android:layout_marginVertical="8dp"
+                android:text="@string/version_and_year"
+                android:layout_marginVertical="4dp"
+                />
+
+            <TextView
+                android:id="@+id/createdByText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:text="@string/created_by"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="8dp"
                 />
 
             <TextView
@@ -60,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:layout_marginHorizontal="8dp"
-                android:text="@string/about_font_info"
+                android:text="@string/about_font_main_text"
                 />
             <TextView
                 android:id="@+id/aboutIconHeadingText"

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,10 +31,28 @@ public class AboutDialogFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupButtons(view);
+        setupFontInfo(view);
         DialogFragmentUtils.setScrollViewHeight(this, view, R.id.aboutInfoScrollView, R.id.aboutInfoLayout);
         DialogFragmentUtils.setTransparentBackground(this);
     }
 
+    /*
+        <string name="about_font_main_text">Main text:&#160;</string>
+    <string name="about_font_main_text_font">Le Patin Magicien, Freeware \n https://www.fontspace.com/le-patin-magicien-font-f39622\n\n </string>
+    <string name="about_font_time_elapsed">Time elapsed:&#160;</string>
+    <string name="about_font_time_elapsed_font">Poe Monospace, Freeware\n https://www.fontspace.com/poe-monospace-font-f23572 </string>
+     */
+
+    private void setupFontInfo(View parentView){
+        TextView fontInfoTextView = parentView.findViewById(R.id.aboutFontText);
+        var fontMainText = getString(R.string.about_font_main_text);
+        var fontMainTextFont = getString(R.string.about_font_main_text_font);
+        var fontTimeElapsed = getString(R.string.about_font_time_elapsed);
+        var fontTimeElapsedFont = getString(R.string.about_font_time_elapsed_font);
+
+        var text = fontMainText + fontMainTextFont + fontTimeElapsed + fontTimeElapsedFont;
+        fontInfoTextView.setText(text);
+    }
 
     private void setupButtons(View parentView){
         ButtonMaker.setupButton(parentView, R.id.dismissAboutDialogButton, this::dismiss);
