@@ -279,10 +279,10 @@ public class TracksFragment extends Fragment{
     private void updatePlaylistInfoView(Playlist playlist){
         int resId = switch (playlist.getType()){
             case ALL_TRACKS -> R.string.default_playlist_info;
-            case PLAYLIST -> R.string.playlist_info_playlist_prefix;
-            case ALBUM   -> R.string.playlist_info_album_prefix;
-            case ARTIST -> R.string.playlist_info_artist_prefix;
-            case GENRE -> R.string.playlist_info_genre_prefix;
+            case PLAYLIST -> R.string.list_prefix;
+            case ALBUM   -> R.string.album_prefix;
+            case ARTIST -> R.string.artist_prefix;
+            case GENRE -> R.string.genre_prefix;
         };
         String prefix = getString(resId);
         String info = resId == R.string.default_playlist_info ? prefix : prefix + " " + playlist.getName();

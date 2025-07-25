@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
         android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"
-        android:text="@string/button_stop_now" />
+        android:text="@string/stop_now" />
 
     <Button
         android:id="@+id/stopAfterCurrentTrackButton"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
         android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"
-        android:text="@string/button_stop_after_current_track" />
+        android:text="@string/stop_after_current" />
 
     <Button
         android:id="@+id/stopInOneMinuteButton"
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
         android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"
-        android:text="@string/button_stop_in_one_minute" />
+        android:text="@string/queue_stop_one" />
 
     <Button
         android:id="@+id/stopInThreeMinutesButton"
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
         android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"
-        android:text="@string/button_stop_in_three_minutes" />
+        android:text="@string/queue_stop_three" />
 
 
 </LinearLayout>

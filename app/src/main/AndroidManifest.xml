@@ -78,7 +78,7 @@
             android:name=".SettingsActivity"
             android:exported="false"
             android:theme="@style/SettingsTheme"
-            android:label="@string/title_activity_settings">
+            android:label="@string/settings">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

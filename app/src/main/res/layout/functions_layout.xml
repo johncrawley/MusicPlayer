@@ -15,17 +15,7 @@
         android:layout_margin="@dimen/function_button_margin"
         android:padding="@dimen/function_button_padding"
         android:src="?attr/search_button"
-        android:contentDescription="@string/search_button_content_description" />
-
-    <ImageButton
-        android:visibility="gone"
-        android:id="@+id/refreshButton"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/function_button_margin"
-        android:padding="@dimen/function_button_padding"
-        android:src="@drawable/ic_refresh"
-        android:contentDescription="@string/refresh_button_content_description" />
+        android:contentDescription="@string/search_desc" />
 
     <ImageButton
         android:id="@+id/configButton"
@@ -34,16 +24,6 @@
         android:layout_margin="@dimen/function_button_margin"
         android:padding="@dimen/function_button_padding"
         android:src="?attr/settings_button"
-        android:contentDescription="@string/settings_button_content_description" />
-
-    <ImageButton
-        android:visibility="gone"
-        android:id="@+id/aboutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/function_button_margin"
-        android:padding="@dimen/function_button_padding"
-        android:src="@drawable/ic_info"
-        android:contentDescription="@string/about_button_content_description" />
+        android:contentDescription="@string/settings_desc" />
 
 </LinearLayout>

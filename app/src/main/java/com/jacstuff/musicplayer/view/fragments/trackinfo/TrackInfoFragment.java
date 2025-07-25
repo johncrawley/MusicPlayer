@@ -80,7 +80,7 @@ public class TrackInfoFragment extends DialogFragment {
 
 
     private String getFormattedStrFor(String value){
-        String nullPlaceholder = getString(R.string.track_info_null_value);
+        String nullPlaceholder = getString(R.string.null_val);
         if(value == null || value.isBlank()){
             return nullPlaceholder;
         }

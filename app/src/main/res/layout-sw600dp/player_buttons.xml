@@ -11,7 +11,7 @@
         android:id="@+id/previousTrackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/previous_track_button_content_description"
+        android:contentDescription="@string/prev_track_desc"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
         android:paddingBottom="@dimen/button_padding"
         app:srcCompat="?attr/previous_track_button" />
@@ -20,7 +20,7 @@
         android:id="@+id/playButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/play_button_content_description"
+        android:contentDescription="@string/play_desc"
         android:paddingBottom="@dimen/button_padding"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
         app:srcCompat="?attr/play_button" />
@@ -29,7 +29,7 @@
         android:id="@+id/pauseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/pause_button_content_description"
+        android:contentDescription="@string/pause_desc"
         android:paddingBottom="@dimen/button_padding"
         android:visibility="gone"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
@@ -39,7 +39,7 @@
         android:id="@+id/stopButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/stop_button_content_description"
+        android:contentDescription="@string/stop_desc"
         android:paddingBottom="@dimen/button_padding"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
         app:srcCompat="?attr/stop_button" />
@@ -48,7 +48,7 @@
         android:id="@+id/nextTrackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/next_track_button_content_description"
+        android:contentDescription="@string/next_track_desc"
         android:paddingBottom="@dimen/button_padding"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
         app:srcCompat="?attr/next_track_button" />
@@ -57,7 +57,7 @@
         android:id="@+id/turnShuffleOffButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/shuffle_off_button_content_description"
+        android:contentDescription="@string/shuffle_off_desc"
         android:paddingBottom="@dimen/button_padding"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"
         app:srcCompat="?attr/shuffle_button" />
@@ -67,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:contentDescription="@string/shuffle_on_button_content_description"
+        android:contentDescription="@string/shuffle_on_desc"
         android:paddingBottom="@dimen/button_padding"
         app:tint="@color/image_button_shuffle_on_tint"
         android:layout_marginHorizontal="@dimen/player_button_horizontal_margin_tablet"

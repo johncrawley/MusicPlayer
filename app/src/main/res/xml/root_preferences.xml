@@ -14,13 +14,13 @@
     <PreferenceCategory app:title="@string/search_header">
         <SwitchPreference
             app:key="dismissSearchAfterSelection"
-            app:title="@string/dismiss_search_after_selection_title"
+            app:title="@string/dismiss_search"
             app:defaultValue="true"
             app:enabled="true" />
 
         <SwitchPreference
             app:key="simpleSearchView"
-            app:title="@string/simple_search_enabled_title"
+            app:title="@string/simple_search_enabled"
             app:defaultValue="true"
             app:enabled="true" />
     </PreferenceCategory>
@@ -29,15 +29,15 @@
     <PreferenceCategory app:title="@string/tracks_header">
         <EditTextPreference
             app:key="tracksPathnameString_1"
-            app:title="@string/include_music_with_pathname"
-            app:summary="@string/include_music_with_pathname_summary"
+            app:title="@string/include_pathname"
+            app:summary="@string/include_path_summary"
             app:defaultValue=""
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
             app:key="excludeTracksWithPathname"
-            app:title="@string/exclude_tracks_with_pathname"
-            app:summary="@string/exclude_tracks_with_pathname_summary"
+            app:title="@string/exclude_path"
+            app:summary="@string/exclude_path_summary"
             app:defaultValue=""
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
@@ -46,39 +46,39 @@
     <PreferenceCategory app:title="@string/lists_header">
         <EditTextPreference
             app:key="minimumNumberOfTracksForMainArtist"
-            app:title="@string/min_number_of_tracks_for_main_artist_title"
-            app:summary="@string/min_number_of_tracks_for_main_artist_summary"
+            app:title="@string/min_tracks_artist_title"
+            app:summary="@string/min_tracks_artist_summary"
             app:defaultValue="1"
             app:useSimpleSummaryProvider="true" />
 
         <SwitchPreference
             app:key="autoNextTrackOnPlaylistLoaded"
-            app:title="@string/move_to_next_track_when_playlist_loaded_title"
+            app:title="@string/autoload_playlist_track"
             app:defaultValue="true"
             app:enabled="true" />
 
         <SwitchPreference
             app:key="ignoreDuplicateTracks"
-            app:title="@string/ignore_duplicates_in_all_tracks_title"
+            app:title="@string/ignore_duplicates_title"
             app:defaultValue="true"
             app:enabled="true" />
 
         <SwitchPreference
             app:key="autoSwitchTabsAfterPlaylistSelection"
-            app:title="@string/auto_switch_tabs_after_playlist_selection_title"
+            app:title="@string/auto_switch_tabs_title"
             app:defaultValue="true"
             app:enabled="true" />
 
         <SwitchPreference
             app:key="onlyShowAlbumTracksFromSelectedArtist"
-            app:title="@string/only_show_album_tracks_from_selected_artist"
+            app:title="@string/only_show_artist_tracks"
             app:defaultValue="true"
             app:enabled="true" />
 
         <EditTextPreference
             app:key="numberOfRandomTracksToAdd"
-            app:title="@string/number_of_random_tracks_to_add"
-            app:summary="@string/number_of_random_tracks_to_add_summary"
+            app:title="@string/rand_tracks_num"
+            app:summary="@string/rand_tracks_num_summary"
             app:defaultValue="5"
             app:min="0"
             app:useSimpleSummaryProvider="true" />

@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textSize="16sp"
-                android:text="@string/version_and_year"
+                android:text="@string/version"
                 android:layout_marginVertical="4dp"
                 />
 
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textAlignment="center"
-                android:text="@string/about_font_heading"
+                android:text="@string/font_info"
                 android:layout_marginVertical="8dp"
                 />
 
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:layout_marginHorizontal="8dp"
-                android:text="@string/about_font_main_text"
+                android:text="@string/font_main"
                 />
             <TextView
                 android:id="@+id/aboutIconHeadingText"
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textAlignment="center"
-                android:text="@string/about_icon_heading"
+                android:text="@string/icon_info"
                 android:layout_marginVertical="8dp"
                 />
 
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:layout_marginHorizontal="8dp"
-                android:text="@string/about_icon_info"
+                android:text="@string/icon_detail"
                 />
 
         </LinearLayout>

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
         android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"
-        android:text="@string/button_artist_options_load" />
+        android:text="@string/load" />
 
     <Button
         android:id="@+id/addAlbumTracksToCurrentPlaylistButton"
@@ -22,7 +22,7 @@
         android:visibility="gone"
         android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
         android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"
-        android:text="@string/button_artist_options_add_tracks_to_playlist" />
+        android:text="@string/add_to_list" />
 
     <Button
         android:id="@+id/addRandomAlbumTracksToCurrentPlaylistButton"
@@ -31,5 +31,5 @@
         android:visibility="gone"
         android:layout_marginHorizontal="@dimen/dialog_option_button_margin_horizontal"
         android:layout_marginVertical="@dimen/dialog_option_button_margin_vertical"
-        android:text="@string/button_options_add_random_tracks_to_playlist" />
+        android:text="@string/add_rand_list" />
 </LinearLayout>

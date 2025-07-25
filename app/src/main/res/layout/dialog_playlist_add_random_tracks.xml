@@ -40,8 +40,8 @@
             android:background="@drawable/toggle_button"
             android:textColor="@color/toggle_button_text_colors"
             android:layout_marginHorizontal="4dp"
-            android:textOn="@string/toggle_button_all_tracks"
-            android:textOff="@string/toggle_button_all_tracks"
+            android:textOn="@string/toggle_all"
+            android:textOff="@string/toggle_all"
             />
 
         <ToggleButton
@@ -51,8 +51,8 @@
             android:background="@drawable/toggle_button"
             android:textColor="@color/toggle_button_text_colors"
             android:layout_margin="4dp"
-            android:textOn="@string/toggle_button_artists"
-            android:textOff="@string/toggle_button_artists" />
+            android:textOn="@string/toggle_artists"
+            android:textOff="@string/toggle_artists" />
 
         <ToggleButton
             android:id="@+id/genresToggleButton"
@@ -61,8 +61,8 @@
             android:background="@drawable/toggle_button"
             android:textColor="@color/toggle_button_text_colors"
             android:layout_marginHorizontal="4dp"
-            android:textOn="@string/toggle_button_genres"
-            android:textOff="@string/toggle_button_genres"/>
+            android:textOn="@string/toggle_genres"
+            android:textOff="@string/toggle_genres"/>
 
     </LinearLayout>
 
@@ -119,7 +119,7 @@
             android:textColor="?attr/dialog_text_color"
             android:layout_marginVertical="4dp"
             android:labelFor="@id/numberOfTracksEditText"
-            android:text="@string/add_random_tracks_number"
+            android:text="@string/add_rand_num"
             />
         <LinearLayout
             android:layout_width="wrap_content"
@@ -130,7 +130,7 @@
                 android:id="@+id/decreaseNumberOfRandomTracksButton"
                 android:layout_width="60dp"
                 android:layout_height="50dp"
-                android:text="@string/button_text_decrease_random_tracks"/>
+                android:text="@string/dec_random_tracks"/>
 
             <EditText
                 android:id="@+id/numberOfTracksEditText"
@@ -147,7 +147,7 @@
                 android:id="@+id/increaseNumberOfRandomTracksButton"
                 android:layout_width="60dp"
                 android:layout_height="50dp"
-                android:text="@string/button_text_increase_random_tracks"/>
+                android:text="@string/inc_random_tracks"/>
 
         </LinearLayout>
 
@@ -173,7 +173,7 @@
             android:id="@+id/addTracksButton"
             android:visibility="visible"
             style="@android:attr/buttonBarButtonStyle"
-            android:text="@string/button_add_random_tracks"/>
+            android:text="@string/add_random_tracks"/>
     </LinearLayout>
 
 

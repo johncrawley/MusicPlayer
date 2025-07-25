@@ -95,7 +95,7 @@ public class GenresFragment extends DialogFragment {
 
 
     private void toastLoaded(){
-        getMainActivity().toastIfTabsNotAutoSwitched(R.string.toast_genre_tracks_loaded);
+        getMainActivity().toastIfTabsNotAutoSwitched(R.string.genre_loaded);
     }
 
 

@@ -88,8 +88,8 @@ public class PlaylistOptionsFragment extends DialogFragment {
             return;
         }
         AlertHelper.showDialogForPlaylist(getContext(),
-                R.string.clear_tracks_confirm_dialog_title,
-                R.string.clear_tracks_confirm_dialog_text,
+                R.string.clear_tracks_title,
+                R.string.clear_tracks_confirm,
                 selectedPlaylistName,
                 this::clearTracksFromPlaylistAndDismiss);
     }
@@ -97,7 +97,7 @@ public class PlaylistOptionsFragment extends DialogFragment {
 
     private void clearTracksFromPlaylistAndDismiss(){
         getMediaPlayerService().ifPresent( mps -> mps.getPlaylistHelper().clearTracksFromPlaylist(selectedPlaylistId));
-        getMain().ifPresent( ma -> ma.toast(R.string.toast_playlist_tracks_cleared));
+        getMain().ifPresent( ma -> ma.toast(R.string.cleared));
         dismiss();
     }
 

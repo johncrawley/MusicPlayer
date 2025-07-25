@@ -209,7 +209,7 @@ public class AlbumsFragment extends Fragment {
 
 
     private void toastLoaded(){
-        getMainActivity().toastIfTabsNotAutoSwitched(R.string.toast_album_tracks_loaded);
+        getMainActivity().toastIfTabsNotAutoSwitched(R.string.album_loaded);
     }
 
 

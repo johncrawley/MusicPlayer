@@ -1,18 +1,18 @@
 <resources>
 
     <string-array name="theme_color_entries">
-        <item>@string/theme_green</item>
-        <item>@string/theme_yellow</item>
-        <item>@string/theme_blue</item>
-        <item>@string/theme_light_blue</item>
-        <item>@string/theme_light_green</item>
-        <item>@string/theme_light_yellow</item>
-        <item>@string/theme_orange</item>
-        <item>@string/theme_rose</item>
-        <item>@string/theme_red</item>
-        <item>@string/theme_grey</item>
-        <item>@string/theme_magenta</item>
-        <item>@string/theme_cyan</item>
+        <item>@string/green</item>
+        <item>@string/yellow</item>
+        <item>@string/blue</item>
+        <item>@string/lt_blue</item>
+        <item>@string/lt_green</item>
+        <item>@string/lt_yellow</item>
+        <item>@string/orange</item>
+        <item>@string/rose</item>
+        <item>@string/red</item>
+        <item>@string/grey</item>
+        <item>@string/magenta</item>
+        <item>@string/cyan</item>
     </string-array>
 
     <string-array name="theme_color_values">

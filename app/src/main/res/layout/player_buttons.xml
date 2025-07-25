@@ -13,7 +13,7 @@
         android:id="@+id/previousTrackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/previous_track_button_content_description"
+        android:contentDescription="@string/prev_track_desc"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +34,7 @@
             android:id="@+id/playButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/play_button_content_description"
+            android:contentDescription="@string/play_desc"
             android:padding="@dimen/player_button_padding"
             app:srcCompat="?attr/play_button" />
 
@@ -42,7 +42,7 @@
             android:id="@+id/pauseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/pause_button_content_description"
+            android:contentDescription="@string/pause_desc"
             android:padding="@dimen/player_button_padding"
             android:visibility="gone"
             app:srcCompat="?attr/pause_button" />
@@ -53,7 +53,7 @@
         android:id="@+id/stopButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/stop_button_content_description"
+        android:contentDescription="@string/stop_desc"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/playPauseButtonLayout"
@@ -65,7 +65,7 @@
         android:id="@+id/nextTrackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/next_track_button_content_description"
+        android:contentDescription="@string/next_track_desc"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/stopButton"
@@ -86,7 +86,7 @@
             android:id="@+id/turnShuffleOffButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/shuffle_off_button_content_description"
+            android:contentDescription="@string/shuffle_off_desc"
             android:padding="@dimen/player_button_padding"
             app:srcCompat="?attr/shuffle_button" />
 
@@ -95,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:contentDescription="@string/shuffle_on_button_content_description"
+            android:contentDescription="@string/shuffle_on_desc"
             android:padding="@dimen/player_button_padding"
             app:tint="@color/image_button_shuffle_on_tint"
             app:srcCompat="?attr/shuffle_button" />

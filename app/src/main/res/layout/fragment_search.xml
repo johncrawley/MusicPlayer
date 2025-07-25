@@ -24,7 +24,7 @@
             android:maxLines="1"
             android:maxLength="@integer/search_input_max_length"
             android:imeOptions="actionDone"
-            android:hint="@string/search_edit_text_label" />
+            android:hint="@string/search_label" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/list_button_margin_horizontal"
             android:layout_marginVertical="@dimen/list_button_margin_vertical"
-            android:text="@string/button_search_add_selected" />
+            android:text="@string/search_add" />
 
         <Button
             android:id="@+id/addAllButton"
@@ -78,14 +78,14 @@
             android:layout_marginHorizontal="@dimen/list_button_margin_horizontal"
             android:layout_marginVertical="@dimen/list_button_margin_vertical"
             android:visibility="gone"
-            android:text="@string/button_search_add_all" />
+            android:text="@string/search_add_all" />
         <Button
             android:id="@+id/playSelectedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/list_button_margin_horizontal"
             android:layout_marginVertical="@dimen/list_button_margin_vertical"
-            android:text="@string/button_search_play_selected" />
+            android:text="@string/search_play" />
 
         <Button
             android:id="@+id/playNextButton"
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/list_button_margin_horizontal"
             android:layout_marginVertical="@dimen/list_button_margin_vertical"
-            android:text="@string/button_search_play_next" />
+            android:text="@string/search_enqueue" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

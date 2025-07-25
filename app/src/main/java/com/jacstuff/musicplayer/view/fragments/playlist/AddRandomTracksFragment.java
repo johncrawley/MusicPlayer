@@ -154,7 +154,7 @@ public class AddRandomTracksFragment extends DialogFragment {
 
     private void setupTitle(View parentView){
         TextView title = parentView.findViewById(R.id.dialogTitleText);
-        String text = getString(R.string.add_random_tracks_to_playlist_dialog_title, playlistName);
+        String text = getString(R.string.add_random_title, playlistName);
         title.setText(text);
     }
 

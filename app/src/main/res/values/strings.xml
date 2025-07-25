@@ -1,24 +1,24 @@
 <resources>
+
+    <string name="version" translatable="false">v1.3, 2024–2025</string>
+    <string name="font_main_detail" translatable="false">Le Patin Magicien, Freeware \n https://www.fontspace.com/le-patin-magicien-font-f39622\n\n </string>
+    <string name="font_time_detail" translatable="false">Poe Monospace, Freeware\n https://www.fontspace.com/poe-monospace-font-f23572 </string>
+    <string name="dec_random_tracks" translatable="false">&#160;-&#160;</string>
+    <string name="inc_random_tracks" translatable="false">&#160;+&#160;</string>
+    <string name="add_playlist" translatable="false">+</string>
+    <string name="null_val" translatable="false">-</string>
+    <string name="kbps" translatable="false">kbps</string>
     <string name="app_name">Music Player!</string>
-    <string name="version_and_year" translatable="false">v1.3, 2024–2025</string>
     <string name="created_by">Created by John Crawley</string>
-    <string name="about_font_heading"><u>Font Information</u></string>
-    <string name="about_font_main_text">Main text:&#160;</string>
-    <string name="about_font_main_text_font" translatable="false">Le Patin Magicien, Freeware \n https://www.fontspace.com/le-patin-magicien-font-f39622\n\n </string>
-    <string name="about_font_time_elapsed">Time elapsed:&#160;</string>
-    <string name="about_font_time_elapsed_font" translatable="false">Poe Monospace, Freeware\n https://www.fontspace.com/poe-monospace-font-f23572 </string>
-    <string name="about_icon_heading"><u>Icon Information</u></string>
-    <string name="about_icon_info">Icons loaded from Android Studio and are available under the Apache 2 License: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
-    <string name="title_activity_settings">Settings</string>
-    <string name="menu_button_refresh">Refresh</string>
-    <string name="menu_button_search">Search</string>
-    <string name="menu_button_settings">Settings</string>
-    <string name="menu_button_about">About</string>
-
-    <string name="playlist_refreshed_message">Playlist Refreshed</string>
-    <string name="playlist_refreshed_message_new_tracks_count">Playlist Refreshed (%1$d Found)</string>
-    <string name="playlist_refreshed_one_new_track">Playlist Refreshed (1 New)</string>
-
+    <string name="font_info"><u>Font Information</u></string>
+    <string name="font_main">Main text:&#160;</string>
+    <string name="font_time">Time elapsed:&#160;</string>
+    <string name="icon_info"><u>Icon Information</u></string>
+    <string name="icon_detail">Icons loaded from Android Studio under the Apache 2 License: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+    <string name="settings">Settings</string>
+    <string name="refreshed">Playlist Refreshed</string>
+    <string name="refreshed_tracks">Playlist Refreshed (%1$d Found)</string>
+    <string name="refreshed_one">Playlist Refreshed (1 New)</string>
     <string name="loading_tracks">Loading</string>
     <string name="no_tracks_found">No Tracks Found</string>
     <string name="no_genres_found">No Genres Found</string>
@@ -26,196 +26,159 @@
     <string name="no_albums_found">No Albums Found</string>
     <string name="no_items_found">None Found</string>
     <string name="playlist_is_empty">Playlist Is Empty</string>
-
-    <string name="add_random_tracks_to_playlist_dialog_title">Add Random Tracks To Playlist: %1$s</string>
-    <string name="button_text_open_settings">Settings</string>
-    <string name="button_text_refresh_playlist">Refresh</string>
-    <string name="button_text_load_genre">Load Genre</string>
-    <string name="button_text_about_app">About</string>
-
-    <string name="load_genre_dialog_title">Load Tracks of Genre</string>
-    <string name="load_tear_dialog_title">Load Tracks by Year</string>
-
-    <string name="toggle_button_all_tracks">All Tracks</string>
-    <string name="toggle_button_artists">Artists</string>
-    <string name="toggle_button_genres">Genres</string>
-    <string name="button_text_decrease_random_tracks" translatable="false">&#160;-&#160;</string>
-    <string name="button_text_increase_random_tracks" translatable="false">&#160;+&#160;</string>
-    <string name="button_add_random_tracks">Add Tracks</string>
-
+    <string name="add_random_title">Add Random Tracks To Playlist: %1$s</string>
+    <string name="btn_settings">Settings</string>
+    <string name="btn_refresh">Refresh</string>
+    <string name="btn_genre">Load Genre</string>
+    <string name="btn_about">About</string>
+    <string name="load_genre_title">Load Tracks of Genre</string>
+    <string name="load_year_title">Load Tracks by Year</string>
+    <string name="toggle_all">All Tracks</string>
+    <string name="toggle_artists">Artists</string>
+    <string name="toggle_genres">Genres</string>
+    <string name="add_random_tracks">Add Tracks</string>
     <string name="default_playlist_info">All Tracks</string>
     <string name="default_album_info">All Albums</string>
     <string name="album_artist">Artist: %1$s</string>
-    <string name="playlist_info_playlist_prefix">Playlist:</string>
-    <string name="playlist_info_artist_prefix">Artist:</string>
-    <string name="playlist_info_album_prefix">Album:</string>
-    <string name="playlist_info_genre_prefix">Genre:</string>
-    <string name="add_track_to_playlist_dialog_title">Add \"%1$s\" to a playlist:</string>
-
-    <string name="error_playing_track_toast_message">Unable to play the track at %1$s</string>
-    <string name="error_loading_track_toast_message">Unable to load the track at %1$s</string>
-
-    <string name="search_button_content_description">Search</string>
-    <string name="refresh_button_content_description">Refresh playlist from file system</string>
-    <string name="settings_button_content_description">Settings</string>
-    <string name="about_button_content_description">About App</string>
-
-    <string name="elapsed_time_label">Elapsed Time</string>
-    <string name="artist_label">Artist</string>
-    <string name="album_label">Album</string>
-    <string name="track_name">track name</string>
-    <string name="track_title_default_text">No Tracks Found</string>
-
-    <string name="toast_track_added_to_queue">Track Added To Queue</string>
-    <string name="toast_track_added_to_playlist">Track Added To Playlist</string>
-    <string name="toast_track_already_in_playlist">Track Already In Playlist</string>
-    <string name="toast_no_new_tracks_were_added_to_playlist">No New Tracks Were Added To The Playlist</string>
-    <string name="toast_tracks_added_to_playlist">%1$d Tracks Were Added To The Playlist</string>
-    <string name="toast_one_track_added_to_playlist">1 Track Was Added To The Playlist</string>
-    <string name="toast_track_removed_from_playlist">Track Removed From Playlist</string>
-    <string name="toast_tracks_removed_from_playlist">Tracks Removed From Playlist</string>
-    <string name="toast_track_removed_from_playlist_fail">The track could not be removed from the playlist</string>
-
-    <string name="play_button_content_description">Play</string>
-    <string name="stop_button_content_description">Stop</string>
-    <string name="pause_button_content_description">Pause</string>
-    <string name="next_track_button_content_description">Next Track</string>
-    <string name="previous_track_button_content_description">Previous Track</string>
-    <string name="shuffle_on_button_content_description">Turn Shuffle On</string>
-    <string name="shuffle_off_button_content_description">Turn Shuffle Off</string>
-    <string name="thumbnail_content_description">Next Track</string>
+    <string name="list_prefix">Playlist:</string>
+    <string name="artist_prefix">Artist:</string>
+    <string name="album_prefix">Album:</string>
+    <string name="genre_prefix">Genre:</string>
+    <string name="add_track_title">Add \"%1$s\" to a playlist:</string>
+    <string name="error_play_track">Unable to play the track at %1$s</string>
+    <string name="error_load_track">Unable to load the track at %1$s</string>
+    <string name="search_desc">Search</string>
+    <string name="settings_desc">Settings</string>
+    <string name="time_l">Elapsed Time</string>
+    <string name="artist_l">Artist</string>
+    <string name="album_l">Album</string>
+    <string name="name">track name</string>
+    <string name="none">No Tracks Found</string>
+    <string name="queued">Track Added To Queue</string><!--toast-->
+    <string name="added">Track Added To Playlist</string>
+    <string name="already_in_list">Track Already In Playlist</string>
+    <string name="none_added">No New Tracks Were Added To The Playlist</string>
+    <string name="new_added">%1$d Tracks Were Added To The Playlist</string>
+    <string name="one_added">1 Track Was Added To The Playlist</string>
+    <string name="one_removed">Track Removed From Playlist</string>
+    <string name="removed">Tracks Removed From Playlist</string>
+    <string name="remove_fail">The track could not be removed from the playlist</string>
+    <string name="artist_loaded">Artist Tracks Loaded</string>
+    <string name="album_loaded">Album Loaded</string>
+    <string name="list_loaded">Playlist Loaded</string>
+    <string name="cleared">Playlist Cleared</string>
+    <string name="created">Playlist Created</string>
+    <string name="genre_loaded">Genre Loaded</string>
+    <string name="album_error">Unable to load album: %1$s</string>
+    <string name="genre_error">Unable to load genre: %1$s</string>
+    <string name="play_desc">Play</string>
+    <string name="stop_desc">Stop</string>
+    <string name="pause_desc">Pause</string>
+    <string name="next_track_desc">Next Track</string>
+    <string name="prev_track_desc">Previous Track</string>
+    <string name="shuffle_on_desc">Turn Shuffle On</string>
+    <string name="shuffle_off_desc">Turn Shuffle Off</string>
     <string name="default_path">Music/</string>
-
-    <string name="toast_artist_tracks_loaded">Artist Tracks Loaded</string>
-    <string name="toast_album_tracks_loaded">Album Loaded</string>
-    <string name="toast_playlist_tracks_loaded">Playlist Loaded</string>
-    <string name="toast_playlist_tracks_cleared">Playlist Cleared</string>
-    <string name="toast_playlist_created">Playlist Created</string>
-    <string name="toast_genre_tracks_loaded">Genre Loaded</string>
-
-    <string name="tracks_tab">Tracks</string>
-    <string name="playlists_tab">Lists</string>
+    <string name="tracks_tab">Tracks</string><!--tabs-->
+    <string name="lists_tab">Lists</string>
     <string name="artists_tab">Artists</string>
     <string name="albums_tab">Albums</string>
-    <string name="genres_tab">Genres</string>
-    <string name="search_tab">Find</string>
 
-    <string name="button_search_add_selected">Add</string>
-    <string name="button_search_cancel">Cancel</string>
-    <string name="button_search_play_selected">Play</string>
-    <string name="button_search_play_next">Enqueue</string>
-    <string name="button_search_add_all">Add All</string>
-    <string name="button_add_playlist" translatable="false">+</string>
-    <string name="button_load_playlist">Load</string>
-    <string name="button_delete_playlist">Remove</string>
-    <string name="button_load_tracks_from_artist">Load Tracks</string>
-    <string name="button_add_tracks_from_artist">Add To Playlist</string>
-    <string name="button_add_tracks_from_album">Add To Playlist</string>
-    <string name="add_playlist_input_text_hint">Playlist Name</string>
+    <string name="search_add">Add</string>
+    <string name="search_cancel">Cancel</string>
+    <string name="search_play">Play</string>
+    <string name="search_enqueue">Enqueue</string>
+    <string name="search_add_all">Add All</string>
+    <string name="load_playlist">Load</string>
+    <string name="del_playlist">Remove</string>
+    <string name="load_tracks">Load Tracks</string>
+    <string name="list_name">Playlist Name</string>
+    <string name="info">Info</string><!--track options btn-->
+    <string name="enqueue">Enqueue</string>
+    <string name="add_to_a_list">Add To A Playlist</string>
+    <string name="remove_from_list">Remove From Playlist</string>
+    <string name="load_album">Load Album</string>
+    <string name="load_artist">Load Artist</string>
 
-    <string name="button_track_options_info">Info</string>
-    <string name="button_track_options_enqueue">Enqueue</string>
-    <string name="button_track_options_add_to_playlist">Add To A Playlist</string>
-    <string name="button_track_options_remove_from_playlist">Remove From Playlist</string>
-    <string name="button_track_options_load_album">Load Album</string>
-    <string name="button_track_options_load_artist">Load Artist</string>
-
-    <string name="button_playlist_options_load">Load</string>
-    <string name="button_playlist_options_remove">Remove</string>
-    <string name="button_playlist_add_random_tracks">Add Random Tracks</string>
-    <string name="button_playlist_clear_tracks">Clear Tracks</string>
-    <string name="button_playlist_options_new">New</string>
-    <string name="button_artist_options_load">Load</string>
-    <string name="button_artist_options_add_tracks_to_playlist">Add To Playlist</string>
-    <string name="button_options_add_random_tracks_to_playlist">Add Random Tracks To Playlist</string>
-    <string name="add_random_tracks_number">Number of Tracks To Add</string>
+    <string name="load">Load</string>
+    <string name="remove">Remove</string>
+    <string name="add_random">Add Random Tracks</string>
+    <string name="clear">Clear Tracks</string>
+    <string name="list_new">New</string>
+    <string name="add_to_list">Add To Playlist</string>
+    <string name="add_rand_list">Add Random Tracks To Playlist</string>
+    <string name="add_rand_num">Number of Tracks To Add</string>
     <string name="list_label_default">List</string>
 
-    <string name="album_art_content_description">Album Art</string>
-    <string name="album_art_large_view_content_description">Album Art Expanded View</string>
-    <string name="create_playlist_icon_content_description">Create Playlist/</string>
-    <string name="show_all_albums_icon_content_description">Show All Albums/</string>
-    <string name="add_tracks_to_playlist_icon_content_description">Add Tracks To Current Playlist/</string>
+    <string name="art_desc">Album Art</string>
+    <string name="art_large_desc">Album Art Expanded View</string>
+    <string name="create_list_desc">Create Playlist/</string>
+    <string name="show_all_albums_desc">Show All Albums/</string>
+    <string name="add_to_list_icon_desc">Add Tracks To Current Playlist/</string>
+    <string name="stop_now">Stop Now</string>
+    <string name="stop_after_current">Stop After Current Track</string>
+    <string name="queue_stop_three">Stop In Three Minutes</string>
+    <string name="queue_stop_one">Stop In One Minute</string>
 
-    <string name="button_stop_now">Stop Now</string>
-    <string name="button_stop_after_current_track">Stop After Current Track</string>
-    <string name="button_stop_in_three_minutes">Stop In Three Minutes</string>
-    <string name="button_stop_in_one_minute">Stop In One Minute</string>
+    <string name="delete_list_title">Delete Playlist</string>
+    <string name="delete_list_confirm">Are you sure you want to delete the Playlist: %1$s?</string>
+    <string name="clear_tracks_title">Clear Tracks From Playlist</string>
+    <string name="clear_tracks_confirm">Are you sure you want to remove all tracks from the Playlist: %1$s?</string>
+    <string name="list_deleted">Playlist Deleted</string>
 
-    <string name="delete_confirm_dialog_title">Delete Playlist</string>
-    <string name="delete_confirm_dialog_text">Are you sure you want to delete the Playlist: %1$s?</string>
-    <string name="clear_tracks_confirm_dialog_title">Clear Tracks From Playlist</string>
-    <string name="clear_tracks_confirm_dialog_text">Are you sure you want to remove all tracks from the Playlist: %1$s?</string>
-    <string name="delete_playlist_toast_success">Playlist Deleted</string>
-
-
-    <string name="add_playlist_already_exists_error">This name is already in use</string>
-    <string name="unable_to_load_album_toast_message">Unable to load album: %1$s</string>
-    <string name="unable_to_load_genre_toast_message">Unable to load genre: %1$s</string>
+    <string name="playlist_already_exists">This name is already in use</string>
     <string name="create_playlist_button_text">Create</string>
     <string name="status_ready">Ready</string>
     <string name="status_error">Error - Unable To Play</string>
     <string name="status_playing">Playing</string>
     <string name="status_paused">Paused</string>
     <string name="status_connecting">Connecting</string>
-    <string name="notification_button_title_play">Play</string>
-    <string name="notification_button_title_stop">Stop</string>
-    <string name="notification_button_title_pause">Pause</string>
-    <string name="notification_button_title_previous">Previous</string>
-    <string name="notification_button_title_next">Next</string>
-
-    <string name="track_info_title"><b>Title</b></string>
-    <string name="track_info_artist"><b>Artist</b></string>
-    <string name="track_info_album"><b>Album</b></string>
-    <string name="track_info_track_number"><b>Track #</b></string>
-    <string name="track_info_disc"><b>Disc</b></string>
-    <string name="track_info_genre"><b>Genre</b></string>
-    <string name="track_info_year"><b>Year</b></string>
-    <string name="track_info_length"><b>Length</b></string>
-    <string name="track_info_path"><b>Path</b></string>
-    <string name="track_info_bitrate"><b>Bitrate</b></string>
-    <string name="track_info_null_value" translatable="false">-</string>
-    <string name="track_info_bitrate_kbps" translatable="false">kbps</string>
-
-    <string name="search_edit_text_label">Search for track title, artist or album</string>
-    <!-- Preference Titles -->
+    <string name="notification_play">Play</string>
+    <string name="notification_stop">Stop</string>
+    <string name="notification_pause">Pause</string>
+    <string name="notification_prev">Previous</string>
+    <string name="notification_next">Next</string>
+    <string name="title"><b>Title</b></string>
+    <string name="artist"><b>Artist</b></string><!--track info-->
+    <string name="album"><b>Album</b></string>
+    <string name="t_num"><b>Track #</b></string>
+    <string name="disc"><b>Disc</b></string>
+    <string name="genre"><b>Genre</b></string>
+    <string name="year"><b>Year</b></string>
+    <string name="length"><b>Length</b></string>
+    <string name="path"><b>Path</b></string>
+    <string name="bitrate"><b>Bitrate</b></string>
+    <string name="search_label">Search for track title, artist or album</string>
     <string name="theme_header">Theme</string>
     <string name="lists_header">Lists</string>
     <string name="search_header">Search</string>
     <string name="tracks_header">Tracks</string>
-
-    <!-- Preferences -->
     <string name="theme_title">Theme</string>
-    <string name="min_number_of_tracks_for_main_artist_title">Minimum tracks an artist needs to be shown in the Artist list</string>
-    <string name="min_number_of_tracks_for_main_artist_summary">The minimum number of tracks belonging to an artist for that artist to appear in the artists list.</string>
-    <string name="include_music_with_pathname">Load Tracks with Pathname</string>
-    <string name="include_music_with_pathname_summary">Only tracks that include the given string will be shown in the All Tracks list. </string>
-    <string name="exclude_tracks_with_pathname">Exclude Tracks</string>
-    <string name="exclude_tracks_with_pathname_summary">Exclude tracks that include the given strings in their path names (separated by commas)</string>
-    <string name="number_of_random_tracks_to_add">The number of random tracks that are added to a playlist</string>
-    <string name="number_of_random_tracks_to_add_summary">When the user chooses to add random tracks to an artist or album, this is the number of tracks that get added</string>
-
-
-    <string name="dismiss_search_after_selection_title">Dismiss search view when a result is selected</string>
-    <string name="simple_search_enabled_title">Simplified search view (no option buttons) </string>
-
-    <string name="move_to_next_track_when_playlist_loaded_title">Automatically load the next track when a playlist is loaded</string>
-    <string name="move_to_next_track_when_playlist_loaded_summary">Enable to automatically select the next track when a playlist is selected</string>
-    <string name="ignore_duplicates_in_all_tracks_title">Hide duplicates in All-Tracks and Artists playlists</string>
-    <string name="auto_switch_tabs_after_playlist_selection_title">Automatically switch tabs after a playlist is selected</string>
-    <string name="only_show_album_tracks_from_selected_artist">Only show album tracks from the selected artist</string>
-
-    <string name="theme_blue">Blue</string>
-    <string name="theme_light_blue">Light Blue</string>
-    <string name="theme_light_green">Light Green</string>
-    <string name="theme_light_yellow">Light Yellow</string>
-    <string name="theme_orange">Orange</string>
-    <string name="theme_red">Red</string>
-    <string name="theme_green">Green</string>
-    <string name="theme_yellow">Yellow</string>
-    <string name="theme_grey">Grey</string>
-    <string name="theme_cyan">Cyan</string>
-    <string name="theme_magenta">Magenta</string>
-    <string name="theme_rose">Rose</string>
-
+    <string name="min_tracks_artist_title">Minimum tracks an artist needs to be shown in the Artist list</string>
+    <string name="min_tracks_artist_summary">The minimum number of tracks belonging to an artist for that artist to appear in the artists list.</string>
+    <string name="include_pathname">Load Tracks with Pathname</string>
+    <string name="include_path_summary">Only tracks that include the given string will be shown in the All Tracks list. </string>
+    <string name="exclude_path">Exclude Tracks</string>
+    <string name="exclude_path_summary">Exclude tracks that include the given strings in their path names (separated by commas)</string>
+    <string name="rand_tracks_num">The number of random tracks that are added to a playlist</string>
+    <string name="rand_tracks_num_summary">When the user chooses to add random tracks to an artist or album, this is the number of tracks that get added</string>
+    <string name="dismiss_search">Dismiss search view when a result is selected</string>
+    <string name="simple_search_enabled">Simplified search view (no option buttons) </string>
+    <string name="autoload_playlist_track">Automatically load the next track when a playlist is loaded</string>
+    <string name="autoload_playlist_track_summary">Enable to automatically select the next track when a playlist is selected</string>
+    <string name="ignore_duplicates_title">Hide duplicates in All-Tracks and Artists playlists</string>
+    <string name="auto_switch_tabs_title">Automatically switch tabs after a playlist is selected</string>
+    <string name="only_show_artist_tracks">Only show album tracks from the selected artist</string>
+    <string name="blue">Blue</string>
+    <string name="lt_blue">Light Blue</string>
+    <string name="lt_green">Light Green</string>
+    <string name="lt_yellow">Light Yellow</string>
+    <string name="orange">Orange</string>
+    <string name="red">Red</string>
+    <string name="green">Green</string>
+    <string name="yellow">Yellow</string>
+    <string name="grey">Grey</string>
+    <string name="cyan">Cyan</string>
+    <string name="magenta">Magenta</string>
+    <string name="rose">Rose</string>
 </resources>

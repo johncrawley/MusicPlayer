@@ -18,7 +18,7 @@
 
     <ImageView
         android:id="@+id/albumArtImageView"
-        android:contentDescription="@string/album_art_content_description"
+        android:contentDescription="@string/art_desc"
         android:padding="@dimen/album_art_padding"
         android:background="@drawable/album_art_border"
         android:cropToPadding="true"
@@ -83,7 +83,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="@dimen/track_time_margin_bottom_small"
-        android:text="@string/elapsed_time_label"
+        android:text="@string/time_l"
         android:fontFamily="@font/poe_monospace_djj6"
         android:textSize="@dimen/track_time_text_size_small"
         app:layout_constraintTop_toBottomOf="@+id/trackTimeSeekBar"

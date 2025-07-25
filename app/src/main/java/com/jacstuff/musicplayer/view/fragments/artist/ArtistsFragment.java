@@ -156,7 +156,7 @@ public class ArtistsFragment extends Fragment {
 
 
     private void toastLoaded(){
-        getMainActivity().toastIfTabsNotAutoSwitched(R.string.toast_artist_tracks_loaded);
+        getMainActivity().toastIfTabsNotAutoSwitched(R.string.artist_loaded);
     }
 
 

@@ -72,7 +72,7 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
         if(title.isBlank()){
             return;
         }
-        String text = getString(R.string.add_track_to_playlist_dialog_title, title);
+        String text = getString(R.string.add_track_title, title);
         titleTextView.setText(text);
     }
 

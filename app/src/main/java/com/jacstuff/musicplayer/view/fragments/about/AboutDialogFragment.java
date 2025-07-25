@@ -45,10 +45,10 @@ public class AboutDialogFragment extends DialogFragment {
 
     private void setupFontInfo(View parentView){
         TextView fontInfoTextView = parentView.findViewById(R.id.aboutFontText);
-        var fontMainText = getString(R.string.about_font_main_text);
-        var fontMainTextFont = getString(R.string.about_font_main_text_font);
-        var fontTimeElapsed = getString(R.string.about_font_time_elapsed);
-        var fontTimeElapsedFont = getString(R.string.about_font_time_elapsed_font);
+        var fontMainText = getString(R.string.font_main);
+        var fontMainTextFont = getString(R.string.font_main_detail);
+        var fontTimeElapsed = getString(R.string.font_time);
+        var fontTimeElapsedFont = getString(R.string.font_time_detail);
 
         var text = fontMainText + fontMainTextFont + fontTimeElapsed + fontTimeElapsedFont;
         fontInfoTextView.setText(text);

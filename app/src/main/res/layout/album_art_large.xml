@@ -16,6 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/album_art_empty"
-        android:contentDescription="@string/album_art_large_view_content_description" />
+        android:contentDescription="@string/art_large_desc" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

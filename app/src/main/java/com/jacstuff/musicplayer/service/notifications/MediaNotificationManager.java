@@ -204,7 +204,7 @@ public class MediaNotificationManager {
         }
         if(!mediaPlayerService.isPlaying() && !currentUrl.isEmpty()){
             notification.addAction(android.R.drawable.ic_media_play,
-                    context.getString(R.string.notification_button_title_play),
+                    context.getString(R.string.notification_play),
                     createPendingIntentFor(ACTION_PLAY));
         }
     }
@@ -213,7 +213,7 @@ public class MediaNotificationManager {
     private void addPauseButtonTo(NotificationCompat.Builder notification){
         if(mediaPlayerService.isPlaying()){
             notification.addAction(android.R.drawable.ic_media_pause,
-                    context.getString(R.string.notification_button_title_pause),
+                    context.getString(R.string.notification_pause),
                     createPendingIntentFor(ACTION_PAUSE_PLAYER));
         }
     }
@@ -224,7 +224,7 @@ public class MediaNotificationManager {
             return;
         }
         notification.addAction(android.R.drawable.ic_media_previous,
-                context.getString(R.string.notification_button_title_previous),
+                context.getString(R.string.notification_prev),
                 createPendingIntentFor(ACTION_SELECT_PREVIOUS_TRACK));
     }
 
@@ -234,7 +234,7 @@ public class MediaNotificationManager {
             return;
         }
         notification.addAction(android.R.drawable.ic_media_next,
-                context.getString(R.string.notification_button_title_next),
+                context.getString(R.string.notification_next),
                 createPendingIntentFor(ACTION_SELECT_NEXT_TRACK));
     }
 

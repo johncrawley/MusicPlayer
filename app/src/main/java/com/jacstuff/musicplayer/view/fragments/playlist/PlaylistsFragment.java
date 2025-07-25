@@ -200,8 +200,8 @@ public class PlaylistsFragment extends Fragment {
         var playlist = listAdapter.getLongClickedPlaylist();
         if(playlist != null){
             AlertHelper.showDialogForPlaylist(getContext(),
-                    R.string.delete_confirm_dialog_title,
-                    R.string.delete_confirm_dialog_text,
+                    R.string.delete_list_title,
+                    R.string.delete_list_confirm,
                     playlist.getName(),
                     this::deletePlaylistAndSelectFirstPlaylist);
         }
@@ -220,7 +220,7 @@ public class PlaylistsFragment extends Fragment {
         listAdapter.clearLongClickedView();
         delete(playlist);
         refreshList();
-        toast(R.string.delete_playlist_toast_success);
+        toast(R.string.list_deleted);
     }
 
 
@@ -316,13 +316,13 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void toastLoaded(){
-        getMain().ifPresent(ma -> ma.toastIfTabsNotAutoSwitched(R.string.toast_playlist_tracks_loaded));
+        getMain().ifPresent(ma -> ma.toastIfTabsNotAutoSwitched(R.string.list_loaded));
     }
 
 
     private void toastPlaylistCreated(){
         new Handler(Looper.getMainLooper())
-                .postDelayed(()-> toast(R.string.toast_playlist_created) , 500);
+                .postDelayed(()-> toast(R.string.created) , 500);
     }
 
     private void toast(int strId){

@@ -284,13 +284,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void addSelectedTrackToQueue(){enqueue(selectedTrack);}
 
-    public void notifyTrackAddedToPlaylist(){ toast(R.string.toast_track_added_to_playlist); }
+    public void notifyTrackAddedToPlaylist(){ toast(R.string.added); }
 
-    public void notifyTrackAlreadyInPlaylist(){toast(R.string.toast_track_already_in_playlist);}
+    public void notifyTrackAlreadyInPlaylist(){toast(R.string.already_in_list);}
 
 
     public void notifyTrackRemovedFromPlaylist(boolean success){
-        toast(success ? R.string.toast_track_removed_from_playlist : R.string.toast_track_removed_from_playlist_fail);
+        toast(success ? R.string.one_removed : R.string.remove_fail);
     }
 
 
@@ -311,15 +311,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void enqueue(Track track){
         mediaPlayerService.getPlaylistManager().addTrackToQueue(track);
-        toast(R.string.toast_track_added_to_queue);
+        toast(R.string.queued);
     }
 
 
     public void notifyTracksAddedToPlaylist(int numberOfTracks){
         switch (numberOfTracks) {
-            case 0 -> toast(R.string.toast_no_new_tracks_were_added_to_playlist);
-            case 1 -> toast(R.string.toast_one_track_added_to_playlist);
-            default -> toast(getString(R.string.toast_tracks_added_to_playlist, numberOfTracks));
+            case 0 -> toast(R.string.none_added);
+            case 1 -> toast(R.string.one_added);
+            default -> toast(getString(R.string.new_added, numberOfTracks));
         }
         sendMessage(Message.TRACKS_ADDED);
     }
@@ -339,13 +339,13 @@ public class MainActivity extends AppCompatActivity {
             playlistHelper.loadWholeAlbumOf(selectedTrack);
         }
 
-        toastIfTabsNotAutoSwitched(R.string.toast_album_tracks_loaded);
+        toastIfTabsNotAutoSwitched(R.string.album_loaded);
     }
 
 
     public void loadArtistOfSelectedTrack(){
         mediaPlayerService.loadArtistOfTrack(selectedTrack);
-        toastIfTabsNotAutoSwitched(R.string.toast_artist_tracks_loaded);
+        toastIfTabsNotAutoSwitched(R.string.artist_loaded);
     }
 
 
@@ -383,13 +383,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void displayError(Track track){
-        String errorMessage = getString(R.string.error_playing_track_toast_message, track.getPathname());
+        String errorMessage = getString(R.string.error_play_track, track.getPathname());
         toast(errorMessage);
     }
 
 
     public void toastFileDoesNotExistError(Track track){
-        String errorMessage = getString(R.string.error_loading_track_toast_message, track.getPathname());
+        String errorMessage = getString(R.string.error_load_track, track.getPathname());
         toast(errorMessage);
     }
 
@@ -432,12 +432,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void notifyAlbumNotLoaded(String albumName){
-        toast(R.string.unable_to_load_album_toast_message, albumName);
+        toast(R.string.album_error, albumName);
     }
 
 
     public void notifyGenreNotLoaded(String genreName){
-        toast(R.string.unable_to_load_genre_toast_message, genreName);
+        toast(R.string.genre_error, genreName);
     }
 
 
@@ -528,7 +528,7 @@ public class MainActivity extends AppCompatActivity {
             viewModel.isFirstPlaylistLoad = false;
             return;
         }
-        String msg = getResources().getString(R.string.playlist_refreshed_message);
+        String msg = getResources().getString(R.string.refreshed);
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
@@ -544,8 +544,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         String msg = newTrackCount > 1 ?
-                getResources().getString(R.string.playlist_refreshed_message_new_tracks_count, newTrackCount)
-                : getResources().getString(R.string.playlist_refreshed_one_new_track);
+                getResources().getString(R.string.refreshed_tracks, newTrackCount)
+                : getResources().getString(R.string.refreshed_one);
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
