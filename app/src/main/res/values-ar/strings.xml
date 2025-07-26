@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">مشغل الموسيقى!</string>
+
+    <string name="created_by">تم إنشاؤه بواسطة جون كراولي</string>
+
+    <string name="font_info">
+    <u>معلومات الخط</u>
+  </string>
+
+    <string name="font_main">النص الرئيسي: </string>
+
+    <string name="font_time">الوقت المنقضي: </string>
+
+    <string name="icon_info">
+    <u>معلومات الأيقونة</u>
+  </string>
+
+    <string name="icon_detail">الأيقونات التي تم تحميلها من Android Studio بموجب ترخيص Apache 2: https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">إعدادات</string>
+
+    <string name="refreshed">قائمة التشغيل المحدثة</string>
+
+    <string name="refreshed_tracks">تم تحديث قائمة التشغيل (تم العثور على %1$d)</string>
+
+    <string name="refreshed_one">قائمة التشغيل المحدثة (1 جديدة)</string>
+
+    <string name="loading_tracks">تحميل</string>
+
+    <string name="no_tracks_found">لم يتم العثور على أي مسارات</string>
+
+    <string name="no_genres_found">لم يتم العثور على أي أنواع</string>
+
+    <string name="no_artists_found">لم يتم العثور على فنانين</string>
+
+    <string name="no_albums_found">لم يتم العثور على الألبومات</string>
+
+    <string name="no_items_found">لم يتم العثور على أي شيء</string>
+
+    <string name="playlist_is_empty">قائمة التشغيل فارغة</string>
+
+    <string name="add_random_title">إضافة مسارات عشوائية إلى قائمة التشغيل: %1$s</string>
+
+    <string name="btn_settings">إعدادات</string>
+
+    <string name="btn_refresh">ينعش</string>
+
+    <string name="btn_genre">تحميل النوع</string>
+
+    <string name="btn_about">عن</string>
+
+    <string name="load_genre_title">تحميل مسارات النوع</string>
+
+    <string name="load_year_title">مسارات التحميل حسب السنة</string>
+
+    <string name="toggle_all">جميع المسارات</string>
+
+    <string name="toggle_artists">الفنانون</string>
+
+    <string name="toggle_genres">الأنواع</string>
+
+    <string name="add_random_tracks">إضافة المسارات</string>
+
+    <string name="default_playlist_info">جميع المسارات</string>
+
+    <string name="default_album_info">جميع الألبومات</string>
+
+    <string name="album_artist">الفنان: %1$s</string>
+
+    <string name="list_prefix">قائمة التشغيل:</string>
+
+    <string name="artist_prefix">الفنان:</string>
+
+    <string name="album_prefix">الألبوم:</string>
+
+    <string name="genre_prefix">النوع:</string>
+
+    <string name="add_track_title">أضف \"%1$s\" إلى قائمة التشغيل:</string>
+
+    <string name="error_play_track">غير قادر على تشغيل المسار في %1$s</string>
+
+    <string name="error_load_track">غير قادر على تحميل المسار في %1$s</string>
+
+    <string name="search_desc">يبحث</string>
+
+    <string name="settings_desc">إعدادات</string>
+
+    <string name="time_l">الوقت المنقضي</string>
+
+    <string name="artist_l">فنان</string>
+
+    <string name="album_l">الألبوم</string>
+
+    <string name="name">اسم المسار</string>
+
+    <string name="none">لم يتم العثور على أي مسارات</string>
+
+    <string name="queued">تمت إضافة المسار إلى قائمة الانتظار</string>
+    <!--toast-->
+
+    <string name="added">تمت إضافة المسار إلى قائمة التشغيل</string>
+
+    <string name="already_in_list">المسار موجود بالفعل في قائمة التشغيل</string>
+
+    <string name="none_added">لم تتم إضافة أي مسارات جديدة إلى قائمة التشغيل</string>
+
+    <string name="new_added">تمت إضافة %1$d مسارًا إلى قائمة التشغيل</string>
+
+    <string name="one_added">تمت إضافة مسار واحد إلى قائمة التشغيل</string>
+
+    <string name="one_removed">تمت إزالة المسار من قائمة التشغيل</string>
+
+    <string name="removed">المسارات التي تمت إزالتها من قائمة التشغيل</string>
+
+    <string name="remove_fail">لم يتم إزالة المسار من قائمة التشغيل</string>
+
+    <string name="artist_loaded">مسارات الفنان محملة</string>
+
+    <string name="album_loaded">تم تحميل الألبوم</string>
+
+    <string name="list_loaded">تم تحميل قائمة التشغيل</string>
+
+    <string name="cleared">تم مسح قائمة التشغيل</string>
+
+    <string name="created">تم إنشاء قائمة التشغيل</string>
+
+    <string name="genre_loaded">النوع محمل</string>
+
+    <string name="album_error">تعذر تحميل الألبوم: %1$s</string>
+
+    <string name="genre_error">تعذر تحميل النوع: %1$s</string>
+
+    <string name="play_desc">يلعب</string>
+
+    <string name="stop_desc">قف</string>
+
+    <string name="pause_desc">يوقف</string>
+
+    <string name="next_track_desc">المسار التالي</string>
+
+    <string name="prev_track_desc">المسار السابق</string>
+
+    <string name="shuffle_on_desc">تشغيل الخلط</string>
+
+    <string name="shuffle_off_desc">إيقاف تشغيل الخلط</string>
+
+    <string name="default_path">موسيقى/</string>
+
+    <string name="tracks_tab">المسارات</string>
+    <!--tabs-->
+
+    <string name="lists_tab">القوائم</string>
+
+    <string name="artists_tab">الفنانون</string>
+
+    <string name="albums_tab">الألبومات</string>
+
+    <string name="search_add">يضيف</string>
+
+    <string name="search_cancel">يلغي</string>
+
+    <string name="search_play">يلعب</string>
+
+    <string name="search_enqueue">إدراج في قائمة الانتظار</string>
+
+    <string name="search_add_all">إضافة الكل</string>
+
+    <string name="load_playlist">حمولة</string>
+
+    <string name="del_playlist">يزيل</string>
+
+    <string name="load_tracks">مسارات التحميل</string>
+
+    <string name="list_name">اسم قائمة التشغيل</string>
+
+    <string name="info">معلومات</string>
+    <!--track options btn-->
+
+    <string name="enqueue">إدراج في قائمة الانتظار</string>
+
+    <string name="add_to_a_list">أضف إلى قائمة التشغيل</string>
+
+    <string name="remove_from_list">إزالة من قائمة التشغيل</string>
+
+    <string name="load_album">تحميل الألبوم</string>
+
+    <string name="load_artist">تحميل الفنان</string>
+
+    <string name="load">حمولة</string>
+
+    <string name="remove">يزيل</string>
+
+    <string name="add_random">إضافة مسارات عشوائية</string>
+
+    <string name="clear">مسح المسارات</string>
+
+    <string name="list_new">جديد</string>
+
+    <string name="add_to_list">أضف إلى قائمة التشغيل</string>
+
+    <string name="add_rand_list">إضافة مسارات عشوائية إلى قائمة التشغيل</string>
+
+    <string name="add_rand_num">عدد المسارات المراد إضافتها</string>
+
+    <string name="list_label_default">قائمة</string>
+
+    <string name="art_desc">فن الألبوم</string>
+
+    <string name="art_large_desc">عرض موسع لفن الألبوم</string>
+
+    <string name="create_list_desc">إنشاء قائمة تشغيل/</string>
+
+    <string name="show_all_albums_desc">عرض جميع الألبومات/</string>
+
+    <string name="add_to_list_icon_desc">إضافة مسارات إلى قائمة التشغيل الحالية/</string>
+
+    <string name="stop_now">توقف الآن</string>
+
+    <string name="stop_after_current">التوقف بعد المسار الحالي</string>
+
+    <string name="queue_stop_three">توقف في ثلاث دقائق</string>
+
+    <string name="queue_stop_one">توقف في دقيقة واحدة</string>
+
+    <string name="delete_list_title">حذف قائمة التشغيل</string>
+
+    <string name="delete_list_confirm">هل أنت متأكد أنك تريد حذف قائمة التشغيل: %1$s؟</string>
+
+    <string name="clear_tracks_title">مسح المسارات من قائمة التشغيل</string>
+
+    <string name="clear_tracks_confirm">هل أنت متأكد أنك تريد إزالة جميع المسارات من قائمة التشغيل: %1$s؟</string>
+
+    <string name="list_deleted">تم حذف قائمة التشغيل</string>
+
+    <string name="playlist_already_exists">هذا الاسم قيد الاستخدام بالفعل</string>
+
+    <string name="create_playlist_button_text">يخلق</string>
+
+    <string name="status_ready">مستعد</string>
+
+    <string name="status_error">خطأ - غير قادر على اللعب</string>
+
+    <string name="status_playing">اللعب</string>
+
+    <string name="status_paused">متوقف مؤقتًا</string>
+
+    <string name="status_connecting">الاتصال</string>
+
+    <string name="notification_play">يلعب</string>
+
+    <string name="notification_stop">قف</string>
+
+    <string name="notification_pause">يوقف</string>
+
+    <string name="notification_prev">سابق</string>
+
+    <string name="notification_next">التالي</string>
+
+    <string name="title">
+    <b>العنوان</b>
+  </string>
+
+    <string name="artist">
+    <b>فنان</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>الألبوم</b>
+  </string>
+
+    <string name="t_num">
+    <b>مسار #</b>
+  </string>
+
+    <string name="disc">
+    <b>القرص</b>
+  </string>
+
+    <string name="genre">
+    <b>النوع</b>
+  </string>
+
+    <string name="year">
+    <b>السنة</b>
+  </string>
+
+    <string name="length">
+    <b>الطول</b>
+  </string>
+
+    <string name="path">
+    <b>المسار</b>
+  </string>
+
+    <string name="bitrate">
+    <b>معدل البت</b>
+  </string>
+
+    <string name="search_label">ابحث عن عنوان المسار أو الفنان أو الألبوم</string>
+
+    <string name="theme_header">سمة</string>
+
+    <string name="lists_header">القوائم</string>
+
+    <string name="search_header">يبحث</string>
+
+    <string name="tracks_header">المسارات</string>
+
+    <string name="theme_title">سمة</string>
+
+    <string name="min_tracks_artist_title">الحد الأدنى من المسارات التي يجب أن يظهرها الفنان في قائمة الفنانين</string>
+
+    <string name="min_tracks_artist_summary">الحد الأدنى لعدد المسارات التي تنتمي إلى فنان ما لكي يظهر هذا الفنان في قائمة الفنانين.</string>
+
+    <string name="include_pathname">تحميل المسارات باستخدام اسم المسار</string>
+
+    <string name="include_path_summary">سيتم عرض المسارات التي تتضمن السلسلة المحددة فقط في قائمة جميع المسارات. </string>
+
+    <string name="exclude_path">استبعاد المسارات</string>
+
+    <string name="exclude_path_summary">استبعاد المسارات التي تتضمن السلاسل المحددة في أسماء مساراتها (مفصولة بفاصلات)</string>
+
+    <string name="rand_tracks_num">عدد المسارات العشوائية التي تمت إضافتها إلى قائمة التشغيل</string>
+
+    <string name="rand_tracks_num_summary">عندما يختار المستخدم إضافة مسارات عشوائية إلى فنان أو ألبوم، فهذا هو عدد المسارات التي تتم إضافتها</string>
+
+    <string name="dismiss_search">إغلاق عرض البحث عند تحديد نتيجة</string>
+
+    <string name="simple_search_enabled">عرض بحث مبسط (لا توجد أزرار خيارات) </string>
+
+    <string name="autoload_playlist_track">تحميل المسار التالي تلقائيًا عند تحميل قائمة التشغيل</string>
+
+    <string name="autoload_playlist_track_summary">تمكين تحديد المسار التالي تلقائيًا عند تحديد قائمة التشغيل</string>
+
+    <string name="ignore_duplicates_title">إخفاء التكرارات في قوائم تشغيل جميع المسارات والفنانين</string>
+
+    <string name="auto_switch_tabs_title">التبديل التلقائي بين علامات التبويب بعد تحديد قائمة التشغيل</string>
+
+    <string name="only_show_artist_tracks">إظهار مسارات الألبوم للفنان المحدد فقط</string>
+
+    <string name="blue">أزرق</string>
+
+    <string name="lt_blue">أزرق فاتح</string>
+
+    <string name="lt_green">أخضر فاتح</string>
+
+    <string name="lt_yellow">أصفر فاتح</string>
+
+    <string name="orange">البرتقالي</string>
+
+    <string name="red">أحمر</string>
+
+    <string name="green">أخضر</string>
+
+    <string name="yellow">أصفر</string>
+
+    <string name="grey">رمادي</string>
+
+    <string name="cyan">سماوي</string>
+
+    <string name="magenta">أرجواني</string>
+
+    <string name="rose">وَردَة</string>
+</resources>

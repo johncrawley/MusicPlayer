@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">Hudební přehrávač!</string>
+
+    <string name="created_by">Vytvořil John Crawley</string>
+
+    <string name="font_info">
+    <u>Informace o písmu</u>
+  </string>
+
+    <string name="font_main">Hlavní text: </string>
+
+    <string name="font_time">Uplynulý čas: </string>
+
+    <string name="icon_info">
+    <u>Informace o ikoně</u>
+  </string>
+
+    <string name="icon_detail">Ikony načtené z Android Studia pod licencí Apache 2: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">Nastavení</string>
+
+    <string name="refreshed">Seznam skladeb obnoven</string>
+
+    <string name="refreshed_tracks">Seznam videí obnoven (nalezeno: %1$d)</string>
+
+    <string name="refreshed_one">Seznam skladeb obnoven (1 nový)</string>
+
+    <string name="loading_tracks">Načítání</string>
+
+    <string name="no_tracks_found">Nebyly nalezeny žádné stopy</string>
+
+    <string name="no_genres_found">Nebyly nalezeny žádné žánry</string>
+
+    <string name="no_artists_found">Nebyli nalezeni žádní umělci</string>
+
+    <string name="no_albums_found">Nebyla nalezena žádná alba</string>
+
+    <string name="no_items_found">Žádné nenalezeno</string>
+
+    <string name="playlist_is_empty">Seznam skladeb je prázdný</string>
+
+    <string name="add_random_title">Přidat náhodné skladby do seznamu skladeb: %1$s</string>
+
+    <string name="btn_settings">Nastavení</string>
+
+    <string name="btn_refresh">Obnovit</string>
+
+    <string name="btn_genre">Načíst žánr</string>
+
+    <string name="btn_about">O</string>
+
+    <string name="load_genre_title">Načíst skladby žánru</string>
+
+    <string name="load_year_title">Načíst skladby podle roku</string>
+
+    <string name="toggle_all">Všechny skladby</string>
+
+    <string name="toggle_artists">Umělci</string>
+
+    <string name="toggle_genres">Žánry</string>
+
+    <string name="add_random_tracks">Přidat stopy</string>
+
+    <string name="default_playlist_info">Všechny skladby</string>
+
+    <string name="default_album_info">Všechna alba</string>
+
+    <string name="album_artist">Umělec: %1$s</string>
+
+    <string name="list_prefix">Playlist:</string>
+
+    <string name="artist_prefix">Umělec:</string>
+
+    <string name="album_prefix">Album:</string>
+
+    <string name="genre_prefix">Žánr:</string>
+
+    <string name="add_track_title">Přidat „%1$s“ do seznamu videí:</string>
+
+    <string name="error_play_track">Skladbu nelze přehrát v %1$s</string>
+
+    <string name="error_load_track">Trasu v %1$s nelze načíst</string>
+
+    <string name="search_desc">Vyhledávání</string>
+
+    <string name="settings_desc">Nastavení</string>
+
+    <string name="time_l">Uplynulý čas</string>
+
+    <string name="artist_l">Umělec</string>
+
+    <string name="album_l">Album</string>
+
+    <string name="name">název stopy</string>
+
+    <string name="none">Nebyly nalezeny žádné stopy</string>
+
+    <string name="queued">Skladba přidána do fronty</string>
+    <!--toast-->
+
+    <string name="added">Skladba přidána do seznamu skladeb</string>
+
+    <string name="already_in_list">Skladba již v seznamu skladeb</string>
+
+    <string name="none_added">Do seznamu skladeb nebyly přidány žádné nové skladby</string>
+
+    <string name="new_added">Do seznamu skladeb bylo přidáno %1$d skladeb</string>
+
+    <string name="one_added">1 skladba byla přidána do seznamu skladeb</string>
+
+    <string name="one_removed">Skladba odstraněna ze seznamu skladeb</string>
+
+    <string name="removed">Skladby byly odstraněny ze seznamu skladeb</string>
+
+    <string name="remove_fail">Skladbu nelze odstranit ze seznamu skladeb</string>
+
+    <string name="artist_loaded">Skladby interpreta načteny</string>
+
+    <string name="album_loaded">Album načteno</string>
+
+    <string name="list_loaded">Playlist načten</string>
+
+    <string name="cleared">Playlist vymazán</string>
+
+    <string name="created">Seznam skladeb vytvořen</string>
+
+    <string name="genre_loaded">Žánr načten</string>
+
+    <string name="album_error">Nelze načíst album: %1$s</string>
+
+    <string name="genre_error">Nelze načíst žánr: %1$s</string>
+
+    <string name="play_desc">Hrát</string>
+
+    <string name="stop_desc">Zastávka</string>
+
+    <string name="pause_desc">Pauza</string>
+
+    <string name="next_track_desc">Další stopa</string>
+
+    <string name="prev_track_desc">Předchozí stopa</string>
+
+    <string name="shuffle_on_desc">Zapněte náhodné přehrávání</string>
+
+    <string name="shuffle_off_desc">Vypněte náhodné přehrávání</string>
+
+    <string name="default_path">Hudba/</string>
+
+    <string name="tracks_tab">Skladby</string>
+    <!--tabs-->
+
+    <string name="lists_tab">Seznamy</string>
+
+    <string name="artists_tab">Umělci</string>
+
+    <string name="albums_tab">alba</string>
+
+    <string name="search_add">Přidat</string>
+
+    <string name="search_cancel">Zrušit</string>
+
+    <string name="search_play">Hrát</string>
+
+    <string name="search_enqueue">Zařadit do fronty</string>
+
+    <string name="search_add_all">Přidat vše</string>
+
+    <string name="load_playlist">Zatížení</string>
+
+    <string name="del_playlist">Odstranit</string>
+
+    <string name="load_tracks">Načíst stopy</string>
+
+    <string name="list_name">Název seznamu skladeb</string>
+
+    <string name="info">Info</string>
+    <!--track options btn-->
+
+    <string name="enqueue">Zařadit do fronty</string>
+
+    <string name="add_to_a_list">Přidat do seznamu skladeb</string>
+
+    <string name="remove_from_list">Odebrat ze seznamu skladeb</string>
+
+    <string name="load_album">Načíst album</string>
+
+    <string name="load_artist">Načíst interpreta</string>
+
+    <string name="load">Zatížení</string>
+
+    <string name="remove">Odstranit</string>
+
+    <string name="add_random">Přidat náhodné stopy</string>
+
+    <string name="clear">Vymazat stopy</string>
+
+    <string name="list_new">Nový</string>
+
+    <string name="add_to_list">Přidat do seznamu skladeb</string>
+
+    <string name="add_rand_list">Přidat náhodné skladby do seznamu skladeb</string>
+
+    <string name="add_rand_num">Počet stop k přidání</string>
+
+    <string name="list_label_default">Seznam</string>
+
+    <string name="art_desc">Umění alba</string>
+
+    <string name="art_large_desc">Rozšířené zobrazení obrázku alba</string>
+
+    <string name="create_list_desc">Vytvořit seznam skladeb/</string>
+
+    <string name="show_all_albums_desc">Zobrazit všechna alba/</string>
+
+    <string name="add_to_list_icon_desc">Přidat skladby do aktuálního seznamu skladeb/</string>
+
+    <string name="stop_now">Zastavte se</string>
+
+    <string name="stop_after_current">Zastavit po aktuální stopě</string>
+
+    <string name="queue_stop_three">Zastavte se za tři minuty</string>
+
+    <string name="queue_stop_one">Zastavte se za jednu minutu</string>
+
+    <string name="delete_list_title">Smazat seznam skladeb</string>
+
+    <string name="delete_list_confirm">Opravdu chcete smazat seznam videí: %1$s?</string>
+
+    <string name="clear_tracks_title">Vymazat skladby ze seznamu skladeb</string>
+
+    <string name="clear_tracks_confirm">Opravdu chcete odstranit všechny skladby ze seznamu skladeb: %1$s?</string>
+
+    <string name="list_deleted">Seznam skladeb smazán</string>
+
+    <string name="playlist_already_exists">Tento název se již používá</string>
+
+    <string name="create_playlist_button_text">Vytvořit</string>
+
+    <string name="status_ready">Připraveno</string>
+
+    <string name="status_error">Chyba – nelze přehrát</string>
+
+    <string name="status_playing">Hraní</string>
+
+    <string name="status_paused">Pozastaveno</string>
+
+    <string name="status_connecting">Spojovací</string>
+
+    <string name="notification_play">Hrát</string>
+
+    <string name="notification_stop">Zastávka</string>
+
+    <string name="notification_pause">Pauza</string>
+
+    <string name="notification_prev">Předchozí</string>
+
+    <string name="notification_next">Další</string>
+
+    <string name="title">
+    <b>Název</b>
+  </string>
+
+    <string name="artist">
+    <b>Umělec</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>Album</b>
+  </string>
+
+    <string name="t_num">
+    <b>Skladba #</b>
+  </string>
+
+    <string name="disc">
+    <b>Disk</b>
+  </string>
+
+    <string name="genre">
+    <b>Žánr</b>
+  </string>
+
+    <string name="year">
+    <b>Rok</b>
+  </string>
+
+    <string name="length">
+    <b>Délka</b>
+  </string>
+
+    <string name="path">
+    <b>Cesta</b>
+  </string>
+
+    <string name="bitrate">
+    <b>Datový tok</b>
+  </string>
+
+    <string name="search_label">Vyhledejte název skladby, interpreta nebo album</string>
+
+    <string name="theme_header">Téma</string>
+
+    <string name="lists_header">Seznamy</string>
+
+    <string name="search_header">Vyhledávání</string>
+
+    <string name="tracks_header">Skladby</string>
+
+    <string name="theme_title">Téma</string>
+
+    <string name="min_tracks_artist_title">Minimální počet skladeb, které musí interpret zobrazit v seznamu interpretů</string>
+
+    <string name="min_tracks_artist_summary">Minimální počet skladeb patřících interpretovi, aby se tento interpret objevil v seznamu umělců.</string>
+
+    <string name="include_pathname">Načíst stopy s názvem cesty</string>
+
+    <string name="include_path_summary">V seznamu Všechny stopy se zobrazí pouze stopy, které obsahují daný řetězec. </string>
+
+    <string name="exclude_path">Vyloučit stopy</string>
+
+    <string name="exclude_path_summary">Vyloučit stopy, které v názvech cest obsahují dané řetězce (oddělené čárkami)</string>
+
+    <string name="rand_tracks_num">Počet náhodných stop, které jsou přidány do seznamu stop</string>
+
+    <string name="rand_tracks_num_summary">Když se uživatel rozhodne přidat náhodné skladby k interpretovi nebo albu, toto je počet skladeb, které budou přidány</string>
+
+    <string name="dismiss_search">Když je vybrán výsledek, zrušit zobrazení vyhledávání</string>
+
+    <string name="simple_search_enabled">Zjednodušené zobrazení vyhledávání (žádná tlačítka možností) </string>
+
+    <string name="autoload_playlist_track">Automaticky načíst další skladbu při načtení seznamu skladeb</string>
+
+    <string name="autoload_playlist_track_summary">Aktivujte, aby se při výběru seznamu skladeb automaticky vybrala další skladba</string>
+
+    <string name="ignore_duplicates_title">Skryjte duplikáty v seznamech skladeb všech skladeb a interpretů</string>
+
+    <string name="auto_switch_tabs_title">Automaticky přepínat karty po výběru seznamu skladeb</string>
+
+    <string name="only_show_artist_tracks">Zobrazit pouze skladby alba od vybraného interpreta</string>
+
+    <string name="blue">Modrý</string>
+
+    <string name="lt_blue">Světle modrá</string>
+
+    <string name="lt_green">Světle zelená</string>
+
+    <string name="lt_yellow">Světle žlutá</string>
+
+    <string name="orange">Pomerančový</string>
+
+    <string name="red">Červený</string>
+
+    <string name="green">Zelený</string>
+
+    <string name="yellow">Žluť</string>
+
+    <string name="grey">Šedá</string>
+
+    <string name="cyan">azurová</string>
+
+    <string name="magenta">purpurová</string>
+
+    <string name="rose">Růže</string>
+</resources>

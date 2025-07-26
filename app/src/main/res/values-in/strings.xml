@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">Pemutar Musik!</string>
+
+    <string name="created_by">Dibuat oleh John Crawley</string>
+
+    <string name="font_info">
+    <u>Informasi Font</u>
+  </string>
+
+    <string name="font_main">Teks utama: </string>
+
+    <string name="font_time">Waktu berlalu: </string>
+
+    <string name="icon_info">
+    <u>Informasi Ikon</u>
+  </string>
+
+    <string name="icon_detail">Ikon dimuat dari Android Studio di bawah Lisensi Apache 2: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">Pengaturan</string>
+
+    <string name="refreshed">Daftar Putar Diperbarui</string>
+
+    <string name="refreshed_tracks">Daftar Putar Disegarkan (%1$d Ditemukan)</string>
+
+    <string name="refreshed_one">Daftar Putar Diperbarui (1 Baru)</string>
+
+    <string name="loading_tracks">Memuat</string>
+
+    <string name="no_tracks_found">Tidak Ada Jejak Ditemukan</string>
+
+    <string name="no_genres_found">Tidak Ada Genre yang Ditemukan</string>
+
+    <string name="no_artists_found">Tidak Ada Artis yang Ditemukan</string>
+
+    <string name="no_albums_found">Tidak Ada Album Ditemukan</string>
+
+    <string name="no_items_found">Tidak Ditemukan</string>
+
+    <string name="playlist_is_empty">Daftar Putar Kosong</string>
+
+    <string name="add_random_title">Tambahkan Trek Acak ke Daftar Putar: %1$s</string>
+
+    <string name="btn_settings">Pengaturan</string>
+
+    <string name="btn_refresh">Menyegarkan</string>
+
+    <string name="btn_genre">Muat Genre</string>
+
+    <string name="btn_about">Tentang</string>
+
+    <string name="load_genre_title">Muat Trek Genre</string>
+
+    <string name="load_year_title">Beban Trek Berdasarkan Tahun</string>
+
+    <string name="toggle_all">Semua Trek</string>
+
+    <string name="toggle_artists">Seniman</string>
+
+    <string name="toggle_genres">Genre</string>
+
+    <string name="add_random_tracks">Tambahkan Trek</string>
+
+    <string name="default_playlist_info">Semua Trek</string>
+
+    <string name="default_album_info">Semua Album</string>
+
+    <string name="album_artist">Artis: %1$s</string>
+
+    <string name="list_prefix">Daftar putar:</string>
+
+    <string name="artist_prefix">Artis:</string>
+
+    <string name="album_prefix">Album:</string>
+
+    <string name="genre_prefix">Genre:</string>
+
+    <string name="add_track_title">Tambahkan \"%1$s\" ke daftar putar:</string>
+
+    <string name="error_play_track">Tidak dapat memutar trek di %1$s</string>
+
+    <string name="error_load_track">Tidak dapat memuat trek di %1$s</string>
+
+    <string name="search_desc">Mencari</string>
+
+    <string name="settings_desc">Pengaturan</string>
+
+    <string name="time_l">Waktu yang Berlalu</string>
+
+    <string name="artist_l">Artis</string>
+
+    <string name="album_l">Album</string>
+
+    <string name="name">nama trek</string>
+
+    <string name="none">Tidak Ada Jejak Ditemukan</string>
+
+    <string name="queued">Trek Ditambahkan ke Antrean</string>
+    <!--toast-->
+
+    <string name="added">Lagu Ditambahkan ke Daftar Putar</string>
+
+    <string name="already_in_list">Lagu Sudah Ada di Daftar Putar</string>
+
+    <string name="none_added">Tidak Ada Lagu Baru yang Ditambahkan ke Daftar Putar</string>
+
+    <string name="new_added">%1$d Lagu Telah Ditambahkan ke Daftar Putar</string>
+
+    <string name="one_added">1 Lagu Telah Ditambahkan Ke Daftar Putar</string>
+
+    <string name="one_removed">Lagu Dihapus Dari Daftar Putar</string>
+
+    <string name="removed">Trek Dihapus Dari Daftar Putar</string>
+
+    <string name="remove_fail">Trek tidak dapat dihapus dari daftar putar</string>
+
+    <string name="artist_loaded">Lagu Artis Dimuat</string>
+
+    <string name="album_loaded">Album Termuat</string>
+
+    <string name="list_loaded">Daftar Putar Dimuat</string>
+
+    <string name="cleared">Daftar Putar Dihapus</string>
+
+    <string name="created">Daftar Putar Dibuat</string>
+
+    <string name="genre_loaded">Genre yang Dimuat</string>
+
+    <string name="album_error">Tidak dapat memuat album: %1$s</string>
+
+    <string name="genre_error">Tidak dapat memuat genre: %1$s</string>
+
+    <string name="play_desc">Bermain</string>
+
+    <string name="stop_desc">Berhenti</string>
+
+    <string name="pause_desc">Berhenti sebentar</string>
+
+    <string name="next_track_desc">Lagu Berikutnya</string>
+
+    <string name="prev_track_desc">Trek Sebelumnya</string>
+
+    <string name="shuffle_on_desc">Aktifkan Acak</string>
+
+    <string name="shuffle_off_desc">Matikan Acak</string>
+
+    <string name="default_path">Musik/</string>
+
+    <string name="tracks_tab">Jejak</string>
+    <!--tabs-->
+
+    <string name="lists_tab">Daftar</string>
+
+    <string name="artists_tab">Seniman</string>
+
+    <string name="albums_tab">Album</string>
+
+    <string name="search_add">Menambahkan</string>
+
+    <string name="search_cancel">Membatalkan</string>
+
+    <string name="search_play">Bermain</string>
+
+    <string name="search_enqueue">Antrean</string>
+
+    <string name="search_add_all">Tambahkan Semua</string>
+
+    <string name="load_playlist">Memuat</string>
+
+    <string name="del_playlist">Menghapus</string>
+
+    <string name="load_tracks">Muat Trek</string>
+
+    <string name="list_name">Nama Daftar Putar</string>
+
+    <string name="info">Informasi</string>
+    <!--track options btn-->
+
+    <string name="enqueue">Antrean</string>
+
+    <string name="add_to_a_list">Tambahkan ke Daftar Putar</string>
+
+    <string name="remove_from_list">Hapus Dari Daftar Putar</string>
+
+    <string name="load_album">Muat Album</string>
+
+    <string name="load_artist">Muat Artis</string>
+
+    <string name="load">Memuat</string>
+
+    <string name="remove">Menghapus</string>
+
+    <string name="add_random">Tambahkan Trek Acak</string>
+
+    <string name="clear">Jejak yang Jelas</string>
+
+    <string name="list_new">Baru</string>
+
+    <string name="add_to_list">Tambahkan ke Daftar Putar</string>
+
+    <string name="add_rand_list">Tambahkan Trek Acak ke Daftar Putar</string>
+
+    <string name="add_rand_num">Jumlah Trek yang Akan Ditambahkan</string>
+
+    <string name="list_label_default">Daftar</string>
+
+    <string name="art_desc">Sampul Album</string>
+
+    <string name="art_large_desc">Tampilan Sampul Album yang Diperluas</string>
+
+    <string name="create_list_desc">Buat Daftar Putar/</string>
+
+    <string name="show_all_albums_desc">Tampilkan Semua Album/</string>
+
+    <string name="add_to_list_icon_desc">Tambahkan Trek ke Daftar Putar Saat Ini/</string>
+
+    <string name="stop_now">Berhenti Sekarang</string>
+
+    <string name="stop_after_current">Berhenti Setelah Trek Saat Ini</string>
+
+    <string name="queue_stop_three">Berhenti Dalam Tiga Menit</string>
+
+    <string name="queue_stop_one">Berhenti Dalam Satu Menit</string>
+
+    <string name="delete_list_title">Hapus Daftar Putar</string>
+
+    <string name="delete_list_confirm">Apakah Anda yakin ingin menghapus Daftar Putar: %1$s?</string>
+
+    <string name="clear_tracks_title">Hapus Trek Dari Daftar Putar</string>
+
+    <string name="clear_tracks_confirm">Apakah Anda yakin ingin menghapus semua trek dari Daftar Putar: %1$s?</string>
+
+    <string name="list_deleted">Daftar Putar Dihapus</string>
+
+    <string name="playlist_already_exists">Nama ini sudah digunakan</string>
+
+    <string name="create_playlist_button_text">Membuat</string>
+
+    <string name="status_ready">Siap</string>
+
+    <string name="status_error">Kesalahan - Tidak Dapat Diputar</string>
+
+    <string name="status_playing">Bermain</string>
+
+    <string name="status_paused">Dijeda</string>
+
+    <string name="status_connecting">Menghubungkan</string>
+
+    <string name="notification_play">Bermain</string>
+
+    <string name="notification_stop">Berhenti</string>
+
+    <string name="notification_pause">Berhenti sebentar</string>
+
+    <string name="notification_prev">Sebelumnya</string>
+
+    <string name="notification_next">Berikutnya</string>
+
+    <string name="title">
+    <b>Judul</b>
+  </string>
+
+    <string name="artist">
+    <b>Artis</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>Album</b>
+  </string>
+
+    <string name="t_num">
+    <b>Lacak #</b>
+  </string>
+
+    <string name="disc">
+    <b>Cakram</b>
+  </string>
+
+    <string name="genre">
+    <b>Genre</b>
+  </string>
+
+    <string name="year">
+    <b>Tahun</b>
+  </string>
+
+    <string name="length">
+    <b>Panjang</b>
+  </string>
+
+    <string name="path">
+    <b>Jalur</b>
+  </string>
+
+    <string name="bitrate">
+    <b>Kecepatan Bit</b>
+  </string>
+
+    <string name="search_label">Cari judul lagu, artis, atau album</string>
+
+    <string name="theme_header">Tema</string>
+
+    <string name="lists_header">Daftar</string>
+
+    <string name="search_header">Mencari</string>
+
+    <string name="tracks_header">Jejak</string>
+
+    <string name="theme_title">Tema</string>
+
+    <string name="min_tracks_artist_title">Jumlah trek minimum yang harus ditampilkan oleh artis di daftar Artis</string>
+
+    <string name="min_tracks_artist_summary">Jumlah minimum lagu yang dimiliki oleh seorang artis agar artis tersebut muncul dalam daftar artis.</string>
+
+    <string name="include_pathname">Muat Trek dengan Nama Jalur</string>
+
+    <string name="include_path_summary">Hanya trek yang menyertakan string yang diberikan yang akan ditampilkan dalam daftar Semua Trek. </string>
+
+    <string name="exclude_path">Kecualikan Trek</string>
+
+    <string name="exclude_path_summary">Kecualikan trek yang menyertakan string yang diberikan dalam nama jalurnya (dipisahkan dengan koma)</string>
+
+    <string name="rand_tracks_num">Jumlah trek acak yang ditambahkan ke daftar putar</string>
+
+    <string name="rand_tracks_num_summary">Saat pengguna memilih untuk menambahkan trek acak ke artis atau album, ini adalah jumlah trek yang ditambahkan</string>
+
+    <string name="dismiss_search">Tutup tampilan pencarian saat hasil dipilih</string>
+
+    <string name="simple_search_enabled">Tampilan pencarian yang disederhanakan (tanpa tombol opsi) </string>
+
+    <string name="autoload_playlist_track">Muat trek berikutnya secara otomatis saat daftar putar dimuat</string>
+
+    <string name="autoload_playlist_track_summary">Aktifkan untuk secara otomatis memilih trek berikutnya saat daftar putar dipilih</string>
+
+    <string name="ignore_duplicates_title">Sembunyikan duplikat di daftar putar Semua Lagu dan Artis</string>
+
+    <string name="auto_switch_tabs_title">Beralih tab secara otomatis setelah daftar putar dipilih</string>
+
+    <string name="only_show_artist_tracks">Hanya tampilkan trek album dari artis yang dipilih</string>
+
+    <string name="blue">Biru</string>
+
+    <string name="lt_blue">Biru muda</string>
+
+    <string name="lt_green">Hijau muda</string>
+
+    <string name="lt_yellow">Kuning muda</string>
+
+    <string name="orange">Oranye</string>
+
+    <string name="red">Merah</string>
+
+    <string name="green">Hijau</string>
+
+    <string name="yellow">Kuning</string>
+
+    <string name="grey">Abu-abu</string>
+
+    <string name="cyan">Biru kehijauan</string>
+
+    <string name="magenta">Warna merah muda</string>
+
+    <string name="rose">Mawar</string>
+</resources>

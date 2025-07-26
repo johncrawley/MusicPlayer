@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">Musiikkisoitin!</string>
+
+    <string name="created_by">Luonut John Crawley</string>
+
+    <string name="font_info">
+    <u>Fonttitiedot</u>
+  </string>
+
+    <string name="font_main">Pääteksti: </string>
+
+    <string name="font_time">Kulunut aika: </string>
+
+    <string name="icon_info">
+    <u>Kuvakkeen tiedot</u>
+  </string>
+
+    <string name="icon_detail">Android Studiosta Apache 2 -lisenssillä ladatut kuvakkeet: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">Asetukset</string>
+
+    <string name="refreshed">Soittolista päivitetty</string>
+
+    <string name="refreshed_tracks">Soittolista päivitetty (%1$d löydetty)</string>
+
+    <string name="refreshed_one">Soittolista päivitetty (1 uusi)</string>
+
+    <string name="loading_tracks">Ladataan</string>
+
+    <string name="no_tracks_found">Kappaleita ei löytynyt</string>
+
+    <string name="no_genres_found">Genrejä ei löytynyt</string>
+
+    <string name="no_artists_found">Artisteja ei löytynyt</string>
+
+    <string name="no_albums_found">Albumeja ei löytynyt</string>
+
+    <string name="no_items_found">Ei löytynyt</string>
+
+    <string name="playlist_is_empty">Soittolista on tyhjä</string>
+
+    <string name="add_random_title">Lisää satunnaisia kappaleita soittolistaan: %1$s</string>
+
+    <string name="btn_settings">Asetukset</string>
+
+    <string name="btn_refresh">Päivitä</string>
+
+    <string name="btn_genre">Lataa genre</string>
+
+    <string name="btn_about">Noin</string>
+
+    <string name="load_genre_title">Lataa genren kappaleita</string>
+
+    <string name="load_year_title">Lataa kappaleet vuoden mukaan</string>
+
+    <string name="toggle_all">Kaikki kappaleet</string>
+
+    <string name="toggle_artists">Taiteilijat</string>
+
+    <string name="toggle_genres">Genret</string>
+
+    <string name="add_random_tracks">Lisää kappaleita</string>
+
+    <string name="default_playlist_info">Kaikki kappaleet</string>
+
+    <string name="default_album_info">Kaikki albumit</string>
+
+    <string name="album_artist">Artisti: %1$s</string>
+
+    <string name="list_prefix">Soittolista:</string>
+
+    <string name="artist_prefix">Taiteilija:</string>
+
+    <string name="album_prefix">Albumi:</string>
+
+    <string name="genre_prefix">Genre:</string>
+
+    <string name="add_track_title">Lisää \"%1$s\" soittolistaan:</string>
+
+    <string name="error_play_track">Raitaa ei voi toistaa osoitteessa %1$s</string>
+
+    <string name="error_load_track">Raitaa ei voi ladata osoitteessa %1$s</string>
+
+    <string name="search_desc">Haku</string>
+
+    <string name="settings_desc">Asetukset</string>
+
+    <string name="time_l">Kulunut aika</string>
+
+    <string name="artist_l">Taiteilija</string>
+
+    <string name="album_l">Albumi</string>
+
+    <string name="name">kappaleen nimi</string>
+
+    <string name="none">Kappaleita ei löytynyt</string>
+
+    <string name="queued">Raita lisätty jonoon</string>
+    <!--toast-->
+
+    <string name="added">Kappale lisätty soittolistaan</string>
+
+    <string name="already_in_list">Kappale jo soittolistalla</string>
+
+    <string name="none_added">Uusia kappaleita ei lisätty soittolistaan</string>
+
+    <string name="new_added">%1$d kappaletta lisättiin soittolistaan</string>
+
+    <string name="one_added">1 kappale lisättiin soittolistaan</string>
+
+    <string name="one_removed">Kappale poistettu soittolistasta</string>
+
+    <string name="removed">Soittolistasta poistetut kappaleet</string>
+
+    <string name="remove_fail">Kappaletta ei voitu poistaa soittolistasta</string>
+
+    <string name="artist_loaded">Artistin kappaleet ladattu</string>
+
+    <string name="album_loaded">Albumi ladattu</string>
+
+    <string name="list_loaded">Soittolista ladattu</string>
+
+    <string name="cleared">Soittolista tyhjennetty</string>
+
+    <string name="created">Soittolista luotu</string>
+
+    <string name="genre_loaded">Genre Ladattu</string>
+
+    <string name="album_error">Albumia ei voi ladata: %1$s</string>
+
+    <string name="genre_error">Genreä ei voi ladata: %1$s</string>
+
+    <string name="play_desc">Pelata</string>
+
+    <string name="stop_desc">Stop</string>
+
+    <string name="pause_desc">Tauko</string>
+
+    <string name="next_track_desc">Seuraava kappale</string>
+
+    <string name="prev_track_desc">Edellinen kappale</string>
+
+    <string name="shuffle_on_desc">Ota satunnaistoisto käyttöön</string>
+
+    <string name="shuffle_off_desc">Laita satunnaistoisto pois päältä</string>
+
+    <string name="default_path">Musiikki/</string>
+
+    <string name="tracks_tab">Kappaleet</string>
+    <!--tabs-->
+
+    <string name="lists_tab">Luettelot</string>
+
+    <string name="artists_tab">Taiteilijat</string>
+
+    <string name="albums_tab">Albumit</string>
+
+    <string name="search_add">Lisätä</string>
+
+    <string name="search_cancel">Peruuttaa</string>
+
+    <string name="search_play">Pelata</string>
+
+    <string name="search_enqueue">Jono</string>
+
+    <string name="search_add_all">Lisää kaikki</string>
+
+    <string name="load_playlist">Ladata</string>
+
+    <string name="del_playlist">Poistaa</string>
+
+    <string name="load_tracks">Lataa kappaleita</string>
+
+    <string name="list_name">Soittolistan nimi</string>
+
+    <string name="info">Tiedot</string>
+    <!--track options btn-->
+
+    <string name="enqueue">Jono</string>
+
+    <string name="add_to_a_list">Lisää soittolistaan</string>
+
+    <string name="remove_from_list">Poista soittolistasta</string>
+
+    <string name="load_album">Lataa albumi</string>
+
+    <string name="load_artist">Lataa artisti</string>
+
+    <string name="load">Ladata</string>
+
+    <string name="remove">Poistaa</string>
+
+    <string name="add_random">Lisää satunnaisia kappaleita</string>
+
+    <string name="clear">Tyhjennä jäljet</string>
+
+    <string name="list_new">Uusi</string>
+
+    <string name="add_to_list">Lisää soittolistaan</string>
+
+    <string name="add_rand_list">Lisää satunnaisia kappaleita soittolistaan</string>
+
+    <string name="add_rand_num">Lisättävien kappaleiden määrä</string>
+
+    <string name="list_label_default">Lista</string>
+
+    <string name="art_desc">Albumin taide</string>
+
+    <string name="art_large_desc">Albumin kuvituksen laajennettu näkymä</string>
+
+    <string name="create_list_desc">Luo soittolista/</string>
+
+    <string name="show_all_albums_desc">Näytä kaikki albumit/</string>
+
+    <string name="add_to_list_icon_desc">Lisää kappaleita nykyiseen soittolistaan/</string>
+
+    <string name="stop_now">Lopeta nyt</string>
+
+    <string name="stop_after_current">Pysäytä nykyisen raidan jälkeen</string>
+
+    <string name="queue_stop_three">Pysähdy Kolmessa minuutissa</string>
+
+    <string name="queue_stop_one">Pysähdy yhdessä minuutissa</string>
+
+    <string name="delete_list_title">Poista soittolista</string>
+
+    <string name="delete_list_confirm">Haluatko varmasti poistaa soittolistan: %1$s?</string>
+
+    <string name="clear_tracks_title">Poista kappaleet soittolistasta</string>
+
+    <string name="clear_tracks_confirm">Haluatko varmasti poistaa kaikki kappaleet soittolistasta: %1$s?</string>
+
+    <string name="list_deleted">Soittolista poistettu</string>
+
+    <string name="playlist_already_exists">Tämä nimi on jo käytössä</string>
+
+    <string name="create_playlist_button_text">Luoda</string>
+
+    <string name="status_ready">Valmis</string>
+
+    <string name="status_error">Virhe - ei voi pelata</string>
+
+    <string name="status_playing">Pelaaminen</string>
+
+    <string name="status_paused">Keskeytetty</string>
+
+    <string name="status_connecting">Yhdistetään</string>
+
+    <string name="notification_play">Pelata</string>
+
+    <string name="notification_stop">Stop</string>
+
+    <string name="notification_pause">Tauko</string>
+
+    <string name="notification_prev">Edellinen</string>
+
+    <string name="notification_next">Seuraavaksi</string>
+
+    <string name="title">
+    <b>Otsikko</b>
+  </string>
+
+    <string name="artist">
+    <b>Taiteilija</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>Albumi</b>
+  </string>
+
+    <string name="t_num">
+    <b>Raita #</b>
+  </string>
+
+    <string name="disc">
+    <b>Levy</b>
+  </string>
+
+    <string name="genre">
+    <b>Tyylilaji</b>
+  </string>
+
+    <string name="year">
+    <b>Vuosi</b>
+  </string>
+
+    <string name="length">
+    <b>Pituus</b>
+  </string>
+
+    <string name="path">
+    <b>Polku</b>
+  </string>
+
+    <string name="bitrate">
+    <b>Bittinopeus</b>
+  </string>
+
+    <string name="search_label">Etsi kappaleen nimi, artisti tai albumi</string>
+
+    <string name="theme_header">Teema</string>
+
+    <string name="lists_header">Luettelot</string>
+
+    <string name="search_header">Haku</string>
+
+    <string name="tracks_header">Kappaleet</string>
+
+    <string name="theme_title">Teema</string>
+
+    <string name="min_tracks_artist_title">Vähimmäiskappaleet, jotka artistin on näytettävä esittäjäluettelossa</string>
+
+    <string name="min_tracks_artist_summary">Vähimmäismäärä artistille kuuluvia raitoja, jotta kyseinen esittäjä näkyy artistiluettelossa.</string>
+
+    <string name="include_pathname">Lataa kappaleet polun nimellä</string>
+
+    <string name="include_path_summary">Vain kappaleet, jotka sisältävät annetun merkkijonon, näkyvät Kaikki kappaleet -luettelossa. </string>
+
+    <string name="exclude_path">Jätä kappaleet pois</string>
+
+    <string name="exclude_path_summary">Sulje pois raidat, jotka sisältävät annetut merkkijonot polun nimissä (eroteltuna pilkuilla)</string>
+
+    <string name="rand_tracks_num">Soittolistaan lisättyjen satunnaisten kappaleiden määrä</string>
+
+    <string name="rand_tracks_num_summary">Kun käyttäjä päättää lisätä satunnaisia kappaleita artistiin tai albumiin, tämä on lisättävien kappaleiden määrä</string>
+
+    <string name="dismiss_search">Hylkää hakunäkymä, kun tulos valitaan</string>
+
+    <string name="simple_search_enabled">Yksinkertaistettu hakunäkymä (ei valintapainikkeita) </string>
+
+    <string name="autoload_playlist_track">Lataa automaattisesti seuraava kappale, kun soittolista ladataan</string>
+
+    <string name="autoload_playlist_track_summary">Ota käyttöön seuraavan kappaleen automaattinen valinta, kun soittolista valitaan</string>
+
+    <string name="ignore_duplicates_title">Piilota kopiot All-Tracks- ja Artists-soittolistoissa</string>
+
+    <string name="auto_switch_tabs_title">Vaihda välilehtiä automaattisesti, kun soittolista on valittu</string>
+
+    <string name="only_show_artist_tracks">Näytä vain valitun esittäjän albumin kappaleet</string>
+
+    <string name="blue">Sininen</string>
+
+    <string name="lt_blue">Vaaleansininen</string>
+
+    <string name="lt_green">Vaaleanvihreä</string>
+
+    <string name="lt_yellow">Vaaleankeltainen</string>
+
+    <string name="orange">Oranssi</string>
+
+    <string name="red">Punainen</string>
+
+    <string name="green">Vihreä</string>
+
+    <string name="yellow">Keltainen</string>
+
+    <string name="grey">Harmaa</string>
+
+    <string name="cyan">Syaani</string>
+
+    <string name="magenta">Magenta</string>
+
+    <string name="rose">Ruusu</string>
+</resources>

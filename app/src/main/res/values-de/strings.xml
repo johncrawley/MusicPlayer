@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">Musik-Player!</string>
+
+    <string name="created_by">Erstellt von John Crawley</string>
+
+    <string name="font_info">
+    <u>Informationen zur Schriftart</u>
+  </string>
+
+    <string name="font_main">Haupttext: </string>
+
+    <string name="font_time">Verstrichene Zeit: </string>
+
+    <string name="icon_info">
+    <u>Symbolinformationen</u>
+  </string>
+
+    <string name="icon_detail">Von Android Studio unter der Apache 2-Lizenz geladene Symbole: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">Einstellungen</string>
+
+    <string name="refreshed">Playlist aktualisiert</string>
+
+    <string name="refreshed_tracks">Playlist aktualisiert (%1$d gefunden)</string>
+
+    <string name="refreshed_one">Playlist aktualisiert (1 neu)</string>
+
+    <string name="loading_tracks">Laden</string>
+
+    <string name="no_tracks_found">Keine Titel gefunden</string>
+
+    <string name="no_genres_found">Keine Genres gefunden</string>
+
+    <string name="no_artists_found">Keine Künstler gefunden</string>
+
+    <string name="no_albums_found">Keine Alben gefunden</string>
+
+    <string name="no_items_found">Keine gefunden</string>
+
+    <string name="playlist_is_empty">Die Wiedergabeliste ist leer</string>
+
+    <string name="add_random_title">Zufällige Titel zur Playlist hinzufügen: %1$s</string>
+
+    <string name="btn_settings">Einstellungen</string>
+
+    <string name="btn_refresh">Aktualisieren</string>
+
+    <string name="btn_genre">Genre laden</string>
+
+    <string name="btn_about">Um</string>
+
+    <string name="load_genre_title">Titel des Genres laden</string>
+
+    <string name="load_year_title">Titel nach Jahr laden</string>
+
+    <string name="toggle_all">Alle Titel</string>
+
+    <string name="toggle_artists">Künstler</string>
+
+    <string name="toggle_genres">Genres</string>
+
+    <string name="add_random_tracks">Titel hinzufügen</string>
+
+    <string name="default_playlist_info">Alle Titel</string>
+
+    <string name="default_album_info">Alle Alben</string>
+
+    <string name="album_artist">Künstler: %1$s</string>
+
+    <string name="list_prefix">Wiedergabeliste:</string>
+
+    <string name="artist_prefix">Künstler:</string>
+
+    <string name="album_prefix">Album:</string>
+
+    <string name="genre_prefix">Genre:</string>
+
+    <string name="add_track_title">„%1$s“ zu einer Playlist hinzufügen:</string>
+
+    <string name="error_play_track">Der Titel kann bei %1$s nicht abgespielt werden.</string>
+
+    <string name="error_load_track">Der Titel konnte unter %1$s nicht geladen werden.</string>
+
+    <string name="search_desc">Suchen</string>
+
+    <string name="settings_desc">Einstellungen</string>
+
+    <string name="time_l">Verstrichene Zeit</string>
+
+    <string name="artist_l">Künstler</string>
+
+    <string name="album_l">Album</string>
+
+    <string name="name">Titelname</string>
+
+    <string name="none">Keine Titel gefunden</string>
+
+    <string name="queued">Titel zur Warteschlange hinzugefügt</string>
+    <!--toast-->
+
+    <string name="added">Titel zur Playlist hinzugefügt</string>
+
+    <string name="already_in_list">Titel bereits in der Playlist</string>
+
+    <string name="none_added">Der Playlist wurden keine neuen Titel hinzugefügt</string>
+
+    <string name="new_added">%1$d Titel wurden zur Playlist hinzugefügt</string>
+
+    <string name="one_added">1 Titel wurde zur Playlist hinzugefügt</string>
+
+    <string name="one_removed">Titel aus der Playlist entfernt</string>
+
+    <string name="removed">Aus der Playlist entfernte Titel</string>
+
+    <string name="remove_fail">Der Titel konnte nicht aus der Playlist entfernt werden</string>
+
+    <string name="artist_loaded">Künstlertitel geladen</string>
+
+    <string name="album_loaded">Album geladen</string>
+
+    <string name="list_loaded">Playlist geladen</string>
+
+    <string name="cleared">Wiedergabeliste gelöscht</string>
+
+    <string name="created">Playlist erstellt</string>
+
+    <string name="genre_loaded">Genre geladen</string>
+
+    <string name="album_error">Album kann nicht geladen werden: %1$s</string>
+
+    <string name="genre_error">Genre kann nicht geladen werden: %1$s</string>
+
+    <string name="play_desc">Spielen</string>
+
+    <string name="stop_desc">Stoppen</string>
+
+    <string name="pause_desc">Pause</string>
+
+    <string name="next_track_desc">Nächster Titel</string>
+
+    <string name="prev_track_desc">Vorheriger Titel</string>
+
+    <string name="shuffle_on_desc">Zufallswiedergabe aktivieren</string>
+
+    <string name="shuffle_off_desc">Zufallswiedergabe ausschalten</string>
+
+    <string name="default_path">Musik/</string>
+
+    <string name="tracks_tab">Spuren</string>
+    <!--tabs-->
+
+    <string name="lists_tab">Listen</string>
+
+    <string name="artists_tab">Künstler</string>
+
+    <string name="albums_tab">Alben</string>
+
+    <string name="search_add">Hinzufügen</string>
+
+    <string name="search_cancel">Stornieren</string>
+
+    <string name="search_play">Spielen</string>
+
+    <string name="search_enqueue">In die Warteschlange stellen</string>
+
+    <string name="search_add_all">Alle hinzufügen</string>
+
+    <string name="load_playlist">Laden</string>
+
+    <string name="del_playlist">Entfernen</string>
+
+    <string name="load_tracks">Titel laden</string>
+
+    <string name="list_name">Name der Wiedergabeliste</string>
+
+    <string name="info">Info</string>
+    <!--track options btn-->
+
+    <string name="enqueue">In die Warteschlange stellen</string>
+
+    <string name="add_to_a_list">Zu einer Playlist hinzufügen</string>
+
+    <string name="remove_from_list">Aus der Playlist entfernen</string>
+
+    <string name="load_album">Album laden</string>
+
+    <string name="load_artist">Künstler laden</string>
+
+    <string name="load">Laden</string>
+
+    <string name="remove">Entfernen</string>
+
+    <string name="add_random">Zufällige Titel hinzufügen</string>
+
+    <string name="clear">Spuren löschen</string>
+
+    <string name="list_new">Neu</string>
+
+    <string name="add_to_list">Zur Playlist hinzufügen</string>
+
+    <string name="add_rand_list">Zufällige Titel zur Wiedergabeliste hinzufügen</string>
+
+    <string name="add_rand_num">Anzahl der hinzuzufügenden Titel</string>
+
+    <string name="list_label_default">Liste</string>
+
+    <string name="art_desc">Albumcover</string>
+
+    <string name="art_large_desc">Erweiterte Albumcover-Ansicht</string>
+
+    <string name="create_list_desc">Playlist erstellen/</string>
+
+    <string name="show_all_albums_desc">Alle Alben anzeigen/</string>
+
+    <string name="add_to_list_icon_desc">Titel zur aktuellen Playlist hinzufügen/</string>
+
+    <string name="stop_now">Jetzt aufhören</string>
+
+    <string name="stop_after_current">Nach aktuellem Titel anhalten</string>
+
+    <string name="queue_stop_three">Stopp in drei Minuten</string>
+
+    <string name="queue_stop_one">Stopp in einer Minute</string>
+
+    <string name="delete_list_title">Playlist löschen</string>
+
+    <string name="delete_list_confirm">Möchten Sie die Playlist „%1$s“ wirklich löschen?</string>
+
+    <string name="clear_tracks_title">Titel aus der Playlist löschen</string>
+
+    <string name="clear_tracks_confirm">Möchten Sie wirklich alle Titel aus der Playlist „%1$s“ entfernen?</string>
+
+    <string name="list_deleted">Playlist gelöscht</string>
+
+    <string name="playlist_already_exists">Dieser Name wird bereits verwendet</string>
+
+    <string name="create_playlist_button_text">Erstellen</string>
+
+    <string name="status_ready">Bereit</string>
+
+    <string name="status_error">Fehler – Wiedergabe nicht möglich</string>
+
+    <string name="status_playing">Spielen</string>
+
+    <string name="status_paused">Angehalten</string>
+
+    <string name="status_connecting">Verbinden</string>
+
+    <string name="notification_play">Spielen</string>
+
+    <string name="notification_stop">Stoppen</string>
+
+    <string name="notification_pause">Pause</string>
+
+    <string name="notification_prev">Vorherige</string>
+
+    <string name="notification_next">Nächste</string>
+
+    <string name="title">
+    <b>Titel</b>
+  </string>
+
+    <string name="artist">
+    <b>Künstler</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>Album</b>
+  </string>
+
+    <string name="t_num">
+    <b>Spurnummer</b>
+  </string>
+
+    <string name="disc">
+    <b>Diskette</b>
+  </string>
+
+    <string name="genre">
+    <b>Genre</b>
+  </string>
+
+    <string name="year">
+    <b>Jahr</b>
+  </string>
+
+    <string name="length">
+    <b>Länge</b>
+  </string>
+
+    <string name="path">
+    <b>Pfad</b>
+  </string>
+
+    <string name="bitrate">
+    <b>Bitrate</b>
+  </string>
+
+    <string name="search_label">Suche nach Titel, Künstler oder Album</string>
+
+    <string name="theme_header">Thema</string>
+
+    <string name="lists_header">Listen</string>
+
+    <string name="search_header">Suchen</string>
+
+    <string name="tracks_header">Spuren</string>
+
+    <string name="theme_title">Thema</string>
+
+    <string name="min_tracks_artist_title">Mindestanzahl an Titeln, die ein Künstler in der Künstlerliste anzeigen muss</string>
+
+    <string name="min_tracks_artist_summary">Die Mindestanzahl von Titeln eines Künstlers, damit dieser Künstler in der Künstlerliste erscheint.</string>
+
+    <string name="include_pathname">Titel mit Pfadnamen laden</string>
+
+    <string name="include_path_summary">In der Liste „Alle Titel“ werden nur Titel angezeigt, die die angegebene Zeichenfolge enthalten. </string>
+
+    <string name="exclude_path">Titel ausschließen</string>
+
+    <string name="exclude_path_summary">Schließe Titel aus, deren Pfadnamen die angegebenen Zeichenfolgen enthalten (durch Kommas getrennt).</string>
+
+    <string name="rand_tracks_num">Die Anzahl der zufälligen Titel, die einer Wiedergabeliste hinzugefügt werden</string>
+
+    <string name="rand_tracks_num_summary">Wenn der Benutzer zufällige Titel zu einem Künstler oder Album hinzufügt, ist dies die Anzahl der Titel, die hinzugefügt werden</string>
+
+    <string name="dismiss_search">Suchansicht schließen, wenn ein Ergebnis ausgewählt ist</string>
+
+    <string name="simple_search_enabled">Vereinfachte Suchansicht (keine Optionsfelder) </string>
+
+    <string name="autoload_playlist_track">Beim Laden einer Playlist automatisch den nächsten Titel laden</string>
+
+    <string name="autoload_playlist_track_summary">Aktivieren Sie diese Option, um automatisch den nächsten Titel auszuwählen, wenn eine Wiedergabeliste ausgewählt wird.</string>
+
+    <string name="ignore_duplicates_title">Duplikate in All-Tracks- und Artists-Wiedergabelisten ausblenden</string>
+
+    <string name="auto_switch_tabs_title">Automatisches Wechseln der Tabs nach Auswahl einer Playlist</string>
+
+    <string name="only_show_artist_tracks">Nur Albumtitel des ausgewählten Interpreten anzeigen</string>
+
+    <string name="blue">Blau</string>
+
+    <string name="lt_blue">Hellblau</string>
+
+    <string name="lt_green">Hellgrün</string>
+
+    <string name="lt_yellow">Hellgelb</string>
+
+    <string name="orange">Orange</string>
+
+    <string name="red">Rot</string>
+
+    <string name="green">Grün</string>
+
+    <string name="yellow">Gelb</string>
+
+    <string name="grey">Grau</string>
+
+    <string name="cyan">Cyan</string>
+
+    <string name="magenta">Magenta</string>
+
+    <string name="rose">Rose</string>
+</resources>

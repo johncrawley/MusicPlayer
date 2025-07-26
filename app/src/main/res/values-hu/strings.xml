@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">Zenelejátszó!</string>
+
+    <string name="created_by">Készítette: John Crawley</string>
+
+    <string name="font_info">
+    <u>Betűtípus-információ</u>
+  </string>
+
+    <string name="font_main">Fő szöveg: </string>
+
+    <string name="font_time">Eltelt idő: </string>
+
+    <string name="icon_info">
+    <u>Ikoninformációk</u>
+  </string>
+
+    <string name="icon_detail">Az Android Studióból az Apache 2 licenc alatt betöltött ikonok: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">Beállítások elemre</string>
+
+    <string name="refreshed">Lejátszási lista frissítve</string>
+
+    <string name="refreshed_tracks">Lejátszási lista frissítve (%1$d található)</string>
+
+    <string name="refreshed_one">Lejátszási lista frissítve (1 új)</string>
+
+    <string name="loading_tracks">Terhelés</string>
+
+    <string name="no_tracks_found">Nincsenek számok</string>
+
+    <string name="no_genres_found">Nem található műfaj</string>
+
+    <string name="no_artists_found">Nem található előadó</string>
+
+    <string name="no_albums_found">Nem található album</string>
+
+    <string name="no_items_found">Egyik sem található</string>
+
+    <string name="playlist_is_empty">A lejátszási lista üres</string>
+
+    <string name="add_random_title">Véletlenszerű számok hozzáadása a lejátszási listához: %1$s</string>
+
+    <string name="btn_settings">Beállítások elemre</string>
+
+    <string name="btn_refresh">Frissítés</string>
+
+    <string name="btn_genre">Műfaj betöltése</string>
+
+    <string name="btn_about">Körülbelül</string>
+
+    <string name="load_genre_title">Műfaji számok betöltése</string>
+
+    <string name="load_year_title">Számok betöltése év szerint</string>
+
+    <string name="toggle_all">Minden szám</string>
+
+    <string name="toggle_artists">Művészek</string>
+
+    <string name="toggle_genres">Műfajok</string>
+
+    <string name="add_random_tracks">Számok hozzáadása lehetőségre</string>
+
+    <string name="default_playlist_info">Minden szám</string>
+
+    <string name="default_album_info">Minden album</string>
+
+    <string name="album_artist">Előadó: %1$s</string>
+
+    <string name="list_prefix">Lejátszási lista:</string>
+
+    <string name="artist_prefix">Művész:</string>
+
+    <string name="album_prefix">Album:</string>
+
+    <string name="genre_prefix">Műfaj:</string>
+
+    <string name="add_track_title">„%1$s” hozzáadása lejátszási listához:</string>
+
+    <string name="error_play_track">Nem lehet lejátszani a számot itt: %1$s</string>
+
+    <string name="error_load_track">Nem sikerült betölteni a számot itt: %1$s</string>
+
+    <string name="search_desc">Keresés</string>
+
+    <string name="settings_desc">Beállítások elemre</string>
+
+    <string name="time_l">Eltelt idő</string>
+
+    <string name="artist_l">Művész</string>
+
+    <string name="album_l">Album</string>
+
+    <string name="name">műsorszám neve</string>
+
+    <string name="none">Nincsenek számok</string>
+
+    <string name="queued">Szám felvéve a sorba</string>
+    <!--toast-->
+
+    <string name="added">Szám hozzáadva a lejátszási listához</string>
+
+    <string name="already_in_list">A szám már szerepel a lejátszási listán</string>
+
+    <string name="none_added">Nem lettek hozzáadva új számok a lejátszási listához</string>
+
+    <string name="new_added">%1$d szám hozzáadva a lejátszási listához</string>
+
+    <string name="one_added">1 szám hozzáadva a lejátszási listához</string>
+
+    <string name="one_removed">Szám eltávolítva a lejátszási listáról</string>
+
+    <string name="removed">Számok eltávolítva a lejátszási listáról</string>
+
+    <string name="remove_fail">A számot nem sikerült eltávolítani a lejátszási listáról</string>
+
+    <string name="artist_loaded">Előadói számok betöltve</string>
+
+    <string name="album_loaded">Album betöltve</string>
+
+    <string name="list_loaded">Lejátszási lista betöltve</string>
+
+    <string name="cleared">Lejátszási lista törölve</string>
+
+    <string name="created">Lejátszási lista létrehozva</string>
+
+    <string name="genre_loaded">Műfaj betöltve</string>
+
+    <string name="album_error">Nem sikerült betölteni az albumot: %1$s</string>
+
+    <string name="genre_error">Nem sikerült betölteni a műfajt: %1$s</string>
+
+    <string name="play_desc">Játék</string>
+
+    <string name="stop_desc">Stop</string>
+
+    <string name="pause_desc">Szünet</string>
+
+    <string name="next_track_desc">Következő szám</string>
+
+    <string name="prev_track_desc">Előző szám</string>
+
+    <string name="shuffle_on_desc">Kapcsolja be a véletlenszerű lejátszást</string>
+
+    <string name="shuffle_off_desc">Kapcsolja ki a véletlenszerű lejátszást</string>
+
+    <string name="default_path">Zene/</string>
+
+    <string name="tracks_tab">Pályák</string>
+    <!--tabs-->
+
+    <string name="lists_tab">Listák</string>
+
+    <string name="artists_tab">Művészek</string>
+
+    <string name="albums_tab">Albumok</string>
+
+    <string name="search_add">Hozzáadás</string>
+
+    <string name="search_cancel">Mégsem</string>
+
+    <string name="search_play">Játék</string>
+
+    <string name="search_enqueue">Sorba állítás</string>
+
+    <string name="search_add_all">Összes hozzáadása</string>
+
+    <string name="load_playlist">Terhelés</string>
+
+    <string name="del_playlist">Távolítsa el</string>
+
+    <string name="load_tracks">Számok betöltése</string>
+
+    <string name="list_name">Lejátszási lista neve</string>
+
+    <string name="info">Info</string>
+    <!--track options btn-->
+
+    <string name="enqueue">Sorba állítás</string>
+
+    <string name="add_to_a_list">Hozzáadás lejátszási listához</string>
+
+    <string name="remove_from_list">Eltávolítás a lejátszási listáról</string>
+
+    <string name="load_album">Album betöltése</string>
+
+    <string name="load_artist">Előadó betöltése</string>
+
+    <string name="load">Terhelés</string>
+
+    <string name="remove">Távolítsa el</string>
+
+    <string name="add_random">Véletlenszerű számok hozzáadása</string>
+
+    <string name="clear">Nyomások törlése</string>
+
+    <string name="list_new">Új</string>
+
+    <string name="add_to_list">Hozzáadás lejátszási listához</string>
+
+    <string name="add_rand_list">Véletlenszerű számok hozzáadása a lejátszási listához</string>
+
+    <string name="add_rand_num">Hozzáadni kívánt zeneszámok száma</string>
+
+    <string name="list_label_default">Lista</string>
+
+    <string name="art_desc">Album Art</string>
+
+    <string name="art_large_desc">Albumborító kiterjesztett nézet</string>
+
+    <string name="create_list_desc">Lejátszási lista létrehozása/</string>
+
+    <string name="show_all_albums_desc">Összes album megjelenítése/</string>
+
+    <string name="add_to_list_icon_desc">Számok hozzáadása az aktuális lejátszási listához/</string>
+
+    <string name="stop_now">Állj meg most</string>
+
+    <string name="stop_after_current">Leállítás az aktuális szám után</string>
+
+    <string name="queue_stop_three">Álljon meg három perc múlva</string>
+
+    <string name="queue_stop_one">Állj meg egy perc alatt</string>
+
+    <string name="delete_list_title">Lejátszási lista törlése</string>
+
+    <string name="delete_list_confirm">Biztosan törli a következő lejátszási listát: %1$s?</string>
+
+    <string name="clear_tracks_title">Számok törlése a lejátszási listáról</string>
+
+    <string name="clear_tracks_confirm">Biztosan eltávolítod az összes számot a lejátszási listáról: %1$s?</string>
+
+    <string name="list_deleted">Lejátszási lista törölve</string>
+
+    <string name="playlist_already_exists">Ez a név már használatban van</string>
+
+    <string name="create_playlist_button_text">Teremt</string>
+
+    <string name="status_ready">Kész</string>
+
+    <string name="status_error">Hiba – nem lehet játszani</string>
+
+    <string name="status_playing">Játék</string>
+
+    <string name="status_paused">Szüneteltetve</string>
+
+    <string name="status_connecting">Csatlakozás</string>
+
+    <string name="notification_play">Játék</string>
+
+    <string name="notification_stop">Stop</string>
+
+    <string name="notification_pause">Szünet</string>
+
+    <string name="notification_prev">Előző</string>
+
+    <string name="notification_next">Következő</string>
+
+    <string name="title">
+    <b>Cím</b>
+  </string>
+
+    <string name="artist">
+    <b>Művész</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>Album</b>
+  </string>
+
+    <string name="t_num">
+    <b>Műsorszám</b>
+  </string>
+
+    <string name="disc">
+    <b>Lemez</b>
+  </string>
+
+    <string name="genre">
+    <b>Műfaj</b>
+  </string>
+
+    <string name="year">
+    <b>Év</b>
+  </string>
+
+    <string name="length">
+    <b>Hossz</b>
+  </string>
+
+    <string name="path">
+    <b>Elérési út</b>
+  </string>
+
+    <string name="bitrate">
+    <b>Bitráta</b>
+  </string>
+
+    <string name="search_label">Keressen rá a szám címére, előadójára vagy albumára</string>
+
+    <string name="theme_header">Téma</string>
+
+    <string name="lists_header">Listák</string>
+
+    <string name="search_header">Keresés</string>
+
+    <string name="tracks_header">Pályák</string>
+
+    <string name="theme_title">Téma</string>
+
+    <string name="min_tracks_artist_title">Minimális számok, amelyeket egy előadónak meg kell jelenítenie az előadók listájában</string>
+
+    <string name="min_tracks_artist_summary">Egy előadóhoz tartozó számok minimális száma ahhoz, hogy az adott előadó megjelenjen az előadók listáján.</string>
+
+    <string name="include_pathname">Számok betöltése elérési útnévvel</string>
+
+    <string name="include_path_summary">Csak azok a számok jelennek meg az Összes szám listában, amelyek tartalmazzák az adott karakterláncot. </string>
+
+    <string name="exclude_path">Számok kizárása</string>
+
+    <string name="exclude_path_summary">Azok a számok kizárása, amelyek elérési útnevében a megadott karakterláncok szerepelnek (vesszővel elválasztva)</string>
+
+    <string name="rand_tracks_num">A lejátszási listához hozzáadott véletlenszerű számok száma</string>
+
+    <string name="rand_tracks_num_summary">Amikor a felhasználó úgy dönt, hogy véletlenszerű számokat ad hozzá egy előadóhoz vagy albumhoz, ez a hozzáadott számok száma</string>
+
+    <string name="dismiss_search">A keresési nézet elvetése az eredmény kiválasztásakor</string>
+
+    <string name="simple_search_enabled">Egyszerűsített keresési nézet (nincs opciógomb) </string>
+
+    <string name="autoload_playlist_track">A következő szám automatikus betöltése lejátszási lista betöltésekor</string>
+
+    <string name="autoload_playlist_track_summary">Engedélyezze a következő szám automatikus kiválasztását, amikor egy lejátszási lista van kiválasztva</string>
+
+    <string name="ignore_duplicates_title">Az ismétlődések elrejtése az All-Tracks és az Artists lejátszási listákban</string>
+
+    <string name="auto_switch_tabs_title">A lejátszási lista kiválasztása után automatikusan válthat a lapok között</string>
+
+    <string name="only_show_artist_tracks">Csak a kiválasztott előadó albumszámait jelenítse meg</string>
+
+    <string name="blue">Kék</string>
+
+    <string name="lt_blue">Világoskék</string>
+
+    <string name="lt_green">Világoszöld</string>
+
+    <string name="lt_yellow">Világos sárga</string>
+
+    <string name="orange">Narancs</string>
+
+    <string name="red">Piros</string>
+
+    <string name="green">Zöld</string>
+
+    <string name="yellow">Sárga</string>
+
+    <string name="grey">Szürke</string>
+
+    <string name="cyan">Cián</string>
+
+    <string name="magenta">Bíborvörös</string>
+
+    <string name="rose">Rózsa</string>
+</resources>
