@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">音楽プレーヤー！</string>
+
+    <string name="created_by">ジョン・クローリー作</string>
+
+    <string name="font_info">
+    <u>フォント情報</u>
+  </string>
+
+    <string name="font_main">本文：</string>
+
+    <string name="font_time">経過時間: </string>
+
+    <string name="icon_info">
+    <u>アイコン情報</u>
+  </string>
+
+    <string name="icon_detail">Apache 2 ライセンスに基づき Android Studio から読み込まれたアイコン: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">設定</string>
+
+    <string name="refreshed">プレイリストを更新しました</string>
+
+    <string name="refreshed_tracks">プレイリストが更新されました（%1$d見つかった）</string>
+
+    <string name="refreshed_one">プレイリストを更新しました（新規 1 件）</string>
+
+    <string name="loading_tracks">読み込み中</string>
+
+    <string name="no_tracks_found">トラックが見つかりません</string>
+
+    <string name="no_genres_found">ジャンルが見つかりません</string>
+
+    <string name="no_artists_found">アーティストが見つかりません</string>
+
+    <string name="no_albums_found">アルバムが見つかりません</string>
+
+    <string name="no_items_found">見つかりません</string>
+
+    <string name="playlist_is_empty">プレイリストが空です</string>
+
+    <string name="add_random_title">プレイリストにランダムトラックを追加: %1$s</string>
+
+    <string name="btn_settings">設定</string>
+
+    <string name="btn_refresh">リフレッシュ</string>
+
+    <string name="btn_genre">ジャンルを読み込む</string>
+
+    <string name="btn_about">について</string>
+
+    <string name="load_genre_title">ジャンルのトラックを読み込む</string>
+
+    <string name="load_year_title">年別にトラックを読み込む</string>
+
+    <string name="toggle_all">すべてのトラック</string>
+
+    <string name="toggle_artists">アーティスト</string>
+
+    <string name="toggle_genres">ジャンル</string>
+
+    <string name="add_random_tracks">トラックを追加</string>
+
+    <string name="default_playlist_info">すべてのトラック</string>
+
+    <string name="default_album_info">すべてのアルバム</string>
+
+    <string name="album_artist">アーティスト：%1$s</string>
+
+    <string name="list_prefix">プレイリスト:</string>
+
+    <string name="artist_prefix">アーティスト：</string>
+
+    <string name="album_prefix">アルバム：</string>
+
+    <string name="genre_prefix">ジャンル：</string>
+
+    <string name="add_track_title">追加 \"%1$s\"をプレイリストに追加:</string>
+
+    <string name="error_play_track">%1$s のトラックを再生できません</string>
+
+    <string name="error_load_track">%1$s のトラックを読み込めません</string>
+
+    <string name="search_desc">検索</string>
+
+    <string name="settings_desc">設定</string>
+
+    <string name="time_l">経過時間</string>
+
+    <string name="artist_l">アーティスト</string>
+
+    <string name="album_l">アルバム</string>
+
+    <string name="name">トラック名</string>
+
+    <string name="none">トラックが見つかりません</string>
+
+    <string name="queued">トラックがキューに追加されました</string>
+    <!--toast-->
+
+    <string name="added">トラックをプレイリストに追加しました</string>
+
+    <string name="already_in_list">トラックはすでにプレイリストに含まれています</string>
+
+    <string name="none_added">プレイリストに新しいトラックは追加されませんでした</string>
+
+    <string name="new_added">%1$dトラックがプレイリストに追加されました</string>
+
+    <string name="one_added">1 トラックがプレイリストに追加されました</string>
+
+    <string name="one_removed">プレイリストからトラックを削除しました</string>
+
+    <string name="removed">プレイリストから削除されたトラック</string>
+
+    <string name="remove_fail">トラックをプレイリストから削除できませんでした</string>
+
+    <string name="artist_loaded">アーティストトラックが読み込まれました</string>
+
+    <string name="album_loaded">アルバムが読み込まれました</string>
+
+    <string name="list_loaded">プレイリストを読み込んだ</string>
+
+    <string name="cleared">プレイリストをクリアしました</string>
+
+    <string name="created">プレイリストを作成しました</string>
+
+    <string name="genre_loaded">ジャンル満載</string>
+
+    <string name="album_error">アルバムを読み込めません: %1$s</string>
+
+    <string name="genre_error">ジャンルを読み込めません: %1$s</string>
+
+    <string name="play_desc">遊ぶ</string>
+
+    <string name="stop_desc">停止</string>
+
+    <string name="pause_desc">一時停止</string>
+
+    <string name="next_track_desc">次のトラック</string>
+
+    <string name="prev_track_desc">前のトラック</string>
+
+    <string name="shuffle_on_desc">シャッフルをオンにする</string>
+
+    <string name="shuffle_off_desc">シャッフルをオフにする</string>
+
+    <string name="default_path">音楽/</string>
+
+    <string name="tracks_tab">トラック</string>
+    <!--tabs-->
+
+    <string name="lists_tab">リスト</string>
+
+    <string name="artists_tab">アーティスト</string>
+
+    <string name="albums_tab">アルバム</string>
+
+    <string name="search_add">追加</string>
+
+    <string name="search_cancel">キャンセル</string>
+
+    <string name="search_play">遊ぶ</string>
+
+    <string name="search_enqueue">エンキュー</string>
+
+    <string name="search_add_all">すべて追加</string>
+
+    <string name="load_playlist">負荷</string>
+
+    <string name="del_playlist">取り除く</string>
+
+    <string name="load_tracks">トラックをロードする</string>
+
+    <string name="list_name">プレイリスト名</string>
+
+    <string name="info">情報</string>
+    <!--track options btn-->
+
+    <string name="enqueue">エンキュー</string>
+
+    <string name="add_to_a_list">プレイリストに追加</string>
+
+    <string name="remove_from_list">プレイリストから削除</string>
+
+    <string name="load_album">アルバムを読み込む</string>
+
+    <string name="load_artist">アーティストを読み込む</string>
+
+    <string name="load">負荷</string>
+
+    <string name="remove">取り除く</string>
+
+    <string name="add_random">ランダムトラックを追加</string>
+
+    <string name="clear">クリアトラック</string>
+
+    <string name="list_new">新しい</string>
+
+    <string name="add_to_list">プレイリストに追加</string>
+
+    <string name="add_rand_list">プレイリストにランダムトラックを追加する</string>
+
+    <string name="add_rand_num">追加するトラックの数</string>
+
+    <string name="list_label_default">リスト</string>
+
+    <string name="art_desc">アルバムアート</string>
+
+    <string name="art_large_desc">アルバムアートの拡大表示</string>
+
+    <string name="create_list_desc">プレイリストを作成/</string>
+
+    <string name="show_all_albums_desc">すべてのアルバムを表示/</string>
+
+    <string name="add_to_list_icon_desc">現在のプレイリストにトラックを追加/</string>
+
+    <string name="stop_now">今すぐ停止</string>
+
+    <string name="stop_after_current">現在のトラックの後に停止</string>
+
+    <string name="queue_stop_three">3 分で停止</string>
+
+    <string name="queue_stop_one">1 分で停止</string>
+
+    <string name="delete_list_title">プレイリストを削除</string>
+
+    <string name="delete_list_confirm">プレイリストを削除してもよろしいですか?%1$s ？</string>
+
+    <string name="clear_tracks_title">プレイリストからトラックをクリア</string>
+
+    <string name="clear_tracks_confirm">プレイリストからすべてのトラックを削除してもよろしいですか?%1$s ？</string>
+
+    <string name="list_deleted">プレイリストを削除しました</string>
+
+    <string name="playlist_already_exists">この名前はすでに使用されています</string>
+
+    <string name="create_playlist_button_text">作成する</string>
+
+    <string name="status_ready">準備ができて</string>
+
+    <string name="status_error">エラー - 再生できません</string>
+
+    <string name="status_playing">遊ぶ</string>
+
+    <string name="status_paused">一時停止</string>
+
+    <string name="status_connecting">接続中</string>
+
+    <string name="notification_play">遊ぶ</string>
+
+    <string name="notification_stop">停止</string>
+
+    <string name="notification_pause">一時停止</string>
+
+    <string name="notification_prev">前の</string>
+
+    <string name="notification_next">次</string>
+
+    <string name="title">
+    <b>タイトル</b>
+  </string>
+
+    <string name="artist">
+    <b>アーティスト</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>アルバム</b>
+  </string>
+
+    <string name="t_num">
+    <b>トラック番号</b>
+  </string>
+
+    <string name="disc">
+    <b>ディスク</b>
+  </string>
+
+    <string name="genre">
+    <b>ジャンル</b>
+  </string>
+
+    <string name="year">
+    <b>年</b>
+  </string>
+
+    <string name="length">
+    <b>長さ</b>
+  </string>
+
+    <string name="path">
+    <b>パス</b>
+  </string>
+
+    <string name="bitrate">
+    <b>ビットレート</b>
+  </string>
+
+    <string name="search_label">トラックタイトル、アーティスト、アルバムを検索</string>
+
+    <string name="theme_header">テーマ</string>
+
+    <string name="lists_header">リスト</string>
+
+    <string name="search_header">検索</string>
+
+    <string name="tracks_header">トラック</string>
+
+    <string name="theme_title">テーマ</string>
+
+    <string name="min_tracks_artist_title">アーティストリストに表示する必要があるアーティストの最小トラック数</string>
+
+    <string name="min_tracks_artist_summary">アーティストがアーティスト リストに表示されるために必要な、そのアーティストに属するトラックの最小数。</string>
+
+    <string name="include_pathname">パス名でトラックを読み込む</string>
+
+    <string name="include_path_summary">指定した文字列を含むトラックのみが「すべてのトラック」リストに表示されます。</string>
+
+    <string name="exclude_path">トラックを除外</string>
+
+    <string name="exclude_path_summary">パス名に指定された文字列（カンマ区切り）を含むトラックを除外します</string>
+
+    <string name="rand_tracks_num">プレイリストにランダムに追加されるトラックの数</string>
+
+    <string name="rand_tracks_num_summary">ユーザーがアーティストまたはアルバムにランダムトラックを追加することを選択した場合、追加されるトラックの数です</string>
+
+    <string name="dismiss_search">結果が選択されたときに検索ビューを閉じる</string>
+
+    <string name="simple_search_enabled">簡略化された検索ビュー（オプションボタンなし） </string>
+
+    <string name="autoload_playlist_track">プレイリストが読み込まれると次のトラックを自動的に読み込みます</string>
+
+    <string name="autoload_playlist_track_summary">プレイリストを選択したときに次のトラックを自動的に選択できるようにする</string>
+
+    <string name="ignore_duplicates_title">全トラックとアーティストのプレイリストで重複を非表示にする</string>
+
+    <string name="auto_switch_tabs_title">プレイリストを選択した後にタブを自動的に切り替える</string>
+
+    <string name="only_show_artist_tracks">選択したアーティストのアルバムトラックのみを表示します</string>
+
+    <string name="blue">青</string>
+
+    <string name="lt_blue">水色</string>
+
+    <string name="lt_green">ライトグリーン</string>
+
+    <string name="lt_yellow">ライトイエロー</string>
+
+    <string name="orange">オレンジ</string>
+
+    <string name="red">赤</string>
+
+    <string name="green">緑</string>
+
+    <string name="yellow">黄色</string>
+
+    <string name="grey">グレー</string>
+
+    <string name="cyan">シアン</string>
+
+    <string name="magenta">マゼンタ</string>
+
+    <string name="rose">薔薇</string>
+</resources>

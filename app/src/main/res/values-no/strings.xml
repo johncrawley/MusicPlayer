@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">Musikkspiller!</string>
+
+    <string name="created_by">Laget av John Crawley</string>
+
+    <string name="font_info">
+    <u>Skriftinformasjon</u>
+  </string>
+
+    <string name="font_main">Hovedtekst: </string>
+
+    <string name="font_time">Tid medgått: </string>
+
+    <string name="icon_info">
+    <u>Ikoninformasjon</u>
+  </string>
+
+    <string name="icon_detail">Ikoner lastet fra Android Studio under Apache 2-lisensen: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">Innstillinger</string>
+
+    <string name="refreshed">Spillelisten er oppdatert</string>
+
+    <string name="refreshed_tracks">Spillelisten er oppdatert (%1$d funnet)</string>
+
+    <string name="refreshed_one">Spilleliste oppdatert (1 ny)</string>
+
+    <string name="loading_tracks">Laster</string>
+
+    <string name="no_tracks_found">Ingen spor funnet</string>
+
+    <string name="no_genres_found">Ingen sjangere funnet</string>
+
+    <string name="no_artists_found">Ingen artister funnet</string>
+
+    <string name="no_albums_found">Ingen album funnet</string>
+
+    <string name="no_items_found">Ingen funnet</string>
+
+    <string name="playlist_is_empty">Spillelisten er tom</string>
+
+    <string name="add_random_title">Legg til tilfeldige spor i spillelisten: %1$s</string>
+
+    <string name="btn_settings">Innstillinger</string>
+
+    <string name="btn_refresh">Forfriske</string>
+
+    <string name="btn_genre">Last inn sjanger</string>
+
+    <string name="btn_about">Om</string>
+
+    <string name="load_genre_title">Last inn spor av sjanger</string>
+
+    <string name="load_year_title">Last inn spor etter år</string>
+
+    <string name="toggle_all">Alle spor</string>
+
+    <string name="toggle_artists">Kunstnere</string>
+
+    <string name="toggle_genres">Sjangere</string>
+
+    <string name="add_random_tracks">Legg til spor</string>
+
+    <string name="default_playlist_info">Alle spor</string>
+
+    <string name="default_album_info">Alle album</string>
+
+    <string name="album_artist">Artist: %1$s</string>
+
+    <string name="list_prefix">Spilleliste:</string>
+
+    <string name="artist_prefix">Artist:</string>
+
+    <string name="album_prefix">Album:</string>
+
+    <string name="genre_prefix">Sjanger:</string>
+
+    <string name="add_track_title">Legg til «%1$s» i en spilleliste:</string>
+
+    <string name="error_play_track">Kan ikke spille av sporet på %1$s</string>
+
+    <string name="error_load_track">Kan ikke laste inn sporet på %1$s</string>
+
+    <string name="search_desc">Søk</string>
+
+    <string name="settings_desc">Innstillinger</string>
+
+    <string name="time_l">Forløpt tid</string>
+
+    <string name="artist_l">Artist</string>
+
+    <string name="album_l">Album</string>
+
+    <string name="name">spornavn</string>
+
+    <string name="none">Ingen spor funnet</string>
+
+    <string name="queued">Spor lagt til i køen</string>
+    <!--toast-->
+
+    <string name="added">Spor lagt til spilleliste</string>
+
+    <string name="already_in_list">Spor allerede i spilleliste</string>
+
+    <string name="none_added">Ingen nye spor ble lagt til spillelisten</string>
+
+    <string name="new_added">%1$d spor ble lagt til spillelisten</string>
+
+    <string name="one_added">1 spor ble lagt til spillelisten</string>
+
+    <string name="one_removed">Spor fjernet fra spilleliste</string>
+
+    <string name="removed">Spor fjernet fra spilleliste</string>
+
+    <string name="remove_fail">Sporet kunne ikke fjernes fra spillelisten</string>
+
+    <string name="artist_loaded">Artistspor lastet inn</string>
+
+    <string name="album_loaded">Album lastet</string>
+
+    <string name="list_loaded">Spilleliste lastet</string>
+
+    <string name="cleared">Spilleliste slettet</string>
+
+    <string name="created">Spilleliste opprettet</string>
+
+    <string name="genre_loaded">Sjanger lastet</string>
+
+    <string name="album_error">Kan ikke laste inn albumet: %1$s</string>
+
+    <string name="genre_error">Kan ikke laste inn sjanger: %1$s</string>
+
+    <string name="play_desc">Spille</string>
+
+    <string name="stop_desc">Stoppe</string>
+
+    <string name="pause_desc">Pause</string>
+
+    <string name="next_track_desc">Neste spor</string>
+
+    <string name="prev_track_desc">Forrige spor</string>
+
+    <string name="shuffle_on_desc">Slå Shuffle på</string>
+
+    <string name="shuffle_off_desc">Slå Shuffle Off</string>
+
+    <string name="default_path">Musikk/</string>
+
+    <string name="tracks_tab">Spor</string>
+    <!--tabs-->
+
+    <string name="lists_tab">Lister</string>
+
+    <string name="artists_tab">Kunstnere</string>
+
+    <string name="albums_tab">Album</string>
+
+    <string name="search_add">Legge til</string>
+
+    <string name="search_cancel">Kansellere</string>
+
+    <string name="search_play">Spille</string>
+
+    <string name="search_enqueue">Kø</string>
+
+    <string name="search_add_all">Legg til alle</string>
+
+    <string name="load_playlist">Laste</string>
+
+    <string name="del_playlist">Fjerne</string>
+
+    <string name="load_tracks">Last inn spor</string>
+
+    <string name="list_name">Spillelistenavn</string>
+
+    <string name="info">Info</string>
+    <!--track options btn-->
+
+    <string name="enqueue">Kø</string>
+
+    <string name="add_to_a_list">Legg til en spilleliste</string>
+
+    <string name="remove_from_list">Fjern fra spilleliste</string>
+
+    <string name="load_album">Last inn album</string>
+
+    <string name="load_artist">Last inn artist</string>
+
+    <string name="load">Laste</string>
+
+    <string name="remove">Fjerne</string>
+
+    <string name="add_random">Legg til tilfeldige spor</string>
+
+    <string name="clear">Fjern spor</string>
+
+    <string name="list_new">Ny</string>
+
+    <string name="add_to_list">Legg til spilleliste</string>
+
+    <string name="add_rand_list">Legg til tilfeldige spor til spillelisten</string>
+
+    <string name="add_rand_num">Antall spor å legge til</string>
+
+    <string name="list_label_default">Liste</string>
+
+    <string name="art_desc">Albumkunst</string>
+
+    <string name="art_large_desc">Albumomslag utvidet visning</string>
+
+    <string name="create_list_desc">Opprett spilleliste/</string>
+
+    <string name="show_all_albums_desc">Vis alle album/</string>
+
+    <string name="add_to_list_icon_desc">Legg til spor til gjeldende spilleliste/</string>
+
+    <string name="stop_now">Stopp nå</string>
+
+    <string name="stop_after_current">Stopp etter gjeldende spor</string>
+
+    <string name="queue_stop_three">Stopp om tre minutter</string>
+
+    <string name="queue_stop_one">Stopp på ett minutt</string>
+
+    <string name="delete_list_title">Slett spilleliste</string>
+
+    <string name="delete_list_confirm">Er du sikker på at du vil slette spillelisten: %1$s?</string>
+
+    <string name="clear_tracks_title">Fjern spor fra spilleliste</string>
+
+    <string name="clear_tracks_confirm">Er du sikker på at du vil fjerne alle sporene fra spillelisten: %1$s?</string>
+
+    <string name="list_deleted">Spilleliste slettet</string>
+
+    <string name="playlist_already_exists">Dette navnet er allerede i bruk</string>
+
+    <string name="create_playlist_button_text">Skape</string>
+
+    <string name="status_ready">Ferdig</string>
+
+    <string name="status_error">Feil - Kan ikke spille</string>
+
+    <string name="status_playing">Spiller</string>
+
+    <string name="status_paused">Pause</string>
+
+    <string name="status_connecting">Kobler til</string>
+
+    <string name="notification_play">Spille</string>
+
+    <string name="notification_stop">Stoppe</string>
+
+    <string name="notification_pause">Pause</string>
+
+    <string name="notification_prev">Tidligere</string>
+
+    <string name="notification_next">Neste</string>
+
+    <string name="title">
+    <b>Tittel</b>
+  </string>
+
+    <string name="artist">
+    <b>Artist</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>Album</b>
+  </string>
+
+    <string name="t_num">
+    <b>Spor #</b>
+  </string>
+
+    <string name="disc">
+    <b>Plate</b>
+  </string>
+
+    <string name="genre">
+    <b>Sjanger</b>
+  </string>
+
+    <string name="year">
+    <b>År</b>
+  </string>
+
+    <string name="length">
+    <b>Lengde</b>
+  </string>
+
+    <string name="path">
+    <b>Bi</b>
+  </string>
+
+    <string name="bitrate">
+    <b>Bithastighet</b>
+  </string>
+
+    <string name="search_label">Søk etter sportittel, artist eller album</string>
+
+    <string name="theme_header">Tema</string>
+
+    <string name="lists_header">Lister</string>
+
+    <string name="search_header">Søk</string>
+
+    <string name="tracks_header">Spor</string>
+
+    <string name="theme_title">Tema</string>
+
+    <string name="min_tracks_artist_title">Minimum spor en artist må vises i artistlisten</string>
+
+    <string name="min_tracks_artist_summary">Minimumsantallet av spor som tilhører en artist for at den artisten skal vises i artistlisten.</string>
+
+    <string name="include_pathname">Last inn spor med banenavn</string>
+
+    <string name="include_path_summary">Bare spor som inkluderer den gitte strengen vil vises i listen Alle spor. </string>
+
+    <string name="exclude_path">Ekskluder spor</string>
+
+    <string name="exclude_path_summary">Ekskluder spor som inkluderer de gitte strengene i banenavnene deres (atskilt med komma)</string>
+
+    <string name="rand_tracks_num">Antall tilfeldige spor som legges til en spilleliste</string>
+
+    <string name="rand_tracks_num_summary">Når brukeren velger å legge til tilfeldige spor til en artist eller album, er dette antallet spor som blir lagt til</string>
+
+    <string name="dismiss_search">Avvis søkevisning når et resultat er valgt</string>
+
+    <string name="simple_search_enabled">Forenklet søkevisning (ingen alternativknapper) </string>
+
+    <string name="autoload_playlist_track">Last inn neste spor automatisk når en spilleliste er lastet inn</string>
+
+    <string name="autoload_playlist_track_summary">Aktiver for å automatisk velge neste spor når en spilleliste er valgt</string>
+
+    <string name="ignore_duplicates_title">Skjul duplikater i spillelister med alle spor og artister</string>
+
+    <string name="auto_switch_tabs_title">Bytt automatisk fane etter at en spilleliste er valgt</string>
+
+    <string name="only_show_artist_tracks">Vis bare albumspor fra den valgte artisten</string>
+
+    <string name="blue">Blå</string>
+
+    <string name="lt_blue">Lyseblå</string>
+
+    <string name="lt_green">Lysegrønn</string>
+
+    <string name="lt_yellow">Lys gul</string>
+
+    <string name="orange">Oransje</string>
+
+    <string name="red">Rød</string>
+
+    <string name="green">Grønn</string>
+
+    <string name="yellow">Gul</string>
+
+    <string name="grey">Grå</string>
+
+    <string name="cyan">Cyan</string>
+
+    <string name="magenta">Magenta</string>
+
+    <string name="rose">Rose</string>
+</resources>

@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">Reprodutor de música!</string>
+
+    <string name="created_by">Criado por John Crawley</string>
+
+    <string name="font_info">
+    <u>Informações da fonte</u>
+  </string>
+
+    <string name="font_main">Texto principal: </string>
+
+    <string name="font_time">Tempo decorrido: </string>
+
+    <string name="icon_info">
+    <u>Informações do ícone</u>
+  </string>
+
+    <string name="icon_detail">Ícones carregados do Android Studio sob a licença Apache 2: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">Configurações</string>
+
+    <string name="refreshed">Lista de reprodução atualizada</string>
+
+    <string name="refreshed_tracks">Lista de reprodução atualizada (%1$d encontrado)</string>
+
+    <string name="refreshed_one">Lista de reprodução atualizada (1 novo)</string>
+
+    <string name="loading_tracks">Carregando</string>
+
+    <string name="no_tracks_found">Nenhuma faixa encontrada</string>
+
+    <string name="no_genres_found">Nenhum gênero encontrado</string>
+
+    <string name="no_artists_found">Nenhum artista encontrado</string>
+
+    <string name="no_albums_found">Nenhum álbum encontrado</string>
+
+    <string name="no_items_found">Nenhum encontrado</string>
+
+    <string name="playlist_is_empty">A lista de reprodução está vazia</string>
+
+    <string name="add_random_title">Adicionar faixas aleatórias à lista de reprodução: %1$s</string>
+
+    <string name="btn_settings">Configurações</string>
+
+    <string name="btn_refresh">Atualizar</string>
+
+    <string name="btn_genre">Carregar gênero</string>
+
+    <string name="btn_about">Sobre</string>
+
+    <string name="load_genre_title">Carregar faixas do gênero</string>
+
+    <string name="load_year_title">Carregar faixas por ano</string>
+
+    <string name="toggle_all">Todas as faixas</string>
+
+    <string name="toggle_artists">Artistas</string>
+
+    <string name="toggle_genres">Gêneros</string>
+
+    <string name="add_random_tracks">Adicionar faixas</string>
+
+    <string name="default_playlist_info">Todas as faixas</string>
+
+    <string name="default_album_info">Todos os álbuns</string>
+
+    <string name="album_artist">Artista: %1$s</string>
+
+    <string name="list_prefix">Lista de reprodução:</string>
+
+    <string name="artist_prefix">Artista:</string>
+
+    <string name="album_prefix">Álbum:</string>
+
+    <string name="genre_prefix">Gênero:</string>
+
+    <string name="add_track_title">Adicione \"%1$s\" a uma playlist:</string>
+
+    <string name="error_play_track">Não é possível reproduzir a faixa em %1$s</string>
+
+    <string name="error_load_track">Não foi possível carregar a faixa em %1$s</string>
+
+    <string name="search_desc">Procurar</string>
+
+    <string name="settings_desc">Configurações</string>
+
+    <string name="time_l">Tempo decorrido</string>
+
+    <string name="artist_l">Artista</string>
+
+    <string name="album_l">Álbum</string>
+
+    <string name="name">nome da faixa</string>
+
+    <string name="none">Nenhuma faixa encontrada</string>
+
+    <string name="queued">Faixa adicionada à fila</string>
+    <!--toast-->
+
+    <string name="added">Faixa adicionada à lista de reprodução</string>
+
+    <string name="already_in_list">Faixa já na lista de reprodução</string>
+
+    <string name="none_added">Nenhuma nova faixa foi adicionada à lista de reprodução</string>
+
+    <string name="new_added">%1$d faixas foram adicionadas à lista de reprodução</string>
+
+    <string name="one_added">1 faixa foi adicionada à lista de reprodução</string>
+
+    <string name="one_removed">Faixa removida da lista de reprodução</string>
+
+    <string name="removed">Faixas removidas da lista de reprodução</string>
+
+    <string name="remove_fail">A faixa não pôde ser removida da lista de reprodução</string>
+
+    <string name="artist_loaded">Faixas de artistas carregadas</string>
+
+    <string name="album_loaded">Álbum carregado</string>
+
+    <string name="list_loaded">Lista de reprodução carregada</string>
+
+    <string name="cleared">Lista de reprodução limpa</string>
+
+    <string name="created">Lista de reprodução criada</string>
+
+    <string name="genre_loaded">Gênero carregado</string>
+
+    <string name="album_error">Não foi possível carregar o álbum: %1$s</string>
+
+    <string name="genre_error">Não foi possível carregar o gênero: %1$s</string>
+
+    <string name="play_desc">Jogar</string>
+
+    <string name="stop_desc">Parar</string>
+
+    <string name="pause_desc">Pausa</string>
+
+    <string name="next_track_desc">Próxima faixa</string>
+
+    <string name="prev_track_desc">Faixa anterior</string>
+
+    <string name="shuffle_on_desc">Ativar Shuffle</string>
+
+    <string name="shuffle_off_desc">Desativar Shuffle</string>
+
+    <string name="default_path">Música/</string>
+
+    <string name="tracks_tab">Trilhas</string>
+    <!--tabs-->
+
+    <string name="lists_tab">Listas</string>
+
+    <string name="artists_tab">Artistas</string>
+
+    <string name="albums_tab">Álbuns</string>
+
+    <string name="search_add">Adicionar</string>
+
+    <string name="search_cancel">Cancelar</string>
+
+    <string name="search_play">Jogar</string>
+
+    <string name="search_enqueue">Enfileirar</string>
+
+    <string name="search_add_all">Adicionar tudo</string>
+
+    <string name="load_playlist">Carregar</string>
+
+    <string name="del_playlist">Remover</string>
+
+    <string name="load_tracks">Carregar trilhas</string>
+
+    <string name="list_name">Nome da lista de reprodução</string>
+
+    <string name="info">Informações</string>
+    <!--track options btn-->
+
+    <string name="enqueue">Enfileirar</string>
+
+    <string name="add_to_a_list">Adicionar a uma lista de reprodução</string>
+
+    <string name="remove_from_list">Remover da lista de reprodução</string>
+
+    <string name="load_album">Carregar álbum</string>
+
+    <string name="load_artist">Carregar artista</string>
+
+    <string name="load">Carregar</string>
+
+    <string name="remove">Remover</string>
+
+    <string name="add_random">Adicionar faixas aleatórias</string>
+
+    <string name="clear">Limpar trilhas</string>
+
+    <string name="list_new">Novo</string>
+
+    <string name="add_to_list">Adicionar à lista de reprodução</string>
+
+    <string name="add_rand_list">Adicionar faixas aleatórias à lista de reprodução</string>
+
+    <string name="add_rand_num">Número de faixas a adicionar</string>
+
+    <string name="list_label_default">Lista</string>
+
+    <string name="art_desc">Arte do álbum</string>
+
+    <string name="art_large_desc">Visualização expandida da arte do álbum</string>
+
+    <string name="create_list_desc">Criar lista de reprodução/</string>
+
+    <string name="show_all_albums_desc">Mostrar todos os álbuns/</string>
+
+    <string name="add_to_list_icon_desc">Adicionar faixas à lista de reprodução atual/</string>
+
+    <string name="stop_now">Pare agora</string>
+
+    <string name="stop_after_current">Parar após a faixa atual</string>
+
+    <string name="queue_stop_three">Pare em três minutos</string>
+
+    <string name="queue_stop_one">Pare em um minuto</string>
+
+    <string name="delete_list_title">Excluir lista de reprodução</string>
+
+    <string name="delete_list_confirm">Tem certeza de que deseja excluir a lista de reprodução: %1$s?</string>
+
+    <string name="clear_tracks_title">Limpar faixas da lista de reprodução</string>
+
+    <string name="clear_tracks_confirm">Tem certeza de que deseja remover todas as faixas da lista de reprodução: %1$s?</string>
+
+    <string name="list_deleted">Lista de reprodução excluída</string>
+
+    <string name="playlist_already_exists">Este nome já está em uso</string>
+
+    <string name="create_playlist_button_text">Criar</string>
+
+    <string name="status_ready">Preparar</string>
+
+    <string name="status_error">Erro - Não é possível reproduzir</string>
+
+    <string name="status_playing">Jogando</string>
+
+    <string name="status_paused">Pausado</string>
+
+    <string name="status_connecting">Conectando</string>
+
+    <string name="notification_play">Jogar</string>
+
+    <string name="notification_stop">Parar</string>
+
+    <string name="notification_pause">Pausa</string>
+
+    <string name="notification_prev">Anterior</string>
+
+    <string name="notification_next">Próximo</string>
+
+    <string name="title">
+    <b>Título</b>
+  </string>
+
+    <string name="artist">
+    <b>Artista</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>Álbum</b>
+  </string>
+
+    <string name="t_num">
+    <b>Faixa nº</b>
+  </string>
+
+    <string name="disc">
+    <b>Disco</b>
+  </string>
+
+    <string name="genre">
+    <b>Gênero</b>
+  </string>
+
+    <string name="year">
+    <b>Ano</b>
+  </string>
+
+    <string name="length">
+    <b>Comprimento</b>
+  </string>
+
+    <string name="path">
+    <b>Caminho</b>
+  </string>
+
+    <string name="bitrate">
+    <b>Taxa de bits</b>
+  </string>
+
+    <string name="search_label">Pesquisar por título da faixa, artista ou álbum</string>
+
+    <string name="theme_header">Tema</string>
+
+    <string name="lists_header">Listas</string>
+
+    <string name="search_header">Procurar</string>
+
+    <string name="tracks_header">Trilhas</string>
+
+    <string name="theme_title">Tema</string>
+
+    <string name="min_tracks_artist_title">Mínimo de faixas que um artista precisa exibir na lista de artistas</string>
+
+    <string name="min_tracks_artist_summary">O número mínimo de faixas pertencentes a um artista para que ele apareça na lista de artistas.</string>
+
+    <string name="include_pathname">Carregar trilhas com nome de caminho</string>
+
+    <string name="include_path_summary">Somente as faixas que incluem a sequência fornecida serão exibidas na lista Todas as faixas. </string>
+
+    <string name="exclude_path">Excluir faixas</string>
+
+    <string name="exclude_path_summary">Excluir faixas que incluem as strings fornecidas em seus nomes de caminho (separadas por vírgulas)</string>
+
+    <string name="rand_tracks_num">O número de faixas aleatórias que são adicionadas a uma lista de reprodução</string>
+
+    <string name="rand_tracks_num_summary">Quando o usuário escolhe adicionar faixas aleatórias a um artista ou álbum, este é o número de faixas que são adicionadas</string>
+
+    <string name="dismiss_search">Descartar a visualização de pesquisa quando um resultado for selecionado</string>
+
+    <string name="simple_search_enabled">Visualização de pesquisa simplificada (sem botões de opção) </string>
+
+    <string name="autoload_playlist_track">Carregar automaticamente a próxima faixa quando uma lista de reprodução for carregada</string>
+
+    <string name="autoload_playlist_track_summary">Habilitar para selecionar automaticamente a próxima faixa quando uma lista de reprodução for selecionada</string>
+
+    <string name="ignore_duplicates_title">Ocultar duplicatas em todas as faixas e listas de reprodução de artistas</string>
+
+    <string name="auto_switch_tabs_title">Alternar guias automaticamente após selecionar uma lista de reprodução</string>
+
+    <string name="only_show_artist_tracks">Mostrar apenas faixas do álbum do artista selecionado</string>
+
+    <string name="blue">Azul</string>
+
+    <string name="lt_blue">Azul claro</string>
+
+    <string name="lt_green">Verde claro</string>
+
+    <string name="lt_yellow">Amarelo claro</string>
+
+    <string name="orange">Laranja</string>
+
+    <string name="red">Vermelho</string>
+
+    <string name="green">Verde</string>
+
+    <string name="yellow">Amarelo</string>
+
+    <string name="grey">Cinza</string>
+
+    <string name="cyan">Ciano</string>
+
+    <string name="magenta">Magenta</string>
+
+    <string name="rose">Rosa</string>
+</resources>

@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">Player muzical!</string>
+
+    <string name="created_by">Creat de John Crawley</string>
+
+    <string name="font_info">
+    <u>Informații despre font</u>
+  </string>
+
+    <string name="font_main">Textul principal: </string>
+
+    <string name="font_time">Timp scurs: </string>
+
+    <string name="icon_info">
+    <u>Informații despre pictogramă</u>
+  </string>
+
+    <string name="icon_detail">Pictograme încărcate din Android Studio sub licența Apache 2: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">Setări</string>
+
+    <string name="refreshed">Lista de redare reîmprospătată</string>
+
+    <string name="refreshed_tracks">Playlist reîmprospătat (%1$d găsit)</string>
+
+    <string name="refreshed_one">Playlist reîmprospătat (1 nou)</string>
+
+    <string name="loading_tracks">Încărcare</string>
+
+    <string name="no_tracks_found">Nu s-au găsit piese</string>
+
+    <string name="no_genres_found">Nu s-au găsit genuri</string>
+
+    <string name="no_artists_found">Nu s-au găsit artiști</string>
+
+    <string name="no_albums_found">Nu s-au găsit albume</string>
+
+    <string name="no_items_found">Nu a fost găsit</string>
+
+    <string name="playlist_is_empty">Lista de redare este goală</string>
+
+    <string name="add_random_title">Adăugați piese aleatorii în lista de redare: %1$s</string>
+
+    <string name="btn_settings">Setări</string>
+
+    <string name="btn_refresh">Reîmprospăta</string>
+
+    <string name="btn_genre">Încărcare gen</string>
+
+    <string name="btn_about">Despre</string>
+
+    <string name="load_genre_title">Încărcați piese de gen</string>
+
+    <string name="load_year_title">Încărcați piese după an</string>
+
+    <string name="toggle_all">Toate piesele</string>
+
+    <string name="toggle_artists">Artiști</string>
+
+    <string name="toggle_genres">Genuri</string>
+
+    <string name="add_random_tracks">Adăugați piese</string>
+
+    <string name="default_playlist_info">Toate piesele</string>
+
+    <string name="default_album_info">Toate albumele</string>
+
+    <string name="album_artist">Artist: %1$s</string>
+
+    <string name="list_prefix">Lista de redare:</string>
+
+    <string name="artist_prefix">Artist:</string>
+
+    <string name="album_prefix">Album:</string>
+
+    <string name="genre_prefix">Gen:</string>
+
+    <string name="add_track_title">Adăugați „%1$s” la o listă de redare:</string>
+
+    <string name="error_play_track">Nu se poate reda melodia la %1$s</string>
+
+    <string name="error_load_track">Nu se poate încărca piesa la %1$s</string>
+
+    <string name="search_desc">Căutare</string>
+
+    <string name="settings_desc">Setări</string>
+
+    <string name="time_l">Timp scurs</string>
+
+    <string name="artist_l">Artist</string>
+
+    <string name="album_l">Album</string>
+
+    <string name="name">numele piesei</string>
+
+    <string name="none">Nu s-au găsit piese</string>
+
+    <string name="queued">Pista adăugată la coadă</string>
+    <!--toast-->
+
+    <string name="added">Piesă adăugată la lista de redare</string>
+
+    <string name="already_in_list">Piesă deja în lista de redare</string>
+
+    <string name="none_added">Nu au fost adăugate piese noi la lista de redare</string>
+
+    <string name="new_added">%1$d melodii au fost adăugate la lista de redare</string>
+
+    <string name="one_added">1 piesă a fost adăugată la lista de redare</string>
+
+    <string name="one_removed">Piesă eliminată din lista de redare</string>
+
+    <string name="removed">Melodii eliminate din lista de redare</string>
+
+    <string name="remove_fail">Piesa nu a putut fi eliminată din lista de redare</string>
+
+    <string name="artist_loaded">Piesele artistului au fost încărcate</string>
+
+    <string name="album_loaded">Album încărcat</string>
+
+    <string name="list_loaded">Lista de redare a fost încărcată</string>
+
+    <string name="cleared">Lista de redare a fost ștearsă</string>
+
+    <string name="created">Lista de redare creată</string>
+
+    <string name="genre_loaded">Gen încărcat</string>
+
+    <string name="album_error">Nu se poate încărca albumul: %1$s</string>
+
+    <string name="genre_error">Nu se poate încărca genul: %1$s</string>
+
+    <string name="play_desc">Juca</string>
+
+    <string name="stop_desc">Stop</string>
+
+    <string name="pause_desc">Pauză</string>
+
+    <string name="next_track_desc">Următoarea piesă</string>
+
+    <string name="prev_track_desc">Piesa anterioară</string>
+
+    <string name="shuffle_on_desc">Activați Shuffle</string>
+
+    <string name="shuffle_off_desc">Dezactivează Shuffle</string>
+
+    <string name="default_path">Muzică/</string>
+
+    <string name="tracks_tab">Urme</string>
+    <!--tabs-->
+
+    <string name="lists_tab">Liste</string>
+
+    <string name="artists_tab">Artiști</string>
+
+    <string name="albums_tab">Albume</string>
+
+    <string name="search_add">Adăuga</string>
+
+    <string name="search_cancel">Anula</string>
+
+    <string name="search_play">Juca</string>
+
+    <string name="search_enqueue">Pune în coadă</string>
+
+    <string name="search_add_all">Adăugați toate</string>
+
+    <string name="load_playlist">Încărca</string>
+
+    <string name="del_playlist">Elimina</string>
+
+    <string name="load_tracks">Încărcare piste</string>
+
+    <string name="list_name">Numele listei de redare</string>
+
+    <string name="info">Info</string>
+    <!--track options btn-->
+
+    <string name="enqueue">Pune în coadă</string>
+
+    <string name="add_to_a_list">Adăugați la o listă de redare</string>
+
+    <string name="remove_from_list">Eliminați din lista de redare</string>
+
+    <string name="load_album">Încărcați albumul</string>
+
+    <string name="load_artist">Încărcați artistul</string>
+
+    <string name="load">Încărca</string>
+
+    <string name="remove">Elimina</string>
+
+    <string name="add_random">Adăugați piese aleatorii</string>
+
+    <string name="clear">Ștergeți traseele</string>
+
+    <string name="list_new">Nou</string>
+
+    <string name="add_to_list">Adăugați la lista de redare</string>
+
+    <string name="add_rand_list">Adăugați piese aleatorii în lista de redare</string>
+
+    <string name="add_rand_num">Numărul de piese de adăugat</string>
+
+    <string name="list_label_default">Listă</string>
+
+    <string name="art_desc">Arta albumului</string>
+
+    <string name="art_large_desc">Vizualizare extinsă a imaginii albumului</string>
+
+    <string name="create_list_desc">Creați playlist/</string>
+
+    <string name="show_all_albums_desc">Afișează toate albumele/</string>
+
+    <string name="add_to_list_icon_desc">Adăugați piese la lista de redare curentă/</string>
+
+    <string name="stop_now">Oprește-te acum</string>
+
+    <string name="stop_after_current">Opriți după traseul curent</string>
+
+    <string name="queue_stop_three">Opriți-vă în trei minute</string>
+
+    <string name="queue_stop_one">Opriți-vă într-un minut</string>
+
+    <string name="delete_list_title">Șterge lista de redare</string>
+
+    <string name="delete_list_confirm">Sigur doriți să ștergeți lista de redare: %1$s?</string>
+
+    <string name="clear_tracks_title">Ștergeți melodiile din lista de redare</string>
+
+    <string name="clear_tracks_confirm">Sigur doriți să eliminați toate piesele din lista de redare: %1$s?</string>
+
+    <string name="list_deleted">Lista de redare a fost ștearsă</string>
+
+    <string name="playlist_already_exists">Acest nume este deja folosit</string>
+
+    <string name="create_playlist_button_text">Crea</string>
+
+    <string name="status_ready">Gata</string>
+
+    <string name="status_error">Eroare - Nu se poate juca</string>
+
+    <string name="status_playing">Joc</string>
+
+    <string name="status_paused">Întrerupt</string>
+
+    <string name="status_connecting">Conectare</string>
+
+    <string name="notification_play">Juca</string>
+
+    <string name="notification_stop">Stop</string>
+
+    <string name="notification_pause">Pauză</string>
+
+    <string name="notification_prev">Anterior</string>
+
+    <string name="notification_next">Următorul</string>
+
+    <string name="title">
+    <b>Titlu</b>
+  </string>
+
+    <string name="artist">
+    <b>Artist</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>Album</b>
+  </string>
+
+    <string name="t_num">
+    <b>Pistă #</b>
+  </string>
+
+    <string name="disc">
+    <b>Disc</b>
+  </string>
+
+    <string name="genre">
+    <b>Gen</b>
+  </string>
+
+    <string name="year">
+    <b>Anul</b>
+  </string>
+
+    <string name="length">
+    <b>Lungime</b>
+  </string>
+
+    <string name="path">
+    <b>Cale</b>
+  </string>
+
+    <string name="bitrate">
+    <b>Rata de biți</b>
+  </string>
+
+    <string name="search_label">Căutați titlul piesei, artistul sau albumul</string>
+
+    <string name="theme_header">Temă</string>
+
+    <string name="lists_header">Liste</string>
+
+    <string name="search_header">Căutare</string>
+
+    <string name="tracks_header">Urme</string>
+
+    <string name="theme_title">Temă</string>
+
+    <string name="min_tracks_artist_title">Piesele minime pe care un artist trebuie să fie afișate în lista de artiști</string>
+
+    <string name="min_tracks_artist_summary">Numărul minim de melodii aparținând unui artist pentru ca acel artist să apară în lista artiștilor.</string>
+
+    <string name="include_pathname">Încărcați piese cu Pathname</string>
+
+    <string name="include_path_summary">Doar melodiile care includ șirul dat vor fi afișate în lista Toate melodiile. </string>
+
+    <string name="exclude_path">Excludeți piese</string>
+
+    <string name="exclude_path_summary">Excludeți melodiile care includ șirurile date în numele căilor lor (separate prin virgule)</string>
+
+    <string name="rand_tracks_num">Numărul de melodii aleatorii care sunt adăugate la o listă de redare</string>
+
+    <string name="rand_tracks_num_summary">Când utilizatorul alege să adauge melodii aleatorii unui artist sau album, acesta este numărul de melodii care sunt adăugate</string>
+
+    <string name="dismiss_search">Închideți vizualizarea de căutare când este selectat un rezultat</string>
+
+    <string name="simple_search_enabled">Vizualizare de căutare simplificată (fără butoane de opțiune) </string>
+
+    <string name="autoload_playlist_track">Încărcați automat următoarea melodie când este încărcată o listă de redare</string>
+
+    <string name="autoload_playlist_track_summary">Activați pentru a selecta automat următoarea melodie atunci când este selectată o listă de redare</string>
+
+    <string name="ignore_duplicates_title">Ascundeți duplicatele în listele de redare Toate melodiile și Artiști</string>
+
+    <string name="auto_switch_tabs_title">Schimbați automat filele după ce este selectată o listă de redare</string>
+
+    <string name="only_show_artist_tracks">Afișează numai melodiile albumului de la artistul selectat</string>
+
+    <string name="blue">Albastru</string>
+
+    <string name="lt_blue">Albastru deschis</string>
+
+    <string name="lt_green">Verde deschis</string>
+
+    <string name="lt_yellow">Galben deschis</string>
+
+    <string name="orange">Portocale</string>
+
+    <string name="red">Roşu</string>
+
+    <string name="green">Verde</string>
+
+    <string name="yellow">Galben</string>
+
+    <string name="grey">Gri</string>
+
+    <string name="cyan">Cyan</string>
+
+    <string name="magenta">Magenta</string>
+
+    <string name="rose">Trandafir</string>
+</resources>

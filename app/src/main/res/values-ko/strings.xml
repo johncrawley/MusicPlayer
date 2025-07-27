@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">음악 플레이어!</string>
+
+    <string name="created_by">John Crawley가 만들었습니다</string>
+
+    <string name="font_info">
+    <u>글꼴 정보</u>
+  </string>
+
+    <string name="font_main">본문: </string>
+
+    <string name="font_time">경과 시간: </string>
+
+    <string name="icon_info">
+    <u>아이콘 정보</u>
+  </string>
+
+    <string name="icon_detail">Apache 2 라이선스에 따라 Android Studio에서 로드된 아이콘: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">설정</string>
+
+    <string name="refreshed">재생 목록 새로 고침됨</string>
+
+    <string name="refreshed_tracks">재생목록 새로 고침됨 (%1$d개 찾음)</string>
+
+    <string name="refreshed_one">재생 목록 새로 고침됨 (1개 추가)</string>
+
+    <string name="loading_tracks">로딩 중</string>
+
+    <string name="no_tracks_found">트랙을 찾을 수 없습니다</string>
+
+    <string name="no_genres_found">장르를 찾을 수 없습니다</string>
+
+    <string name="no_artists_found">아티스트를 찾을 수 없습니다</string>
+
+    <string name="no_albums_found">앨범을 찾을 수 없습니다</string>
+
+    <string name="no_items_found">찾을 수 없음</string>
+
+    <string name="playlist_is_empty">재생 목록이 비어 있습니다</string>
+
+    <string name="add_random_title">재생 목록에 무작위 트랙 추가: %1$s</string>
+
+    <string name="btn_settings">설정</string>
+
+    <string name="btn_refresh">새로 고치다</string>
+
+    <string name="btn_genre">장르 로드</string>
+
+    <string name="btn_about">에 대한</string>
+
+    <string name="load_genre_title">장르별 트랙 로드</string>
+
+    <string name="load_year_title">연도별 로드 트랙</string>
+
+    <string name="toggle_all">모든 트랙</string>
+
+    <string name="toggle_artists">아티스트</string>
+
+    <string name="toggle_genres">장르</string>
+
+    <string name="add_random_tracks">트랙 추가</string>
+
+    <string name="default_playlist_info">모든 트랙</string>
+
+    <string name="default_album_info">모든 앨범</string>
+
+    <string name="album_artist">아티스트: %1$s</string>
+
+    <string name="list_prefix">재생목록:</string>
+
+    <string name="artist_prefix">아티스트:</string>
+
+    <string name="album_prefix">앨범:</string>
+
+    <string name="genre_prefix">장르:</string>
+
+    <string name="add_track_title">재생 목록에 \"%1$s\" 추가:</string>
+
+    <string name="error_play_track">%1$s에서 트랙을 재생할 수 없습니다.</string>
+
+    <string name="error_load_track">%1$s에서 트랙을 로드할 수 없습니다.</string>
+
+    <string name="search_desc">찾다</string>
+
+    <string name="settings_desc">설정</string>
+
+    <string name="time_l">경과 시간</string>
+
+    <string name="artist_l">아티스트</string>
+
+    <string name="album_l">앨범</string>
+
+    <string name="name">트랙 이름</string>
+
+    <string name="none">트랙을 찾을 수 없습니다</string>
+
+    <string name="queued">대기열에 트랙이 추가되었습니다</string>
+    <!--toast-->
+
+    <string name="added">재생 목록에 트랙이 추가되었습니다</string>
+
+    <string name="already_in_list">재생 목록에 이미 있는 트랙</string>
+
+    <string name="none_added">재생 목록에 새로운 트랙이 추가되지 않았습니다.</string>
+
+    <string name="new_added">%1$d 트랙이 재생 목록에 추가되었습니다.</string>
+
+    <string name="one_added">1개의 트랙이 재생 목록에 추가되었습니다.</string>
+
+    <string name="one_removed">재생 목록에서 트랙이 제거되었습니다</string>
+
+    <string name="removed">재생 목록에서 제거된 트랙</string>
+
+    <string name="remove_fail">트랙을 재생 목록에서 제거할 수 없습니다.</string>
+
+    <string name="artist_loaded">아티스트 트랙 로드됨</string>
+
+    <string name="album_loaded">앨범 로드됨</string>
+
+    <string name="list_loaded">플레이리스트 로드됨</string>
+
+    <string name="cleared">재생 목록이 지워졌습니다</string>
+
+    <string name="created">재생목록이 생성되었습니다</string>
+
+    <string name="genre_loaded">장르 로드됨</string>
+
+    <string name="album_error">앨범을 로드할 수 없습니다: %1$s</string>
+
+    <string name="genre_error">장르를 로드할 수 없습니다: %1$s</string>
+
+    <string name="play_desc">놀다</string>
+
+    <string name="stop_desc">멈추다</string>
+
+    <string name="pause_desc">정지시키다</string>
+
+    <string name="next_track_desc">다음 트랙</string>
+
+    <string name="prev_track_desc">이전 트랙</string>
+
+    <string name="shuffle_on_desc">셔플 켜기</string>
+
+    <string name="shuffle_off_desc">셔플 끄기</string>
+
+    <string name="default_path">음악/</string>
+
+    <string name="tracks_tab">트랙</string>
+    <!--tabs-->
+
+    <string name="lists_tab">기울기</string>
+
+    <string name="artists_tab">아티스트</string>
+
+    <string name="albums_tab">앨범</string>
+
+    <string name="search_add">추가하다</string>
+
+    <string name="search_cancel">취소</string>
+
+    <string name="search_play">놀다</string>
+
+    <string name="search_enqueue">인큐</string>
+
+    <string name="search_add_all">모두 추가</string>
+
+    <string name="load_playlist">짐</string>
+
+    <string name="del_playlist">제거하다</string>
+
+    <string name="load_tracks">로드 트랙</string>
+
+    <string name="list_name">재생 목록 이름</string>
+
+    <string name="info">정보</string>
+    <!--track options btn-->
+
+    <string name="enqueue">인큐</string>
+
+    <string name="add_to_a_list">재생 목록에 추가</string>
+
+    <string name="remove_from_list">재생 목록에서 제거</string>
+
+    <string name="load_album">앨범 로드</string>
+
+    <string name="load_artist">아티스트 로드</string>
+
+    <string name="load">짐</string>
+
+    <string name="remove">제거하다</string>
+
+    <string name="add_random">무작위 트랙 추가</string>
+
+    <string name="clear">클리어 트랙</string>
+
+    <string name="list_new">새로운</string>
+
+    <string name="add_to_list">재생 목록에 추가</string>
+
+    <string name="add_rand_list">재생 목록에 무작위 트랙 추가</string>
+
+    <string name="add_rand_num">추가할 트랙 수</string>
+
+    <string name="list_label_default">목록</string>
+
+    <string name="art_desc">앨범 아트</string>
+
+    <string name="art_large_desc">앨범 아트 확장 보기</string>
+
+    <string name="create_list_desc">재생목록 만들기/</string>
+
+    <string name="show_all_albums_desc">모든 앨범 보기/</string>
+
+    <string name="add_to_list_icon_desc">현재 재생 목록에 트랙 추가/</string>
+
+    <string name="stop_now">지금 멈추세요</string>
+
+    <string name="stop_after_current">현재 트랙 후 정지</string>
+
+    <string name="queue_stop_three">3분 후에 멈추세요</string>
+
+    <string name="queue_stop_one">1분 안에 멈추세요</string>
+
+    <string name="delete_list_title">재생목록 삭제</string>
+
+    <string name="delete_list_confirm">%1$s 재생목록을 삭제하시겠습니까?</string>
+
+    <string name="clear_tracks_title">재생 목록에서 트랙 지우기</string>
+
+    <string name="clear_tracks_confirm">%1$s 재생 목록에서 모든 트랙을 제거하시겠습니까?</string>
+
+    <string name="list_deleted">재생 목록이 삭제되었습니다</string>
+
+    <string name="playlist_already_exists">이 이름은 이미 사용 중입니다</string>
+
+    <string name="create_playlist_button_text">만들다</string>
+
+    <string name="status_ready">준비가 된</string>
+
+    <string name="status_error">오류 - 재생할 수 없습니다</string>
+
+    <string name="status_playing">연주하다</string>
+
+    <string name="status_paused">일시 중지됨</string>
+
+    <string name="status_connecting">연결 중</string>
+
+    <string name="notification_play">놀다</string>
+
+    <string name="notification_stop">멈추다</string>
+
+    <string name="notification_pause">정지시키다</string>
+
+    <string name="notification_prev">이전의</string>
+
+    <string name="notification_next">다음</string>
+
+    <string name="title">
+    <b>제목</b>
+  </string>
+
+    <string name="artist">
+    <b>아티스트</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>앨범</b>
+  </string>
+
+    <string name="t_num">
+    <b>트랙 번호</b>
+  </string>
+
+    <string name="disc">
+    <b>디스크</b>
+  </string>
+
+    <string name="genre">
+    <b>장르</b>
+  </string>
+
+    <string name="year">
+    <b>년</b>
+  </string>
+
+    <string name="length">
+    <b>길이</b>
+  </string>
+
+    <string name="path">
+    <b>경로</b>
+  </string>
+
+    <string name="bitrate">
+    <b>비트레이트</b>
+  </string>
+
+    <string name="search_label">트랙 제목, 아티스트 또는 앨범 검색</string>
+
+    <string name="theme_header">주제</string>
+
+    <string name="lists_header">기울기</string>
+
+    <string name="search_header">찾다</string>
+
+    <string name="tracks_header">트랙</string>
+
+    <string name="theme_title">주제</string>
+
+    <string name="min_tracks_artist_title">아티스트 목록에 표시되어야 하는 최소 트랙 수</string>
+
+    <string name="min_tracks_artist_summary">아티스트 목록에 나타나려면 해당 아티스트가 소유한 최소 트랙 수입니다.</string>
+
+    <string name="include_pathname">경로 이름으로 트랙 로드</string>
+
+    <string name="include_path_summary">모든 트랙 목록에는 주어진 문자열을 포함하는 트랙만 표시됩니다. </string>
+
+    <string name="exclude_path">트랙 제외</string>
+
+    <string name="exclude_path_summary">경로 이름에 지정된 문자열이 포함된 트랙을 제외합니다 (쉼표로 구분).</string>
+
+    <string name="rand_tracks_num">플레이리스트에 추가되는 무작위 트랙의 수</string>
+
+    <string name="rand_tracks_num_summary">사용자가 아티스트나 앨범에 임의의 트랙을 추가하도록 선택하면 추가되는 트랙 수는 다음과 같습니다.</string>
+
+    <string name="dismiss_search">결과가 선택되면 검색 보기를 닫습니다.</string>
+
+    <string name="simple_search_enabled">간소화된 검색 보기 (옵션 버튼 없음) </string>
+
+    <string name="autoload_playlist_track">플레이리스트가 로드되면 자동으로 다음 트랙을 로드합니다.</string>
+
+    <string name="autoload_playlist_track_summary">재생목록을 선택하면 다음 트랙을 자동으로 선택하도록 설정합니다.</string>
+
+    <string name="ignore_duplicates_title">모든 트랙 및 아티스트 재생 목록에서 중복 항목 숨기기</string>
+
+    <string name="auto_switch_tabs_title">재생목록을 선택한 후 자동으로 탭을 전환합니다.</string>
+
+    <string name="only_show_artist_tracks">선택한 아티스트의 앨범 트랙만 표시</string>
+
+    <string name="blue">파란색</string>
+
+    <string name="lt_blue">하늘색</string>
+
+    <string name="lt_green">연두빛</string>
+
+    <string name="lt_yellow">밝은 노란색</string>
+
+    <string name="orange">주황색</string>
+
+    <string name="red">빨간색</string>
+
+    <string name="green">녹색</string>
+
+    <string name="yellow">노란색</string>
+
+    <string name="grey">회색</string>
+
+    <string name="cyan">시안색</string>
+
+    <string name="magenta">마젠타</string>
+
+    <string name="rose">장미</string>
+</resources>

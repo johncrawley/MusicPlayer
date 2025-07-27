@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">音乐播放器！</string>
+
+    <string name="created_by">由约翰·克劳利创作</string>
+
+    <string name="font_info">
+    <u>字体信息</u>
+  </string>
+
+    <string name="font_main">正文：</string>
+
+    <string name="font_time">已用时间：</string>
+
+    <string name="icon_info">
+    <u>图标信息</u>
+  </string>
+
+    <string name="icon_detail">根据 Apache 2 许可证从 Android Studio 加载的图标：\n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">设置</string>
+
+    <string name="refreshed">播放列表已刷新</string>
+
+    <string name="refreshed_tracks">播放列表已刷新（找到 %1$d 个）</string>
+
+    <string name="refreshed_one">播放列表已刷新（1 个新内容）</string>
+
+    <string name="loading_tracks">加载中</string>
+
+    <string name="no_tracks_found">未找到任何踪迹</string>
+
+    <string name="no_genres_found">未找到任何类型</string>
+
+    <string name="no_artists_found">未找到艺术家</string>
+
+    <string name="no_albums_found">未找到专辑</string>
+
+    <string name="no_items_found">未找到</string>
+
+    <string name="playlist_is_empty">播放列表为空</string>
+
+    <string name="add_random_title">将随机曲目添加到播放列表：%1$s</string>
+
+    <string name="btn_settings">设置</string>
+
+    <string name="btn_refresh">刷新</string>
+
+    <string name="btn_genre">加载类型</string>
+
+    <string name="btn_about">关于</string>
+
+    <string name="load_genre_title">加载流派曲目</string>
+
+    <string name="load_year_title">按年份加载曲目</string>
+
+    <string name="toggle_all">所有曲目</string>
+
+    <string name="toggle_artists">艺术家</string>
+
+    <string name="toggle_genres">类型</string>
+
+    <string name="add_random_tracks">添加曲目</string>
+
+    <string name="default_playlist_info">所有曲目</string>
+
+    <string name="default_album_info">所有专辑</string>
+
+    <string name="album_artist">艺术家：%1$s</string>
+
+    <string name="list_prefix">播放列表：</string>
+
+    <string name="artist_prefix">艺术家：</string>
+
+    <string name="album_prefix">专辑：</string>
+
+    <string name="genre_prefix">类型：</string>
+
+    <string name="add_track_title">将“%1$s”添加到播放列表：</string>
+
+    <string name="error_play_track">无法播放 %1$s 的曲目</string>
+
+    <string name="error_load_track">无法加载位于 %1$s 的曲目</string>
+
+    <string name="search_desc">搜索</string>
+
+    <string name="settings_desc">设置</string>
+
+    <string name="time_l">已用时间</string>
+
+    <string name="artist_l">艺术家</string>
+
+    <string name="album_l">专辑</string>
+
+    <string name="name">曲目名称</string>
+
+    <string name="none">未找到任何踪迹</string>
+
+    <string name="queued">曲目已添加到队列</string>
+    <!--toast-->
+
+    <string name="added">曲目已添加到播放列表</string>
+
+    <string name="already_in_list">曲目已在播放列表中</string>
+
+    <string name="none_added">播放列表中未添加任何新曲目</string>
+
+    <string name="new_added">已将 %1$d 首曲目添加到播放列表</string>
+
+    <string name="one_added">1 首曲目已添加到播放列表</string>
+
+    <string name="one_removed">曲目已从播放列表中移除</string>
+
+    <string name="removed">已从播放列表中删除的曲目</string>
+
+    <string name="remove_fail">无法从播放列表中删除该曲目</string>
+
+    <string name="artist_loaded">艺术家曲目已加载</string>
+
+    <string name="album_loaded">专辑已加载</string>
+
+    <string name="list_loaded">播放列表已加载</string>
+
+    <string name="cleared">播放列表已清除</string>
+
+    <string name="created">播放列表已创建</string>
+
+    <string name="genre_loaded">类型丰富</string>
+
+    <string name="album_error">无法加载相册：%1$s</string>
+
+    <string name="genre_error">无法加载类型：%1$s</string>
+
+    <string name="play_desc">玩</string>
+
+    <string name="stop_desc">停止</string>
+
+    <string name="pause_desc">暂停</string>
+
+    <string name="next_track_desc">下一曲</string>
+
+    <string name="prev_track_desc">上一曲目</string>
+
+    <string name="shuffle_on_desc">开启随机播放</string>
+
+    <string name="shuffle_off_desc">关闭随机播放</string>
+
+    <string name="default_path">音乐/</string>
+
+    <string name="tracks_tab">轨道</string>
+    <!--tabs-->
+
+    <string name="lists_tab">列表</string>
+
+    <string name="artists_tab">艺术家</string>
+
+    <string name="albums_tab">专辑</string>
+
+    <string name="search_add">添加</string>
+
+    <string name="search_cancel">取消</string>
+
+    <string name="search_play">玩</string>
+
+    <string name="search_enqueue">入队</string>
+
+    <string name="search_add_all">全部添加</string>
+
+    <string name="load_playlist">加载</string>
+
+    <string name="del_playlist">消除</string>
+
+    <string name="load_tracks">加载轨道</string>
+
+    <string name="list_name">播放列表名称</string>
+
+    <string name="info">信息</string>
+    <!--track options btn-->
+
+    <string name="enqueue">入队</string>
+
+    <string name="add_to_a_list">添加到播放列表</string>
+
+    <string name="remove_from_list">从播放列表中删除</string>
+
+    <string name="load_album">加载相册</string>
+
+    <string name="load_artist">加载艺术家</string>
+
+    <string name="load">加载</string>
+
+    <string name="remove">消除</string>
+
+    <string name="add_random">添加随机曲目</string>
+
+    <string name="clear">清除轨迹</string>
+
+    <string name="list_new">新的</string>
+
+    <string name="add_to_list">添加到播放列表</string>
+
+    <string name="add_rand_list">将随机曲目添加到播放列表</string>
+
+    <string name="add_rand_num">要添加的曲目数量</string>
+
+    <string name="list_label_default">列表</string>
+
+    <string name="art_desc">专辑封面</string>
+
+    <string name="art_large_desc">专辑封面扩展视图</string>
+
+    <string name="create_list_desc">创建播放列表/</string>
+
+    <string name="show_all_albums_desc">显示所有专辑/</string>
+
+    <string name="add_to_list_icon_desc">将曲目添加到当前播放列表/</string>
+
+    <string name="stop_now">立即停止</string>
+
+    <string name="stop_after_current">在当前曲目后停止</string>
+
+    <string name="queue_stop_three">三分钟后停止</string>
+
+    <string name="queue_stop_one">一分钟后停止</string>
+
+    <string name="delete_list_title">删除播放列表</string>
+
+    <string name="delete_list_confirm">您确定要删除播放列表“%1$s”吗？</string>
+
+    <string name="clear_tracks_title">从播放列表中清除曲目</string>
+
+    <string name="clear_tracks_confirm">您确定要从播放列表 %1$s 中移除所有曲目吗？</string>
+
+    <string name="list_deleted">播放列表已删除</string>
+
+    <string name="playlist_already_exists">此名称已被使用</string>
+
+    <string name="create_playlist_button_text">创造</string>
+
+    <string name="status_ready">准备好</string>
+
+    <string name="status_error">错误 - 无法播放</string>
+
+    <string name="status_playing">播放</string>
+
+    <string name="status_paused">已暂停</string>
+
+    <string name="status_connecting">正在连接</string>
+
+    <string name="notification_play">玩</string>
+
+    <string name="notification_stop">停止</string>
+
+    <string name="notification_pause">暂停</string>
+
+    <string name="notification_prev">以前的</string>
+
+    <string name="notification_next">下一个</string>
+
+    <string name="title">
+    <b>标题</b>
+  </string>
+
+    <string name="artist">
+    <b>艺术家</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>相册</b>
+  </string>
+
+    <string name="t_num">
+    <b>曲目编号</b>
+  </string>
+
+    <string name="disc">
+    <b>光盘</b>
+  </string>
+
+    <string name="genre">
+    <b>类型</b>
+  </string>
+
+    <string name="year">
+    <b>年份</b>
+  </string>
+
+    <string name="length">
+    <b>长度</b>
+  </string>
+
+    <string name="path">
+    <b>路径</b>
+  </string>
+
+    <string name="bitrate">
+    <b>比特率</b>
+  </string>
+
+    <string name="search_label">搜索曲目名称、艺术家或专辑</string>
+
+    <string name="theme_header">主题</string>
+
+    <string name="lists_header">列表</string>
+
+    <string name="search_header">搜索</string>
+
+    <string name="tracks_header">轨道</string>
+
+    <string name="theme_title">主题</string>
+
+    <string name="min_tracks_artist_title">艺术家列表中需要显示的最低曲目数</string>
+
+    <string name="min_tracks_artist_summary">一位艺术家要出现在艺术家列表中，其所属曲目的最小数量。</string>
+
+    <string name="include_pathname">使用路径名加载曲目</string>
+
+    <string name="include_path_summary">只有包含给定字符串的曲目才会显示在“所有曲目”列表中。</string>
+
+    <string name="exclude_path">排除曲目</string>
+
+    <string name="exclude_path_summary">排除路径名中包含给定字符串的轨道（以逗号分隔）</string>
+
+    <string name="rand_tracks_num">添加到播放列表中的随机曲目数量</string>
+
+    <string name="rand_tracks_num_summary">当用户选择向艺术家或专辑添加随机曲目时，这是添加的曲目数量</string>
+
+    <string name="dismiss_search">选择结果时关闭搜索视图</string>
+
+    <string name="simple_search_enabled">简化的搜索视图（无选项按钮） </string>
+
+    <string name="autoload_playlist_track">播放列表加载时自动加载下一曲目</string>
+
+    <string name="autoload_playlist_track_summary">启用选择播放列表时自动选择下一曲目</string>
+
+    <string name="ignore_duplicates_title">隐藏所有曲目和艺术家播放列表中的重复项</string>
+
+    <string name="auto_switch_tabs_title">选择播放列表后自动切换标签</string>
+
+    <string name="only_show_artist_tracks">仅显示所选艺术家的专辑曲目</string>
+
+    <string name="blue">蓝色的</string>
+
+    <string name="lt_blue">浅蓝色</string>
+
+    <string name="lt_green">浅绿色</string>
+
+    <string name="lt_yellow">浅黄色</string>
+
+    <string name="orange">橙子</string>
+
+    <string name="red">红色的</string>
+
+    <string name="green">绿色的</string>
+
+    <string name="yellow">黄色的</string>
+
+    <string name="grey">灰色的</string>
+
+    <string name="cyan">青色</string>
+
+    <string name="magenta">品红</string>
+
+    <string name="rose">玫瑰</string>
+</resources>

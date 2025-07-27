@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">נַגָן!</string>
+
+    <string name="created_by">נוצר על ידי ג\'ון קרולי</string>
+
+    <string name="font_info">
+    <u>מידע על גופנים</u>
+  </string>
+
+    <string name="font_main">טקסט ראשי: </string>
+
+    <string name="font_time">זמן שחלף: </string>
+
+    <string name="icon_info">
+    <u>מידע על סמלים</u>
+  </string>
+
+    <string name="icon_detail">סמלים שנטענו מ-Android Studio תחת רישיון Apache 2: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">הגדרות</string>
+
+    <string name="refreshed">הפלייליסט רענון</string>
+
+    <string name="refreshed_tracks">הפלייליסט רענן (נמצאו %1$d)</string>
+
+    <string name="refreshed_one">פלייליסט רענון (1 חדש)</string>
+
+    <string name="loading_tracks">טְעִינָה</string>
+
+    <string name="no_tracks_found">לא נמצאו רצועות</string>
+
+    <string name="no_genres_found">לא נמצאו ז\'אנרים</string>
+
+    <string name="no_artists_found">לא נמצאו אמנים</string>
+
+    <string name="no_albums_found">לא נמצאו אלבומים</string>
+
+    <string name="no_items_found">לא נמצא</string>
+
+    <string name="playlist_is_empty">רשימת ההשמעה ריקה</string>
+
+    <string name="add_random_title">הוסף רצועות אקראיות לפלייליסט: %1$s</string>
+
+    <string name="btn_settings">הגדרות</string>
+
+    <string name="btn_refresh">לְרַעֲנֵן</string>
+
+    <string name="btn_genre">טען ז\'אנר</string>
+
+    <string name="btn_about">אוֹדוֹת</string>
+
+    <string name="load_genre_title">טען שירים של ז\'אנר</string>
+
+    <string name="load_year_title">טען שירים לפי שנה</string>
+
+    <string name="toggle_all">כל הרצועות</string>
+
+    <string name="toggle_artists">אמנים</string>
+
+    <string name="toggle_genres">ז\'אנרים</string>
+
+    <string name="add_random_tracks">הוסף רצועות</string>
+
+    <string name="default_playlist_info">כל הרצועות</string>
+
+    <string name="default_album_info">כל האלבומים</string>
+
+    <string name="album_artist">אמן: %1$s</string>
+
+    <string name="list_prefix">רשימת השמעה:</string>
+
+    <string name="artist_prefix">אָמָן:</string>
+
+    <string name="album_prefix">אַלבּוֹם:</string>
+
+    <string name="genre_prefix">ז\'ָאנר:</string>
+
+    <string name="add_track_title">הוסף את \"%1$s\" לפלייליסט:</string>
+
+    <string name="error_play_track">לא ניתן להפעיל את הרצועה ב-%1$s</string>
+
+    <string name="error_load_track">לא ניתן לטעון את הרצועה ב-%1$s</string>
+
+    <string name="search_desc">לְחַפֵּשׂ</string>
+
+    <string name="settings_desc">הגדרות</string>
+
+    <string name="time_l">זמן שחלף</string>
+
+    <string name="artist_l">אָמָן</string>
+
+    <string name="album_l">אַלבּוֹם</string>
+
+    <string name="name">שם הרצועה</string>
+
+    <string name="none">לא נמצאו רצועות</string>
+
+    <string name="queued">מסלול נוסף לתור</string>
+    <!--toast-->
+
+    <string name="added">רצועה נוספת לרשימת ההשמעה</string>
+
+    <string name="already_in_list">מסלול כבר בפלייליסט</string>
+
+    <string name="none_added">לא נוספו רצועות חדשות לפלייליסט</string>
+
+    <string name="new_added">%1$d רצועות נוספו לפלייליסט</string>
+
+    <string name="one_added">רצועה אחת נוספה לרשימת ההשמעה</string>
+
+    <string name="one_removed">הרצועה הוסר מרשימת ההשמעה</string>
+
+    <string name="removed">רצועות הוסרו מרשימת ההשמעה</string>
+
+    <string name="remove_fail">לא ניתן היה להסיר את הרצועה מרשימת ההשמעה</string>
+
+    <string name="artist_loaded">רצועות אמן נטענו</string>
+
+    <string name="album_loaded">האלבום נטען</string>
+
+    <string name="list_loaded">הפלייליסט נטען</string>
+
+    <string name="cleared">הפלייליסט נמחק</string>
+
+    <string name="created">פלייליסט נוצר</string>
+
+    <string name="genre_loaded">ז\'אנר טעון</string>
+
+    <string name="album_error">לא ניתן לטעון את האלבום: %1$s</string>
+
+    <string name="genre_error">לא ניתן לטעון את הז\'אנר: %1$s</string>
+
+    <string name="play_desc">לְשַׂחֵק</string>
+
+    <string name="stop_desc">לְהַפְסִיק</string>
+
+    <string name="pause_desc">הַפסָקָה</string>
+
+    <string name="next_track_desc">המסלול הבא</string>
+
+    <string name="prev_track_desc">המסלול הקודם</string>
+
+    <string name="shuffle_on_desc">הפעל את ערבוב</string>
+
+    <string name="shuffle_off_desc">כבה את Shuffle</string>
+
+    <string name="default_path">מוּסִיקָה/</string>
+
+    <string name="tracks_tab">מסלולים</string>
+    <!--tabs-->
+
+    <string name="lists_tab">רשימות</string>
+
+    <string name="artists_tab">אמנים</string>
+
+    <string name="albums_tab">אלבומים</string>
+
+    <string name="search_add">לְהוֹסִיף</string>
+
+    <string name="search_cancel">לְבַטֵל</string>
+
+    <string name="search_play">לְשַׂחֵק</string>
+
+    <string name="search_enqueue">תור</string>
+
+    <string name="search_add_all">הוסף הכל</string>
+
+    <string name="load_playlist">לִטעוֹן</string>
+
+    <string name="del_playlist">לְהַסִיר</string>
+
+    <string name="load_tracks">טען מסלולים</string>
+
+    <string name="list_name">שם רשימת השמעה</string>
+
+    <string name="info">מידע</string>
+    <!--track options btn-->
+
+    <string name="enqueue">תור</string>
+
+    <string name="add_to_a_list">הוסף לרשימת השמעה</string>
+
+    <string name="remove_from_list">הסר מרשימת ההשמעה</string>
+
+    <string name="load_album">טען אלבום</string>
+
+    <string name="load_artist">טען אמן</string>
+
+    <string name="load">לִטעוֹן</string>
+
+    <string name="remove">לְהַסִיר</string>
+
+    <string name="add_random">הוסף רצועות אקראיות</string>
+
+    <string name="clear">נקה מסלולים</string>
+
+    <string name="list_new">חָדָשׁ</string>
+
+    <string name="add_to_list">הוסף לרשימת השמעה</string>
+
+    <string name="add_rand_list">הוסף רצועות אקראיות לרשימת ההשמעה</string>
+
+    <string name="add_rand_num">מספר רצועות להוסיף</string>
+
+    <string name="list_label_default">רְשִׁימָה</string>
+
+    <string name="art_desc">אמנות אלבום</string>
+
+    <string name="art_large_desc">תצוגה מורחבת של אמנות אלבום</string>
+
+    <string name="create_list_desc">צור רשימת השמעה/</string>
+
+    <string name="show_all_albums_desc">הצג את כל האלבומים/</string>
+
+    <string name="add_to_list_icon_desc">הוסף רצועות לפלייליסט נוכחי/</string>
+
+    <string name="stop_now">עצור עכשיו</string>
+
+    <string name="stop_after_current">עצור לאחר המסלול הנוכחי</string>
+
+    <string name="queue_stop_three">עצור בעוד שלוש דקות</string>
+
+    <string name="queue_stop_one">עצור בעוד דקה</string>
+
+    <string name="delete_list_title">מחק רשימת השמעה</string>
+
+    <string name="delete_list_confirm">האם אתה בטוח שברצונך למחוק את הפלייליסט: %1$s?</string>
+
+    <string name="clear_tracks_title">נקה רצועות מרשימת ההשמעה</string>
+
+    <string name="clear_tracks_confirm">האם אתה בטוח שברצונך להסיר את כל הרצועות מהפלייליסט: %1$s?</string>
+
+    <string name="list_deleted">רשימת השמעה נמחקה</string>
+
+    <string name="playlist_already_exists">השם הזה כבר בשימוש</string>
+
+    <string name="create_playlist_button_text">לִיצוֹר</string>
+
+    <string name="status_ready">מוּכָן</string>
+
+    <string name="status_error">שגיאה - לא ניתן לשחק</string>
+
+    <string name="status_playing">משחק</string>
+
+    <string name="status_paused">מושהה</string>
+
+    <string name="status_connecting">מְקַשֵׁר</string>
+
+    <string name="notification_play">לְשַׂחֵק</string>
+
+    <string name="notification_stop">לְהַפְסִיק</string>
+
+    <string name="notification_pause">הַפסָקָה</string>
+
+    <string name="notification_prev">קוֹדֵם</string>
+
+    <string name="notification_next">הַבָּא</string>
+
+    <string name="title">
+    <b>כותרת</b>
+  </string>
+
+    <string name="artist">
+    <b>אמן</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>אלבום</b>
+  </string>
+
+    <string name="t_num">
+    <b>מסלול מס\'</b>
+  </string>
+
+    <string name="disc">
+    <b>דיסק</b>
+  </string>
+
+    <string name="genre">
+    <b>ז\'אנר</b>
+  </string>
+
+    <string name="year">
+    <b>שנה</b>
+  </string>
+
+    <string name="length">
+    <b>אורך</b>
+  </string>
+
+    <string name="path">
+    <b>נתיב</b>
+  </string>
+
+    <string name="bitrate">
+    <b>קצב סיביות</b>
+  </string>
+
+    <string name="search_label">חפש שם רצועה, אמן או אלבום</string>
+
+    <string name="theme_header">נוֹשֵׂא</string>
+
+    <string name="lists_header">רשימות</string>
+
+    <string name="search_header">לְחַפֵּשׂ</string>
+
+    <string name="tracks_header">מסלולים</string>
+
+    <string name="theme_title">נוֹשֵׂא</string>
+
+    <string name="min_tracks_artist_title">מינימום רצועות שאמן צריך להיות מוצג ברשימת האמנים</string>
+
+    <string name="min_tracks_artist_summary">המספר המינימלי של רצועות השייכות לאמן כדי שאמן זה יופיע ברשימת האמנים.</string>
+
+    <string name="include_pathname">טען רצועות עם שם נתיב</string>
+
+    <string name="include_path_summary">רק רצועות שכוללות את המחרוזת הנתונה יוצגו ברשימת כל הרצועות. </string>
+
+    <string name="exclude_path">אל תכלול רצועות</string>
+
+    <string name="exclude_path_summary">אל תכלול רצועות שכוללות את המחרוזות הנתונות בשמות הנתיבים שלהן (מופרדות בפסיקים)</string>
+
+    <string name="rand_tracks_num">מספר הרצועות האקראיות שנוספו לרשימת השמעה</string>
+
+    <string name="rand_tracks_num_summary">כאשר המשתמש בוחר להוסיף רצועות אקראיות לאמן או לאלבום, זהו מספר הרצועות שנוספו</string>
+
+    <string name="dismiss_search">סגור את תצוגת החיפוש כאשר נבחרת תוצאה</string>
+
+    <string name="simple_search_enabled">תצוגת חיפוש פשוטה (ללא לחצני אפשרות) </string>
+
+    <string name="autoload_playlist_track">טען אוטומטית את הרצועה הבאה כאשר רשימת השמעה נטען</string>
+
+    <string name="autoload_playlist_track_summary">הפעל לבחירה אוטומטית של הרצועה הבאה כאשר נבחר רשימת השמעה</string>
+
+    <string name="ignore_duplicates_title">הסתר כפילויות בפלייליסטים של All-Tracks ואמנים</string>
+
+    <string name="auto_switch_tabs_title">החלף כרטיסיות אוטומטית לאחר בחירת רשימת השמעה</string>
+
+    <string name="only_show_artist_tracks">הצג רק רצועות אלבומים מהאמן שנבחר</string>
+
+    <string name="blue">כְּחוֹל</string>
+
+    <string name="lt_blue">תכלת</string>
+
+    <string name="lt_green">ירוק בהיר</string>
+
+    <string name="lt_yellow">צהוב בהיר</string>
+
+    <string name="orange">כָּתוֹם</string>
+
+    <string name="red">אָדוֹם</string>
+
+    <string name="green">יָרוֹק</string>
+
+    <string name="yellow">צָהוֹב</string>
+
+    <string name="grey">אָפוֹר</string>
+
+    <string name="cyan">ציאן</string>
+
+    <string name="magenta">מַגֶנטָה</string>
+
+    <string name="rose">וֶרֶד</string>
+</resources>

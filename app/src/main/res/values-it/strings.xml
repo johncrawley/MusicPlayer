@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><resources>
+
+    <string name="app_name">Lettore musicale!</string>
+
+    <string name="created_by">Creato da John Crawley</string>
+
+    <string name="font_info">
+    <u>Informazioni sul carattere</u>
+  </string>
+
+    <string name="font_main">Testo principale: </string>
+
+    <string name="font_time">Tempo trascorso: </string>
+
+    <string name="icon_info">
+    <u>Informazioni sull\'icona</u>
+  </string>
+
+    <string name="icon_detail">Icone caricate da Android Studio con licenza Apache 2: \n https://www.apache.org/licenses/LICENSE-2.0.txt\n\n</string>
+
+    <string name="settings">Impostazioni</string>
+
+    <string name="refreshed">Playlist aggiornata</string>
+
+    <string name="refreshed_tracks">Playlist aggiornata (trovati %1$d)</string>
+
+    <string name="refreshed_one">Playlist aggiornata (1 nuova)</string>
+
+    <string name="loading_tracks">Caricamento</string>
+
+    <string name="no_tracks_found">Nessuna traccia trovata</string>
+
+    <string name="no_genres_found">Nessun genere trovato</string>
+
+    <string name="no_artists_found">Nessun artista trovato</string>
+
+    <string name="no_albums_found">Nessun album trovato</string>
+
+    <string name="no_items_found">Nessuno trovato</string>
+
+    <string name="playlist_is_empty">La playlist è vuota</string>
+
+    <string name="add_random_title">Aggiungi tracce casuali alla playlist: %1$s</string>
+
+    <string name="btn_settings">Impostazioni</string>
+
+    <string name="btn_refresh">Aggiornare</string>
+
+    <string name="btn_genre">Carica genere</string>
+
+    <string name="btn_about">Di</string>
+
+    <string name="load_genre_title">Carica tracce del genere</string>
+
+    <string name="load_year_title">Carica tracce per anno</string>
+
+    <string name="toggle_all">Tutte le tracce</string>
+
+    <string name="toggle_artists">Artisti</string>
+
+    <string name="toggle_genres">Generi</string>
+
+    <string name="add_random_tracks">Aggiungi tracce</string>
+
+    <string name="default_playlist_info">Tutte le tracce</string>
+
+    <string name="default_album_info">Tutti gli album</string>
+
+    <string name="album_artist">Artista: %1$s</string>
+
+    <string name="list_prefix">Playlist:</string>
+
+    <string name="artist_prefix">Artista:</string>
+
+    <string name="album_prefix">Album:</string>
+
+    <string name="genre_prefix">Genere:</string>
+
+    <string name="add_track_title">Aggiungi \"%1$s\" a una playlist:</string>
+
+    <string name="error_play_track">Impossibile riprodurre la traccia a %1$s</string>
+
+    <string name="error_load_track">Impossibile caricare la traccia a %1$s</string>
+
+    <string name="search_desc">Ricerca</string>
+
+    <string name="settings_desc">Impostazioni</string>
+
+    <string name="time_l">Tempo trascorso</string>
+
+    <string name="artist_l">Artista</string>
+
+    <string name="album_l">Album</string>
+
+    <string name="name">nome della traccia</string>
+
+    <string name="none">Nessuna traccia trovata</string>
+
+    <string name="queued">Traccia aggiunta alla coda</string>
+    <!--toast-->
+
+    <string name="added">Traccia aggiunta alla playlist</string>
+
+    <string name="already_in_list">Traccia già presente nella playlist</string>
+
+    <string name="none_added">Nessuna nuova traccia è stata aggiunta alla playlist</string>
+
+    <string name="new_added">%1$d tracce sono state aggiunte alla playlist</string>
+
+    <string name="one_added">1 traccia è stata aggiunta alla playlist</string>
+
+    <string name="one_removed">Traccia rimossa dalla playlist</string>
+
+    <string name="removed">Tracce rimosse dalla playlist</string>
+
+    <string name="remove_fail">Non è stato possibile rimuovere la traccia dalla playlist</string>
+
+    <string name="artist_loaded">Tracce dell\'artista caricate</string>
+
+    <string name="album_loaded">Album caricato</string>
+
+    <string name="list_loaded">Playlist caricata</string>
+
+    <string name="cleared">Playlist cancellata</string>
+
+    <string name="created">Playlist creata</string>
+
+    <string name="genre_loaded">Genere caricato</string>
+
+    <string name="album_error">Impossibile caricare l\'album: %1$s</string>
+
+    <string name="genre_error">Impossibile caricare il genere: %1$s</string>
+
+    <string name="play_desc">Giocare</string>
+
+    <string name="stop_desc">Fermare</string>
+
+    <string name="pause_desc">Pausa</string>
+
+    <string name="next_track_desc">Traccia successiva</string>
+
+    <string name="prev_track_desc">Traccia precedente</string>
+
+    <string name="shuffle_on_desc">Attiva la riproduzione casuale</string>
+
+    <string name="shuffle_off_desc">Disattiva la riproduzione casuale</string>
+
+    <string name="default_path">Musica/</string>
+
+    <string name="tracks_tab">Tracce</string>
+    <!--tabs-->
+
+    <string name="lists_tab">Liste</string>
+
+    <string name="artists_tab">Artisti</string>
+
+    <string name="albums_tab">Album</string>
+
+    <string name="search_add">Aggiungere</string>
+
+    <string name="search_cancel">Cancellare</string>
+
+    <string name="search_play">Giocare</string>
+
+    <string name="search_enqueue">Mettere in coda</string>
+
+    <string name="search_add_all">Aggiungi tutto</string>
+
+    <string name="load_playlist">Carico</string>
+
+    <string name="del_playlist">Rimuovere</string>
+
+    <string name="load_tracks">Carico tracce</string>
+
+    <string name="list_name">Nome della playlist</string>
+
+    <string name="info">Informazioni</string>
+    <!--track options btn-->
+
+    <string name="enqueue">Mettere in coda</string>
+
+    <string name="add_to_a_list">Aggiungi a una playlist</string>
+
+    <string name="remove_from_list">Rimuovi dalla playlist</string>
+
+    <string name="load_album">Carica album</string>
+
+    <string name="load_artist">Carica artista</string>
+
+    <string name="load">Carico</string>
+
+    <string name="remove">Rimuovere</string>
+
+    <string name="add_random">Aggiungi tracce casuali</string>
+
+    <string name="clear">Cancella tracce</string>
+
+    <string name="list_new">Nuovo</string>
+
+    <string name="add_to_list">Aggiungi alla playlist</string>
+
+    <string name="add_rand_list">Aggiungi tracce casuali alla playlist</string>
+
+    <string name="add_rand_num">Numero di tracce da aggiungere</string>
+
+    <string name="list_label_default">Lista</string>
+
+    <string name="art_desc">Copertina dell\'album</string>
+
+    <string name="art_large_desc">Vista espansa della copertina dell\'album</string>
+
+    <string name="create_list_desc">Crea playlist/</string>
+
+    <string name="show_all_albums_desc">Mostra tutti gli album/</string>
+
+    <string name="add_to_list_icon_desc">Aggiungi tracce alla playlist corrente/</string>
+
+    <string name="stop_now">Fermati adesso</string>
+
+    <string name="stop_after_current">Fermati dopo la traccia corrente</string>
+
+    <string name="queue_stop_three">Fermati tra tre minuti</string>
+
+    <string name="queue_stop_one">Fermati tra un minuto</string>
+
+    <string name="delete_list_title">Elimina playlist</string>
+
+    <string name="delete_list_confirm">Vuoi davvero eliminare la playlist: %1$s?</string>
+
+    <string name="clear_tracks_title">Cancella tracce dalla playlist</string>
+
+    <string name="clear_tracks_confirm">Vuoi davvero rimuovere tutte le tracce dalla playlist: %1$s?</string>
+
+    <string name="list_deleted">Playlist eliminata</string>
+
+    <string name="playlist_already_exists">Questo nome è già in uso</string>
+
+    <string name="create_playlist_button_text">Creare</string>
+
+    <string name="status_ready">Pronto</string>
+
+    <string name="status_error">Errore - Impossibile riprodurre</string>
+
+    <string name="status_playing">Giocando</string>
+
+    <string name="status_paused">In pausa</string>
+
+    <string name="status_connecting">Collegamento</string>
+
+    <string name="notification_play">Giocare</string>
+
+    <string name="notification_stop">Fermare</string>
+
+    <string name="notification_pause">Pausa</string>
+
+    <string name="notification_prev">Precedente</string>
+
+    <string name="notification_next">Prossimo</string>
+
+    <string name="title">
+    <b>Titolo</b>
+  </string>
+
+    <string name="artist">
+    <b>Artista</b>
+  </string>
+    <!--track info-->
+
+    <string name="album">
+    <b>Album</b>
+  </string>
+
+    <string name="t_num">
+    <b>Traccia n.</b>
+  </string>
+
+    <string name="disc">
+    <b>Disco</b>
+  </string>
+
+    <string name="genre">
+    <b>Genere</b>
+  </string>
+
+    <string name="year">
+    <b>Anno</b>
+  </string>
+
+    <string name="length">
+    <b>Lunghezza</b>
+  </string>
+
+    <string name="path">
+    <b>Percorso</b>
+  </string>
+
+    <string name="bitrate">
+    <b>Bitrate</b>
+  </string>
+
+    <string name="search_label">Cerca per titolo del brano, artista o album</string>
+
+    <string name="theme_header">Tema</string>
+
+    <string name="lists_header">Liste</string>
+
+    <string name="search_header">Ricerca</string>
+
+    <string name="tracks_header">Tracce</string>
+
+    <string name="theme_title">Tema</string>
+
+    <string name="min_tracks_artist_title">Numero minimo di tracce che un artista deve visualizzare nell\'elenco degli artisti</string>
+
+    <string name="min_tracks_artist_summary">Numero minimo di tracce appartenenti a un artista affinché quell\'artista appaia nell\'elenco degli artisti.</string>
+
+    <string name="include_pathname">Carica tracce con nome percorso</string>
+
+    <string name="include_path_summary">Nell\'elenco Tutte le tracce verranno visualizzate solo le tracce che includono la stringa specificata. </string>
+
+    <string name="exclude_path">Escludi tracce</string>
+
+    <string name="exclude_path_summary">Escludi le tracce che includono le stringhe specificate nei loro nomi di percorso (separate da virgole)</string>
+
+    <string name="rand_tracks_num">Il numero di tracce casuali che vengono aggiunte a una playlist</string>
+
+    <string name="rand_tracks_num_summary">Quando l\'utente sceglie di aggiungere tracce casuali a un artista o a un album, questo è il numero di tracce che vengono aggiunte</string>
+
+    <string name="dismiss_search">Ignora la visualizzazione della ricerca quando viene selezionato un risultato</string>
+
+    <string name="simple_search_enabled">Visualizzazione di ricerca semplificata (senza pulsanti di opzione) </string>
+
+    <string name="autoload_playlist_track">Carica automaticamente la traccia successiva quando viene caricata una playlist</string>
+
+    <string name="autoload_playlist_track_summary">Abilita la selezione automatica della traccia successiva quando viene selezionata una playlist</string>
+
+    <string name="ignore_duplicates_title">Nascondi i duplicati nelle playlist Tutte le tracce e Artisti</string>
+
+    <string name="auto_switch_tabs_title">Cambia automaticamente scheda dopo aver selezionato una playlist</string>
+
+    <string name="only_show_artist_tracks">Mostra solo le tracce dell\'album dell\'artista selezionato</string>
+
+    <string name="blue">Blu</string>
+
+    <string name="lt_blue">Azzurro chiaro</string>
+
+    <string name="lt_green">Verde chiaro</string>
+
+    <string name="lt_yellow">Giallo chiaro</string>
+
+    <string name="orange">Arancia</string>
+
+    <string name="red">Rosso</string>
+
+    <string name="green">Verde</string>
+
+    <string name="yellow">Giallo</string>
+
+    <string name="grey">Grigio</string>
+
+    <string name="cyan">Ciano</string>
+
+    <string name="magenta">Magenta</string>
+
+    <string name="rose">Rosa</string>
+</resources>
