@@ -4,26 +4,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/dialog_background"
-    android:padding="12dp">
+    android:padding="@dimen/_12sdp">
 
     <TextView
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:id="@+id/title"
-        android:layout_margin="8dp"/>
+        android:layout_margin="@dimen/_8sdp"/>
 
     <LinearLayout
         android:id="@+id/playlistRecyclerViewLayout"
-        android:layout_width="100dp"
-        android:layout_height="200dp"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_200sdp"
         android:background="@color/background"
-        android:layout_marginVertical="12dp">
+        android:layout_marginVertical="@dimen/_12sdp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/playlistRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="@dimen/playlist_list_view_horizontal_margin"
+            android:layout_marginHorizontal="@dimen/_2sdp"
             android:layout_marginTop="@dimen/list_margin_top"
             android:layout_marginBottom="@dimen/list_margin_bottom"
             android:fadeScrollbars="true"

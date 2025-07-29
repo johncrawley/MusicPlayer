@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp"
+    android:layout_margin="@dimen/_12sdp"
     android:gravity="center"
-    android:padding="8dp"
+    android:padding="@dimen/_8sdp"
     android:background="@drawable/dialog_background"
     android:orientation="vertical">
 
@@ -12,14 +12,14 @@
     <ScrollView
         android:id="@+id/aboutInfoScrollView"
         android:layout_width="wrap_content"
-        android:layout_height="500dp">
+        android:layout_height="@dimen/_200sdp">
 
         <LinearLayout
             android:id="@+id/aboutInfoLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="4dp"
-            android:layout_margin="8dp"
+            android:paddingHorizontal="@dimen/_4sdp"
+            android:layout_margin="@dimen/_8sdp"
             android:background="?attr/track_info_background"
             android:orientation="vertical">
 
@@ -30,7 +30,7 @@
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:text="@string/app_name"
-                android:layout_marginVertical="8dp"
+                android:layout_marginVertical="@dimen/_8sdp"
                 />
 
             <TextView
@@ -40,7 +40,7 @@
                 android:textAlignment="center"
                 android:textSize="16sp"
                 android:text="@string/version"
-                android:layout_marginVertical="4dp"
+                android:layout_marginVertical="@dimen/_4sdp"
                 />
 
             <TextView
@@ -51,7 +51,7 @@
                 android:textSize="16sp"
                 android:text="@string/created_by"
                 android:layout_marginTop="0dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/_8sdp"
                 />
 
             <TextView
@@ -61,7 +61,7 @@
                 android:textSize="14sp"
                 android:textAlignment="center"
                 android:text="@string/font_info"
-                android:layout_marginVertical="8dp"
+                android:layout_marginVertical="@dimen/_8sdp"
                 />
 
             <TextView
@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="@dimen/_8sdp"
                 android:text="@string/font_main"
                 />
             <TextView
@@ -80,7 +80,7 @@
                 android:textSize="14sp"
                 android:textAlignment="center"
                 android:text="@string/icon_info"
-                android:layout_marginVertical="8dp"
+                android:layout_marginVertical="@dimen/_8sdp"
                 />
 
             <TextView
@@ -89,7 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="@dimen/_8sdp"
                 android:text="@string/icon_detail"
                 />
 

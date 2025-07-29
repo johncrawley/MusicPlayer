@@ -2,20 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:paddingHorizontal="@dimen/dialog_layout_padding_horizontal"
+    android:paddingHorizontal="@dimen/_8sdp"
     android:background="@drawable/dialog_background"
     android:layout_height="match_parent">
-
-    <!--
-
-        style="@style/customTextInputLayoutStyle"
-    -->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/addPlaylistTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/input_text_padding_top">
+        android:paddingTop="@dimen/_12sdp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/addPlaylistNameEditText"
             android:layout_width="match_parent"
@@ -32,13 +27,13 @@
         android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
+        android:layout_marginVertical="@dimen/_8sdp"
         android:text="@string/playlist_already_exists"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:paddingHorizontal="@dimen/dialog_layout_padding_horizontal"
+        android:paddingHorizontal="@dimen/_8sdp"
         style="@android:attr/buttonBarStyle"
         android:layout_height="wrap_content">
 
@@ -46,14 +41,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@android:attr/buttonBarButtonStyle"
-            android:layout_margin="@dimen/list_button_margin_horizontal"
+            android:layout_margin="@dimen/_8sdp"
             android:id="@+id/cancelDialogButton"
             android:text="@android:string/cancel"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/list_button_margin_horizontal"
+            android:layout_margin="@dimen/_8sdp"
             android:id="@+id/createPlaylistButton"
             android:visibility="invisible"
             style="@android:attr/buttonBarButtonStyle"
