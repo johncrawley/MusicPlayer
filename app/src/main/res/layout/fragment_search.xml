@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/panel_background"
-    android:padding="8dp"
+    android:padding="@dimen/_8sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/searchResultsRecyclerView"
-        android:paddingTop="@dimen/search_edit_text_padding_top">
+        android:paddingTop="@dimen/_12sdp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/trackSearchEditText"
             android:layout_width="match_parent"
@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/playlist_list_view_horizontal_margin"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/_8sdp"
         android:fadeScrollbars="true"
         android:scrollbars="vertical"
         app:layout_constraintTop_toBottomOf="@+id/searchInputLayout"
@@ -67,32 +67,32 @@
             android:id="@+id/addSelectedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/list_button_margin_horizontal"
-            android:layout_marginVertical="@dimen/list_button_margin_vertical"
+            android:layout_marginHorizontal="@dimen/_8sdp"
+            android:layout_marginVertical="@dimen/_2sdp"
             android:text="@string/search_add" />
 
         <Button
             android:id="@+id/addAllButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/list_button_margin_horizontal"
-            android:layout_marginVertical="@dimen/list_button_margin_vertical"
+            android:layout_marginHorizontal="@dimen/_8sdp"
+            android:layout_marginVertical="@dimen/_2sdp"
             android:visibility="gone"
             android:text="@string/search_add_all" />
         <Button
             android:id="@+id/playSelectedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/list_button_margin_horizontal"
-            android:layout_marginVertical="@dimen/list_button_margin_vertical"
+            android:layout_marginHorizontal="@dimen/_8sdp"
+            android:layout_marginVertical="@dimen/_2sdp"
             android:text="@string/search_play" />
 
         <Button
             android:id="@+id/playNextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/list_button_margin_horizontal"
-            android:layout_marginVertical="@dimen/list_button_margin_vertical"
+            android:layout_marginHorizontal="@dimen/_8sdp"
+            android:layout_marginVertical="@dimen/_2sdp"
             android:text="@string/search_enqueue" />
     </LinearLayout>
 

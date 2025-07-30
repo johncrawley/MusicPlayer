@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_background"
     android:layout_gravity="center"
-    android:layout_margin="@dimen/button_fragment_margin"
+    android:layout_margin="@dimen/_4sdp"
     android:gravity="center"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -15,17 +15,17 @@
         android:text="@string/load_genre_title"
         android:textAlignment="center"
         android:textSize="18sp"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/_8sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <include layout="@layout/recycler_list"
         android:id="@+id/genresRecyclerLayout"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/_8sdp"
         android:visibility="visible"
         android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/_170sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dialogTitleText"

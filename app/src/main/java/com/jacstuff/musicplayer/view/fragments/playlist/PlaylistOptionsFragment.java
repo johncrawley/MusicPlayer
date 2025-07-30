@@ -166,7 +166,7 @@ public class PlaylistOptionsFragment extends DialogFragment {
             log("getMPS() main activity is null!");
             return Optional.empty();
         }
-        return Optional.of(mainActivity.getMediaPlayerService());
+        return Optional.ofNullable(mainActivity.getMediaPlayerService());
     }
 
 

@@ -20,7 +20,7 @@
     <View
         android:id="@+id/artistNameDivider"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="@dimen/_2sdp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,9 +30,7 @@
         android:id="@+id/albumsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="@dimen/playlist_list_view_horizontal_margin"
-        android:layout_marginTop="@dimen/list_margin_top"
-        android:layout_marginBottom="@dimen/list_margin_bottom"
+        android:layout_marginHorizontal="@dimen/_2sdp"
         android:fadeScrollbars="true"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -61,8 +59,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_margin="@dimen/add_button_margin"
-        android:padding="1dp"
+        android:layout_margin="@dimen/_12sdp"
+        android:padding="@dimen/_1sdp"
         android:background="@drawable/add_image_button_outer_layout_background"
         >
 

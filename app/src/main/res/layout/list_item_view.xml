@@ -5,17 +5,15 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/track_list_item_row_padding_vertical"
-    android:background="@drawable/recycler_bg_selector"
-    android:paddingTop="@dimen/track_list_item_row_padding_vertical">
+    android:paddingVertical="@dimen/_6sdp"
+    android:background="@drawable/recycler_bg_selector">
 
 
     <TextView
         android:id="@+id/trackName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginHorizontal="@dimen/_8sdp"
         android:text="@string/name"
         />
 </RelativeLayout>
