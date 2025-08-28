@@ -23,5 +23,4 @@ public class ButtonMaker {
         button.setOnClickListener((View v)-> onClickAction.run());
         return button;
     }
-
 }

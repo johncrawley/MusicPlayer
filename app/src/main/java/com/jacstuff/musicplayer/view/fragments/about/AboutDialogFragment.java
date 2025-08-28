@@ -36,12 +36,6 @@ public class AboutDialogFragment extends DialogFragment {
         DialogFragmentUtils.setTransparentBackground(this);
     }
 
-    /*
-        <string name="about_font_main_text">Main text:&#160;</string>
-    <string name="about_font_main_text_font">Le Patin Magicien, Freeware \n https://www.fontspace.com/le-patin-magicien-font-f39622\n\n </string>
-    <string name="about_font_time_elapsed">Time elapsed:&#160;</string>
-    <string name="about_font_time_elapsed_font">Poe Monospace, Freeware\n https://www.fontspace.com/poe-monospace-font-f23572 </string>
-     */
 
     private void setupFontInfo(View parentView){
         TextView fontInfoTextView = parentView.findViewById(R.id.aboutFontText);
