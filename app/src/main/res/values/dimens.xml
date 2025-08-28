@@ -63,4 +63,6 @@
 
     <dimen name="function_button_padding">4dp</dimen>
     <dimen name="function_button_margin">0dp</dimen>
+
+    <dimen name="function_button_dimension">60dp</dimen>
 </resources>
