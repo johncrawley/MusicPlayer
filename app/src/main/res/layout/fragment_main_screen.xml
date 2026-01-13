@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <include layout="@layout/player"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="0.5"/>
+
+    <include layout="@layout/playlist_tabs"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="0.5"/>
+    <View
+        android:id="@+id/tabsBottomDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <include layout="@layout/fragment_search"
+        android:id="@+id/searchView"
+        android:visibility="gone"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+    <include layout="@layout/add_track_to_playlist"
+        android:id="@+id/addTrackToPlaylistView"
+        android:visibility="gone"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+    <include layout="@layout/album_art_large"
+        android:id="@+id/albumArtLargeView"
+        android:visibility="gone"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+</LinearLayout>

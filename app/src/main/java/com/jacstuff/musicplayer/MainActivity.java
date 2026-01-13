@@ -25,6 +25,7 @@ import android.os.Bundle;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
@@ -39,6 +40,7 @@ import com.jacstuff.musicplayer.service.helpers.preferences.PrefKey;
 import com.jacstuff.musicplayer.service.helpers.preferences.PreferencesHelperImpl;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
+import com.jacstuff.musicplayer.view.fragments.MainScreenFragment;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
@@ -100,6 +102,17 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
+    private void setupFragmentsIf(boolean isSavedStateNull) {
+        if(!isSavedStateNull){
+            return;
+        }
+        Fragment mainMenuFragment = new MainScreenFragment();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, mainMenuFragment)
+                .commit();
+    }
+
+
     private final ActivityResultLauncher<String> requestAudioPermissionLauncher = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
             result -> {
@@ -120,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestPermissions();
         assignTheme();
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.fragment_main_screen);
         setupLayout();
         setupViewModel();
         initHelpers();
@@ -278,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void deselectCurrentTrack() { sendMessage(DESELECT_CURRENT_TRACK_ITEM); }
 
-    public void disableViewForAWhile(View view){disableViewForAWhile(view, 700);}
+    public void disableViewForAWhile(View view){ disableViewForAWhile(view, 700);}
 
     public void selectTrack(int index) {mediaPlayerService.selectTrack(index); }
 
@@ -287,7 +300,6 @@ public class MainActivity extends AppCompatActivity {
     public void notifyTrackAddedToPlaylist(){ toast(R.string.added); }
 
     public void notifyTrackAlreadyInPlaylist(){toast(R.string.already_in_list);}
-
 
     public void notifyTrackRemovedFromPlaylist(boolean success){
         toast(success ? R.string.one_removed : R.string.remove_fail);

@@ -1,45 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:background="@color/background"
+    tools:context=".MainActivity">
 
-    <include layout="@layout/player"
-        android:layout_height="0dp"
+
+    <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
-        android:layout_weight="0.5"/>
-
-    <include layout="@layout/playlist_tabs"
-        android:layout_height="0dp"
-        android:layout_width="match_parent"
-        android:layout_weight="0.5"/>
-    <View
-        android:id="@+id/tabsBottomDivider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
-
-    <include layout="@layout/fragment_search"
-        android:id="@+id/searchView"
-        android:visibility="gone"
-        android:layout_weight="1"
         android:layout_height="match_parent"
-        android:layout_width="match_parent" />
+        android:id="@+id/fragment_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
-    <include layout="@layout/add_track_to_playlist"
-        android:id="@+id/addTrackToPlaylistView"
-        android:visibility="gone"
-        android:layout_weight="1"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent" />
-
-    <include layout="@layout/album_art_large"
-        android:id="@+id/albumArtLargeView"
-        android:visibility="gone"
-        android:layout_weight="1"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
