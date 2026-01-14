@@ -119,7 +119,7 @@ public class SearchViewHelper {
             return;
         }
         keyboardHelper.hideKeyboard(searchView);
-        Animator animator = AnimatorHelper.createHideAnimatorFor(searchView, this::onSearchViewHidden);
+        var animator = AnimatorHelper.createHideAnimatorFor(searchView, this::onSearchViewHidden);
         dismissSearchViewOnBackPressedCallback.setEnabled(false);
         animator.start();
     }
@@ -151,6 +151,7 @@ public class SearchViewHelper {
 
 
     private void onSearchResultSelect(Track track){
+        keyboardHelper.hideKeyboard(searchView);
         selectedSearchResultTrack = track;
         if(isAddingTrackToPlaylist){
             addSelectedSearchResultToPlaylist();

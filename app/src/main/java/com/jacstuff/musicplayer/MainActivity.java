@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
         if(isServiceConnected.get()){
             mediaPlayerService.checkPath();
         }
+
     }
 
 
@@ -380,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void startMediaPlayerService(){
-        Intent mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
+        var mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
         getApplicationContext().startForegroundService(mediaPlayerServiceIntent);
         getApplicationContext().bindService(mediaPlayerServiceIntent, serviceConnection, 0);
     }
@@ -462,8 +463,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void deselectItemsInNonArtistTabs(){
         sendMessage(NOTIFY_TO_DESELECT_PLAYLIST_ITEMS);
-        // sendMessage(NOTIFY_TO_DESELECT_ALBUM_ITEMS); // FYI Not required because the album list is reloaded anyway
         sendMessage(NOTIFY_TO_DESELECT_GENRE_ITEMS);
+        // NB Don't need to notify to deselect album items because the album list is reloaded anyway
     }
 
 
