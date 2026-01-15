@@ -121,7 +121,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     }
 
 
-
     public void updateViews(PlaylistManager playlistManager){
         Track currentTrack = mediaPlayerHelper.getCurrentTrack();
         if(currentTrack != null){

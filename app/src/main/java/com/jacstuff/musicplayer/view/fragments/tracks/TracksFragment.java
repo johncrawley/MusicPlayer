@@ -17,6 +17,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.TextView;
 
 import com.jacstuff.musicplayer.MainActivity;
@@ -26,6 +27,7 @@ import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.options.TrackOptionsDialog;
+import com.jacstuff.musicplayer.view.utils.AnimatorHelper;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.Optional;
@@ -52,6 +54,9 @@ public class TracksFragment extends Fragment{
     private Playlist playlist;
     private String noTracksFoundStr = "";
     private int listRefreshCount;
+    private ViewGroup listHolder;
+    private Animation fadeInListAnimation;
+    private TextView loadingTextView;
 
     public TracksFragment() {
         // Required empty public constructor
@@ -60,13 +65,7 @@ public class TracksFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        log("Entered onCreateView()");
         return inflater.inflate(R.layout.fragment_tab_tracks, container, false);
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ TracksFragment: " + msg);
     }
 
 
@@ -76,6 +75,7 @@ public class TracksFragment extends Fragment{
         this.parentView = view;
         noTracksFoundStr = getString(R.string.no_tracks_found);
         initViews();
+        initFadeInListAnimation();
         assignPlaylist();
         setupRecyclerView(view);
         setupAddTracksButton(view);
@@ -85,15 +85,27 @@ public class TracksFragment extends Fragment{
     }
 
 
+    private void initFadeInListAnimation(){
+        fadeInListAnimation = AnimatorHelper.createFadeInAnimation(getContext(), this::finishListSetup);
+    }
+
+
+    private void finishListSetup(){
+
+    }
+
+
     private void initViews(){
         noTracksFoundTextView = parentView.findViewById(R.id.noTracksFoundTextView);
         playlistInfoTextView = parentView.findViewById(R.id.playlistNameTextView);
+        listHolder = parentView.findViewById(R.id.listHolder);
+        loadingTextView = parentView.findViewById(R.id.loadingTracksText);
         initRecyclerView();
     }
 
 
     private void initRecyclerView(){
-        recyclerView = parentView.findViewById(R.id.genresRecyclerView);
+        recyclerView = parentView.findViewById(R.id.tracksRecyclerView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -108,11 +120,6 @@ public class TracksFragment extends Fragment{
     }
 
 
-    private void assignPlaylist(){
-        playlist = getMainActivity().getCurrentPlaylist();
-    }
-
-
     private void setListeners(){
         setListener(this, NOTIFY_USER_PLAYLIST_LOADED, this::setVisibilityOnAddTracksToPlaylistButton);
         setListener(this, ENSURE_SELECTED_TRACK_IS_VISIBLE, this::ensureSelectedTrackIsVisible);
@@ -123,7 +130,6 @@ public class TracksFragment extends Fragment{
 
 
     private void updateTracksList(Bundle bundle){
-        log("Entered updateTracksList()");
         isBeingRefreshed.set(true);
         assignPlaylist();
         updatePlaylistInfoView(playlist);
@@ -132,6 +138,11 @@ public class TracksFragment extends Fragment{
         setupRecyclerView(parentView);
         scrollToAndSelectListPosition(getInt(bundle, MessageKey.TRACK_INDEX));
         isBeingRefreshed.set(false);
+    }
+
+
+    private void assignPlaylist(){
+        playlist = getMainActivity().getCurrentPlaylist();
     }
 
 
@@ -216,7 +227,8 @@ public class TracksFragment extends Fragment{
 
 
     private void runAfterDelay(Runnable runnable){
-        new Handler(Looper.getMainLooper()).postDelayed(runnable, 150);
+        new Handler(Looper.getMainLooper())
+                .postDelayed(runnable, 150);
     }
 
 
@@ -233,7 +245,7 @@ public class TracksFragment extends Fragment{
         updatePlaylistInfoView(playlist);
         noTracksFoundTextView.setText(getString(R.string.loading_tracks));
         setVisibilityOnNoTracksFoundText();
-        getMain().ifPresent(ma -> ma.notifyNumberOfTracks(playlist.getTracks().size()));
+        getMain().ifPresent(activity -> activity.notifyNumberOfTracks(playlist.getTracks().size()));
     }
 
 
