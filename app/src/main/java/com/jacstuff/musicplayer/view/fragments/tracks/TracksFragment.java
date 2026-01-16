@@ -1,5 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments.tracks;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 import static com.jacstuff.musicplayer.view.fragments.Message.DESELECT_CURRENT_TRACK_ITEM;
 import static com.jacstuff.musicplayer.view.fragments.Message.ENSURE_SELECTED_TRACK_IS_VISIBLE;
@@ -55,7 +57,7 @@ public class TracksFragment extends Fragment{
     private String noTracksFoundStr = "";
     private int listRefreshCount;
     private ViewGroup listHolder;
-    private Animation fadeInListAnimation;
+    private Animation fadeInListAnimation, fadeOutTextAnimation, fadeOutListAnimation, fadeInTextAnimation;
     private TextView loadingTextView;
 
     public TracksFragment() {
@@ -86,13 +88,33 @@ public class TracksFragment extends Fragment{
 
 
     private void initFadeInListAnimation(){
-        fadeInListAnimation = AnimatorHelper.createFadeInAnimation(getContext(), this::finishListSetup);
+        fadeInListAnimation = AnimatorHelper.createFadeInAnimation(getContext(), this::onListFadedIn);
+        fadeOutListAnimation = AnimatorHelper.createFadeInAnimation(getContext(), this::onListFadedIn);
+        fadeInTextAnimation = AnimatorHelper.createFadeInAnimation(getContext(), this::onLoadingTextFadedIn);
+        fadeOutTextAnimation = AnimatorHelper.createFadeInAnimation(getContext(), this::onLoadingTextFadedOut);
     }
 
 
-    private void finishListSetup(){
+    private void onListFadedIn(){
 
     }
+
+
+    private void onListFadedOut(){
+
+    }
+
+
+
+    private void onLoadingTextFadedIn(){
+
+    }
+
+
+    private void onLoadingTextFadedOut(){
+        listHolder.setAnimation(fadeInListAnimation);
+    }
+
 
 
     private void initViews(){
@@ -136,6 +158,8 @@ public class TracksFragment extends Fragment{
         setVisibilityOnAddTracksToPlaylistButton(playlist.isUserPlaylist());
         previousIndex = 0;
         setupRecyclerView(parentView);
+        loadingTextView.setVisibility(GONE);
+        listHolder.setVisibility(VISIBLE);
         scrollToAndSelectListPosition(getInt(bundle, MessageKey.TRACK_INDEX));
         isBeingRefreshed.set(false);
     }
@@ -243,7 +267,6 @@ public class TracksFragment extends Fragment{
         trackListAdapter = new TrackListAdapter(playlist, this::selectTrack, this::createTrackOptionsFragment);
         recyclerView.setAdapter(trackListAdapter);
         updatePlaylistInfoView(playlist);
-        noTracksFoundTextView.setText(getString(R.string.loading_tracks));
         setVisibilityOnNoTracksFoundText();
         getMain().ifPresent(activity -> activity.notifyNumberOfTracks(playlist.getTracks().size()));
     }
@@ -251,7 +274,7 @@ public class TracksFragment extends Fragment{
 
     private void setVisibilityOnAddTracksToPlaylistButton(Bundle bundle){
         boolean isUserPlaylistLoaded = getBoolean(bundle,IS_USER_PLAYLIST);
-        addTracksToPlaylistButtonOuterLayout.setVisibility(isUserPlaylistLoaded ? View.VISIBLE : View.INVISIBLE);
+        addTracksToPlaylistButtonOuterLayout.setVisibility(isUserPlaylistLoaded ? VISIBLE : View.INVISIBLE);
         setVisibilityOnAddTracksToPlaylistButton(isUserPlaylistLoaded );
     }
 
@@ -269,7 +292,7 @@ public class TracksFragment extends Fragment{
     private void setupAddTracksButton(View parentView){
         addTracksToPlaylistButtonOuterLayout = parentView.findViewById(R.id.addButtonOuterLayout);
         ButtonMaker.initImageButton(parentView, R.id.addButton, this::addTracksToPlaylist);
-        getMain().ifPresent(ma -> addTracksToPlaylistButtonOuterLayout.setVisibility(ma.isUserPlaylistLoaded() ? View.VISIBLE : View.INVISIBLE));
+        getMain().ifPresent(ma -> addTracksToPlaylistButtonOuterLayout.setVisibility(ma.isUserPlaylistLoaded() ? VISIBLE : View.INVISIBLE));
     }
 
 
@@ -308,7 +331,9 @@ public class TracksFragment extends Fragment{
 
 
     private void showNoTracksIfNotBeingRefreshed(int oldRefreshCount){
-        if(isBeingRefreshed.get() || listRefreshCount != oldRefreshCount || getContext() == null){
+        if(isBeingRefreshed.get()
+                || listRefreshCount != oldRefreshCount
+                || getContext() == null){
             return;
         }
         setVisibilityOnNoItemsFoundText(playlist.getTracks(), recyclerView, noTracksFoundTextView, noTracksFoundStr);
@@ -316,7 +341,7 @@ public class TracksFragment extends Fragment{
 
 
     private void setVisibilityOnAddTracksToPlaylistButton(boolean isUserPlaylistLoaded){
-        int visibility = isUserPlaylistLoaded? View.VISIBLE : View.INVISIBLE;
+        int visibility = isUserPlaylistLoaded? VISIBLE : View.INVISIBLE;
         addTracksToPlaylistButtonOuterLayout.setVisibility(visibility);
     }
 

@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         setupLayout();
         setupViewModel();
         initHelpers();
-        startMediaPlayerService();
+      //  startMediaPlayerService();
         checkPath();
     }
 
@@ -351,7 +351,6 @@ public class MainActivity extends AppCompatActivity {
         if(playlistHelper != null){
             playlistHelper.loadWholeAlbumOf(selectedTrack);
         }
-
         toastIfTabsNotAutoSwitched(R.string.album_loaded);
     }
 
@@ -382,8 +381,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void startMediaPlayerService(){
         var mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
-        getApplicationContext().startForegroundService(mediaPlayerServiceIntent);
-        getApplicationContext().bindService(mediaPlayerServiceIntent, serviceConnection, 0);
+        var context = getApplicationContext();
+        context.startForegroundService(mediaPlayerServiceIntent);
+        context.bindService(mediaPlayerServiceIntent, serviceConnection, 0);
     }
 
 
