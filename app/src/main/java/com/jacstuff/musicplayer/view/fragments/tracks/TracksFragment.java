@@ -79,11 +79,19 @@ public class TracksFragment extends Fragment{
         initViews();
         initFadeInListAnimation();
         assignPlaylist();
-        setupRecyclerView(view);
         setupAddTracksButton(view);
-        getMainActivity().notifyTracksFragmentReady();
         setListeners();
-        selectCurrentTrack();
+        startMediaPlayerServiceOrUpdateTracks();
+    }
+
+
+    private void startMediaPlayerServiceOrUpdateTracks(){
+        if(isMediaPlayerServiceAvailable()){
+            getMainActivity().getMediaPlayerService().updateViewTrackList();
+        }
+        else{
+            getMainActivity().startMediaPlayerService();
+        }
     }
 
 
@@ -137,7 +145,9 @@ public class TracksFragment extends Fragment{
     private void selectCurrentTrack(){
         if(getMainActivity() != null && getMainActivity().getMediaPlayerService() != null){
             int currentIndex = getMainActivity().getMediaPlayerService().getCurrentTrackIndex();
-            scrollToAndSelectListPosition(currentIndex);
+            if(playlist != null && !playlist.getTracks().isEmpty()){
+                scrollToAndSelectListPosition(currentIndex);
+            }
         }
     }
 
@@ -152,6 +162,10 @@ public class TracksFragment extends Fragment{
 
 
     private void updateTracksList(Bundle bundle){
+        log("entered updateTracksList()");
+        if(isBeingRefreshed.get()){
+            return;
+        }
         isBeingRefreshed.set(true);
         assignPlaylist();
         updatePlaylistInfoView(playlist);
@@ -257,6 +271,7 @@ public class TracksFragment extends Fragment{
 
 
     private void setupRecyclerView(View parentView){
+        log("entered setupRecyclerView()");
         if(parentView == null
                 || playlist == null
                 || playlist.getTracks() == null
@@ -272,6 +287,11 @@ public class TracksFragment extends Fragment{
     }
 
 
+    private void log(String msg){
+        System.out.println("^^^ TracksFragment: " + msg);
+    }
+
+
     private void setVisibilityOnAddTracksToPlaylistButton(Bundle bundle){
         boolean isUserPlaylistLoaded = getBoolean(bundle,IS_USER_PLAYLIST);
         addTracksToPlaylistButtonOuterLayout.setVisibility(isUserPlaylistLoaded ? VISIBLE : View.INVISIBLE);
@@ -280,7 +300,7 @@ public class TracksFragment extends Fragment{
 
 
     private boolean isMediaPlayerServiceAvailable(){
-        MainActivity mainActivity = getMainActivity();
+        var mainActivity = getMainActivity();
         if(mainActivity != null){
             var mps = mainActivity.getMediaPlayerService();
             return mps != null;

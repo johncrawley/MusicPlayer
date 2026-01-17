@@ -189,7 +189,7 @@ public class SearchViewHelper {
         if(mediaPlayerService == null){
             return Collections.emptyList();
         }
-        return mediaPlayerService.getTracksForSearch(str);
+        return mediaPlayerService.getPlaylistHelper().searchForTracks(str);
     }
 
 

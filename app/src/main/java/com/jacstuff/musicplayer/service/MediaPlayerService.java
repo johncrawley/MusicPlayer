@@ -188,10 +188,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     public PlaylistHelper getPlaylistHelper(){ return playlistHelper;}
 
-    public List<Track> getTracksForSearch(String str){ return playlistHelper.searchForTracks(str);}
-
-    public void loadTracksFromArtist(String artistName){ playlistHelper.loadTracksFromArtist(artistName);}
-
     public void loadTracksFromAlbum(String albumName){ playlistHelper.loadTracksFromAlbum(albumName); }
 
     public void loadTracksFromGenre(String genreName){ playlistHelper.loadTracksFromGenre(genreName); }
@@ -321,9 +317,14 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
 
     public void updateViewTrackList(PlaylistManager playlistManager) {
-        Track currentTrack = mediaPlayerHelper.getCurrentTrack();
+        var currentTrack = mediaPlayerHelper.getCurrentTrack();
         int currentTrackIndex = currentTrack == null ? -1 : currentTrack.getIndex();
         mainActivity.updateTracksList(playlistManager.getCurrentPlaylist(), currentTrack, currentTrackIndex);
+    }
+
+
+    public void updateViewTrackList(){
+        updateViewTrackList(playlistHelper.getPlaylistManager());
     }
 
 

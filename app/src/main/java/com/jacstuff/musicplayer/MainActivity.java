@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             setupOptionsMenuForCurrentTrack();
             setupFunctionButtons();
             sendMessage(NOTIFY_PLAYLIST_TAB_TO_RELOAD);
-            sendMessage(NOTIFY_TRACKS_TAB_TO_RELOAD);
+            //sendMessage(NOTIFY_TRACKS_TAB_TO_RELOAD);
             sendMessage(NOTIFY_ARTISTS_TAB_TO_RESELECT_ITEM);
             sendMessage(NOTIFY_ALBUM_TAB_TO_RESELECT_ITEM);
             sendMessage(NOTIFY_ADD_RANDOM_TRACKS_DIALOG_TO_RELOAD);
@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
         setupLayout();
         setupViewModel();
         initHelpers();
-      //  startMediaPlayerService();
         checkPath();
     }
 
@@ -379,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void startMediaPlayerService(){
+    public void startMediaPlayerService(){
         var mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
         var context = getApplicationContext();
         context.startForegroundService(mediaPlayerServiceIntent);
@@ -423,15 +422,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void updateTracksList(Playlist playlist, Track currentTrack, int currentTrackIndex){
-        Bundle bundle = new Bundle();
+        var bundle = new Bundle();
         putInt(bundle, MessageKey.TRACK_INDEX, currentTrackIndex);
         sendMessage(NOTIFY_TRACKS_TAB_TO_RELOAD, bundle);
         runOnUiThread(()-> updateViews(playlist.getTracks(), currentTrack));
-    }
-
-
-    public void notifyTracksFragmentReady(){
-        startMediaPlayerService();
     }
 
 
@@ -512,7 +506,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void loadTracksFromArtist(String artistName){
-        mediaPlayerService.loadTracksFromArtist(artistName);
+        mediaPlayerService.getPlaylistHelper().loadTracksFromArtist(artistName);
         tabHelper.switchToAlbumsTab();
     }
 
