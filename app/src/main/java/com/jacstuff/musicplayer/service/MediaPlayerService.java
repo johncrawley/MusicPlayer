@@ -323,7 +323,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     }
 
 
-
     public void updateViewTrackList(){
         updateViewTrackList(playlistHelper.getPlaylistManager());
     }

@@ -171,6 +171,10 @@ public class TracksFragment extends Fragment{
 
     private void assignPlaylist(){
         playlist = getMainActivity().getCurrentPlaylist();
+        int selectedTrackIndex = getMainActivity().getViewModel().selectedTrackIndex;
+        if(playlist != null && playlist.getTracks().size() > selectedTrackIndex){
+            scrollToAndSelectListPosition(selectedTrackIndex);
+        }
     }
 
 
@@ -181,7 +185,7 @@ public class TracksFragment extends Fragment{
     }
 
 
-    public void scrollToAndSelectListPosition(int index){
+    private void scrollToAndSelectListPosition(int index){
         if(index >= 0) {
             scrollToIndex(index, false);
         }

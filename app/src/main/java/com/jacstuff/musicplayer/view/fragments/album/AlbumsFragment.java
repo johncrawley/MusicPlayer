@@ -32,7 +32,6 @@ import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AlbumsFragment extends Fragment {
