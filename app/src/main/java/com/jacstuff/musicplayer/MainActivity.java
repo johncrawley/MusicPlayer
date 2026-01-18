@@ -386,6 +386,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void requestTracksUpdate(){
+        if(mediaPlayerService == null){
+            startMediaPlayerService();
+        }else{
+            mediaPlayerService.updateViewTrackList();
+        }
+    }
+
+
+    public void requestAlbumsUpdate(){
+        if(mediaPlayerService == null){
+            startMediaPlayerService();
+        }else{
+            mediaPlayerService.updateAlbumsView();
+        }
+    }
+
+
     @Override
     public void onDestroy(){
         super.onDestroy();

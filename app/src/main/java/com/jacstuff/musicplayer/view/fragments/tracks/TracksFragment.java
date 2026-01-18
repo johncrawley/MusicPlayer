@@ -81,17 +81,7 @@ public class TracksFragment extends Fragment{
         assignPlaylist();
         setupAddTracksButton(view);
         setListeners();
-        startMediaPlayerServiceOrUpdateTracks();
-    }
-
-
-    private void startMediaPlayerServiceOrUpdateTracks(){
-        if(isMediaPlayerServiceAvailable()){
-            getMainActivity().getMediaPlayerService().updateViewTrackList();
-        }
-        else{
-            getMainActivity().startMediaPlayerService();
-        }
+        getMainActivity().requestTracksUpdate();
     }
 
 

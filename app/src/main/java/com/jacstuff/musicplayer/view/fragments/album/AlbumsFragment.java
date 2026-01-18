@@ -65,6 +65,7 @@ public class AlbumsFragment extends Fragment {
         assignListIndexManager();
         selectSavedIndex();
         setVisibilityOnBackButton();
+        getMainActivity().requestAlbumsUpdate();
     }
 
 
@@ -106,7 +107,7 @@ public class AlbumsFragment extends Fragment {
 
 
     private void loadAlbumNamesFrom(Bundle bundle){
-        ArrayList<String> albumNames =  bundle.getStringArrayList(ALBUM_UPDATES.toString());
+        var albumNames =  bundle.getStringArrayList(ALBUM_UPDATES.toString());
         if(albumNames != null){
             loadAlbumNames(albumNames);
         }
@@ -133,7 +134,7 @@ public class AlbumsFragment extends Fragment {
 
 
     private void refreshList(){
-        List<String> albumNames = getMainActivity().getAlbumNames();
+        var albumNames = getMainActivity().getAlbumNames();
         setVisibilityOnNoAlbumsFoundText(albumNames);
         if(this.parentView == null || albumNames == null){
             return;
