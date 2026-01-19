@@ -294,7 +294,6 @@ public class MainActivity extends AppCompatActivity {
     public void disableViewForAWhile(View view){ disableViewForAWhile(view, 700);}
 
     public void selectTrack(int index) {
-        viewModel.selectedTrackIndex = index;
         mediaPlayerService.selectTrack(index); }
 
     public void addSelectedTrackToQueue(){enqueue(selectedTrack);}

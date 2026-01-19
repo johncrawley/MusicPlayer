@@ -171,8 +171,28 @@ public class TracksFragment extends Fragment{
 
     private void assignPlaylist(){
         playlist = getMainActivity().getCurrentPlaylist();
-        int selectedTrackIndex = getMainActivity().getViewModel().selectedTrackIndex;
-        if(playlist != null && playlist.getTracks().size() > selectedTrackIndex){
+        scrollToPreviouslySelectedTrack();
+    }
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        scrollToPreviouslySelectedTrack();
+    }
+
+
+    private void scrollToPreviouslySelectedTrack(){
+        if(playlist == null){
+            return;
+        }
+        int playlistSize = playlist.getTracks().size();
+        var service = getMainActivity().getMediaPlayerService();
+        if(service == null){
+            return;
+        }
+        int selectedTrackIndex = service.getCurrentTrackIndex();
+        if(playlistSize  > selectedTrackIndex){
             scrollToAndSelectListPosition(selectedTrackIndex);
         }
     }

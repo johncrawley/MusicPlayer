@@ -12,6 +12,4 @@ public class MainViewModel extends ViewModel {
 
     public int tracksFragmentSavedIndex = 0;
     public boolean isTracksFragmentIndexSaved = false;
-    public int selectedTrackIndex = -1;
-
 }
