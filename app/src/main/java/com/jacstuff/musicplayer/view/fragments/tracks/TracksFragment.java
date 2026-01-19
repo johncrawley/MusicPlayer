@@ -59,6 +59,7 @@ public class TracksFragment extends Fragment{
     private ViewGroup listHolder;
     private Animation fadeInListAnimation, fadeOutTextAnimation, fadeOutListAnimation, fadeInTextAnimation;
     private TextView loadingTextView;
+    private final AtomicBoolean isScrolling = new AtomicBoolean(false);
 
     public TracksFragment() {
         // Required empty public constructor
@@ -171,7 +172,6 @@ public class TracksFragment extends Fragment{
 
     private void assignPlaylist(){
         playlist = getMainActivity().getCurrentPlaylist();
-        scrollToPreviouslySelectedTrack();
     }
 
 
@@ -269,12 +269,14 @@ public class TracksFragment extends Fragment{
 
 
     public void scrollToAndSelectListPosition(int index, boolean isSearchResult){
-        if(trackListAdapter == null){
+        if(trackListAdapter == null || isScrolling.get()){
             return;
         }
+        isScrolling.set(true);
         trackListAdapter.selectItemAt(index);
         scrollToOffsetPosition(index, isSearchResult);
         scrollDownAPixel();
+        isScrolling.set(false);
     }
 
 
