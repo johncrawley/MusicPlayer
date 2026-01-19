@@ -421,6 +421,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     public void startUpdatingElapsedTimeOnView(){
-        updateElapsedTimeFuture = executorService.scheduleAtFixedRate(this::updateElapsedTimeOnView, 0L, 200L, TimeUnit.MILLISECONDS);
+        updateElapsedTimeFuture = executorService.scheduleWithFixedDelay(this::updateElapsedTimeOnView, 0L, 200L, TimeUnit.MILLISECONDS);
     }
 }

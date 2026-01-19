@@ -50,17 +50,16 @@ public class MediaNotificationManager {
         notificationLayoutExpanded = new RemoteViews(context.getPackageName(), R.layout.notification_large);
         View expandedLayout = notificationLayoutExpanded.apply(context, null);
         expandedTitle = expandedLayout.findViewById(R.id.notification_song_title);
-
     }
 
-    Notification createCustomNotification(String heading, String channelName) {
 
+    Notification createCustomNotification(String heading, String channelName) {
         setupButtonIntent(R.id.nextButton, ACTION_SELECT_NEXT_TRACK);
         setupButtonIntent(R.id.prevButton, ACTION_SELECT_PREVIOUS_TRACK);
         setupButtonIntent(R.id.pauseButton, ACTION_PAUSE_PLAYER);
         setupButtonIntent(R.id.playButton, ACTION_PLAY);
 
-        Notification customNotification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+        return new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_baseline_music_note_24)
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setCustomContentView(notificationLayout)
@@ -70,15 +69,13 @@ public class MediaNotificationManager {
                 .setContentIntent(pendingIntent)
                 .setShowWhen(false)
                 .setOngoing(true).build();
-
-        return customNotification;
     }
 
 
     private void setupButtonIntent(int buttonId, String action){
-        Intent intent = new Intent(action);
+        var intent = new Intent(action);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        var pendingSwitchIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         notificationLayoutExpanded.setOnClickPendingIntent(buttonId, pendingSwitchIntent);
     }
 
@@ -150,9 +147,9 @@ public class MediaNotificationManager {
 
 
     private void sendNotification( String status, Track track){
-        String trackInfo = parseTrackDetails(track);
-        Notification notification = createNotification(status, trackInfo);
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        var trackInfo = parseTrackDetails(track);
+        var notification = createNotification(status, trackInfo);
+        var notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, notification);
     }
 
@@ -188,9 +185,9 @@ public class MediaNotificationManager {
 
 
     private void setupNotificationChannel(){
-        String channelName = "music_player-notification-channel";
-        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName,  NotificationManager.IMPORTANCE_DEFAULT);
+        var channelName = "music_player-notification-channel";
+        var notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        var channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName,  NotificationManager.IMPORTANCE_DEFAULT);
         channel.setSound(null, null);
         channel.setShowBadge(false);
         notificationManager.createNotificationChannel(channel);
@@ -198,7 +195,7 @@ public class MediaNotificationManager {
 
 
     private void addPlayButtonTo(NotificationCompat.Builder notification){
-        String currentUrl = mediaPlayerService.getCurrentUrl();
+        var currentUrl = mediaPlayerService.getCurrentUrl();
         if(currentUrl == null){
             return;
         }

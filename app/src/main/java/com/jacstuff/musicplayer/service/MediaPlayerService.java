@@ -412,17 +412,25 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
 
     public String getCurrentStatus(){
+        log("Entered getCurrentStatus()");
         int resId = R.string.status_ready;
         if(mediaPlayerHelper.hasEncounteredError()){
+            log("getCurrentStatus() error encountered!");
             resId = R.string.status_error;
         }
         else if(mediaPlayerHelper.isPlaying()){
+            log("getCurrentStatus() media player playing!");
             resId = R.string.status_playing;
         }
         else if(mediaPlayerHelper.isPaused()){
+            log("getCurrentStatus() media player paused!");
             resId = R.string.status_paused;
         }
         return getApplicationContext().getString(resId);
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ MediaPlayerService: " +  msg);
     }
 
 
