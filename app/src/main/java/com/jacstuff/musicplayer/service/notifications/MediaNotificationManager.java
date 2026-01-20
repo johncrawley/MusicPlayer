@@ -41,6 +41,7 @@ public class MediaNotificationManager {
     RemoteViews notificationLayout, notificationLayoutExpanded;
     private TextView expandedTitle;
 
+
     public MediaNotificationManager(Context context, MediaPlayerService mediaPlayerService){
         this.context = context;
         this.mediaPlayerService = mediaPlayerService;
@@ -72,7 +73,13 @@ public class MediaNotificationManager {
     }
 
 
+    private void log(String msg){
+        System.out.println("^^^ MediaNotificationManager: " + msg);
+    }
+
+
     private void setupButtonIntent(int buttonId, String action){
+        log("entered setupButtonIntent()");
         var intent = new Intent(action);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         var pendingSwitchIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
@@ -81,6 +88,7 @@ public class MediaNotificationManager {
 
 
     public Notification createNotification(String heading, String channelName){
+        log("entered createNotification() heading: " + heading);
         final NotificationCompat.Builder notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(heading)
                 .setContentText(channelName)
@@ -121,32 +129,33 @@ public class MediaNotificationManager {
             return;
         }
         resetErrorStatusAfterDelay();
-        new Handler(Looper.getMainLooper()).post(() ->
-            sendNotification(mediaPlayerService.getCurrentStatus(), mediaPlayerService.getCurrentTrack()));
+        new Handler(Looper.getMainLooper()).post(() -> {
+            log("Entered updateNotification()");
+            sendNotification(mediaPlayerService.getCurrentStatus(), mediaPlayerService.getCurrentTrack());
+        });
     }
 
 
     private void resetErrorStatusAfterDelay(){
-        int numberOfMillisecondsBeforeResettingStatus = 9_000;
         hasErrorNotificationBeenReplaced.set(true);
-        if(mediaPlayerService.hasNotEncounteredError()){
-            return;
-        } else{
+        if(mediaPlayerService.getMediaPlayerHelper().hasEncounteredError()){
             hasErrorNotificationBeenReplaced.set(false);
-        }
-        String status = mediaPlayerService.getReadyStatusStr();
-        Track track = mediaPlayerService.getCurrentTrack();
+            var status = mediaPlayerService.getReadyStatusStr();
+            var track = mediaPlayerService.getCurrentTrack();
 
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            if(!hasErrorNotificationBeenReplaced.get()){
-                sendNotification(status, track);
-                hasErrorNotificationBeenReplaced.set(true);
-            }
-        }, numberOfMillisecondsBeforeResettingStatus);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                if(!hasErrorNotificationBeenReplaced.get()){
+                    log("Entered resetErrorStatusAfterDelay");
+                    sendNotification(status, track);
+                    hasErrorNotificationBeenReplaced.set(true);
+                }
+            }, 5000);
+        }
     }
 
 
     private void sendNotification( String status, Track track){
+        log("Entered sendNotification()");
         var trackInfo = parseTrackDetails(track);
         var notification = createNotification(status, trackInfo);
         var notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

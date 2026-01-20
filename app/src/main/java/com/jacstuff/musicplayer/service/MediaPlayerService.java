@@ -33,8 +33,6 @@ import com.jacstuff.musicplayer.service.notifications.MediaNotificationManager;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
 
-import java.util.List;
-
 public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     private MediaNotificationManager mediaNotificationManager;
@@ -313,7 +311,9 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public AlbumArtRetriever getAlbumArtRetriever(){ return albumArtRetriever;}
 
 
-    public void updateNotification(){ mediaNotificationManager.updateNotification();}
+    public void updateNotification(String source){
+        log("entered updateNotification() from: " + source);
+        mediaNotificationManager.updateNotification();}
 
 
     public void updateViewTrackList(PlaylistManager playlistManager) {
@@ -373,7 +373,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
 
     public void updateViewsOnTrackAssigned(){
-        mediaNotificationManager.updateNotification();
+        updateNotification("updateViewsOnTrackAssigned()");
         mainActivity.setTrackDetails(mediaPlayerHelper.getCurrentTrack(), 0);
         if(mediaPlayerHelper.isPaused()){
             playerViewHelper.hideTrackSeekBar();
@@ -406,7 +406,8 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     private void moveToForeground(){
         mediaNotificationManager.init();
-        Notification notification = mediaNotificationManager.createNotification(getCurrentStatus(), "");
+        log("entered moveToForeground");
+        var notification = mediaNotificationManager.createNotification(getCurrentStatus(), "");
         startForeground(NOTIFICATION_ID, notification);
     }
 
@@ -429,6 +430,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         return getApplicationContext().getString(resId);
     }
 
+
     private void log(String msg){
         System.out.println("^^^ MediaPlayerService: " +  msg);
     }
@@ -441,7 +443,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     public void updateViewsForConnecting(){
         broadcastHelper.notifyViewOfConnectingStatus();
-        mediaNotificationManager.updateNotification();
+        updateNotification("updateViewsForConnecting()");
     }
 
 

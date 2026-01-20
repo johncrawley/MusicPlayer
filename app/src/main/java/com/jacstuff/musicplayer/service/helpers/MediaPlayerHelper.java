@@ -70,7 +70,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         }
         assignTrack(track);
         mediaPlayerService.scrollToPositionOf(track);
-        mediaPlayerService.updateNotification();
+        mediaPlayerService.updateNotification("loadTrack()");
     }
 
 
@@ -159,7 +159,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
             albumArtRetriever.assignAlbumArt(track);
         }
         catch(IOException e){
-            e.printStackTrace();
+            printError(e);
             hasEncounteredError = true;
         } catch(RuntimeException e){
             hasEncounteredError = true;
@@ -182,7 +182,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     private void handleConnectionError(){
         hasEncounteredError = true;
-        mediaPlayerService.updateNotification();
+        mediaPlayerService.updateNotification("handleConnectionError");
         onError();
     }
 
@@ -235,7 +235,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         stopUpdatingElapsedTime();
         resetElapsedTime();
         if(shouldUpdateNotification) {
-            mediaPlayerService.updateNotification();
+            mediaPlayerService.updateNotification("stop()");
         }
         mediaPlayerService.updateMainViewOfStop(shouldUpdateMainView);
         cancelScheduledStoppageOfTrack();
@@ -304,7 +304,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         mediaPlayer.start();
         startUpdatingElapsedTimeOnView();
         mediaPlayerService.notifyMainViewOfMediaPlayerPlaying();
-        mediaPlayerService.updateNotification();
+        mediaPlayerService.updateNotification("resume");
     }
 
 
@@ -378,18 +378,21 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
             mediaPlayerService.displayErrorOnMainView(currentTrack);
         }finally{
             isPreparingTrack.set(false);
-            mediaPlayerService.updateNotification();
+            mediaPlayerService.updateNotification("startTrack() finally branch");
         }
     }
 
+
     private void printError(Exception e){
-        e.printStackTrace();
+        var err = e.getMessage();
+        System.out.println("error: " + err);
     }
+
 
 
     private void stopPlayer(){
         releaseAndResetMediaPlayer();
-        mediaPlayerService.updateNotification();
+        mediaPlayerService.updateNotification("stopPlayer()");
     }
 
 
@@ -402,7 +405,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
             }
         }catch (RuntimeException e){
             Log.i("MediaPlayerHelper", "releaseAndResetMediaPlayerAndWifiLock() exception:  " + e.getMessage());
-            e.printStackTrace();
+            printError(e);
         }
     }
 
