@@ -97,6 +97,32 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
+    public void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
+        stopIfPlayingOrPaused();
+        stopUpdatingElapsedTime();
+        resetElapsedTime();
+        if(shouldUpdateNotification) {
+            mediaPlayerService.updateNotification("stop()");
+        }
+        mediaPlayerService.updateMainViewOfStop(shouldUpdateMainView);
+        cancelScheduledStoppageOfTrack();
+    }
+
+
+    public void stopPlayingAfterNumberOfMinutes(int numberOfMinutes){
+        stopTrackFuture = executorService.schedule( this::stopAndResetTime, numberOfMinutes, TimeUnit.MINUTES);
+    }
+
+
+    private void stopIfPlayingOrPaused(){
+        if(isTrackPlayingOrPaused()) {
+            mediaPlayer.stop();
+            currentState = MediaPlayerState.STOPPED;
+            mediaPlayer.reset();
+        }
+    }
+
+
     public void assignTrack(Track track){
         currentTrack = track;
         resetElapsedTime();
@@ -145,11 +171,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     private void stopAndResetTime(){
         stop(true);
         mediaPlayerService.resetElapsedTimeOnMainView();
-    }
-
-
-    public void stopPlayingInThreeMinutes(int numberOfMinutes){
-        stopTrackFuture = executorService.schedule( this::stopAndResetTime, numberOfMinutes, TimeUnit.MINUTES);
     }
 
 
@@ -223,36 +244,10 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    public void cancelScheduledStoppageOfTrack(){
-        if(stopTrackFuture != null) {
-            stopTrackFuture.cancel(false);
-        }
-    }
-
-
-    public void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
-        stopIfPlayingOrPaused();
-        stopUpdatingElapsedTime();
-        resetElapsedTime();
-        if(shouldUpdateNotification) {
-            mediaPlayerService.updateNotification("stop()");
-        }
-        mediaPlayerService.updateMainViewOfStop(shouldUpdateMainView);
-        cancelScheduledStoppageOfTrack();
-    }
 
 
     public boolean isPaused(){
         return currentState == MediaPlayerState.PAUSED;
-    }
-
-
-    private void stopIfPlayingOrPaused(){
-        if(isTrackPlayingOrPaused()) {
-            mediaPlayer.stop();
-            currentState = MediaPlayerState.STOPPED;
-            mediaPlayer.reset();
-        }
     }
 
 
@@ -273,15 +268,27 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
             mediaPlayer.pause();
             stopUpdatingElapsedTime();
             currentState = MediaPlayerState.PAUSED;
+            stopPlayingAfterNumberOfMinutes(180);
         }
     }
 
 
-    public void stopUpdatingElapsedTime(){
-        if(updateElapsedTimeFuture == null || updateElapsedTimeFuture.isCancelled()){
-            return;
+    private void stopUpdatingElapsedTime(){
+        cancel(updateElapsedTimeFuture);
+    }
+
+
+    private void cancelScheduledStoppageOfTrack(){
+        cancel(stopTrackFuture);
+    }
+
+
+    private void cancel(ScheduledFuture<?> future){
+        if(future != null
+                && !future.isCancelled()
+                && !future.isDone()) {
+            future.cancel(false);
         }
-        updateElapsedTimeFuture.cancel(false);
     }
 
 
@@ -300,6 +307,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     void resume(){
+        cancelScheduledStoppageOfTrack();
         currentState = MediaPlayerState.PLAYING;
         mediaPlayer.start();
         startUpdatingElapsedTimeOnView();
@@ -398,10 +406,11 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     private void releaseAndResetMediaPlayer(){
         try {
-            if (mediaPlayer != null) {
+            if (mediaPlayer != null){
                 mediaPlayer.reset();
                 mediaPlayer.release();
                 mediaPlayer = null;
+                currentState = MediaPlayerState.STOPPED;
             }
         }catch (RuntimeException e){
             Log.i("MediaPlayerHelper", "releaseAndResetMediaPlayerAndWifiLock() exception:  " + e.getMessage());

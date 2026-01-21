@@ -39,7 +39,7 @@ public class MediaNotificationManager {
     final static String NOTIFICATION_CHANNEL_ID = "com.jcrawley.musicplayer-notification";
     private final AtomicBoolean hasErrorNotificationBeenReplaced = new AtomicBoolean(false);
     RemoteViews notificationLayout, notificationLayoutExpanded;
-    private TextView expandedTitle;
+    private final TextView expandedTitle;
 
 
     public MediaNotificationManager(Context context, MediaPlayerService mediaPlayerService){
@@ -51,6 +51,41 @@ public class MediaNotificationManager {
         notificationLayoutExpanded = new RemoteViews(context.getPackageName(), R.layout.notification_large);
         View expandedLayout = notificationLayoutExpanded.apply(context, null);
         expandedTitle = expandedLayout.findViewById(R.id.notification_song_title);
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ MediaNotificationManager: " + msg);
+    }
+
+
+    private void setupButtonIntent(int buttonId, String action){
+        var intent = new Intent(action);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        var pendingSwitchIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        notificationLayoutExpanded.setOnClickPendingIntent(buttonId, pendingSwitchIntent);
+    }
+
+
+    public Notification createNotification(String heading, String channelName){
+        final NotificationCompat.Builder notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(heading)
+                .setContentText(channelName)
+                .setSilent(true)
+                .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
+                .setSmallIcon(R.drawable.ic_baseline_music_note_24)
+                .setLargeIcon(mediaPlayerService.getAlbumArtForNotification())
+                .setNumber(-1)
+                .setOnlyAlertOnce(true)
+                .setContentIntent(pendingIntent)
+                .setShowWhen(false)
+                .setOngoing(true);
+
+        addPreviousButtonTo(notification);
+        addPlayButtonTo(notification);
+        addPauseButtonTo(notification);
+        addNextButtonTo(notification);
+        return notification.build();
     }
 
 
@@ -70,43 +105,6 @@ public class MediaNotificationManager {
                 .setContentIntent(pendingIntent)
                 .setShowWhen(false)
                 .setOngoing(true).build();
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ MediaNotificationManager: " + msg);
-    }
-
-
-    private void setupButtonIntent(int buttonId, String action){
-        log("entered setupButtonIntent()");
-        var intent = new Intent(action);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        var pendingSwitchIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        notificationLayoutExpanded.setOnClickPendingIntent(buttonId, pendingSwitchIntent);
-    }
-
-
-    public Notification createNotification(String heading, String channelName){
-        log("entered createNotification() heading: " + heading);
-        final NotificationCompat.Builder notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(heading)
-                .setContentText(channelName)
-                .setSilent(true)
-                .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
-                .setSmallIcon(R.drawable.ic_baseline_music_note_24)
-                .setLargeIcon(mediaPlayerService.getAlbumArtForNotification())
-                .setNumber(-1)
-                .setOnlyAlertOnce(true)
-                .setContentIntent(pendingIntent)
-                .setShowWhen(false)
-                .setOngoing(true);
-
-        addPreviousButtonTo(notification);
-        addPlayButtonTo(notification);
-        addPauseButtonTo(notification);
-        addNextButtonTo(notification);
-        return notification.build();
     }
 
 
@@ -130,7 +128,6 @@ public class MediaNotificationManager {
         }
         resetErrorStatusAfterDelay();
         new Handler(Looper.getMainLooper()).post(() -> {
-            log("Entered updateNotification()");
             sendNotification(mediaPlayerService.getCurrentStatus(), mediaPlayerService.getCurrentTrack());
         });
     }
@@ -145,7 +142,6 @@ public class MediaNotificationManager {
 
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 if(!hasErrorNotificationBeenReplaced.get()){
-                    log("Entered resetErrorStatusAfterDelay");
                     sendNotification(status, track);
                     hasErrorNotificationBeenReplaced.set(true);
                 }
@@ -154,8 +150,7 @@ public class MediaNotificationManager {
     }
 
 
-    private void sendNotification( String status, Track track){
-        log("Entered sendNotification()");
+    private void sendNotification(String status, Track track){
         var trackInfo = parseTrackDetails(track);
         var notification = createNotification(status, trackInfo);
         var notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

@@ -8,7 +8,6 @@ import static com.jacstuff.musicplayer.view.utils.PlayerViewHelper.MediaPlayerNo
 import static com.jacstuff.musicplayer.view.utils.PlayerViewHelper.MediaPlayerNotification.MEDIA_PLAYER_STOPPED;
 
 import android.Manifest;
-import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -217,11 +216,11 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public boolean isCurrentTrackEmpty(){ return mediaPlayerHelper.getCurrentTrack() == null;}
 
     public void stopPlayingInOneMinute(){
-        mediaPlayerHelper.stopPlayingInThreeMinutes(1);
+        mediaPlayerHelper.stopPlayingAfterNumberOfMinutes(1);
     }
 
     public void stopPlayingInThreeMinutes(){
-        mediaPlayerHelper.stopPlayingInThreeMinutes(3);
+        mediaPlayerHelper.stopPlayingAfterNumberOfMinutes(3);
     }
 
     public void stop(){
@@ -458,7 +457,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         mediaPlayerHelper.pauseMediaPlayer();
         mediaNotificationManager.updateNotification();
         playerViewHelper.notify(MEDIA_PLAYER_PAUSED);
-        mediaPlayerHelper.cancelScheduledStoppageOfTrack();
     }
 
 
