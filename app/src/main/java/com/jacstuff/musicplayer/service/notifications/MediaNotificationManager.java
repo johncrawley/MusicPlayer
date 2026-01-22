@@ -54,11 +54,6 @@ public class MediaNotificationManager {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ MediaNotificationManager: " + msg);
-    }
-
-
     private void setupButtonIntent(int buttonId, String action){
         var intent = new Intent(action);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -67,10 +62,10 @@ public class MediaNotificationManager {
     }
 
 
-    public Notification createNotification(String heading, String channelName){
-        final NotificationCompat.Builder notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+    public Notification createNotification(String heading){
+        var notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(heading)
-                .setContentText(channelName)
+                .setContentText(getArtistAndTitle())
                 .setSilent(true)
                 .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
                 .setSmallIcon(R.drawable.ic_baseline_music_note_24)
@@ -89,22 +84,14 @@ public class MediaNotificationManager {
     }
 
 
-    Notification createCustomNotification(String heading, String channelName) {
-        setupButtonIntent(R.id.nextButton, ACTION_SELECT_NEXT_TRACK);
-        setupButtonIntent(R.id.prevButton, ACTION_SELECT_PREVIOUS_TRACK);
-        setupButtonIntent(R.id.pauseButton, ACTION_PAUSE_PLAYER);
-        setupButtonIntent(R.id.playButton, ACTION_PLAY);
-
-        return new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_baseline_music_note_24)
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                .setCustomContentView(notificationLayout)
-                .setCustomBigContentView(notificationLayoutExpanded)
-                .setNumber(-1)
-                .setOnlyAlertOnce(true)
-                .setContentIntent(pendingIntent)
-                .setShowWhen(false)
-                .setOngoing(true).build();
+    private String getArtistAndTitle(){
+        if(mediaPlayerService != null){
+            var mediaPlayerHelper = mediaPlayerService.getMediaPlayerHelper();
+            if(mediaPlayerHelper != null){
+                return parseTrackDetails(mediaPlayerHelper.getCurrentTrack());
+            }
+        }
+       return "";
     }
 
 
@@ -128,7 +115,7 @@ public class MediaNotificationManager {
         }
         resetErrorStatusAfterDelay();
         new Handler(Looper.getMainLooper()).post(() -> {
-            sendNotification(mediaPlayerService.getCurrentStatus(), mediaPlayerService.getCurrentTrack());
+            sendNotification(mediaPlayerService.getCurrentStatus());
         });
     }
 
@@ -138,11 +125,10 @@ public class MediaNotificationManager {
         if(mediaPlayerService.getMediaPlayerHelper().hasEncounteredError()){
             hasErrorNotificationBeenReplaced.set(false);
             var status = mediaPlayerService.getReadyStatusStr();
-            var track = mediaPlayerService.getCurrentTrack();
 
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 if(!hasErrorNotificationBeenReplaced.get()){
-                    sendNotification(status, track);
+                    sendNotification(status);
                     hasErrorNotificationBeenReplaced.set(true);
                 }
             }, 5000);
@@ -150,18 +136,10 @@ public class MediaNotificationManager {
     }
 
 
-    private void sendNotification(String status, Track track){
-        var trackInfo = parseTrackDetails(track);
-        var notification = createNotification(status, trackInfo);
+    private void sendNotification(String status){
+        var notification = createNotification(status);
         var notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, notification);
-    }
-
-
-    private void updateCustomNotification(Track track){
-        expandedTitle.setText(track.getTitle());
-        notificationLayoutExpanded.setTextViewText(R.id.notification_song_title, track.getTitle());
-        notificationLayout.setTextViewText(R.id.notification_song_title, track.getTitle());
     }
 
 
@@ -252,4 +230,29 @@ public class MediaNotificationManager {
                 PendingIntent.FLAG_IMMUTABLE);
     }
 
+
+    Notification createCustomNotification(String heading, String channelName) {
+        setupButtonIntent(R.id.nextButton, ACTION_SELECT_NEXT_TRACK);
+        setupButtonIntent(R.id.prevButton, ACTION_SELECT_PREVIOUS_TRACK);
+        setupButtonIntent(R.id.pauseButton, ACTION_PAUSE_PLAYER);
+        setupButtonIntent(R.id.playButton, ACTION_PLAY);
+
+        return new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_baseline_music_note_24)
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setCustomContentView(notificationLayout)
+                .setCustomBigContentView(notificationLayoutExpanded)
+                .setNumber(-1)
+                .setOnlyAlertOnce(true)
+                .setContentIntent(pendingIntent)
+                .setShowWhen(false)
+                .setOngoing(true).build();
+    }
+
+
+    private void updateCustomNotification(Track track){
+        expandedTitle.setText(track.getTitle());
+        notificationLayoutExpanded.setTextViewText(R.id.notification_song_title, track.getTitle());
+        notificationLayout.setTextViewText(R.id.notification_song_title, track.getTitle());
+    }
 }

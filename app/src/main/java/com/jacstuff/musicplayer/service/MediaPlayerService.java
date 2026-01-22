@@ -187,8 +187,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     public void loadTracksFromAlbum(String albumName){ playlistHelper.loadTracksFromAlbum(albumName); }
 
-    public void loadTracksFromGenre(String genreName){ playlistHelper.loadTracksFromGenre(genreName); }
-
     public int getCurrentTrackIndex(){
         return playlistHelper.getIndexOfCurrentTrack();
     }
@@ -296,7 +294,8 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     public void updateAlbumsView(){
         var playlistManager = getPlaylistManager();
-        mainActivity.updateAlbumsList(playlistManager.getAlbumNames(), playlistManager.getCurrentArtistName().orElse("")); }
+        mainActivity.updateAlbumsList(playlistManager.getAlbumNames(), playlistManager.getCurrentArtistName().orElse(""));
+    }
 
 
     public void setBlankTrackInfoOnMainView(){
@@ -405,27 +404,16 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     private void moveToForeground(){
         mediaNotificationManager.init();
-        log("entered moveToForeground");
-        var notification = mediaNotificationManager.createNotification(getCurrentStatus(), "");
+        var notification = mediaNotificationManager.createNotification(getCurrentStatus());
         startForeground(NOTIFICATION_ID, notification);
     }
 
 
     public String getCurrentStatus(){
-        log("Entered getCurrentStatus()");
-        int resId = R.string.status_ready;
-        if(mediaPlayerHelper.hasEncounteredError()){
-            log("getCurrentStatus() error encountered!");
-            resId = R.string.status_error;
-        }
-        else if(mediaPlayerHelper.isPlaying()){
-            log("getCurrentStatus() media player playing!");
-            resId = R.string.status_playing;
-        }
-        else if(mediaPlayerHelper.isPaused()){
-            log("getCurrentStatus() media player paused!");
-            resId = R.string.status_paused;
-        }
+        int resId = mediaPlayerHelper.hasEncounteredError() ? R.string.status_error
+                : mediaPlayerHelper.isPlaying() ? R.string.status_playing
+                : mediaPlayerHelper.isPaused() ? R.string.status_paused
+                : R.string.status_ready;
         return getApplicationContext().getString(resId);
     }
 
