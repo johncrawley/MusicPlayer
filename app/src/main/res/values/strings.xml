@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="version" translatable="false">v1.3, 2024–2025</string>
+    <string name="version" translatable="false">v1.4, 2024–2026</string>
     <string name="font_main_detail" translatable="false">Le Patin Magicien, Freeware \n https://www.fontspace.com/le-patin-magicien-font-f39622\n\n </string>
     <string name="font_time_detail" translatable="false">Poe Monospace, Freeware\n https://www.fontspace.com/poe-monospace-font-f23572 </string>
     <string name="dec_random_tracks" translatable="false">&#160;-&#160;</string>
