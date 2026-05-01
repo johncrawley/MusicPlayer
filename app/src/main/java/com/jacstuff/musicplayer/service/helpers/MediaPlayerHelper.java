@@ -2,6 +2,9 @@ package com.jacstuff.musicplayer.service.helpers;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.media.VolumeShaper;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.util.Log;
 
@@ -29,11 +32,26 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     private int elapsedTime;
     private Track currentTrack;
     private final ScheduledExecutorService executorService;
+    private VolumeShaper.Configuration volumeShaperConfig;
+    private final int fadeOutTime = 400;
+    @SuppressWarnings("FieldCanBeLocal")
+    private VolumeShaper volumeShaper;
 
 
     public MediaPlayerHelper(MediaPlayerService mediaPlayerService){
         this.mediaPlayerService = mediaPlayerService;
         executorService = Executors.newScheduledThreadPool(3);
+        initVolumeShaperConfig();
+    }
+
+
+    private void initVolumeShaperConfig(){
+        volumeShaperConfig =
+                new VolumeShaper.Configuration.Builder()
+                        .setDuration(fadeOutTime)
+                        .setCurve(new float[] {0.f, 1.f}, new float[] {1.f, 0.f})
+                        .setInterpolatorType(VolumeShaper.Configuration.INTERPOLATOR_TYPE_CUBIC)
+                        .build();
     }
 
 
@@ -56,6 +74,17 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         resetErrorStatus();
         loadTrack(track == null ? currentTrack : track);
         cancelScheduledStoppageOfTrack();
+    }
+
+
+    private void startVolumeShaper(){
+       // try (var volumeShaper = mediaPlayer.createVolumeShaper(volumeShaperConfig)) {
+       //     volumeShaper.apply(VolumeShaper.Operation.PLAY);
+       // }
+
+
+        volumeShaper = mediaPlayer.createVolumeShaper(volumeShaperConfig);
+        volumeShaper.apply(VolumeShaper.Operation.PLAY);
     }
 
 
@@ -115,11 +144,21 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     private void stopIfPlayingOrPaused(){
-        if(isTrackPlayingOrPaused()) {
-            mediaPlayer.stop();
-            currentState = MediaPlayerState.STOPPED;
-            mediaPlayer.reset();
+        if(currentState == MediaPlayerState.PLAYING){
+            startVolumeShaper();
+            new Handler(Looper.getMainLooper()).postDelayed(this::stopMediaPlayer,fadeOutTime + 50);
+
         }
+        else if(currentState == MediaPlayerState.PAUSED){
+            stopMediaPlayer();
+        }
+    }
+
+
+    private void stopMediaPlayer(){
+        mediaPlayer.stop();
+        currentState = MediaPlayerState.STOPPED;
+        mediaPlayer.reset();
     }
 
 

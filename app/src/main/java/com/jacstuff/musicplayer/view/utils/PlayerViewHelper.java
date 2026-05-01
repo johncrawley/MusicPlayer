@@ -9,8 +9,6 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentTransaction;
-
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
@@ -19,7 +17,6 @@ import com.jacstuff.musicplayer.service.helpers.MediaPlayerHelper;
 import com.jacstuff.musicplayer.view.fragments.options.StopOptionsFragment;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 public class PlayerViewHelper {
@@ -53,7 +50,6 @@ public class PlayerViewHelper {
     }
 
 
-
     private void setupViews(){
         setupPlayerButtonPanelViews();
         initTrackDetailViews();
@@ -62,7 +58,34 @@ public class PlayerViewHelper {
     }
 
 
+    private void setupPlayerButtonPanelViews(){
+        playerButtonPanel = mainActivity.findViewById(R.id.playerButtonsInclude);
+        previousTrackButton = setupImageButton(R.id.previousTrackButton, this::previousTrack);
+        nextTrackButton     = setupImageButton(R.id.nextTrackButton, this::nextTrack);
+        playButton  = setupImageButton(R.id.playButton, this::playTrack);
+        pauseButton = setupImageButton(R.id.pauseButton, this::pauseTrack);
+        stopButton  = setupImageButton(R.id.stopButton, this:: stopTrack);
+        setupLongClickListenerOnStopButton();
+    }
+
+
+    public void stopTrack(){
+        if(mainActivity == null){
+            return;
+        }
+        mainActivity.disableViewForAWhile(playButton, 500);
+        mainActivity.disableViewForAWhile(stopButton, 520);
+        mainActivity.disableViewForAWhile(pauseButton, 540);
+        mediaPlayerService.stop();
+        resetElapsedTime();
+    }
+
+
     public void playTrack() {
+        if(mainActivity == null){
+            return;
+        }
+       mainActivity.disableViewForAWhile(pauseButton, 500);
        var mediaPlayerHelper = mediaPlayerService.getMediaPlayerHelper();
        if(mediaPlayerHelper != null){
            mediaPlayerHelper.playTrack();
@@ -74,6 +97,7 @@ public class PlayerViewHelper {
         if(mainActivity == null){
             return;
         }
+        mainActivity.disableViewForAWhile(pauseButton, 500);
         mainActivity.disableViewForAWhile(playButton, 300);
         mediaPlayerService.pause();
     }
@@ -217,7 +241,7 @@ public class PlayerViewHelper {
 
 
     private void setPlayerControlsEnabled(boolean isEnabled){
-        List<View> controls = Arrays.asList(stopButton, playButton, pauseButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton);
+        var controls = Arrays.asList(stopButton, playButton, pauseButton, nextTrackButton, previousTrackButton, turnShuffleOnButton, turnShuffleOffButton);
         for(View control : controls){
             control.setEnabled(isEnabled);
         }
@@ -239,17 +263,6 @@ public class PlayerViewHelper {
     }
 
 
-    private void setupPlayerButtonPanelViews(){
-        playerButtonPanel = mainActivity.findViewById(R.id.playerButtonsInclude);
-        previousTrackButton = setupImageButton(R.id.previousTrackButton, this::previousTrack);
-        nextTrackButton     = setupImageButton(R.id.nextTrackButton, this::nextTrack);
-        playButton  = setupImageButton(R.id.playButton, this::playTrack);
-        pauseButton = setupImageButton(R.id.pauseButton, this::pauseTrack);
-        stopButton  = setupImageButton(R.id.stopButton, mainActivity:: stopTrack);
-        setupLongClickListenerOnStopButton();
-    }
-
-
     private void setupShuffleButtons(){
         turnShuffleOnButton =  setupImageButton(R.id.turnShuffleOnButton, this::enableShuffle);
         turnShuffleOffButton = setupImageButton(R.id.turnShuffleOffButton, this::disableShuffle);
@@ -266,6 +279,7 @@ public class PlayerViewHelper {
         mediaPlayerService.disableShuffle();
         setShuffleState(false);
     }
+
 
     public void notifyNumberOfTracks(int numberOfTracks){
         if(mainActivity != null
@@ -289,8 +303,8 @@ public class PlayerViewHelper {
 
 
     private void createStopOptionsFragment(){
-        String tag = "stop_options_dialog";
-        FragmentTransaction fragmentTransaction = FragmentHelper.createTransaction(mainActivity, tag);
+        var tag = "stop_options_dialog";
+        var fragmentTransaction = FragmentHelper.createTransaction(mainActivity, tag);
         StopOptionsFragment.newInstance().show(fragmentTransaction, tag);
     }
 
@@ -304,6 +318,7 @@ public class PlayerViewHelper {
         playButton.setVisibility(VISIBLE);
         pauseButton.setVisibility(GONE);
     }
+
 
     private void setSeekBarVisibility(){
         getMediaPlayerHelper().ifPresent(mph -> {

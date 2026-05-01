@@ -22,7 +22,6 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
@@ -134,16 +133,16 @@ public class MainActivity extends AppCompatActivity {
         requestPermissions();
         assignTheme();
         setContentView(R.layout.fragment_main_screen);
-        setupLayout();
+        setupInsets();
         setupViewModel();
         initHelpers();
         checkPath();
     }
 
 
-    private void setupLayout() {
+    private void setupInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            var systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
@@ -154,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
         if(isServiceConnected.get()){
             mediaPlayerService.checkPath();
         }
-
     }
 
 
@@ -244,12 +242,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void stopTrack(){
-        mediaPlayerService.stop();
-        resetElapsedTime();
-    }
-
-
     public MediaPlayerService getMediaPlayerService(){ return this.mediaPlayerService;}
 
     public SearchViewHelper getSearchViewHelper(){ return searchViewHelper; }
@@ -317,8 +309,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void disableViewForAWhile(View view, int delayTime) {
         view.setEnabled(false);
-        Handler handler = new Handler(getMainLooper());
-        handler.postDelayed(()->view.setEnabled(true), delayTime);
+        new Handler(getMainLooper()).postDelayed(()-> view.setEnabled(true), delayTime);
     }
 
 

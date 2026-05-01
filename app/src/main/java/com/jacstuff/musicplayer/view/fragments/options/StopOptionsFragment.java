@@ -57,7 +57,7 @@ public class StopOptionsFragment extends DialogFragment {
     private void stopNow(){
         MainActivity mainActivity = getMainActivity();
         if(mainActivity != null){
-            mainActivity.stopTrack();
+            mainActivity.getPlayerViewHelper().stopTrack();
         }
         dismiss();
     }
