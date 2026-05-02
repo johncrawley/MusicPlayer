@@ -330,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void removeSelectedTrackFromPlaylist(){
-        mediaPlayerService.removeTrackFromCurrentPlaylist(selectedTrack);
+        mediaPlayerService.getPlaylistHelper().removeTrackFromCurrentPlaylist(selectedTrack);
     }
 
 
@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void loadArtistOfSelectedTrack(){
-        mediaPlayerService.loadArtistOfTrack(selectedTrack);
+        mediaPlayerService.getPlaylistHelper().loadArtistOfTrack(selectedTrack);
         toastIfTabsNotAutoSwitched(R.string.artist_loaded);
     }
 
@@ -510,7 +510,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void loadTracksFromPlaylist(Playlist playlist){
-        mediaPlayerService.loadPlaylist(playlist);
+        mediaPlayerService.getPlaylistHelper().loadPlaylist(playlist);
         tabHelper.switchToTracksTab();
     }
 
@@ -522,7 +522,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void loadTracksFromAlbum(String albumName){
-        mediaPlayerService.loadTracksFromAlbum(albumName);
+        mediaPlayerService.getPlaylistHelper().loadTracksFromAlbum(albumName);
         tabHelper.switchToTracksTab();
     }
 
@@ -613,7 +613,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         Bundle bundle = new Bundle();
-        putInt(bundle, MessageKey.TRACK_INDEX, mediaPlayerService.getCurrentTrackIndex());
+        putInt(bundle, MessageKey.TRACK_INDEX, mediaPlayerService.getPlaylistHelper().getIndexOfCurrentTrack());
         sendMessage(ENSURE_SELECTED_TRACK_IS_VISIBLE, bundle);
     }
 
@@ -629,6 +629,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void addTrackToPlaylist(Playlist playlist, int position){
-        mediaPlayerService.addTrackToPlaylist(selectedTrack, playlist);
+        mediaPlayerService.getPlaylistHelper().addTrackToPlaylist(selectedTrack, playlist);
     }
 }

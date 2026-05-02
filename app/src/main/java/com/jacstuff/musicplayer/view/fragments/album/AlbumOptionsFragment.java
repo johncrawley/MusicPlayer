@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
+import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
@@ -94,13 +95,28 @@ public class AlbumOptionsFragment extends DialogFragment {
 
     private void addAlbumTracksToCurrentPlaylist(){
         disableAllButtons();
-        getMainActivity().getMediaPlayerService().addTracksFromAlbumToCurrentPlaylist(albumName);
+        var service = getService();
+        if(service != null){
+            service.getPlaylistHelper().addTracksFromAlbumToCurrentPlaylist(albumName);
+        }
         dismissAfterPause();
     }
 
 
     private void addRandomAlbumTracksToCurrentPlaylist(){
-        getMainActivity().getMediaPlayerService().getPlaylistHelper().addRandomTracksFromAlbumToCurrentPlaylist(albumName);
+        var service = getService();
+        if(service != null){
+            service.getPlaylistHelper().addRandomTracksFromAlbumToCurrentPlaylist(albumName);
+        }
+    }
+
+
+    private MediaPlayerService getService(){
+        var activity = getMainActivity();
+        if(activity == null) {
+            return null;
+        }
+        return activity.getMediaPlayerService();
     }
 
 

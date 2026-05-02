@@ -19,7 +19,6 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.TextView;
 
 import com.jacstuff.musicplayer.MainActivity;
@@ -29,7 +28,6 @@ import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.options.TrackOptionsDialog;
-import com.jacstuff.musicplayer.view.utils.AnimatorHelper;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.Optional;
@@ -57,7 +55,6 @@ public class TracksFragment extends Fragment{
     private String noTracksFoundStr = "";
     private int listRefreshCount;
     private ViewGroup listHolder;
-    private Animation fadeInListAnimation, fadeOutTextAnimation, fadeOutListAnimation, fadeInTextAnimation;
     private TextView loadingTextView;
     private final AtomicBoolean isScrolling = new AtomicBoolean(false);
 
@@ -78,42 +75,11 @@ public class TracksFragment extends Fragment{
         this.parentView = view;
         noTracksFoundStr = getString(R.string.no_tracks_found);
         initViews();
-        initFadeInListAnimation();
         assignPlaylist();
         setupAddTracksButton(view);
         setListeners();
         getMainActivity().requestTracksUpdate();
     }
-
-
-    private void initFadeInListAnimation(){
-        fadeInListAnimation = AnimatorHelper.createFadeInAnimation(getContext(), this::onListFadedIn);
-        fadeOutListAnimation = AnimatorHelper.createFadeInAnimation(getContext(), this::onListFadedIn);
-        fadeInTextAnimation = AnimatorHelper.createFadeInAnimation(getContext(), this::onLoadingTextFadedIn);
-        fadeOutTextAnimation = AnimatorHelper.createFadeInAnimation(getContext(), this::onLoadingTextFadedOut);
-    }
-
-
-    private void onListFadedIn(){
-
-    }
-
-
-    private void onListFadedOut(){
-
-    }
-
-
-
-    private void onLoadingTextFadedIn(){
-
-    }
-
-
-    private void onLoadingTextFadedOut(){
-        listHolder.setAnimation(fadeInListAnimation);
-    }
-
 
 
     private void initViews(){
@@ -130,16 +96,6 @@ public class TracksFragment extends Fragment{
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-    }
-
-
-    private void selectCurrentTrack(){
-        if(getMainActivity() != null && getMainActivity().getMediaPlayerService() != null){
-            int currentIndex = getMainActivity().getMediaPlayerService().getCurrentTrackIndex();
-            if(playlist != null && !playlist.getTracks().isEmpty()){
-                scrollToAndSelectListPosition(currentIndex);
-            }
-        }
     }
 
 
@@ -191,7 +147,7 @@ public class TracksFragment extends Fragment{
         if(service == null){
             return;
         }
-        int selectedTrackIndex = service.getCurrentTrackIndex();
+        int selectedTrackIndex = service.getPlaylistHelper().getIndexOfCurrentTrack();
         if(playlistSize  > selectedTrackIndex){
             scrollToAndSelectListPosition(selectedTrackIndex);
         }
@@ -311,7 +267,7 @@ public class TracksFragment extends Fragment{
     private void setVisibilityOnAddTracksToPlaylistButton(Bundle bundle){
         boolean isUserPlaylistLoaded = getBoolean(bundle,IS_USER_PLAYLIST);
         addTracksToPlaylistButtonOuterLayout.setVisibility(isUserPlaylistLoaded ? VISIBLE : View.INVISIBLE);
-        setVisibilityOnAddTracksToPlaylistButton(isUserPlaylistLoaded );
+        setVisibilityOnAddTracksToPlaylistButton(isUserPlaylistLoaded);
     }
 
 

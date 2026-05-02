@@ -20,7 +20,6 @@ import android.view.View;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.helpers.art.AlbumArtConsumer;
 import com.jacstuff.musicplayer.service.helpers.art.AlbumArtRetriever;
@@ -185,29 +184,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     public PlaylistHelper getPlaylistHelper(){ return playlistHelper;}
 
-    public void loadTracksFromAlbum(String albumName){ playlistHelper.loadTracksFromAlbum(albumName); }
-
-    public int getCurrentTrackIndex(){
-        return playlistHelper.getIndexOfCurrentTrack();
-    }
-
-    public void addTracksFromAristToCurrentPlaylist(String artistName){ playlistHelper.addTracksFromAristToCurrentPlaylist(artistName); }
-
-    public void addTracksFromAlbumToCurrentPlaylist(String albumName){ playlistHelper.addTracksFromAlbumToCurrentPlaylist( albumName); }
-
-    public void loadPlaylist(Playlist playlist){ playlistHelper.loadPlaylist(playlist);}
-
-    public void addTrackToCurrentPlaylist(Track track){ playlistHelper.addTrackToCurrentPlaylist(track);}
-
-    public int getTrackCount(){ return playlistHelper.getTrackCount();}
-
-    public void addTrackToPlaylist(Track track, Playlist playlist){ playlistHelper.addTrackToPlaylist(track, playlist);}
-
-    public void removeTrackFromCurrentPlaylist(Track track){ playlistHelper.removeTrackFromCurrentPlaylist(track);}
-
     public PlaylistManager getPlaylistManager(){return playlistHelper.getPlaylistManager();}
-
-    public void loadArtistOfTrack(Track track){playlistHelper.loadArtistOfTrack(track);}
 
     public Bitmap getAlbumArtForNotification(){ return albumArtRetriever.getAlbumArtForNotification(); }
 
@@ -216,6 +193,7 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     public void stopPlayingInOneMinute(){
         mediaPlayerHelper.stopPlayingAfterNumberOfMinutes(1);
     }
+
 
     public void stopPlayingInThreeMinutes(){
         mediaPlayerHelper.stopPlayingAfterNumberOfMinutes(3);
@@ -233,16 +211,11 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
     public void enableStopAfterTrackFinishes(){mediaPlayerHelper.enabledStopAfterTrackFinishes();}
 
-    public boolean hasNotEncounteredError(){ return mediaPlayerHelper.hasEncounteredError();}
-
-    public String getCurrentUrl(){ return mediaPlayerHelper.getCurrentUrl(); }
-
     public Track getCurrentTrack(){ return mediaPlayerHelper.getCurrentTrack(); }
 
     public boolean isPlaying(){
         return mediaPlayerHelper.isPlaying();
     }
-
 
     public void notifyViewOfAlbumNotLoaded(String albumName){ mainActivity.notifyAlbumNotLoaded(albumName);}
 

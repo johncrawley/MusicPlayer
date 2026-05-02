@@ -116,7 +116,10 @@ public class ArtistOptionsFragment extends DialogFragment {
 
     private void addArtistTracksToCurrentPlaylist(){
         disableAllButtons();
-        getService().addTracksFromAristToCurrentPlaylist(artistName);
+        var service = getService();
+        if(service != null){
+            service.getPlaylistHelper().addTracksFromAristToCurrentPlaylist(artistName);
+        }
         dismissAfterPause();
     }
 

@@ -98,7 +98,7 @@ public class SearchViewHelper {
 
     private void addSelectedSearchResultToPlaylist(){
         if(selectedSearchResultTrack != null){
-            mediaPlayerService.addTrackToCurrentPlaylist(selectedSearchResultTrack);
+            mediaPlayerService.getPlaylistHelper().addTrackToCurrentPlaylist(selectedSearchResultTrack);
         }
     }
 

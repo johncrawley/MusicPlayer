@@ -78,11 +78,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     private void startVolumeShaper(){
-       // try (var volumeShaper = mediaPlayer.createVolumeShaper(volumeShaperConfig)) {
-       //     volumeShaper.apply(VolumeShaper.Operation.PLAY);
-       // }
-
-
         volumeShaper = mediaPlayer.createVolumeShaper(volumeShaperConfig);
         volumeShaper.apply(VolumeShaper.Operation.PLAY);
     }

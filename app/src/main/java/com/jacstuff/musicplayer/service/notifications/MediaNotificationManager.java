@@ -177,7 +177,7 @@ public class MediaNotificationManager {
 
 
     private void addPlayButtonTo(NotificationCompat.Builder notification){
-        var currentUrl = mediaPlayerService.getCurrentUrl();
+        var currentUrl = mediaPlayerService.getMediaPlayerHelper().getCurrentUrl();
         if(currentUrl == null){
             return;
         }
@@ -219,7 +219,7 @@ public class MediaNotificationManager {
 
 
     private boolean isThereLessThanTwoTracks(){
-        return mediaPlayerService.getTrackCount() < 2;
+        return mediaPlayerService.getPlaylistHelper().getTrackCount() < 2;
     }
 
 
