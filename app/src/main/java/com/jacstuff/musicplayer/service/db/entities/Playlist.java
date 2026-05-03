@@ -20,13 +20,44 @@ public class Playlist {
     }
 
 
+    public void clear(){
+        if(isUserPlaylist){
+            tracks.clear();
+        }
+    }
+
+
     public Playlist(Long id, String name, boolean isUserPlaylist){
         this(id, name, PlaylistType.PLAYLIST, isUserPlaylist);
     }
 
 
+    public void add(Track track){
+        tracks.add(track);
+    }
+
+    public void remove(Track track){
+        tracks.remove(track.getIndex());
+    }
+
+
+    public Track get(int index){
+        var i = Math.max(0, Math.min(index, tracks.size()-1));
+        return tracks.get(i);
+    }
+
+    public int size(){
+        return tracks.size();
+    }
+
+
     public Playlist(String name, PlaylistType type){
         this(type.getDefaultId(), name, type, type.isUserPlaylist());
+    }
+
+
+    public boolean isEmpty(){
+        return tracks.isEmpty();
     }
 
 

@@ -80,7 +80,10 @@ public class PlaylistsFragment extends Fragment {
         setListener(this, ADD_RANDOM_TRACKS_TO_PLAYLIST, (bundle)->  startAddRandomTracksDialogFragment());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD, (bundle) -> loadLongClickedPlaylist());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE, (bundle) -> startAddPlaylistFragment());
-        setListener(this, Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
+        setListener(this, Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS, (bundle) -> {
+            log("listener : NOTIFY_TO_DESELECT_PLAYLIST_ITEMS");
+            listAdapter.deselectCurrentlySelectedItem();
+        });
         setListener(this, Message.NOTIFY_PLAYLIST_TAB_TO_RELOAD, (bundle) -> setupListView(parentView));
     }
 

@@ -47,7 +47,9 @@ public class ArtistsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        log("entered onCreateView()");
         return inflater.inflate(R.layout.fragment_tab_artists, container, false);
+
     }
 
 
@@ -60,6 +62,25 @@ public class ArtistsFragment extends Fragment {
         refreshArtistsList();
         setupFragmentListener();
         selectSavedIndex();
+    }
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        log("hello from onResume()");
+        var activity = getMainActivity();
+        if(activity != null){
+            var service = activity.getMediaPlayerService();
+            if(service != null){
+                service.getPlaylistHelper().loadTracksFromArtist("sdfs");
+            }
+        }
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ ArtistsFragment: " + msg);
     }
 
 

@@ -334,24 +334,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void loadAlbumOfSelectedTrack(){
-        if(mediaPlayerService == null){
-            return;
-        }
-        var playlistHelper = mediaPlayerService.getPlaylistHelper();
-        if(playlistHelper != null){
-            playlistHelper.loadWholeAlbumOf(selectedTrack);
-        }
-        toastIfTabsNotAutoSwitched(R.string.album_loaded);
-    }
-
-
-    public void loadArtistOfSelectedTrack(){
-        mediaPlayerService.getPlaylistHelper().loadArtistOfTrack(selectedTrack);
-        toastIfTabsNotAutoSwitched(R.string.artist_loaded);
-    }
-
-
     public void toastIfTabsNotAutoSwitched(int strId){
         if(!preferencesHelper.getBoolean(PrefKey.ARE_TABS_SWITCHED_AFTER_PLAYLIST_SELECTION)){
             toast(strId);
@@ -466,9 +448,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void deselectItemsInNonArtistTabs(){
+        log("entered deselectItemsInNonArtistTabs()");
         sendMessage(NOTIFY_TO_DESELECT_PLAYLIST_ITEMS);
         sendMessage(NOTIFY_TO_DESELECT_GENRE_ITEMS);
         // NB Don't need to notify to deselect album items because the album list is reloaded anyway
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ MainActivity: " + msg);
     }
 
 
@@ -522,8 +510,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void loadTracksFromAlbum(String albumName){
-        mediaPlayerService.getPlaylistHelper().loadTracksFromAlbum(albumName);
-        tabHelper.switchToTracksTab();
+        if(mediaPlayerService != null){
+            mediaPlayerService.getPlaylistHelper().loadTracksFromAlbum(albumName);
+            tabHelper.switchToTracksTab();
+        }
     }
 
 
@@ -532,6 +522,35 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayerService.getPlaylistHelper().loadTracksFromGenre(genreName);
             tabHelper.switchToTracksTab();
         }
+    }
+
+
+    public void loadAlbumOfSelectedTrack(){
+        /*
+        if(mediaPlayerService == null){
+            return;
+        }
+        var playlistHelper = mediaPlayerService.getPlaylistHelper();
+        if(playlistHelper != null){
+            playlistHelper.loadWholeAlbumOf(selectedTrack);
+        }
+        if(selectedTrack == null){
+            return;
+        }
+
+         */
+        var albumName = selectedTrack.getAlbum();
+        if(albumName.trim().isBlank()){
+            return;
+        }
+        loadTracksFromAlbum(albumName);
+        toastIfTabsNotAutoSwitched(R.string.album_loaded);
+    }
+
+
+    public void loadArtistOfSelectedTrack(){
+        mediaPlayerService.getPlaylistHelper().loadArtistOfTrack(selectedTrack);
+        toastIfTabsNotAutoSwitched(R.string.artist_loaded);
     }
 
 

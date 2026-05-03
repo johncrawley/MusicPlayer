@@ -266,8 +266,9 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
 
     public void updateAlbumsView(){
-        var playlistManager = getPlaylistManager();
-        mainActivity.updateAlbumsList(playlistManager.getAlbumNames(), playlistManager.getCurrentArtistName().orElse(""));
+        var albumNames = getPlaylistManager().getAlbumNames();
+        var artistName = getPlaylistManager().getCurrentArtistName().orElse("");
+        mainActivity.updateAlbumsList(albumNames, artistName);
     }
 
 
@@ -283,7 +284,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
 
     public void updateNotification(String source){
-        log("entered updateNotification() from: " + source);
         mediaNotificationManager.updateNotification();}
 
 
