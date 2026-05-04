@@ -28,6 +28,8 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.ListIndexManager;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
+import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
@@ -52,6 +54,42 @@ public class AlbumsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_tab_albums, container, false);
+    }
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        selectPositionFromCurrentPlaylist();
+    }
+
+
+    private void selectPositionFromCurrentPlaylist(){
+        if(listAdapter.isPositionSelected()){
+            return;
+        }
+        var playlistManager = getPlaylistManager();
+        if(playlistManager != null){
+            var playlist = playlistManager.getCurrentPlaylist();
+            if(playlist != null){
+                if(playlist.getType() == PlaylistType.ALBUM){
+                    scrollToAndSelect(playlist.getName());
+                }
+            }
+        }
+    }
+
+
+    private PlaylistManager getPlaylistManager(){
+        var mainActivity = getMainActivity();
+        if(mainActivity == null){
+            return null;
+        }
+        var mps = mainActivity.getMediaPlayerService();
+        if(mps == null){
+            return null;
+        }
+        return mps.getPlaylistManager();
     }
 
 
@@ -173,6 +211,14 @@ public class AlbumsFragment extends Fragment {
     private void scrollToAndSelect(int index){
         listAdapter.selectItemAt(index);
         recyclerView.scrollToPosition(index);
+    }
+
+
+    private void scrollToAndSelect(String name){
+        int position = listAdapter.selectItemAt(name);
+        if(position > RecyclerView.NO_POSITION){
+            recyclerView.scrollToPosition(position);
+        }
     }
 
 

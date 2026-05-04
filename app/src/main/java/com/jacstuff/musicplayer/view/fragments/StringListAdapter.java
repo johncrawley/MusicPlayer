@@ -137,11 +137,28 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
     }
 
 
+    public int selectItemAt(String name){
+        int index = items.indexOf(name);
+        if(index != RecyclerView.NO_POSITION){
+            deselectCurrentlySelectedItem();
+            setIndexToScrollTo(index);
+            changePositionTo(index);
+        }
+        return index;
+    }
+
+
     public void changePositionTo(int newPosition){
         notifyItemChanged(selectedPosition);
         selectedPosition = newPosition;
         notifyItemChanged(selectedPosition);
     }
+
+
+    public boolean isPositionSelected(){
+        return selectedPosition != RecyclerView.NO_POSITION;
+    }
+
 
     @Override
     public int getItemCount(){
