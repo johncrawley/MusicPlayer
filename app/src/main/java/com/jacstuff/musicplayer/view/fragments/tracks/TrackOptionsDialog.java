@@ -1,13 +1,11 @@
 package com.jacstuff.musicplayer.view.fragments.tracks;
 
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -60,6 +58,7 @@ public class TrackOptionsDialog extends DialogFragment {
         setupButtonIfConditionsMet(parentView, R.id.showTrackInfoButton, Track::getAlbum, this::loadInfoFragment);
     }
 
+
     private void setupLoadAlbumButton(View parentView){
         setupButtonIfConditionsMet(parentView, R.id.loadAlbumButton, Track::getAlbum, this::loadRelatedAlbum);
     }
@@ -109,7 +108,7 @@ public class TrackOptionsDialog extends DialogFragment {
 
 
     private void setupRemoveTrackButton(View parentView){
-        Button removeTrackButton =  ButtonMaker.setupButton(parentView, R.id.removeFromPlaylistButton, this::removeSelectedTrackFromPlaylist);
+        var removeTrackButton =  ButtonMaker.setupButton(parentView, R.id.removeFromPlaylistButton, this::removeSelectedTrackFromPlaylist);
         if(removeTrackButton != null) {
             setupVisibilityForUserPlaylistLoaded(removeTrackButton);
         }
@@ -117,7 +116,7 @@ public class TrackOptionsDialog extends DialogFragment {
 
 
     private void setupVisibilityForUserPlaylistsExist(View view){
-        MainActivity mainActivity = getMainActivity();
+        var mainActivity = getMainActivity();
         int visibility = mainActivity != null && !mainActivity.getAllUserPlaylists().isEmpty() ?
                 View.VISIBLE : View.GONE;
         view.setVisibility(visibility);

@@ -526,19 +526,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void loadAlbumOfSelectedTrack(){
-        /*
-        if(mediaPlayerService == null){
-            return;
-        }
-        var playlistHelper = mediaPlayerService.getPlaylistHelper();
-        if(playlistHelper != null){
-            playlistHelper.loadWholeAlbumOf(selectedTrack);
-        }
-        if(selectedTrack == null){
-            return;
-        }
-
-         */
         var albumName = selectedTrack.getAlbum();
         if(albumName.trim().isBlank()){
             return;
@@ -552,8 +539,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void loadArtistOfSelectedTrack(){
-        mediaPlayerService.getPlaylistHelper().loadArtistOfTrack(selectedTrack);
-        toastIfTabsNotAutoSwitched(R.string.artist_loaded);
+        var artistName = selectedTrack.getAlbum();
+        if(artistName.trim().isBlank()){
+            return;
+        }
+        if(mediaPlayerService != null){
+            mediaPlayerService.getListIndexManager().resetAllIndexes();
+            mediaPlayerService.getPlaylistHelper().loadArtistOfTrack(selectedTrack);
+            toastIfTabsNotAutoSwitched(R.string.artist_loaded);
+        }
     }
 
 
