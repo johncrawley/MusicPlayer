@@ -49,7 +49,7 @@ public class AlbumOptionsFragment extends DialogFragment {
 
 
     private void assignAlbumNameFromBundle(){
-        Bundle bundle = getArguments();
+        var bundle = getArguments();
         assert bundle != null;
         albumName = bundle.getString(ALBUM_NAME_BUNDLE_KEY);
     }

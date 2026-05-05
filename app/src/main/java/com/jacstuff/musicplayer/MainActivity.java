@@ -46,7 +46,7 @@ import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
 import com.jacstuff.musicplayer.view.fragments.config.ConfigDialogFragment;
 import com.jacstuff.musicplayer.view.fragments.genre.GenresFragment;
 import com.jacstuff.musicplayer.view.fragments.options.AddTrackToPlaylistFragment;
-import com.jacstuff.musicplayer.view.fragments.options.TrackOptionsDialog;
+import com.jacstuff.musicplayer.view.fragments.tracks.TrackOptionsDialog;
 import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
@@ -542,6 +542,9 @@ public class MainActivity extends AppCompatActivity {
         var albumName = selectedTrack.getAlbum();
         if(albumName.trim().isBlank()){
             return;
+        }
+        if(mediaPlayerService != null){
+            mediaPlayerService.getListIndexManager().resetAllIndexes();
         }
         loadTracksFromAlbum(albumName);
         toastIfTabsNotAutoSwitched(R.string.album_loaded);

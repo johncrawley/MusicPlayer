@@ -27,7 +27,6 @@ import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
-import com.jacstuff.musicplayer.view.fragments.options.TrackOptionsDialog;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.Optional;
@@ -109,7 +108,6 @@ public class TracksFragment extends Fragment{
 
 
     private void updateTracksList(Bundle bundle){
-        log("entered updateTracksList()");
         if(isBeingRefreshed.get()){
             return;
         }
@@ -243,7 +241,6 @@ public class TracksFragment extends Fragment{
 
 
     private void setupRecyclerView(View parentView){
-        log("entered setupRecyclerView()");
         if(parentView == null
                 || playlist == null
                 || playlist.getTracks() == null
@@ -256,11 +253,6 @@ public class TracksFragment extends Fragment{
         updatePlaylistInfoView(playlist);
         setVisibilityOnNoTracksFoundText();
         getMain().ifPresent(activity -> activity.notifyNumberOfTracks(playlist.getTracks().size()));
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ TracksFragment: " + msg);
     }
 
 

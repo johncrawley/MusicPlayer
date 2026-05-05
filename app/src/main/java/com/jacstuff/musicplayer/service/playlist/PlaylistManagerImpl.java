@@ -245,6 +245,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         setupUnPlayedIndexes();
         trackHistory.reset();
         currentIndex = -1;
+        currentPlaylist.resetIndex();
         currentArtist = null;
     }
 
@@ -385,7 +386,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void addTracksFromArtistToCurrentPlaylist(String artistName, PlaylistViewNotifier playlistViewNotifier) {
-        List<Track> tracks = trackLoader.getTracksForArtist(artistName);
+        var tracks = trackLoader.getTracksForArtist(artistName);
         addTracksToCurrentPlaylist(getSortedTracks(tracks), playlistViewNotifier);
     }
 
@@ -398,7 +399,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     @Override
     public void addTracksFromAlbumToCurrentPlaylist(String albumName, PlaylistViewNotifier playlistViewNotifier) {
-        List<Track> tracks = trackLoader.getTracksForAlbum(albumName);
+        var tracks = trackLoader.getTracksForAlbum(albumName);
         addTracksToCurrentPlaylist(getSortedAlbumTracks(tracks), playlistViewNotifier);
     }
 
@@ -473,7 +474,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
     private int addTracksToPlaylist(List<Track> additionalTracks, long playlistId, boolean isExistingCheckPerformed){
         List<Track> playlistTracks = isExistingCheckPerformed ? playlistItemRepository.getTracksForPlaylistId(playlistId) : Collections.emptyList();
         int numberOfNewTracks = 0;
-        for(Track track : additionalTracks){
+        for(var track : additionalTracks){
             if(isExistingCheckPerformed && isTrackNotInPlaylist(track, playlistTracks)){
                 numberOfNewTracks += addNewTrackToPlaylist(track, playlistId) ? 1 : 0;
             }
@@ -533,6 +534,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
         setupUnPlayedIndexes();
         trackHistory.reset();
         currentIndex = -1;
+        currentPlaylist.resetIndex();
     }
 
 
@@ -555,7 +557,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private Track getTrack(Supplier<Track> supplier){
         if(!queuedTracks.isEmpty()){
-            Track track = queuedTracks.removeLast();
+            var track = queuedTracks.removeLast();
             trackHistory.add(track);
             return track;
         }
@@ -587,17 +589,19 @@ public class PlaylistManagerImpl implements PlaylistManager {
         if(trackIndex > -1 && trackIndex < tracks.size()){
             if(tracks.get(trackIndex).getPathname().equals(track.getPathname())){
                 currentIndex = trackIndex;
+                currentPlaylist.setCurrentIndex(trackIndex);
             }
         }
     }
 
 
     private Track getPreviousTrackFromHistory(){
-        Track track = trackHistory.getPreviousTrack();
+        var track = trackHistory.getPreviousTrack();
         if(track == null){
             return null;
         }
         currentIndex = track.getIndex();
+        currentPlaylist.setCurrentIndex(track.getIndex());
         return track;
     }
 
@@ -607,7 +611,7 @@ public class PlaylistManagerImpl implements PlaylistManager {
             return null;
         }
         incrementCurrentIndex();
-        Track currentTrack = tracks.get(currentIndex);
+        var currentTrack = tracks.get(currentIndex);
         trackHistory.removeHistoriesAfterCurrent();
         trackHistory.add(currentTrack);
         return currentTrack;
@@ -616,23 +620,27 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
     private Track getFirstTrackOnList(){
         currentIndex = -1;
+        currentPlaylist.resetIndex();
         return getNextTrackOnList();
     }
 
 
     private Track getPreviousTrackOnList(){
         decrementCurrentIndex();
+        currentPlaylist.decrementCurrentIndex();
         return tracks.get(currentIndex);
     }
 
 
     private void incrementCurrentIndex(){
         currentIndex = currentIndex >= tracks.size() -1 ? 0 : currentIndex + 1;
+        currentPlaylist.incrementCurrentIndex();
     }
 
 
     private void decrementCurrentIndex(){
         currentIndex = currentIndex <= 0 ? tracks.size() -1 : currentIndex - 1;
+        currentPlaylist.decrementCurrentIndex();
     }
 
 
@@ -644,8 +652,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
             return null;
         }
         int randomIndex = getNextRandomIndex(unPlayedTracks.size());
-        Track currentTrack = unPlayedTracks.remove(randomIndex);
+        var currentTrack = unPlayedTracks.remove(randomIndex);
         currentIndex = currentTrack.getIndex();
+        currentPlaylist.setCurrentIndex(currentTrack.getIndex());
         attemptSetupOfIndexesIfEmpty();
         trackHistory.add(currentTrack);
         return currentTrack;
@@ -674,8 +683,9 @@ public class PlaylistManagerImpl implements PlaylistManager {
             return null;
         }
         currentIndex = index;
+        currentPlaylist.setCurrentIndex(index);
         trackHistory.removeHistoriesAfterCurrent();
-        Track track = tracks.get(index);
+        var track = tracks.get(index);
         trackHistory.add(track);
         return tracks.get(index);
     }

@@ -24,7 +24,7 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.ListIndexManager;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
-import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
+import com.jacstuff.musicplayer.view.fragments.list.StringListAdapter;
 
 import java.util.List;
 

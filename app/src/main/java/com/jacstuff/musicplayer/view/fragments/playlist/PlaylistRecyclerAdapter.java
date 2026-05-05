@@ -35,7 +35,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
         PlaylistViewHolder(View view) {
             super(view);
-            trackNameTextView = view.findViewById(R.id.trackName);
+            trackNameTextView = view.findViewById(R.id.itemName);
             view.setOnClickListener(v -> onClick(this, v, trackNameTextView));
             view.setOnLongClickListener(v -> onLongClick(this, v, trackNameTextView));
         }
@@ -98,36 +98,6 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
         this.playlists = new ArrayList<>(playlists);
         this.onItemClickConsumer = onItemClickConsumer;
         this.onItemLongClickConsumer = (playlist, position) -> {};
-    }
-
-
-    public Playlist getLongClickedPlaylist(){
-        return longClickedPlaylist;
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void refresh(List<Playlist> playlists){
-        this.playlists.clear();
-        this.playlists.addAll(playlists);
-        notifyDataSetChanged();
-        reselectPreviouslySelectedPlaylist();
-    }
-
-
-    public Playlist getSelectedPlaylist(){
-        return selectedPlaylist;
-    }
-
-
-    public void selectLongClickedView(){
-        longClickedView.callOnClick();
-    }
-
-
-    public void select(View view){
-        changePositionTo(0);
-        selectedPlaylist = playlists.get(0);
-        currentlySelectedView = view;
     }
 
 

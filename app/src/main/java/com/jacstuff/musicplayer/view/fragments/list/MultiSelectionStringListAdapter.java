@@ -28,7 +28,7 @@ public class MultiSelectionStringListAdapter extends RecyclerView.Adapter<MultiS
         private TextViewHolder(View itemView) {
             super(itemView);
             view = itemView;
-            textView = itemView.findViewById(R.id.trackName);
+            textView = itemView.findViewById(R.id.itemName);
         }
     }
 

@@ -10,6 +10,7 @@ import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ALB
 import static com.jacstuff.musicplayer.view.fragments.Message.LOAD_ALBUMS;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.ALBUM_ARTIST;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.ALBUM_UPDATES;
+import static com.jacstuff.musicplayer.view.fragments.Utils.selectPositionFromCurrentPlaylist;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
 import android.os.Bundle;
@@ -29,9 +30,8 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.ListIndexManager;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
-import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
-import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
+import com.jacstuff.musicplayer.view.fragments.list.StringListAdapter;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.List;
@@ -60,36 +60,7 @@ public class AlbumsFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        selectPositionFromCurrentPlaylist();
-    }
-
-
-    private void selectPositionFromCurrentPlaylist(){
-        if(listAdapter.isPositionSelected()){
-            return;
-        }
-        var playlistManager = getPlaylistManager();
-        if(playlistManager != null){
-            var playlist = playlistManager.getCurrentPlaylist();
-            if(playlist != null){
-                if(playlist.getType() == PlaylistType.ALBUM){
-                    scrollToAndSelect(playlist.getName());
-                }
-            }
-        }
-    }
-
-
-    private PlaylistManager getPlaylistManager(){
-        var mainActivity = getMainActivity();
-        if(mainActivity == null){
-            return null;
-        }
-        var mps = mainActivity.getMediaPlayerService();
-        if(mps == null){
-            return null;
-        }
-        return mps.getPlaylistManager();
+        selectPositionFromCurrentPlaylist(this, listAdapter, recyclerView, PlaylistType.ALBUM);
     }
 
 
@@ -184,7 +155,7 @@ public class AlbumsFragment extends Fragment {
 
 
     private void assignListIndexManager(){
-        MediaPlayerService mediaPlayerService = getMainActivity().getMediaPlayerService();
+        var mediaPlayerService = getMainActivity().getMediaPlayerService();
         if(mediaPlayerService != null){
             listIndexManager = mediaPlayerService.getListIndexManager();
         }
@@ -211,14 +182,6 @@ public class AlbumsFragment extends Fragment {
     private void scrollToAndSelect(int index){
         listAdapter.selectItemAt(index);
         recyclerView.scrollToPosition(index);
-    }
-
-
-    private void scrollToAndSelect(String name){
-        int position = listAdapter.selectItemAt(name);
-        if(position > RecyclerView.NO_POSITION){
-            recyclerView.scrollToPosition(position);
-        }
     }
 
 

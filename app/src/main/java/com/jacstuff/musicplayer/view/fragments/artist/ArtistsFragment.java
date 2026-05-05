@@ -9,6 +9,7 @@ import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ARTIST;
 import static com.jacstuff.musicplayer.view.fragments.Message.LOAD_ARTISTS;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.ARTIST_UPDATES;
+import static com.jacstuff.musicplayer.view.fragments.Utils.selectPositionFromCurrentPlaylist;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
 
 import android.os.Bundle;
@@ -26,8 +27,9 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.ListIndexManager;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
-import com.jacstuff.musicplayer.view.fragments.StringListAdapter;
+import com.jacstuff.musicplayer.view.fragments.list.StringListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,14 +70,7 @@ public class ArtistsFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        log("hello from onResume()");
-        var activity = getMainActivity();
-        if(activity != null){
-            var service = activity.getMediaPlayerService();
-            if(service != null){
-                service.getPlaylistHelper().loadTracksFromArtist("sdfs");
-            }
-        }
+        selectPositionFromCurrentPlaylist(this, listAdapter, recyclerView, PlaylistType.ARTIST);
     }
 
 

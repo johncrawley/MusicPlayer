@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.view.fragments.playlist;
+package com.jacstuff.musicplayer.view.fragments.list;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapter.TextViewHolder> {
+public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapter.TextViewHolder>  {
 
-    private List<Playlist> items;
+    private final List<Playlist> items;
     private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
     private int indexToScrollTo = -1;
@@ -35,7 +35,7 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
 
         TextViewHolder(View view) {
             super(view);
-            textView = view.findViewById(R.id.trackName);
+            textView = view.findViewById(R.id.itemName);
             view.setOnClickListener(v -> onClick(this, v, textView));
             view.setOnLongClickListener(v -> onLongClick(v, textView));
         }
@@ -46,15 +46,6 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
         this.items = new ArrayList<>(items);
         this.clickConsumer = clickConsumer;
         this.longClickConsumer = longClickConsumer;
-    }
-
-
-    public void resetSelections(){
-        selectedPosition = RecyclerView.NO_POSITION;
-        currentlySelectedView = null;
-        indexToScrollTo = -1;
-        currentItem = null;
-        longClickedView = null;
     }
 
 
@@ -93,21 +84,6 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
     }
 
 
-    public void  selectLongClickItem(){
-        if(longClickedView == null){
-            return;
-        }
-        longClickedView.callOnClick();
-    }
-
-
-    @SuppressWarnings("notifyDataSetChanged")
-    public void setItems(List<Playlist> playlists){
-        this.items = playlists;
-        notifyDataSetChanged();
-    }
-
-
     @Override
     @NonNull
     public PlaylistListAdapter.TextViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
@@ -123,6 +99,7 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
         holder.itemView.setSelected(selectedPosition == position);
 
         if(position == indexToScrollTo){
+            log("entered onBindViewHolder() position == index to scroll to");
             deselectCurrentlySelectedItem();
             currentlySelectedView = holder.itemView;
             currentlySelectedView.setSelected(true);
@@ -131,6 +108,7 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
 
 
     public void selectItemAt(int index){
+        log("entered selectItemAt( " + index + ")");
         deselectCurrentlySelectedItem();
         setIndexToScrollTo(index);
         changePositionTo(index);
@@ -138,9 +116,17 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
 
 
     public void deselectCurrentlySelectedItem(){
+        log("entered deselectCurrentlySelectedItem() ");
         if(currentlySelectedView != null){
             currentlySelectedView.setSelected(false);
         }
+        else{
+            log(" deselectCurrentlySelectedItem() currently selected view is null!");
+        }
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ PlaylistAdapter: " + msg);
     }
 
 

@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.view.fragments;
+package com.jacstuff.musicplayer.view.fragments.list;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.TextViewHolder> {
+public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.TextViewHolder> implements SimpleListAdapter {
 
     private List<String> items;
     private int selectedPosition = RecyclerView.NO_POSITION;
@@ -28,16 +28,16 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
 
 
     class TextViewHolder extends RecyclerView.ViewHolder {
-
         TextView textView;
 
         TextViewHolder(View view) {
             super(view);
-            textView = view.findViewById(R.id.trackName);
+            textView = getTextViewFrom(view);
             view.setOnClickListener(v -> onClick(this, v, textView));
             view.setOnLongClickListener(v -> onLongClick(v, textView));
         }
     }
+
 
 
     public void resetSelections(){
@@ -75,11 +75,15 @@ public class StringListAdapter extends RecyclerView.Adapter<StringListAdapter.Te
     }
 
 
-    public void  selectLongClickItem(){
-        if(longClickedView == null){
-            return;
+    public void selectLongClickItem(){
+        if(longClickedView != null){
+            longClickedView.callOnClick();
         }
-        longClickedView.callOnClick();
+    }
+
+
+    private TextView getTextViewFrom(View view){
+        return view.findViewById(R.id.itemName);
     }
 
 

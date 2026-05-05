@@ -3,10 +3,72 @@ package com.jacstuff.musicplayer.view.fragments;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.jacstuff.musicplayer.MainActivity;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
+import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
+import com.jacstuff.musicplayer.view.fragments.list.SimpleListAdapter;
 
 import java.util.List;
 
 public class Utils {
+
+
+
+    public static void selectPositionFromCurrentPlaylist(Fragment fragment,
+                                                         SimpleListAdapter listAdapter,
+                                                         RecyclerView recyclerView,
+                                                         PlaylistType expectedType) {
+        if (listAdapter.isPositionSelected()) {
+            return;
+        }
+
+        var playlistManager = getPlaylistManager(fragment);
+        if (playlistManager != null && playlistManager.getCurrentPlaylist() != null) {
+            var currentPlaylistType = getCurrentPlaylistType(fragment);
+            if (currentPlaylistType != null && currentPlaylistType == expectedType) {
+                scrollToAndSelect(listAdapter, recyclerView, playlistManager.getCurrentPlaylist().getName());
+            }
+        }
+    }
+
+
+
+    public static PlaylistType getCurrentPlaylistType(Fragment fragment){
+        var playlistManager = getPlaylistManager(fragment);
+        if(playlistManager != null) {
+            var playlist = playlistManager.getCurrentPlaylist();
+            if (playlist != null) {
+                return playlist.getType();
+            }
+        }
+        return null;
+    }
+
+
+    private static void scrollToAndSelect(SimpleListAdapter listAdapter, RecyclerView recyclerView, String name){
+        int position = listAdapter.selectItemAt(name);
+        if(position > RecyclerView.NO_POSITION){
+            recyclerView.scrollToPosition(position);
+        }
+    }
+
+
+    private static PlaylistManager getPlaylistManager(Fragment fragment){
+        var mainActivity = (MainActivity) fragment.getActivity();
+        if(mainActivity == null){
+            return null;
+        }
+        var mps = mainActivity.getMediaPlayerService();
+        if(mps == null){
+            return null;
+        }
+        return mps.getPlaylistManager();
+    }
+
+
 
     public static int getInt(Bundle bundle, MessageKey key){
         return bundle.getInt(key.toString(), 0);

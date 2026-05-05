@@ -31,7 +31,7 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
 
         TrackViewHolder(View view) {
             super(view);
-            trackNameTextView = view.findViewById(R.id.trackName);
+            trackNameTextView = view.findViewById(R.id.itemName);
 
             view.setOnClickListener(v -> {
                 deselectCurrentlySelectedItem();

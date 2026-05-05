@@ -16,8 +16,8 @@ public class FragmentManagerHelper {
 
 
     public static void showDialog(Fragment parentFragment, DialogFragment dialogFragment, String tag, Bundle bundle){
-        FragmentManager fragmentManager = parentFragment.getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        var fragmentManager = parentFragment.getParentFragmentManager();
+        var fragmentTransaction = fragmentManager.beginTransaction();
         removePreviousFragmentTransaction(fragmentManager, tag, fragmentTransaction);
         dialogFragment.setArguments(bundle);
         dialogFragment.show(fragmentTransaction, tag);
@@ -25,15 +25,15 @@ public class FragmentManagerHelper {
 
 
     public static void showDialog(AppCompatActivity activity, DialogFragment dialogFragment, String tag){
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        var fragmentManager = activity.getSupportFragmentManager();
+        var fragmentTransaction = fragmentManager.beginTransaction();
         removePreviousFragmentTransaction(fragmentManager, tag, fragmentTransaction);
         dialogFragment.show(fragmentTransaction, tag);
     }
 
 
     private static void removePreviousFragmentTransaction(FragmentManager fragmentManager, String tag, FragmentTransaction fragmentTransaction){
-        Fragment prev = fragmentManager.findFragmentByTag(tag);
+        var prev = fragmentManager.findFragmentByTag(tag);
         if (prev != null) {
             fragmentTransaction.remove(prev);
         }
@@ -42,12 +42,14 @@ public class FragmentManagerHelper {
 
 
     public static void setListener(Fragment fragment, String key, Consumer<Bundle> consumer){
-        fragment.getParentFragmentManager().setFragmentResultListener(key, fragment, (requestKey, bundle) -> consumer.accept(bundle));
+        fragment.getParentFragmentManager()
+                .setFragmentResultListener(key, fragment, (requestKey, bundle) -> consumer.accept(bundle));
     }
 
 
     public static void setListener(Fragment fragment, Message key, Consumer<Bundle> consumer){
-        fragment.getParentFragmentManager().setFragmentResultListener(key.toString(), fragment, (requestKey, bundle) -> consumer.accept(bundle));
+        fragment.getParentFragmentManager()
+                .setFragmentResultListener(key.toString(), fragment, (requestKey, bundle) -> consumer.accept(bundle));
     }
 
 

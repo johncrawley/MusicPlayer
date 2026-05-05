@@ -13,6 +13,7 @@ import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_USER_PLAYLIST_LOADED;
+import static com.jacstuff.musicplayer.view.fragments.Utils.getCurrentPlaylistType;
 import static com.jacstuff.musicplayer.view.fragments.Utils.putBoolean;
 import static com.jacstuff.musicplayer.view.fragments.Utils.putLong;
 
@@ -29,10 +30,12 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.ListIndexManager;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.view.fragments.AlertHelper;
 import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
+import com.jacstuff.musicplayer.view.fragments.list.PlaylistListAdapter;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.ArrayList;
@@ -75,29 +78,41 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        var currentType = getCurrentPlaylistType(this);
+        if(currentType != PlaylistType.ALL_TRACKS && currentType != PlaylistType.PLAYLIST){
+            log("onResume() deselecting currently selected item");
+            listAdapter.deselectCurrentlySelectedItem();
+          //  recyclerView.
+        }
+    }
+
+    private void log(String msg){
+        System.out.println("^^^ PlaylistsFragment: " + msg);
+    }
+
+
     private void setupFragmentListeners(){
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE, (bundle)->  showDeletePlaylistDialog());
-        setListener(this, ADD_RANDOM_TRACKS_TO_PLAYLIST, (bundle)->  startAddRandomTracksDialogFragment());
+        setListener(this, ADD_RANDOM_TRACKS_TO_PLAYLIST, this::showOptionsDialog);
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD, (bundle) -> loadLongClickedPlaylist());
         setListener(this, NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE, (bundle) -> startAddPlaylistFragment());
-        setListener(this, Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS, (bundle) -> {
-            log("listener : NOTIFY_TO_DESELECT_PLAYLIST_ITEMS");
-            listAdapter.deselectCurrentlySelectedItem();
-        });
+        setListener(this, Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS, (bundle) -> listAdapter.deselectCurrentlySelectedItem());
         setListener(this, Message.NOTIFY_PLAYLIST_TAB_TO_RELOAD, (bundle) -> setupListView(parentView));
     }
 
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
-        log("entered onViewCreated()");
         setupButtons(view);
         selectSavedIndex();
     }
 
 
     private void assignListIndexManager(){
-        MediaPlayerService mediaPlayerService = getMainActivity().getMediaPlayerService();
+        var mediaPlayerService = getMainActivity().getMediaPlayerService();
         if(mediaPlayerService != null){
             listIndexManager = mediaPlayerService.getListIndexManager();
         }
@@ -117,10 +132,7 @@ public class PlaylistsFragment extends Fragment {
     private void selectSavedIndex(){
         new Handler(Looper.getMainLooper()).postDelayed(()->{
             if(listIndexManager != null){
-                listIndexManager.getPlaylistIndex().ifPresentOrElse(this::scrollToAndSelect, ()-> log(" selectSavedIndex() : listIndexManager not found!"));
-            }
-            else{
-                log("listIndexManager is null!");
+                listIndexManager.getPlaylistIndex().ifPresent(this::scrollToAndSelect);
             }
         }, 200);
 
@@ -133,10 +145,6 @@ public class PlaylistsFragment extends Fragment {
         recyclerView.scrollToPosition(index);
     }
 
-
-    private void log(String msg){
-        System.out.println("^^^ PlaylistsFragment" + msg);
-    }
 
     public void onAddNewPlaylist(){
         hasClicked = false;
@@ -195,7 +203,7 @@ public class PlaylistsFragment extends Fragment {
         putBoolean(bundle, MessageKey.IS_USER_PLAYLIST, playlist.isUserPlaylist());
         addStrTo(bundle, MessageKey.PLAYLIST_NAME, playlist.getName());
         putLong(bundle, MessageKey.PLAYLIST_ID, playlist.getId());
-        FragmentManagerHelper.showDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
+        showOptionsDialog(bundle);
     }
 
 
@@ -211,8 +219,7 @@ public class PlaylistsFragment extends Fragment {
     }
 
 
-    private void startAddRandomTracksDialogFragment(){
-        Bundle bundle = new Bundle();
+    private void showOptionsDialog(Bundle bundle){
         FragmentManagerHelper.showDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
     }
 
@@ -305,7 +312,7 @@ public class PlaylistsFragment extends Fragment {
 
     private List<Playlist> loadAllPlaylists(){
         int INITIAL_PLAYLIST_CAPACITY = 50;
-        List<Playlist> playlists = new ArrayList<>(INITIAL_PLAYLIST_CAPACITY);
+        var playlists = new ArrayList<Playlist>(INITIAL_PLAYLIST_CAPACITY);
         getMediaPlayerService().ifPresent(mps ->
                 playlists.addAll(mps.getPlaylistManager().getAllPlaylists()));
         return playlists;

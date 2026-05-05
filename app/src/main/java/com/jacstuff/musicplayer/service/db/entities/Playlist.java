@@ -10,6 +10,7 @@ public class Playlist {
     private String name;
     private List<Track> tracks;
     private final boolean isUserPlaylist;
+    private int currentIndex;
 
     public Playlist(Long id, String name, PlaylistType playlistType, boolean isUserPlaylist){
         this.id = id;
@@ -27,10 +28,35 @@ public class Playlist {
     }
 
 
+
+
     public Playlist(Long id, String name, boolean isUserPlaylist){
         this(id, name, PlaylistType.PLAYLIST, isUserPlaylist);
     }
 
+    public void resetIndex(){
+        currentIndex = -1;
+    }
+
+
+    public void incrementCurrentIndex(){
+        currentIndex = currentIndex >= tracks.size() -1 ? 0 : currentIndex + 1;
+    }
+
+
+    public void decrementCurrentIndex(){
+        currentIndex = currentIndex <= 0 ? tracks.size() -1 : currentIndex - 1;
+    }
+
+
+    public void setCurrentIndex(int index){
+        currentIndex = index;
+    }
+
+
+    public int getCurrentIndex(){
+        return currentIndex;
+    }
 
     public void add(Track track){
         tracks.add(track);

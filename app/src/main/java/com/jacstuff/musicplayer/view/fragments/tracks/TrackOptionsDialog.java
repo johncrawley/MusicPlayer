@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.view.fragments.options;
+package com.jacstuff.musicplayer.view.fragments.tracks;
 
 
 import android.os.Bundle;
@@ -79,7 +79,7 @@ public class TrackOptionsDialog extends DialogFragment {
         if(attribute.isBlank() || attribute.equalsIgnoreCase("<unknown>")){
             return;
         }
-        Button button = ButtonMaker.setupButton(parentView, buttonId, runnable);
+        var button = ButtonMaker.setupButton(parentView, buttonId, runnable);
         if(button != null){
             button.setVisibility(View.VISIBLE);
         }
@@ -87,7 +87,7 @@ public class TrackOptionsDialog extends DialogFragment {
 
 
     private void setupAddTrackToPlaylistButton(View parentView){
-        Button addTrackToPlaylistButton =  ButtonMaker.setupButton(parentView, R.id.addTrackToPlaylistButton, this::showAddTrackToPlaylistDialog);
+        var addTrackToPlaylistButton =  ButtonMaker.setupButton(parentView, R.id.addTrackToPlaylistButton, this::showAddTrackToPlaylistDialog);
         if(addTrackToPlaylistButton != null) {
             setupVisibilityForUserPlaylistsExist(addTrackToPlaylistButton);
         }
