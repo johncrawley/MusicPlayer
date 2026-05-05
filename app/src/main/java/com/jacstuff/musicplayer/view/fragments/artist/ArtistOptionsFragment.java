@@ -1,7 +1,8 @@
 package com.jacstuff.musicplayer.view.fragments.artist;
 
-import static android.view.View.VISIBLE;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
+import static com.jacstuff.musicplayer.view.fragments.Utils.setupButtonAndMakeVisible;
+import static com.jacstuff.musicplayer.view.fragments.Utils.disableButton;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +27,7 @@ public class ArtistOptionsFragment extends DialogFragment {
 
     private String artistName;
     public final static String ARTIST_NAME_BUNDLE_KEY = "artist_name_key";
-    private Button addTracksToPlaylistButton, loadTracksButton;
+    private Button addTracksToPlaylistButton, loadTracksButton, addRandomTracksToPlaylistButton;
 
     public static ArtistOptionsFragment newInstance() {
         return new ArtistOptionsFragment();
@@ -49,7 +50,7 @@ public class ArtistOptionsFragment extends DialogFragment {
 
 
     private void assignArtistNameFromBundle(){
-        Bundle bundle = getArguments();
+        var bundle = getArguments();
         assert bundle != null;
         artistName = bundle.getString(ARTIST_NAME_BUNDLE_KEY);
     }
@@ -75,41 +76,14 @@ public class ArtistOptionsFragment extends DialogFragment {
 
     private void setupUserPlaylistButtons(View parentView){
         if(getMainActivity().isUserPlaylistLoaded()){
-            addTracksToPlaylistButton = ButtonMaker.setupButton(parentView,
+
+           addTracksToPlaylistButton = setupButtonAndMakeVisible(parentView,
                     R.id.addArtistTracksToCurrentPlaylistButton,
                     this::addArtistTracksToCurrentPlaylist);
 
-            if(addTracksToPlaylistButton != null) {
-                addTracksToPlaylistButton.setVisibility(VISIBLE);
-            }
-
-            setupButtonAndMakeVisible(parentView,
-                    R.id.addArtistTracksToCurrentPlaylistButton,
-                    this::addArtistTracksToCurrentPlaylist);
-
-
-            setupButtonAndMakeVisible(parentView,
+           addRandomTracksToPlaylistButton = setupButtonAndMakeVisible(parentView,
                     R.id.addRandomTracksToCurrentPlaylistButton,
                     this::addRandomTracksToCurrentPlaylist);
-        }
-    }
-
-
-    private void setupButtonAndMakeVisible(View parentView, int buttonId, Runnable runnable){
-        var button = ButtonMaker.setupButton(parentView,
-                buttonId,
-                runnable);
-
-        if(button != null){
-            button.setVisibility(VISIBLE);
-        }
-    }
-
-
-    private void disableAllButtons(){
-        loadTracksButton.setEnabled(false);
-        if(addTracksToPlaylistButton != null) {
-            addTracksToPlaylistButton.setEnabled(false);
         }
     }
 
@@ -121,6 +95,13 @@ public class ArtistOptionsFragment extends DialogFragment {
             service.getPlaylistHelper().addTracksFromAristToCurrentPlaylist(artistName);
         }
         dismissAfterPause();
+    }
+
+
+    private void disableAllButtons(){
+        disableButton(addTracksToPlaylistButton);
+        disableButton(addRandomTracksToPlaylistButton);
+        disableButton(loadTracksButton);
     }
 
 

@@ -1,6 +1,10 @@
 package com.jacstuff.musicplayer.view.fragments;
 
+import static android.view.View.VISIBLE;
+
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -10,6 +14,7 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.list.SimpleListAdapter;
+import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.List;
 
@@ -45,6 +50,25 @@ public class Utils {
             }
         }
         return null;
+    }
+
+
+    public static Button setupButtonAndMakeVisible(View parentView, int buttonId, Runnable runnable){
+        var button = ButtonMaker.setupButton(parentView,
+                buttonId,
+                runnable);
+
+        if(button != null){
+            button.setVisibility(VISIBLE);
+        }
+        return button;
+    }
+
+
+    public static void disableButton(Button button){
+        if(button != null) {
+            button.setEnabled(false);
+        }
     }
 
 
