@@ -17,8 +17,6 @@ import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoIte
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,12 +60,10 @@ public class AddRandomTracksFragment extends DialogFragment {
     private PlaylistType playlistType = PlaylistType.ALL_TRACKS;
     private RecyclerView artistsRecyclerView, genresRecyclerView;
     private long playlistId;
-    private int numberOfTracksToAdd = 30;
-    private final int numberOfTracksIncrement = 10;
-    private final int minNumberOfTracksToAdd = 1;
     private List<ToggleButton> toggleButtons;
     private ToggleButton allTracksToggleButton, artistsToggleButton, genresToggleButton;
-
+    private Button increaseTracksButton, decreaseTracksButton;
+    private final RandomTrackQuantity randomTrackQuantity = new RandomTrackQuantity();
 
     public static PlaylistOptionsFragment newInstance() {
         return new PlaylistOptionsFragment();
@@ -90,17 +86,11 @@ public class AddRandomTracksFragment extends DialogFragment {
         setupButtons(view);
         setupLists();
         numberOfTracksEditText = view.findViewById(R.id.numberOfTracksEditText);
-        setNumberOfTracksText();
+        updateTrackQuantityViews();
         assignArgs();
         DialogFragmentUtils.setTransparentBackground(this);
         setupFragmentListener();
         setupTitle(view);
-    }
-
-
-    private void setNumberOfTracksText(){
-        var numTracksStr = String.valueOf(numberOfTracksToAdd);
-        numberOfTracksEditText.setText(numTracksStr);
     }
 
 
@@ -172,8 +162,8 @@ public class AddRandomTracksFragment extends DialogFragment {
 
 
     private void setupNumberOfRandomTracksButtons(View parentView){
-        setupButton(parentView, R.id.decreaseNumberOfRandomTracksButton, this::decreaseNumberOfRandomTracks);
-        setupButton(parentView, R.id.increaseNumberOfRandomTracksButton, this::increaseNumberOfRandomTracks);
+       decreaseTracksButton = setupButton(parentView, R.id.decreaseNumberOfRandomTracksButton, this::decreaseNumberOfRandomTracks);
+       increaseTracksButton = setupButton(parentView, R.id.increaseNumberOfRandomTracksButton, this::increaseNumberOfRandomTracks);
     }
 
 
@@ -240,18 +230,33 @@ public class AddRandomTracksFragment extends DialogFragment {
 
 
     private void decreaseNumberOfRandomTracks(){
-        numberOfTracksToAdd = Math.max(minNumberOfTracksToAdd, numberOfTracksToAdd - numberOfTracksIncrement );
-        setNumberOfTracksText();
+        randomTrackQuantity.decrement();
+        updateTrackQuantityViews();
     }
 
 
     private void increaseNumberOfRandomTracks(){
-        final int maxNumberOfTracksToAdd = 200;
-        if(numberOfTracksToAdd == minNumberOfTracksToAdd){
-            numberOfTracksToAdd = 0;
-        }
-        numberOfTracksToAdd = Math.min(maxNumberOfTracksToAdd, numberOfTracksToAdd + numberOfTracksIncrement);
+        randomTrackQuantity.increment();
+        updateTrackQuantityViews();
+    }
+
+
+    private void updateTrackQuantityViews(){
         setNumberOfTracksText();
+        setVisibilityOfTrackQuantityButtons();
+    }
+
+
+    private void setNumberOfTracksText(){
+        var numTracksStr = String.valueOf(randomTrackQuantity.get());
+        numberOfTracksEditText.setText(numTracksStr);
+    }
+
+
+    private void setVisibilityOfTrackQuantityButtons(){
+        int quantity = randomTrackQuantity.get();
+        increaseTracksButton.setVisibility(quantity == RandomTrackQuantity.MAX_VALUE ? INVISIBLE : VISIBLE);
+        decreaseTracksButton.setVisibility(quantity == RandomTrackQuantity.INITIAL_VALUE ? INVISIBLE : VISIBLE);
     }
 
 
@@ -289,11 +294,6 @@ public class AddRandomTracksFragment extends DialogFragment {
     }
 
 
-    private void dismissAfterPause(){
-        new Handler(Looper.getMainLooper()).postDelayed(this::dismiss, 150);
-    }
-
-
     private Button setupButton(View parentView, int id, Runnable runnable){
         Button button = parentView.findViewById(id);
         button.setOnClickListener((View v)-> runnable.run());
@@ -306,7 +306,7 @@ public class AddRandomTracksFragment extends DialogFragment {
         if(itemsList == null){
             return;
         }
-        MultiSelectionStringListAdapter listAdapter = new MultiSelectionStringListAdapter(itemsList, onClickConsumer);
+        var listAdapter = new MultiSelectionStringListAdapter(itemsList, onClickConsumer);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);

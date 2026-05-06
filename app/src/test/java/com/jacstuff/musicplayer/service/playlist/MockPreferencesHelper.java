@@ -39,6 +39,11 @@ public class MockPreferencesHelper implements PreferencesHelper {
         return false;
     }
 
+    @Override
+    public void set(PrefKey prefKey, boolean value) {
+        //do nothing
+    }
+
 
     public void setNumberOfRandomTracksToAdd(int value){
         this.numberOfRandomTracksToAdd = value;
