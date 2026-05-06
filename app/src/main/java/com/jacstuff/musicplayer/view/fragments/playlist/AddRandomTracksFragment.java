@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.getBundleStr;
+import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.setTransparentBackground;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_ADD_RANDOM_TRACKS_DIALOG_TO_RELOAD;
 import static com.jacstuff.musicplayer.view.fragments.Message.TRACKS_ADDED;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.PLAYLIST_ID;
@@ -17,6 +18,8 @@ import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoIte
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +40,6 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.service.playlist.RandomTrackConfig;
-import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.list.MultiSelectionStringListAdapter;
 
 import java.util.ArrayList;
@@ -79,6 +81,10 @@ public class AddRandomTracksFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        boolean isDismissed = dismissIfServiceIsUnavailable();
+        if(isDismissed){
+            return;
+        }
         artistsLayout = view.findViewById(R.id.artistsRecyclerLayout);
         genresLayout = view.findViewById(R.id.genresRecyclerLayout);
         selectedArtists = new HashSet<>(200);
@@ -88,9 +94,19 @@ public class AddRandomTracksFragment extends DialogFragment {
         numberOfTracksEditText = view.findViewById(R.id.numberOfTracksEditText);
         updateTrackQuantityViews();
         assignArgs();
-        DialogFragmentUtils.setTransparentBackground(this);
+        setTransparentBackground(this);
         setupFragmentListener();
         setupTitle(view);
+    }
+
+
+    private boolean dismissIfServiceIsUnavailable(){
+        var activity = getMainActivity();
+        if(activity == null || activity.getMediaPlayerService() == null){
+            dismiss();
+            return true;
+        }
+        return false;
     }
 
 
@@ -98,20 +114,22 @@ public class AddRandomTracksFragment extends DialogFragment {
         setListener(this, TRACKS_ADDED, (bundle)-> addTracksButton.setEnabled(true));
         setListener(this, NOTIFY_ADD_RANDOM_TRACKS_DIALOG_TO_RELOAD, (bundle)-> {
             setupLists();
-            setupButtonState();
         });
     }
 
 
     private void setupLists(){
+
         artistsRecyclerView = artistsLayout.findViewById(R.id.recyclerView);
-        TextView noArtistsFoundTextView = artistsLayout.findViewById(R.id.noItemsFoundText);
-        refreshList(artistsRecyclerView, getMainActivity().getArtistNames(), noArtistsFoundTextView, this::toggleArtistSelection);
-
         genresRecyclerView = genresLayout.findViewById(R.id.recyclerView);
+        TextView noArtistsFoundTextView = artistsLayout.findViewById(R.id.noItemsFoundText);
         TextView noGenresFoundTextView = genresLayout.findViewById(R.id.noItemsFoundText);
-        refreshList(genresRecyclerView, getMainActivity().getGenreNames(), noGenresFoundTextView, this::toggleGenreSelection);
 
+        new Handler(Looper.getMainLooper()).postDelayed(()-> {
+            refreshList(artistsRecyclerView, getMainActivity().getArtistNames(), noArtistsFoundTextView, this::toggleArtistSelection);
+            refreshList(genresRecyclerView, getMainActivity().getGenreNames(), noGenresFoundTextView, this::toggleGenreSelection);
+            setupButtonState();
+        },300);
     }
 
 
