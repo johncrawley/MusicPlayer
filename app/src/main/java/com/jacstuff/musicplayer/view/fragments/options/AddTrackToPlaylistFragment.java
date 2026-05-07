@@ -24,7 +24,6 @@ import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
-import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_add_track_to_playlist, container, false);
         dismissIfServiceNotReady();
-        setupPlaylistRecyclerView(view);
+        setupList(view);
         setupTitle(view);
         return view;
     }
@@ -68,12 +67,11 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
 
     private void setupTitle(View parentView){
         titleTextView = parentView.findViewById(R.id.title);
-        String title = getCurrentTrackTitle();
-        if(title.isBlank()){
-            return;
+        var title = getCurrentTrackTitle();
+        if(!title.isBlank()){
+            var text = getString(R.string.add_track_title, title);
+            titleTextView.setText(text);
         }
-        String text = getString(R.string.add_track_title, title);
-        titleTextView.setText(text);
     }
 
 
@@ -82,7 +80,7 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
             @Override
             public void onGlobalLayout() {
                 parentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                Rect windowBounds = DialogFragmentUtils.getWindowBounds(AddTrackToPlaylistFragment.this);
+                var windowBounds = DialogFragmentUtils.getWindowBounds(AddTrackToPlaylistFragment.this);
                 int height = getPlaylistHeight(windowBounds);
                 int width = getPlaylistWidth(windowBounds);
                 setListDimensions(parentView, width, height);
@@ -144,12 +142,12 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
     }
 
 
-    private void setupPlaylistRecyclerView(View parentView){
+    private void setupList(View parentView){
         if(parentView == null){
             return;
         }
         RecyclerView recyclerView = parentView.findViewById(R.id.playlistRecyclerView);
-        PlaylistRecyclerAdapter listAdapter = new PlaylistRecyclerAdapter(loadUserPlaylists(), this::addTrackToSelectedPlaylist);
+        var listAdapter = new PlaylistRecyclerAdapter(loadUserPlaylists(), this::addTrackToSelectedPlaylist);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(listAdapter);
@@ -167,10 +165,9 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
     }
 
 
-
     private List<Playlist> loadUserPlaylists(){
         int INITIAL_PLAYLIST_CAPACITY = 50;
-        List<Playlist> playlists = new ArrayList<>(INITIAL_PLAYLIST_CAPACITY);
+        var playlists = new ArrayList<Playlist>(INITIAL_PLAYLIST_CAPACITY);
         getMediaPlayerService().ifPresent(mps -> playlists.addAll(mps.getPlaylistManager().getAllUserPlaylists()));
         numberOfPlaylists = playlists.size();
         return playlists;

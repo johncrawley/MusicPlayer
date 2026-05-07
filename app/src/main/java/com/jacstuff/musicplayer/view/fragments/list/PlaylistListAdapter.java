@@ -99,7 +99,6 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
         holder.itemView.setSelected(selectedPosition == position);
 
         if(position == indexToScrollTo){
-            log("entered onBindViewHolder() position == index to scroll to");
             deselectCurrentlySelectedItem();
             currentlySelectedView = holder.itemView;
             currentlySelectedView.setSelected(true);
@@ -108,7 +107,6 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
 
 
     public void selectItemAt(int index){
-        log("entered selectItemAt( " + index + ")");
         deselectCurrentlySelectedItem();
         setIndexToScrollTo(index);
         changePositionTo(index);
@@ -116,17 +114,9 @@ public class PlaylistListAdapter extends RecyclerView.Adapter<PlaylistListAdapte
 
 
     public void deselectCurrentlySelectedItem(){
-        log("entered deselectCurrentlySelectedItem() ");
         if(currentlySelectedView != null){
             currentlySelectedView.setSelected(false);
         }
-        else{
-            log(" deselectCurrentlySelectedItem() currently selected view is null!");
-        }
-    }
-
-    private void log(String msg){
-        System.out.println("^^^ PlaylistAdapter: " + msg);
     }
 
 

@@ -19,7 +19,6 @@ public class ListUtils {
 
     public static void setVisibilityOnNoItemsFoundText(List<?> tracks, RecyclerView recyclerView, TextView noItemsFoundTextview, String text){
         var isEmpty = tracks == null || tracks.isEmpty();
-        System.out.println("^^^ ----->>> ListUtils.setVisibilityOnNoItemsFoundText() : isEmpty: " + isEmpty + " is text blank: " + text.isBlank());
         if(isEmpty && !text.isBlank()){
             noItemsFoundTextview.setText(text);
         }

@@ -1,6 +1,6 @@
-package com.jacstuff.musicplayer.view.fragments.playlist;
+package com.jacstuff.musicplayer.view.fragments.options;
 
-import android.annotation.SuppressLint;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +24,6 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     private final BiConsumer<Playlist, Integer> onItemClickConsumer,  onItemLongClickConsumer;
     private Playlist selectedPlaylist;
     private Playlist longClickedPlaylist;
-    private View longClickedView;
     private int indexToScrollTo = -1;
     public boolean isMultiSelectEnabled;
 
@@ -69,28 +68,9 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
 
     private boolean onLongClick(RecyclerView.ViewHolder viewHolder, View v, TextView trackNameTextView){
-        longClickedView = v;
         longClickedPlaylist = (Playlist)trackNameTextView.getTag();
         onItemLongClickConsumer.accept(longClickedPlaylist, viewHolder.getBindingAdapterPosition());
         return false;
-    }
-
-
-    public PlaylistRecyclerAdapter(List<Playlist> playlists,
-                                   BiConsumer<Playlist, Integer> onItemClickConsumer,
-                                   BiConsumer<Playlist, Integer> onItemLongClickConsumer){
-        this(playlists, onItemClickConsumer, onItemLongClickConsumer, false);
-    }
-
-
-    public PlaylistRecyclerAdapter(List<Playlist> playlists,
-                                   BiConsumer<Playlist, Integer> onItemClickConsumer,
-                                   BiConsumer<Playlist, Integer> onItemLongClickConsumer,
-                                   boolean isMultiSelectEnabled){
-        this.playlists = new ArrayList<>(playlists);
-        this.onItemClickConsumer = onItemClickConsumer;
-        this.onItemLongClickConsumer = onItemLongClickConsumer;
-        this.isMultiSelectEnabled = isMultiSelectEnabled;
     }
 
 
@@ -130,54 +110,10 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     }
 
 
-    public void clearLongClickedView(){
-        if(selectedPlaylist == null || longClickedPlaylist == null){
-            return;
-        }
-        if(selectedPlaylist.getId().equals(longClickedPlaylist.getId())){
-           selectedPlaylist = null;
-           currentlySelectedView = null;
-        }
-        longClickedView = null;
-    }
-
-
-    public void selectItemAt(int index){
-        deselectCurrentlySelectedItem();
-        setIndexToScrollTo(index);
-        changePositionTo(index);
-    }
-
-
-    public void setIndexToScrollTo(int index){
-        this.indexToScrollTo = index;
-    }
-
-
-    private void reselectPreviouslySelectedPlaylist(){
-        if(selectedPlaylist == null){
-            return;
-        }
-        for(int i = 0; i < playlists.size(); i++){
-            var playlistId = playlists.get(i).getId();
-            if(selectedPlaylist.getId().equals(playlistId)){
-                selectedPosition = i;
-                break;
-            }
-        }
-    }
-
-
     @Override
     public int getItemCount(){
         return playlists.size();
     }
 
-
-    private void changePositionTo(int newPosition){
-        notifyItemChanged(selectedPosition);
-        selectedPosition = newPosition;
-        notifyItemChanged(selectedPosition);
-    }
 
 }

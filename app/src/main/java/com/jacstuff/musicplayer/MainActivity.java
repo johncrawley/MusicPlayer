@@ -11,6 +11,7 @@ import static com.jacstuff.musicplayer.view.fragments.Utils.putInt;
 import static com.jacstuff.musicplayer.view.fragments.Utils.sendFragmentMessage;
 import static com.jacstuff.musicplayer.view.utils.FragmentHelper.sendArrayListToFragment;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
-            MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
+            var binder = (MediaPlayerService.LocalBinder) service;
             mediaPlayerService = binder.getService();
             playerViewHelper.setMediaPlayerService(mediaPlayerService);
             albumArtHelper = new AlbumArtHelper(MainActivity.this);
@@ -130,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         requestPermissions();
         assignTheme();
         setContentView(R.layout.fragment_main_screen);
