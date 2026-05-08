@@ -2,6 +2,7 @@ package com.jacstuff.musicplayer.view.fragments.playlist;
 
 import static android.view.View.GONE;
 import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.addStrTo;
+import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.dismissIfServiceUnavailable;
 import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.getBundleStr;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD;
@@ -61,6 +62,7 @@ public class PlaylistOptionsFragment extends DialogFragment {
         assignArgs();
         setupButtons(view);
         DialogFragmentUtils.setTransparentBackground(this);
+        dismissIfServiceUnavailable(this);
     }
 
 

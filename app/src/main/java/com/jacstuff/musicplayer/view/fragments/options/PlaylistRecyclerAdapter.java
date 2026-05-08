@@ -19,12 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecyclerAdapter.PlaylistViewHolder> {
 
     private final List<Playlist> playlists;
-    private int selectedPosition = RecyclerView.NO_POSITION;
     private View currentlySelectedView;
     private final BiConsumer<Playlist, Integer> onItemClickConsumer,  onItemLongClickConsumer;
-    private Playlist selectedPlaylist;
-    private Playlist longClickedPlaylist;
-    private int indexToScrollTo = -1;
     public boolean isMultiSelectEnabled;
 
 
@@ -43,7 +39,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
     private void onClick(RecyclerView.ViewHolder viewHolder, View v, TextView textView){
         deselectPreviousSelection();
-        selectedPlaylist = (Playlist)textView.getTag();
+        Playlist selectedPlaylist = (Playlist) textView.getTag();
         currentlySelectedView = v;
         toggleSelected();
         currentlySelectedView.setSelected(true);
@@ -68,7 +64,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
 
     private boolean onLongClick(RecyclerView.ViewHolder viewHolder, View v, TextView trackNameTextView){
-        longClickedPlaylist = (Playlist)trackNameTextView.getTag();
+        var longClickedPlaylist = (Playlist) trackNameTextView.getTag();
         onItemLongClickConsumer.accept(longClickedPlaylist, viewHolder.getBindingAdapterPosition());
         return false;
     }
@@ -100,8 +96,10 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position){
         holder.trackNameTextView.setText(playlists.get(position).getName());
         holder.trackNameTextView.setTag(playlists.get(position));
+        int selectedPosition = RecyclerView.NO_POSITION;
         holder.itemView.setSelected(selectedPosition == position);
 
+        int indexToScrollTo = -1;
         if(position == indexToScrollTo){
             deselectCurrentlySelectedItem();
             currentlySelectedView = holder.itemView;

@@ -1,5 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.album;
 
+import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.dismissIfServiceUnavailable;
 import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ALBUM;
 import static com.jacstuff.musicplayer.view.fragments.Utils.disableButton;
@@ -46,6 +47,7 @@ public class AlbumOptionsFragment extends DialogFragment {
         assignAlbumNameFromBundle();
         setupButtons(view);
         DialogFragmentUtils.setTransparentBackground(this);
+        dismissIfServiceUnavailable(this);
     }
 
 

@@ -140,7 +140,6 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void scrollToAndSelect(int index){
-        log("entered scrollToAndSelect(" + index + ")");
         listAdapter.selectItemAt(index);
         recyclerView.scrollToPosition(index);
     }

@@ -39,7 +39,9 @@ public class RandomTrackAppender {
 
 
     private int getNumberOfTracksToCopy(){
-       return Math.max(1, preferencesHelper.getInt(PrefKey.NUMBER_OF_RANDOM_TRACKS_TO_ADD));
+        var str = preferencesHelper.getStr(PrefKey.NUMBER_OF_RANDOM_TRACKS_TO_ADD);
+        int numberOfTracksToAdd = Integer.parseInt(str);
+       return Math.max(1, numberOfTracksToAdd);
     }
 
 }

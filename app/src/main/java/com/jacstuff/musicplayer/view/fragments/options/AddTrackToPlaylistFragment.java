@@ -1,5 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments.options;
 
+import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.dismissIfServiceUnavailable;
+
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +24,6 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
-import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
 
 import java.util.ArrayList;
@@ -42,7 +43,6 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_add_track_to_playlist, container, false);
-        dismissIfServiceNotReady();
         setupList(view);
         setupTitle(view);
         return view;
@@ -54,14 +54,7 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         DialogFragmentUtils.setTransparentBackground(this);
         setViewDimensions(view);
-    }
-
-
-    private void dismissIfServiceNotReady(){
-        MainActivity ma = (MainActivity) getActivity();
-        if(ma == null  || ma.getMediaPlayerService() == null){
-            dismiss();
-        }
+        dismissIfServiceUnavailable(this);
     }
 
 
@@ -131,9 +124,9 @@ public class AddTrackToPlaylistFragment extends DialogFragment {
 
     private String getCurrentTrackTitle(){
         String trackTitle = "";
-        MainActivity mainActivity = (MainActivity)getActivity();
+        var mainActivity = getMainActivity();
         if(mainActivity != null){
-            Track track = mainActivity.getSelectedTrack();
+            var track = mainActivity.getSelectedTrack();
             if(track != null){
                 trackTitle = track.getTitle();
             }

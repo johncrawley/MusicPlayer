@@ -34,6 +34,14 @@ public class DialogFragmentUtils {
     }
 
 
+    public static void dismissIfServiceUnavailable(DialogFragment fragment){
+        var mainActivity = (MainActivity)fragment.getActivity();
+        if(mainActivity == null || mainActivity.getMediaPlayerService() == null){
+            fragment.dismiss();
+        }
+    }
+
+
     public static void setTransparentBackground(DialogFragment fragment){
         Dialog dialog = fragment.getDialog();
         if(dialog == null){

@@ -1,5 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments.options;
 
+import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.dismissIfServiceUnavailable;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +29,6 @@ public class StopOptionsFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.dialog_options_stop, container, false);
     }
 
@@ -37,6 +38,7 @@ public class StopOptionsFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         setupButtons(view);
         DialogFragmentUtils.setTransparentBackground(this);
+        dismissIfServiceUnavailable(this);
     }
 
 

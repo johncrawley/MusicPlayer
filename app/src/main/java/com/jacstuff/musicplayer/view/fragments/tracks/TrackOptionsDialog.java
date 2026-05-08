@@ -1,5 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments.tracks;
 
+import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.dismissIfServiceUnavailable;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,6 +43,7 @@ public class TrackOptionsDialog extends DialogFragment {
         dismissWithoutAMediaPlayerService();
         setupButtons(view);
         DialogFragmentUtils.setTransparentBackground(this);
+        dismissIfServiceUnavailable(this);
     }
 
 
