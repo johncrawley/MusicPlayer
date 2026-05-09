@@ -417,7 +417,8 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private int getDefaultNumberOfRandomTracksToCopy(){
-        return Math.max(1, preferencesHelper.getInt(PrefKey.NUMBER_OF_RANDOM_TRACKS_TO_ADD));
+        int numberOfRandomTracksToAdd = Integer.parseInt(preferencesHelper.getStr(PrefKey.NUMBER_OF_RANDOM_TRACKS_TO_ADD));
+        return Math.max(1, numberOfRandomTracksToAdd);
     }
 
 
@@ -455,12 +456,11 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private void addTracksToPlaylist(List<Track> additionalTracks, long playlistId, PlaylistViewNotifier playlistViewNotifier, boolean isCheckPerformed) {
-        if(!isUserPlaylist(playlistId)){
-            return;
+        if(isUserPlaylist(playlistId)){
+            int numberOfNewTracks = addTracksToPlaylist(additionalTracks, playlistId, isCheckPerformed);
+            assignIndexesOnCurrentPlaylist(playlistId, numberOfNewTracks);
+            playlistViewNotifier.notifyViewOfMultipleTracksAddedToPlaylist(numberOfNewTracks);
         }
-        int numberOfNewTracks = addTracksToPlaylist(additionalTracks, playlistId, isCheckPerformed);
-        assignIndexesOnCurrentPlaylist(playlistId, numberOfNewTracks);
-        playlistViewNotifier.notifyViewOfMultipleTracksAddedToPlaylist(numberOfNewTracks);
     }
 
 
@@ -472,11 +472,36 @@ public class PlaylistManagerImpl implements PlaylistManager {
 
 
     private int addTracksToPlaylist(List<Track> additionalTracks, long playlistId, boolean isExistingCheckPerformed){
-        List<Track> playlistTracks = isExistingCheckPerformed ? playlistItemRepository.getTracksForPlaylistId(playlistId) : Collections.emptyList();
+        if(isExistingCheckPerformed){
+            return addUniqueTracksToPlaylist(additionalTracks, playlistId);
+        }
+        else{
+            return addEveryTrackToPlaylist(additionalTracks, playlistId);
+        }
+    }
+
+
+    private int addUniqueTracksToPlaylist(List<Track> additionalTracks, long playlistId){
+        int numberOfNewTracks = 0;
+        var playlistTracks = playlistItemRepository.getTracksForPlaylistId(playlistId);
+        for(var track : additionalTracks){
+            if(isTrackNotInPlaylist(track, playlistTracks)){
+                boolean wasAdded = addNewTrackToPlaylist(track, playlistId);
+                if(wasAdded){
+                    numberOfNewTracks++;
+                }
+            }
+        }
+        return numberOfNewTracks;
+    }
+
+
+    private int addEveryTrackToPlaylist(List<Track> additionalTracks, long playlistId){
         int numberOfNewTracks = 0;
         for(var track : additionalTracks){
-            if(isExistingCheckPerformed && isTrackNotInPlaylist(track, playlistTracks)){
-                numberOfNewTracks += addNewTrackToPlaylist(track, playlistId) ? 1 : 0;
+            boolean wasAdded = addNewTrackToPlaylist(track, playlistId);
+            if(wasAdded){
+                numberOfNewTracks++;
             }
         }
         return numberOfNewTracks;
