@@ -140,6 +140,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
     private void stopIfPlayingOrPaused(){
         if(currentState == MediaPlayerState.PLAYING){
+            currentState = MediaPlayerState.STOPPING;
             startVolumeShaper();
             new Handler(Looper.getMainLooper()).postDelayed(this::stopMediaPlayer,fadeOutTime + 50);
         }

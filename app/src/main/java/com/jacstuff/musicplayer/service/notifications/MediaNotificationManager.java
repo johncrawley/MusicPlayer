@@ -102,7 +102,7 @@ public class MediaNotificationManager {
 
 
     void setupNotificationClickForActivity(){
-        Intent resultIntent = new Intent(context, MainActivity.class);
+        var resultIntent = new Intent(context, MainActivity.class);
         resultIntent.setAction(Intent.ACTION_MAIN);
         resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         pendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_IMMUTABLE);
@@ -156,7 +156,7 @@ public class MediaNotificationManager {
 
     private boolean isPostNotificationsPermitted(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            String requiredPermission = Manifest.permission.POST_NOTIFICATIONS;
+            var requiredPermission = Manifest.permission.POST_NOTIFICATIONS;
             return context.checkCallingOrSelfPermission(requiredPermission) == PackageManager.PERMISSION_GRANTED;
         }
         return true;
