@@ -76,7 +76,7 @@ public class PlayerViewHelper {
         mainActivity.disableViewForAWhile(playButton, 500);
         mainActivity.disableViewForAWhile(stopButton, 520);
         mainActivity.disableViewForAWhile(pauseButton, 540);
-        mediaPlayerService.stop();
+        mediaPlayerService.getMediaPlayerHelper().stop(true);
         resetElapsedTime();
     }
 

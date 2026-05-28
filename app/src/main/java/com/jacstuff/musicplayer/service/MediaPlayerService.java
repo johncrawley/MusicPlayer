@@ -199,10 +199,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
         mediaPlayerHelper.stopPlayingAfterNumberOfMinutes(3);
     }
 
-    public void stop(){
-        mediaPlayerHelper.stop(true);
-    }
-
     public void seek(int milliseconds){
         mediaPlayerHelper.seek(milliseconds);
     }
@@ -284,7 +280,13 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
 
     public void updateNotification(String source){
-        mediaNotificationManager.updateNotification();}
+        mediaNotificationManager.updateNotification();
+    }
+
+
+    public void sendStopNotification(){
+        mediaNotificationManager.updateNotification(getString(R.string.status_ready));
+    }
 
 
     public void updateViewTrackList(PlaylistManager playlistManager) {

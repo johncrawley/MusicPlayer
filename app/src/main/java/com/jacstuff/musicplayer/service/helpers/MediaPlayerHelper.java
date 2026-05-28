@@ -126,7 +126,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         stopUpdatingElapsedTime();
         resetElapsedTime();
         if(shouldUpdateNotification) {
-            mediaPlayerService.updateNotification("stop()");
+            mediaPlayerService.sendStopNotification();
         }
         mediaPlayerService.updateMainViewOfStop(shouldUpdateMainView);
         cancelScheduledStoppageOfTrack();
@@ -142,7 +142,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         if(currentState == MediaPlayerState.PLAYING){
             startVolumeShaper();
             new Handler(Looper.getMainLooper()).postDelayed(this::stopMediaPlayer,fadeOutTime + 50);
-
         }
         else if(currentState == MediaPlayerState.PAUSED){
             stopMediaPlayer();

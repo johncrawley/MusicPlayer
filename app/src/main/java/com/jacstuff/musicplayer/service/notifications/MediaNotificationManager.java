@@ -110,12 +110,17 @@ public class MediaNotificationManager {
 
 
     public void updateNotification() {
+        updateNotification(mediaPlayerService.getCurrentStatus());
+    }
+
+
+    public void updateNotification(String status) {
         if(!isPostNotificationsPermitted()){
             return;
         }
         resetErrorStatusAfterDelay();
         new Handler(Looper.getMainLooper()).post(() -> {
-            sendNotification(mediaPlayerService.getCurrentStatus());
+            sendNotification(status);
         });
     }
 

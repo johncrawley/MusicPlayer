@@ -30,10 +30,16 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
         PlaylistViewHolder(View view) {
             super(view);
+            log("entered PlaylistViewHolder()");
             trackNameTextView = view.findViewById(R.id.itemName);
             view.setOnClickListener(v -> onClick(this, v, trackNameTextView));
             view.setOnLongClickListener(v -> onLongClick(this, v, trackNameTextView));
         }
+    }
+
+
+    private void log(String msg){
+        System.out.println("^^^ Options/PlaylistRecyclerAdapter: " + msg);
     }
 
 
