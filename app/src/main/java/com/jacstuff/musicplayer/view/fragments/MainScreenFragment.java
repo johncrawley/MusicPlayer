@@ -31,7 +31,7 @@ public class MainScreenFragment  extends Fragment {
     }
 
     private void setupButton(View parentView, int buttonId, Runnable action){
-        Button button = parentView.findViewById(buttonId);
+        var button = parentView.findViewById(buttonId);
         button.setOnClickListener( v-> action.run());
     }
 

@@ -1,7 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments.artist;
 
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.sendMessages;
+import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.setListener;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_ARTISTS_TAB_TO_RESELECT_ITEM;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
@@ -28,7 +28,7 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.ListIndexManager;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
-import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
+import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.fragments.list.StringListAdapter;
 
 import java.util.ArrayList;
@@ -162,7 +162,7 @@ public class ArtistsFragment extends Fragment {
     private void showOptionsDialog(String artistName){
         Bundle bundle = new Bundle();
         bundle.putString(ArtistOptionsFragment.ARTIST_NAME_BUNDLE_KEY, artistName);
-        FragmentManagerHelper.showDialog(this, ArtistOptionsFragment.newInstance(), "artist_options", bundle);
+        FragmentHelper.showDialog(this, ArtistOptionsFragment.newInstance(), "artist_options", bundle);
     }
 
 

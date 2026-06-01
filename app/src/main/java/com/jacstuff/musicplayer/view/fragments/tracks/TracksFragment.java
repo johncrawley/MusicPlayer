@@ -2,7 +2,7 @@ package com.jacstuff.musicplayer.view.fragments.tracks;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.setListener;
 import static com.jacstuff.musicplayer.view.fragments.Message.DESELECT_CURRENT_TRACK_ITEM;
 import static com.jacstuff.musicplayer.view.fragments.Message.ENSURE_SELECTED_TRACK_IS_VISIBLE;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TRACKS_TAB_TO_RELOAD;
@@ -25,7 +25,7 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.entities.Track;
-import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
+import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
@@ -336,7 +336,7 @@ public class TracksFragment extends Fragment{
             return;
         }
         mainActivity.setSelectedTrack(track);
-        FragmentManagerHelper.showDialog(this, TrackOptionsDialog.newInstance(), "track_options_dialog", new Bundle());
+        FragmentHelper.showDialog(this, TrackOptionsDialog.newInstance(), "track_options_dialog", new Bundle());
     }
 
 

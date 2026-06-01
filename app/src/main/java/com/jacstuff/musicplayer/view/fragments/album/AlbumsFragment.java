@@ -1,7 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments.album;
 
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.sendMessages;
+import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.setListener;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_ALBUM_TAB_TO_RESELECT_ITEM;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_GENRE_ITEMS;
@@ -28,9 +28,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.ListIndexManager;
-import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
-import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
+import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.fragments.list.StringListAdapter;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
@@ -208,7 +207,7 @@ public class AlbumsFragment extends Fragment {
     private void showOptionsDialog(String albumName){
         Bundle bundle = new Bundle();
         bundle.putString(AlbumOptionsFragment.ALBUM_NAME_BUNDLE_KEY, albumName);
-        FragmentManagerHelper.showDialog(this, AlbumOptionsFragment.newInstance(), "album_options", bundle);
+        FragmentHelper.showDialog(this, AlbumOptionsFragment.newInstance(), "album_options", bundle);
     }
 
 

@@ -25,7 +25,6 @@ import android.os.Bundle;
 
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
@@ -39,15 +38,10 @@ import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.service.helpers.preferences.PrefKey;
 import com.jacstuff.musicplayer.service.helpers.preferences.PreferencesHelperImpl;
 import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
-import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
-import com.jacstuff.musicplayer.view.fragments.MainScreenFragment;
+import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.Message;
-import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
-import com.jacstuff.musicplayer.view.fragments.config.ConfigDialogFragment;
-import com.jacstuff.musicplayer.view.fragments.genre.GenresFragment;
 import com.jacstuff.musicplayer.view.fragments.options.AddTrackToPlaylistFragment;
-import com.jacstuff.musicplayer.view.fragments.tracks.TrackOptionsDialog;
 import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
@@ -100,17 +94,6 @@ public class MainActivity extends AppCompatActivity {
             isServiceConnected.set(false);
         }
     };
-
-
-    private void setupFragmentsIf(boolean isSavedStateNull) {
-        if(!isSavedStateNull){
-            return;
-        }
-        Fragment mainMenuFragment = new MainScreenFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, mainMenuFragment)
-                .commit();
-    }
 
 
     private final ActivityResultLauncher<String> requestAudioPermissionLauncher = registerForActivityResult(
@@ -262,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void showAddTrackToPlaylistView(){
-        FragmentManagerHelper.showDialog(this, AddTrackToPlaylistFragment.newInstance(), "add_track_to_playlist");
+        FragmentHelper.showDialog(this, AddTrackToPlaylistFragment.newInstance(), "add_track_to_playlist");
     }
 
 
@@ -450,15 +433,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void deselectItemsInNonArtistTabs(){
-        log("entered deselectItemsInNonArtistTabs()");
         sendMessage(NOTIFY_TO_DESELECT_PLAYLIST_ITEMS);
         sendMessage(NOTIFY_TO_DESELECT_GENRE_ITEMS);
         // NB Don't need to notify to deselect album items because the album list is reloaded anyway
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ MainActivity: " + msg);
     }
 
 
@@ -470,19 +447,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setupOptionsMenuForCurrentTrack(){
-        List<View> views = List.of(findViewById(R.id.trackTitle), findViewById(R.id.albumArtImageView), findViewById(R.id.trackDetailsLayout));
+        List<View> views = List.of(findViewById(R.id.trackTitle),
+                findViewById(R.id.albumArtImageView),
+                findViewById(R.id.trackDetailsLayout));
         views.forEach(v -> v.setOnLongClickListener(c -> {createTrackOptionsFragment(); return false;}));
     }
 
 
     private void createTrackOptionsFragment() {
         setSelectedTrack(mediaPlayerService.getCurrentTrack());
-        FragmentManagerHelper.showDialog(this, TrackOptionsDialog.newInstance(), "track_options_dialog");
+        FragmentHelper.showTrackOptionsDialog(this);
     }
 
 
     public void updateAlbumsList(ArrayList<String> albums, String artist){
-        Bundle bundle = new Bundle();
+        var bundle = new Bundle();
         bundle.putStringArrayList(ALBUM_UPDATES.toString(), albums);
         bundle.putString(ALBUM_ARTIST.toString(), artist);
         runOnUiThread(()-> getSupportFragmentManager().setFragmentResult(LOAD_ALBUMS.toString(), bundle));
@@ -542,14 +521,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadArtistOfSelectedTrack(){
         var artistName = selectedTrack.getAlbum();
-        if(artistName.trim().isBlank()){
+        if(artistName.trim().isBlank() || mediaPlayerService == null){
             return;
         }
-        if(mediaPlayerService != null){
-            mediaPlayerService.getListIndexManager().resetAllIndexes();
-            mediaPlayerService.getPlaylistHelper().loadArtistOfTrack(selectedTrack);
-            toastIfTabsNotAutoSwitched(R.string.artist_loaded);
-        }
+        mediaPlayerService.getListIndexManager().resetAllIndexes();
+        mediaPlayerService.getPlaylistHelper().loadArtistOfTrack(selectedTrack);
+        toastIfTabsNotAutoSwitched(R.string.artist_loaded);
     }
 
 
@@ -586,8 +563,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setupFunctionButtons(){
-        setupImageButton(R.id.searchButton, ()-> searchViewHelper.toggleSearch());
-        setupImageButton(R.id.configButton, this::loadConfigDialog);
+        setupImageButton(R.id.searchButton, () -> searchViewHelper.toggleSearch());
+        setupImageButton(R.id.configButton, () -> FragmentHelper.showConfigDialog(MainActivity.this));
     }
 
 
@@ -598,23 +575,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void startSettingsActivity(){
-        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+        var intent = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(intent);
-    }
-
-
-    public void loadConfigDialog(){
-        FragmentManagerHelper.showDialog(this, new ConfigDialogFragment(), "configDialogFragment");
-    }
-
-
-    public void loadAboutDialog(){
-        FragmentManagerHelper.showDialog(this, new AboutDialogFragment(), "aboutDialogFragment");
-    }
-
-
-    public void loadGenreDialog(){
-        FragmentManagerHelper.showDialog(this, new GenresFragment(), "loadGenreFragment");
     }
 
 

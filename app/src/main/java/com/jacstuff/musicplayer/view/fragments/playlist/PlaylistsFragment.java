@@ -2,9 +2,9 @@ package com.jacstuff.musicplayer.view.fragments.playlist;
 
 import static com.jacstuff.musicplayer.service.helpers.preferences.PrefKey.ARE_TABS_SWITCHED_AFTER_PLAYLIST_SELECTION;
 import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.addStrTo;
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.sendMessage;
+import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.sendMessages;
+import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.setListener;
 import static com.jacstuff.musicplayer.view.fragments.Message.ADD_RANDOM_TRACKS_TO_PLAYLIST;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_CREATE;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
@@ -32,7 +32,7 @@ import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.view.fragments.AlertHelper;
-import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
+import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.list.PlaylistListAdapter;
@@ -192,7 +192,7 @@ public class PlaylistsFragment extends Fragment {
             return;
         }
         hasClicked = true;
-        FragmentManagerHelper.showDialog(this, CreatePlaylistFragment.newInstance(), "create_playlist", new Bundle());
+        FragmentHelper.showDialog(this, CreatePlaylistFragment.newInstance(), "create_playlist", new Bundle());
     }
 
 
@@ -219,7 +219,7 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void showOptionsDialog(Bundle bundle){
-        FragmentManagerHelper.showDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
+        FragmentHelper.showDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
     }
 
 

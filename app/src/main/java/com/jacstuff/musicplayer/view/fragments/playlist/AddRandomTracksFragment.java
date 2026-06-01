@@ -15,7 +15,7 @@ import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.fadeOut;
 import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.hideIfVisible;
 import static com.jacstuff.musicplayer.view.utils.AnimatorHelper.switchViews;
 import static com.jacstuff.musicplayer.view.utils.ListUtils.setVisibilityOnNoItemsFoundText;
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.setListener;
+import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.setListener;
 
 import android.os.Bundle;
 import android.os.Handler;

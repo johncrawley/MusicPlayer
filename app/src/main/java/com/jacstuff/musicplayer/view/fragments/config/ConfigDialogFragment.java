@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
+import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 import java.util.Optional;
@@ -54,13 +55,13 @@ public class ConfigDialogFragment extends DialogFragment {
 
     private void openAboutApp(){
         dismiss();
-        getMain().ifPresent(MainActivity::loadAboutDialog);
+        getMain().ifPresent(FragmentHelper::showAboutDialog);
     }
 
 
     private void openLoadGenreDialog(){
         dismiss();
-        getMain().ifPresent(MainActivity::loadGenreDialog);
+        getMain().ifPresent(FragmentHelper::showGenreDialog);
     }
 
 

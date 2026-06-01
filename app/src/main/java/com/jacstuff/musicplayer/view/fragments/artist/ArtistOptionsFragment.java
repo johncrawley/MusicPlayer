@@ -1,7 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments.artist;
 
 import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.dismissIfServiceUnavailable;
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessage;
+import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.Utils.setupButtonAndMakeVisible;
 import static com.jacstuff.musicplayer.view.fragments.Utils.disableButton;
 

@@ -16,7 +16,7 @@ import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.entities.Track;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
-import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
+import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.fragments.trackinfo.TrackInfoFragment;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
@@ -146,7 +146,7 @@ public class TrackOptionsDialog extends DialogFragment {
 
     private void loadInfoFragment(){
         dismiss();
-        FragmentManagerHelper.showDialog(this, new TrackInfoFragment(), TrackInfoFragment.TAG, new Bundle());
+        FragmentHelper.showDialog(this, new TrackInfoFragment(), TrackInfoFragment.TAG, new Bundle());
     }
 
 

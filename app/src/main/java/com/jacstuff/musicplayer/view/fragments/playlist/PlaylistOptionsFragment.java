@@ -29,7 +29,7 @@ import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.view.fragments.AlertHelper;
 import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
-import com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper;
+import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 
@@ -115,7 +115,7 @@ public class PlaylistOptionsFragment extends DialogFragment {
         addStrTo(bundle, MessageKey.PLAYLIST_NAME, selectedPlaylistName);
         addStrTo(bundle, MessageKey.PLAYLIST_TYPE, PlaylistType.GENRE.name());
         putLong(bundle, MessageKey.PLAYLIST_ID, selectedPlaylistId);
-        FragmentManagerHelper.showDialog(this, new AddRandomTracksFragment(), AddRandomTracksFragment.TAG, bundle);
+        FragmentHelper.showDialog(this, new AddRandomTracksFragment(), AddRandomTracksFragment.TAG, bundle);
     }
 
 

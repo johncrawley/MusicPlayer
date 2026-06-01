@@ -1,6 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.genre;
 
-import static com.jacstuff.musicplayer.view.fragments.FragmentManagerHelper.sendMessages;
+import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.sendMessages;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ALBUM_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_ARTIST_ITEMS;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_DESELECT_PLAYLIST_ITEMS;

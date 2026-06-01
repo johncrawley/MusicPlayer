@@ -8,11 +8,53 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
+import com.jacstuff.musicplayer.view.fragments.config.ConfigDialogFragment;
+import com.jacstuff.musicplayer.view.fragments.genre.GenresFragment;
+import com.jacstuff.musicplayer.view.fragments.tracks.TrackOptionsDialog;
+
 import java.util.Arrays;
 import java.util.function.Consumer;
 
 
-public class FragmentManagerHelper {
+public class FragmentHelper {
+
+
+
+
+    public static void showConfigDialog(AppCompatActivity activity){
+        FragmentHelper.showDialog(activity, new ConfigDialogFragment(), "configDialogFragment");
+    }
+
+
+    public static void showAboutDialog(AppCompatActivity activity){
+        FragmentHelper.showDialog(activity, new AboutDialogFragment(), "aboutDialogFragment");
+    }
+
+
+    public static void showGenreDialog(AppCompatActivity activity){
+        FragmentHelper.showDialog(activity, new GenresFragment(), "loadGenreFragment");
+    }
+
+
+    public static void showTrackOptionsDialog(AppCompatActivity activity){
+        showDialog(activity, TrackOptionsDialog.newInstance(), "track_options_dialog");
+    }
+
+
+    public static void showDialog(AppCompatActivity activity, DialogFragment dialogFragment, String tag){
+        var fragmentManager = activity.getSupportFragmentManager();
+        var existingFragment = fragmentManager.findFragmentByTag(tag);
+        if (existingFragment != null) {
+            fragmentManager.beginTransaction()
+                    .remove(existingFragment)
+                    .commit();
+        }
+        fragmentManager.beginTransaction()
+                .add(dialogFragment , tag)
+                .commit();
+    }
+
 
 
     public static void showDialog(Fragment parentFragment, DialogFragment dialogFragment, String tag, Bundle bundle){
@@ -24,7 +66,7 @@ public class FragmentManagerHelper {
     }
 
 
-    public static void showDialog(AppCompatActivity activity, DialogFragment dialogFragment, String tag){
+    public static void showDialogOLD(AppCompatActivity activity, DialogFragment dialogFragment, String tag){
         var fragmentManager = activity.getSupportFragmentManager();
         var fragmentTransaction = fragmentManager.beginTransaction();
         removePreviousFragmentTransaction(fragmentManager, tag, fragmentTransaction);
