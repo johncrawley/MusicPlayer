@@ -1,9 +1,9 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
 import static android.view.View.GONE;
-import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.addStrTo;
-import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.dismissIfServiceUnavailable;
-import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.getBundleStr;
+import static com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils.addStrTo;
+import static com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils.dismissIfServiceUnavailable;
+import static com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils.getBundleStr;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_LOAD;
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.IS_USER_PLAYLIST;
@@ -28,7 +28,7 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.view.fragments.AlertHelper;
-import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
+import com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;

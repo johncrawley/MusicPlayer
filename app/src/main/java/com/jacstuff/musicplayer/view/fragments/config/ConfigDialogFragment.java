@@ -1,6 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.config;
 
-import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.runThenDismissAfterDelay;
+import static com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils.runThenDismissAfterDelay;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
-import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
+import com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 

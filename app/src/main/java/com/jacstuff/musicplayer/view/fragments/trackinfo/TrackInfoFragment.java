@@ -1,6 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.trackinfo;
 
-import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.setScrollViewHeight;
+import static com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils.setScrollViewHeight;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.entities.Track;
-import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
+import com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 import com.jacstuff.musicplayer.view.utils.TimeConverter;
 

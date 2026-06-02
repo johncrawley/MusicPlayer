@@ -1,6 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.artist;
 
-import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.dismissIfServiceUnavailable;
+import static com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils.dismissIfServiceUnavailable;
 import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.Utils.setupButtonAndMakeVisible;
 import static com.jacstuff.musicplayer.view.fragments.Utils.disableButton;
@@ -20,7 +20,7 @@ import androidx.fragment.app.DialogFragment;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
-import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
+import com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.Message;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 

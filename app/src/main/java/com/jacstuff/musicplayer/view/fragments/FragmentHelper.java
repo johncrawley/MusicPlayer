@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
+import com.jacstuff.musicplayer.view.fragments.artist.ArtistOptionsFragment;
 import com.jacstuff.musicplayer.view.fragments.config.ConfigDialogFragment;
 import com.jacstuff.musicplayer.view.fragments.genre.GenresFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TrackOptionsDialog;
@@ -42,6 +43,13 @@ public class FragmentHelper {
     }
 
 
+    public static void showArtistOptionsDialog(Fragment parentFragment, String artistName){
+            var bundle = new Bundle();
+            bundle.putString(ArtistOptionsFragment.ARTIST_NAME_BUNDLE_KEY, artistName);
+            showDialog(parentFragment, ArtistOptionsFragment.newInstance(), "artist_options", bundle);
+    }
+
+
     public static void showDialog(AppCompatActivity activity, DialogFragment dialogFragment, String tag){
         var fragmentManager = activity.getSupportFragmentManager();
         var existingFragment = fragmentManager.findFragmentByTag(tag);
@@ -59,27 +67,16 @@ public class FragmentHelper {
 
     public static void showDialog(Fragment parentFragment, DialogFragment dialogFragment, String tag, Bundle bundle){
         var fragmentManager = parentFragment.getParentFragmentManager();
-        var fragmentTransaction = fragmentManager.beginTransaction();
-        removePreviousFragmentTransaction(fragmentManager, tag, fragmentTransaction);
-        dialogFragment.setArguments(bundle);
-        dialogFragment.show(fragmentTransaction, tag);
-    }
-
-
-    public static void showDialogOLD(AppCompatActivity activity, DialogFragment dialogFragment, String tag){
-        var fragmentManager = activity.getSupportFragmentManager();
-        var fragmentTransaction = fragmentManager.beginTransaction();
-        removePreviousFragmentTransaction(fragmentManager, tag, fragmentTransaction);
-        dialogFragment.show(fragmentTransaction, tag);
-    }
-
-
-    private static void removePreviousFragmentTransaction(FragmentManager fragmentManager, String tag, FragmentTransaction fragmentTransaction){
-        var prev = fragmentManager.findFragmentByTag(tag);
-        if (prev != null) {
-            fragmentTransaction.remove(prev);
+        var existingFragment = fragmentManager.findFragmentByTag(tag);
+        if (existingFragment != null) {
+            fragmentManager.beginTransaction()
+                    .remove(existingFragment)
+                    .commit();
         }
-        fragmentTransaction.addToBackStack(null);
+        dialogFragment.setArguments(bundle);
+        fragmentManager.beginTransaction()
+                .add(dialogFragment , tag)
+                .commit();
     }
 
 

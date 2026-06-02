@@ -1,7 +1,7 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
 import static com.jacstuff.musicplayer.service.helpers.preferences.PrefKey.ARE_TABS_SWITCHED_AFTER_PLAYLIST_SELECTION;
-import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.addStrTo;
+import static com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils.addStrTo;
 import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.sendMessages;
 import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.setListener;

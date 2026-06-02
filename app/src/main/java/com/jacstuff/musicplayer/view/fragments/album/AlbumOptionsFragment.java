@@ -1,6 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.album;
 
-import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.dismissIfServiceUnavailable;
+import static com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils.dismissIfServiceUnavailable;
 import static com.jacstuff.musicplayer.view.fragments.FragmentHelper.sendMessage;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_TO_LOAD_ALBUM;
 import static com.jacstuff.musicplayer.view.fragments.Utils.disableButton;
@@ -21,7 +21,7 @@ import androidx.fragment.app.DialogFragment;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
-import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
+import com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
 
 public class AlbumOptionsFragment extends DialogFragment {

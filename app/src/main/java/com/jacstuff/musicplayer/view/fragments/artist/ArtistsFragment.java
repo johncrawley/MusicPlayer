@@ -49,7 +49,6 @@ public class ArtistsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        log("entered onCreateView()");
         return inflater.inflate(R.layout.fragment_tab_artists, container, false);
 
     }
@@ -71,11 +70,6 @@ public class ArtistsFragment extends Fragment {
     public void onResume(){
         super.onResume();
         selectPositionFromCurrentPlaylist(this, listAdapter, recyclerView, PlaylistType.ARTIST);
-    }
-
-
-    private void log(String msg){
-        System.out.println("^^^ ArtistsFragment: " + msg);
     }
 
 
@@ -160,9 +154,7 @@ public class ArtistsFragment extends Fragment {
 
 
     private void showOptionsDialog(String artistName){
-        Bundle bundle = new Bundle();
-        bundle.putString(ArtistOptionsFragment.ARTIST_NAME_BUNDLE_KEY, artistName);
-        FragmentHelper.showDialog(this, ArtistOptionsFragment.newInstance(), "artist_options", bundle);
+        FragmentHelper.showArtistOptionsDialog(this, artistName);
     }
 
 

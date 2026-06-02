@@ -26,7 +26,7 @@ import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.entities.Playlist;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepository;
 import com.jacstuff.musicplayer.service.db.playlist.PlaylistRepositoryImpl;
-import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
+import com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.utils.KeyboardHelper;
 
 import androidx.annotation.NonNull;

@@ -1,4 +1,4 @@
-package com.jacstuff.musicplayer.view.fragments;
+package com.jacstuff.musicplayer.view.fragments.dialog;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.jacstuff.musicplayer.MainActivity;
+import com.jacstuff.musicplayer.view.fragments.MessageKey;
 
 import java.util.function.Consumer;
 

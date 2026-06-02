@@ -1,6 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.tracks;
 
-import static com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils.dismissIfServiceUnavailable;
+import static com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils.dismissIfServiceUnavailable;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,7 +15,7 @@ import androidx.fragment.app.DialogFragment;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.db.entities.Track;
-import com.jacstuff.musicplayer.view.fragments.DialogFragmentUtils;
+import com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.fragments.trackinfo.TrackInfoFragment;
 import com.jacstuff.musicplayer.view.utils.ButtonMaker;
