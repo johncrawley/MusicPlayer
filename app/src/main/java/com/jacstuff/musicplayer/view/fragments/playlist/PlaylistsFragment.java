@@ -188,11 +188,10 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void startAddPlaylistFragment(){
-        if(hasClicked){
-            return;
+        if(!hasClicked){
+            hasClicked = true;
+            FragmentHelper.showCreatePlaylistDialog(this);
         }
-        hasClicked = true;
-        FragmentHelper.showDialog(this, CreatePlaylistFragment.newInstance(), "create_playlist", new Bundle());
     }
 
 

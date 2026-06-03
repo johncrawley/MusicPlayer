@@ -111,11 +111,7 @@ public class PlaylistOptionsFragment extends DialogFragment {
 
     private void loadAddRandomTracksFragment(){
         dismiss();
-        var bundle = new Bundle();
-        addStrTo(bundle, MessageKey.PLAYLIST_NAME, selectedPlaylistName);
-        addStrTo(bundle, MessageKey.PLAYLIST_TYPE, PlaylistType.GENRE.name());
-        putLong(bundle, MessageKey.PLAYLIST_ID, selectedPlaylistId);
-        FragmentHelper.showDialog(this, new AddRandomTracksFragment(), AddRandomTracksFragment.TAG, bundle);
+        FragmentHelper.showAddRandomTracksDialog(this, selectedPlaylistName, selectedPlaylistId);
     }
 
 

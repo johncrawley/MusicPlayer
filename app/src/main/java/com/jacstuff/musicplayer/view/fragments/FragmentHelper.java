@@ -1,5 +1,8 @@
 package com.jacstuff.musicplayer.view.fragments;
 
+import static com.jacstuff.musicplayer.view.fragments.Utils.putLong;
+import static com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils.addStrTo;
+
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,10 +11,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.view.fragments.about.AboutDialogFragment;
+import com.jacstuff.musicplayer.view.fragments.album.AlbumOptionsFragment;
 import com.jacstuff.musicplayer.view.fragments.artist.ArtistOptionsFragment;
 import com.jacstuff.musicplayer.view.fragments.config.ConfigDialogFragment;
 import com.jacstuff.musicplayer.view.fragments.genre.GenresFragment;
+import com.jacstuff.musicplayer.view.fragments.playlist.AddRandomTracksFragment;
+import com.jacstuff.musicplayer.view.fragments.playlist.CreatePlaylistFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TrackOptionsDialog;
 
 import java.util.Arrays;
@@ -19,8 +26,6 @@ import java.util.function.Consumer;
 
 
 public class FragmentHelper {
-
-
 
 
     public static void showConfigDialog(AppCompatActivity activity){
@@ -34,7 +39,7 @@ public class FragmentHelper {
 
 
     public static void showGenreDialog(AppCompatActivity activity){
-        FragmentHelper.showDialog(activity, new GenresFragment(), "loadGenreFragment");
+        showDialog(activity, new GenresFragment(), "loadGenreFragment");
     }
 
 
@@ -47,6 +52,27 @@ public class FragmentHelper {
             var bundle = new Bundle();
             bundle.putString(ArtistOptionsFragment.ARTIST_NAME_BUNDLE_KEY, artistName);
             showDialog(parentFragment, ArtistOptionsFragment.newInstance(), "artist_options", bundle);
+    }
+
+
+    public static void showAlbumOptionsDialog(Fragment parentFragment, String albumName){
+        var bundle = new Bundle();
+        bundle.putString(AlbumOptionsFragment.ALBUM_NAME_BUNDLE_KEY, albumName);
+        showDialog(parentFragment, AlbumOptionsFragment.newInstance(), "album_options", bundle);
+    }
+
+
+    public static void showAddRandomTracksDialog(Fragment parentFragment, String playlistName, long playlistId){
+        var bundle = new Bundle();
+        addStrTo(bundle, MessageKey.PLAYLIST_NAME, playlistName);
+        addStrTo(bundle, MessageKey.PLAYLIST_TYPE, PlaylistType.GENRE.name());
+        putLong(bundle, MessageKey.PLAYLIST_ID, playlistId);
+        showDialog(parentFragment, new AddRandomTracksFragment(), AddRandomTracksFragment.TAG, bundle);
+    }
+
+
+    public static void showCreatePlaylistDialog(Fragment parentFragment){
+        showDialog(parentFragment, CreatePlaylistFragment.newInstance(), "create_playlist", new Bundle());
     }
 
 
