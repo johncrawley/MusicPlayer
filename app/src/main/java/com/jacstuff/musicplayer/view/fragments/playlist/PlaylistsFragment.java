@@ -83,14 +83,8 @@ public class PlaylistsFragment extends Fragment {
         super.onResume();
         var currentType = getCurrentPlaylistType(this);
         if(currentType != PlaylistType.ALL_TRACKS && currentType != PlaylistType.PLAYLIST){
-            log("onResume() deselecting currently selected item");
             listAdapter.deselectCurrentlySelectedItem();
-          //  recyclerView.
         }
-    }
-
-    private void log(String msg){
-        System.out.println("^^^ PlaylistsFragment: " + msg);
     }
 
 
@@ -197,7 +191,7 @@ public class PlaylistsFragment extends Fragment {
 
     private void startPlaylistOptionsFragment(Playlist playlist, int position){
         longClickedPosition = position;
-        Bundle bundle = new Bundle();
+        var bundle = new Bundle();
         putBoolean(bundle, MessageKey.IS_USER_PLAYLIST, playlist.isUserPlaylist());
         addStrTo(bundle, MessageKey.PLAYLIST_NAME, playlist.getName());
         putLong(bundle, MessageKey.PLAYLIST_ID, playlist.getId());
@@ -218,7 +212,7 @@ public class PlaylistsFragment extends Fragment {
 
 
     private void showOptionsDialog(Bundle bundle){
-        FragmentHelper.showDialog(this, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
+        FragmentHelper.showPlaylistOptionsDialog(this, bundle);
     }
 
 
@@ -332,6 +326,7 @@ public class PlaylistsFragment extends Fragment {
         new Handler(Looper.getMainLooper())
                 .postDelayed(()-> toast(R.string.created) , 500);
     }
+
 
     private void toast(int strId){
         getMain().ifPresent(ma -> ma.toast(strId));

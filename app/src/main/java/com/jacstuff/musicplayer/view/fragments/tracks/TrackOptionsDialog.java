@@ -146,7 +146,7 @@ public class TrackOptionsDialog extends DialogFragment {
 
     private void loadInfoFragment(){
         dismiss();
-        FragmentHelper.showDialog(this, new TrackInfoFragment(), TrackInfoFragment.TAG, new Bundle());
+        FragmentHelper.showTrackInfoDialog(this);
     }
 
 

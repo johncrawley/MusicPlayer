@@ -336,7 +336,7 @@ public class TracksFragment extends Fragment{
             return;
         }
         mainActivity.setSelectedTrack(track);
-        FragmentHelper.showDialog(this, TrackOptionsDialog.newInstance(), "track_options_dialog", new Bundle());
+        FragmentHelper.showTrackOptionsDialog(mainActivity);
     }
 
 

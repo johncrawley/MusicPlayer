@@ -41,7 +41,6 @@ import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.Message;
-import com.jacstuff.musicplayer.view.fragments.options.AddTrackToPlaylistFragment;
 import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
@@ -245,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void showAddTrackToPlaylistView(){
-        FragmentHelper.showDialog(this, AddTrackToPlaylistFragment.newInstance(), "add_track_to_playlist");
+        FragmentHelper.showAddTrackToPlaylistDialog(this);
     }
 
 

@@ -17,8 +17,11 @@ import com.jacstuff.musicplayer.view.fragments.album.AlbumOptionsFragment;
 import com.jacstuff.musicplayer.view.fragments.artist.ArtistOptionsFragment;
 import com.jacstuff.musicplayer.view.fragments.config.ConfigDialogFragment;
 import com.jacstuff.musicplayer.view.fragments.genre.GenresFragment;
+import com.jacstuff.musicplayer.view.fragments.options.AddTrackToPlaylistFragment;
 import com.jacstuff.musicplayer.view.fragments.playlist.AddRandomTracksFragment;
 import com.jacstuff.musicplayer.view.fragments.playlist.CreatePlaylistFragment;
+import com.jacstuff.musicplayer.view.fragments.playlist.PlaylistOptionsFragment;
+import com.jacstuff.musicplayer.view.fragments.trackinfo.TrackInfoFragment;
 import com.jacstuff.musicplayer.view.fragments.tracks.TrackOptionsDialog;
 
 import java.util.Arrays;
@@ -76,7 +79,25 @@ public class FragmentHelper {
     }
 
 
+    public static void showPlaylistOptionsDialog(Fragment parentFragment, Bundle bundle){
+        showDialog(parentFragment, PlaylistOptionsFragment.newInstance(), "playlist_options", bundle);
+    }
+
+
+    public static void showAddTrackToPlaylistDialog(AppCompatActivity activity){
+        showDialog(activity, AddTrackToPlaylistFragment.newInstance(), "add_track_to_playlist");
+    }
+
+
+    public static void showTrackInfoDialog(Fragment parentFragment){
+        showDialog(parentFragment, new TrackInfoFragment(), TrackInfoFragment.TAG, new Bundle());
+    }
+
+
     public static void showDialog(AppCompatActivity activity, DialogFragment dialogFragment, String tag){
+        if(activity == null){
+            return;
+        }
         var fragmentManager = activity.getSupportFragmentManager();
         var existingFragment = fragmentManager.findFragmentByTag(tag);
         if (existingFragment != null) {
@@ -91,7 +112,7 @@ public class FragmentHelper {
 
 
 
-    public static void showDialog(Fragment parentFragment, DialogFragment dialogFragment, String tag, Bundle bundle){
+    private static void showDialog(Fragment parentFragment, DialogFragment dialogFragment, String tag, Bundle bundle){
         var fragmentManager = parentFragment.getParentFragmentManager();
         var existingFragment = fragmentManager.findFragmentByTag(tag);
         if (existingFragment != null) {
