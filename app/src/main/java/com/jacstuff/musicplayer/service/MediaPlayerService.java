@@ -345,6 +345,19 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     }
 
 
+    public void scrollToPositionOfCurrentTrack(Track searchResultTrack){
+        var currentTrack = getCurrentTrack();
+        var isSearchResult = currentTrack.getId() == searchResultTrack.getId();
+        int trackIndexOnCurrentPlaylist = getPlaylistManager().getCurrentIndexOf(currentTrack);
+        if(trackIndexOnCurrentPlaylist == - 1){
+            new Handler(Looper.getMainLooper()).postDelayed(  ()-> mainActivity.deselectCurrentTrack(), 300);
+        }
+        else {
+            mainActivity.scrollToAndSelectPosition(trackIndexOnCurrentPlaylist, isSearchResult);
+        }
+    }
+
+
     public void updateViewsOnTrackAssigned(){
         updateNotification("updateViewsOnTrackAssigned()");
         mainActivity.setTrackDetails(mediaPlayerHelper.getCurrentTrack(), 0);

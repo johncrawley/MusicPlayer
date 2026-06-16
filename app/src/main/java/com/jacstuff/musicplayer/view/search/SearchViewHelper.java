@@ -136,7 +136,7 @@ public class SearchViewHelper {
 
     private void scrollToPositionIfSearchResultHasBeenPlayed(){
         if(hasSearchResultBeenPlayed){
-            mainActivity.getMediaPlayerService().scrollToPositionOf(selectedSearchResultTrack, true);
+            mainActivity.getMediaPlayerService().scrollToPositionOfCurrentTrack(selectedSearchResultTrack);
         }
         hasSearchResultBeenPlayed = false;
     }
