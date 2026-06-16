@@ -1,7 +1,6 @@
 package com.jacstuff.musicplayer.view.fragments.playlist;
 
 import static android.view.View.GONE;
-import static com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils.addStrTo;
 import static com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils.dismissIfServiceUnavailable;
 import static com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils.getBundleStr;
 import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_FRAGMENT_TO_DELETE;
@@ -9,7 +8,6 @@ import static com.jacstuff.musicplayer.view.fragments.Message.NOTIFY_PLAYLISTS_F
 import static com.jacstuff.musicplayer.view.fragments.MessageKey.IS_USER_PLAYLIST;
 import static com.jacstuff.musicplayer.view.fragments.Utils.getBoolean;
 import static com.jacstuff.musicplayer.view.fragments.Utils.getLong;
-import static com.jacstuff.musicplayer.view.fragments.Utils.putLong;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +24,6 @@ import androidx.fragment.app.DialogFragment;
 import com.jacstuff.musicplayer.MainActivity;
 import com.jacstuff.musicplayer.R;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
-import com.jacstuff.musicplayer.service.db.entities.PlaylistType;
 import com.jacstuff.musicplayer.view.fragments.AlertHelper;
 import com.jacstuff.musicplayer.view.fragments.dialog.DialogFragmentUtils;
 import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
@@ -38,12 +35,10 @@ import java.util.Optional;
 
 public class PlaylistOptionsFragment extends DialogFragment {
 
-
     private Button loadPlaylistButton, deletePlaylistButton, addRandomTracksButton, clearTracksButton;
     private boolean isUserPlaylist;
     private String selectedPlaylistName;
     private long selectedPlaylistId;
-
 
     public static PlaylistOptionsFragment newInstance() {
         return new PlaylistOptionsFragment();
@@ -104,11 +99,6 @@ public class PlaylistOptionsFragment extends DialogFragment {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ " + msg);
-    }
-
-
     private void loadAddRandomTracksFragment(){
         dismiss();
         FragmentHelper.showAddRandomTracksDialog(this, selectedPlaylistName, selectedPlaylistId);
@@ -161,7 +151,6 @@ public class PlaylistOptionsFragment extends DialogFragment {
     private Optional<MediaPlayerService> getMediaPlayerService(){
         MainActivity mainActivity = (MainActivity) getActivity();
         if(mainActivity == null){
-            log("getMPS() main activity is null!");
             return Optional.empty();
         }
         return Optional.ofNullable(mainActivity.getMediaPlayerService());

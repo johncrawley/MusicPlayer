@@ -580,7 +580,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void scrollToAndSelectPosition(int index, boolean isSearchResult){
-        Bundle bundle = new Bundle();
+        var bundle = new Bundle();
         putInt(bundle, MessageKey.TRACK_INDEX, index);
         putBoolean(bundle, MessageKey.IS_SEARCH_RESULT, isSearchResult);
         sendMessage(SCROLL_TO_CURRENT_TRACK, bundle);
@@ -591,7 +591,7 @@ public class MainActivity extends AppCompatActivity {
         if(mediaPlayerService == null){
             return;
         }
-        Bundle bundle = new Bundle();
+        var bundle = new Bundle();
         putInt(bundle, MessageKey.TRACK_INDEX, mediaPlayerService.getPlaylistHelper().getIndexOfCurrentTrack());
         sendMessage(ENSURE_SELECTED_TRACK_IS_VISIBLE, bundle);
     }

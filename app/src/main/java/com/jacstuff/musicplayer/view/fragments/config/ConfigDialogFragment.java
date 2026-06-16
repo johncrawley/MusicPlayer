@@ -74,6 +74,7 @@ public class ConfigDialogFragment extends DialogFragment {
         });
     }
 
+
     private Optional<MainActivity> getMain(){
         return Optional.ofNullable((MainActivity) getActivity());
     }

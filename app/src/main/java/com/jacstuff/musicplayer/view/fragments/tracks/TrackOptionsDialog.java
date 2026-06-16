@@ -73,11 +73,11 @@ public class TrackOptionsDialog extends DialogFragment {
 
 
     private void setupButtonIfConditionsMet(View parentView, int buttonId, Function<Track, String> function, Runnable runnable){
-        Track track = getCurrentTrack();
+        var track = getCurrentTrack();
         if(track == null){
             return;
         }
-        String attribute = function.apply(track);
+        var attribute = function.apply(track);
         if(attribute.isBlank() || attribute.equalsIgnoreCase("<unknown>")){
             return;
         }
@@ -167,7 +167,7 @@ public class TrackOptionsDialog extends DialogFragment {
 
 
     private void runThenDismissAfterDelay(Consumer<MainActivity> consumer){
-        MainActivity mainActivity = (MainActivity) getActivity();
+        var mainActivity = (MainActivity) getActivity();
         if(mainActivity != null) {
             consumer.accept(mainActivity);
         }

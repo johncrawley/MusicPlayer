@@ -1,6 +1,5 @@
 package com.jacstuff.musicplayer.view.fragments.dialog;
 
-import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -10,7 +9,6 @@ import android.os.Looper;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.view.WindowMetrics;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
@@ -44,7 +42,7 @@ public class DialogFragmentUtils {
 
 
     public static void setTransparentBackground(DialogFragment fragment){
-        Dialog dialog = fragment.getDialog();
+        var dialog = fragment.getDialog();
         if(dialog == null){
             return;
         }
@@ -56,12 +54,11 @@ public class DialogFragmentUtils {
 
 
     private static void setupScrollViewHeight(Fragment fragment, View parentView, int scrollViewId, int layoutId){
-        ScrollView scrollView = parentView.findViewById(scrollViewId);
-        LinearLayout contentsLayout = parentView.findViewById(layoutId);
-
         if(fragment.getView() == null){
             return;
         }
+        ScrollView scrollView = parentView.findViewById(scrollViewId);
+        LinearLayout contentsLayout = parentView.findViewById(layoutId);
         int height = Math.min(contentsLayout.getHeight(), getDisplayHeight(fragment) / 2);
         scrollView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, height));
     }
@@ -71,7 +68,7 @@ public class DialogFragmentUtils {
         if(fragment.getActivity() == null){
             return 700;
         }
-        WindowMetrics windowMetrics = fragment.getActivity().getWindowManager().getCurrentWindowMetrics();
+        var windowMetrics = fragment.getActivity().getWindowManager().getCurrentWindowMetrics();
         return windowMetrics.getBounds().height();
     }
 
@@ -80,13 +77,13 @@ public class DialogFragmentUtils {
         if(fragment.getActivity() == null){
             return new Rect(0,0,700, 700);
         }
-        WindowMetrics windowMetrics = fragment.getActivity().getWindowManager().getCurrentWindowMetrics();
+        var windowMetrics = fragment.getActivity().getWindowManager().getCurrentWindowMetrics();
         return windowMetrics.getBounds();
     }
 
 
     public static void runThenDismissAfterDelay(DialogFragment dialogFragment, Consumer<MainActivity> consumer){
-        MainActivity mainActivity = (MainActivity) dialogFragment.getActivity();
+        var mainActivity = (MainActivity) dialogFragment.getActivity();
         if(mainActivity != null) {
             consumer.accept(mainActivity);
         }
