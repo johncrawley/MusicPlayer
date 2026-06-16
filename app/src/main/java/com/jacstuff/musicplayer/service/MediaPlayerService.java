@@ -330,30 +330,23 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
 
 
     public void scrollToPositionOf(Track track){
-        scrollToPositionOf(track, false);
-    }
-
-
-    public void scrollToPositionOf(Track track, boolean isSearchResult){
         int trackIndexOnCurrentPlaylist = getPlaylistManager().getCurrentIndexOf(track);
         if(trackIndexOnCurrentPlaylist == - 1){
             new Handler(Looper.getMainLooper()).postDelayed(  ()-> mainActivity.deselectCurrentTrack(), 300);
         }
         else {
-            mainActivity.scrollToAndSelectPosition(trackIndexOnCurrentPlaylist, isSearchResult);
+            mainActivity.scrollToAndSelectPosition(trackIndexOnCurrentPlaylist, false);
         }
     }
 
 
-    public void scrollToPositionOfCurrentTrack(Track searchResultTrack){
-        var currentTrack = getCurrentTrack();
-        var isSearchResult = currentTrack.getId() == searchResultTrack.getId();
-        int trackIndexOnCurrentPlaylist = getPlaylistManager().getCurrentIndexOf(currentTrack);
+    public void scrollToPositionOfCurrentTrack(){
+        int trackIndexOnCurrentPlaylist = getPlaylistManager().getCurrentIndexOf(getCurrentTrack());
         if(trackIndexOnCurrentPlaylist == - 1){
             new Handler(Looper.getMainLooper()).postDelayed(  ()-> mainActivity.deselectCurrentTrack(), 300);
         }
         else {
-            mainActivity.scrollToAndSelectPosition(trackIndexOnCurrentPlaylist, isSearchResult);
+            mainActivity.scrollToAndSelectPosition(trackIndexOnCurrentPlaylist, true);
         }
     }
 
