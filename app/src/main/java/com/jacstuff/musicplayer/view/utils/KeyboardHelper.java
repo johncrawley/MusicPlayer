@@ -32,7 +32,7 @@ public class KeyboardHelper {
 
     private void showKeyboard(EditText editText){
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(editText, InputMethodManager.RESULT_UNCHANGED_SHOWN);
+        imm.showSoftInput(editText, 0);
     }
 
 }

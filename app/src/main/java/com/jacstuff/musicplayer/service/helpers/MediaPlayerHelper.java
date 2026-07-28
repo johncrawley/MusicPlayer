@@ -116,44 +116,8 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    public void stop(boolean shouldUpdateMainView){
-        stop(shouldUpdateMainView, true);
-    }
-
-
-    public void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
-        stopIfPlayingOrPaused();
-        stopUpdatingElapsedTime();
-        resetElapsedTime();
-        if(shouldUpdateNotification) {
-            mediaPlayerService.sendStopNotification();
-        }
-        mediaPlayerService.updateMainViewOfStop(shouldUpdateMainView);
-        cancelScheduledStoppageOfTrack();
-    }
-
-
     public void stopPlayingAfterNumberOfMinutes(int numberOfMinutes){
         stopTrackFuture = executorService.schedule( this::stopAndResetTime, numberOfMinutes, TimeUnit.MINUTES);
-    }
-
-
-    private void stopIfPlayingOrPaused(){
-        if(currentState == MediaPlayerState.PLAYING){
-            currentState = MediaPlayerState.STOPPING;
-            startVolumeShaper();
-            new Handler(Looper.getMainLooper()).postDelayed(this::stopMediaPlayer,fadeOutTime + 50);
-        }
-        else if(currentState == MediaPlayerState.PAUSED){
-            stopMediaPlayer();
-        }
-    }
-
-
-    private void stopMediaPlayer(){
-        mediaPlayer.stop();
-        currentState = MediaPlayerState.STOPPED;
-        mediaPlayer.reset();
     }
 
 
@@ -179,11 +143,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         else if(currentState == MediaPlayerState.PLAYING){
             stopPlayerAndSchedulePlay();
         }
-    }
-
-
-    private boolean isTrackPlayingOrPaused(){
-        return currentState == MediaPlayerState.PLAYING || currentState == MediaPlayerState.PAUSED;
     }
 
 
@@ -278,8 +237,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-
-
     public boolean isPaused(){
         return currentState == MediaPlayerState.PAUSED;
     }
@@ -371,9 +328,45 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
         if(currentState == MediaPlayerState.PAUSED){
             resume();
         }
-        else if(currentState == MediaPlayerState.STOPPED) {
+        else if(currentState == MediaPlayerState.STOPPED || currentState == MediaPlayerState.FINISHED) {
             stopPlayerAndSchedulePlay();
         }
+    }
+
+
+    public void stop(boolean shouldUpdateMainView){
+        stop(shouldUpdateMainView, true);
+    }
+
+
+    public void stop(boolean shouldUpdateMainView, boolean shouldUpdateNotification){
+        stopIfPlayingOrPaused();
+        stopUpdatingElapsedTime();
+        resetElapsedTime();
+        if(shouldUpdateNotification) {
+            mediaPlayerService.sendStopNotification();
+        }
+        mediaPlayerService.updateMainViewOfStop(shouldUpdateMainView);
+        cancelScheduledStoppageOfTrack();
+    }
+
+
+    private void stopIfPlayingOrPaused(){
+        if(currentState == MediaPlayerState.PLAYING){
+            currentState = MediaPlayerState.STOPPING;
+            startVolumeShaper();
+            new Handler(Looper.getMainLooper()).postDelayed(this::stopMediaPlayer,fadeOutTime + 50);
+        }
+        else if(currentState == MediaPlayerState.PAUSED){
+            stopMediaPlayer();
+        }
+    }
+
+
+    private void stopMediaPlayer(){
+        mediaPlayer.stop();
+        currentState = MediaPlayerState.STOPPED;
+        mediaPlayer.reset();
     }
 
 
@@ -425,16 +418,15 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
-    private void printError(Exception e){
-        var err = e.getMessage();
-        System.out.println("error: " + err);
-    }
-
-
-
     private void stopPlayer(){
         releaseAndResetMediaPlayer();
         mediaPlayerService.updateNotification("stopPlayer()");
+    }
+
+
+    private void printError(Exception e){
+        var err = e.getMessage();
+        System.out.println("error: " + err);
     }
 
 

@@ -119,9 +119,7 @@ public class MediaNotificationManager {
             return;
         }
         resetErrorStatusAfterDelay();
-        new Handler(Looper.getMainLooper()).post(() -> {
-            sendNotification(status);
-        });
+        new Handler(Looper.getMainLooper()).post(() -> sendNotification(status));
     }
 
 

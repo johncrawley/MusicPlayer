@@ -127,7 +127,7 @@ public class BroadcastHelper {
             if(mediaPlayerHelper == null){
                 return;
             }
-            String broadcast = mediaPlayerHelper.isPlaying() ? ACTION_NOTIFY_VIEW_OF_PLAYING : ACTION_NOTIFY_VIEW_OF_STOP;
+            var broadcast = mediaPlayerHelper.isPlaying() ? ACTION_NOTIFY_VIEW_OF_PLAYING : ACTION_NOTIFY_VIEW_OF_STOP;
             sendBroadcast(broadcast);
         }
     };
@@ -137,7 +137,7 @@ public class BroadcastHelper {
         if(mediaPlayerService == null){
             return;
         }
-        MediaPlayerHelper mediaPlayerHelper = mediaPlayerService.getMediaPlayerHelper();
+        var mediaPlayerHelper = mediaPlayerService.getMediaPlayerHelper();
         if(mediaPlayerHelper != null){
             consumer.accept(mediaPlayerHelper);
         }
