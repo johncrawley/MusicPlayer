@@ -297,6 +297,13 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     }
 
 
+    public void setVolume(float value){
+        float limitedValue = Math.clamp(value, 0, 100);
+        final float volume = (float) (1 - (Math.log(100 - limitedValue) / Math.log(100)));
+        mediaPlayer.setVolume(volume, volume);
+    }
+
+
     void resume(){
         cancelScheduledStoppageOfTrack();
         currentState = MediaPlayerState.PLAYING;
@@ -315,7 +322,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     public void setCpuWakeLock(Context context){
-            mediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
+        mediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
     }
 
 

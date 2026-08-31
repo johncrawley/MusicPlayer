@@ -41,6 +41,7 @@ import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.Message;
+import com.jacstuff.musicplayer.view.fragments.volume.CustomVolumeView;
 import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
@@ -121,6 +122,18 @@ public class MainActivity extends AppCompatActivity {
         setupViewModel();
         initHelpers();
         checkPath();
+        setupVolume();
+    }
+
+
+    private void setupVolume(){
+        CustomVolumeView volumeView = findViewById(R.id.volumeControl);
+        volumeView.setOnVolumeChangeListener( percentage -> {
+            if(mediaPlayerService != null){
+                var mediaPlayerHelper = mediaPlayerService.getMediaPlayerHelper();
+                mediaPlayerHelper.setVolume(percentage);
+            }
+        });
     }
 
 
