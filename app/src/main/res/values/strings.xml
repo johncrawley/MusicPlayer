@@ -181,4 +181,8 @@
     <string name="cyan">Cyan</string>
     <string name="magenta">Magenta</string>
     <string name="rose">Rose</string>
+
+    <string name="display_header" translatable="false">Display</string>
+    <string name="show_volume" translatable="false">Show Volume</string>
+    <string name="show_artwork" translatable="false">Show Artwork</string>
 </resources>

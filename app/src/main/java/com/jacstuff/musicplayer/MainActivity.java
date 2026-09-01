@@ -48,6 +48,7 @@ import com.jacstuff.musicplayer.service.MediaPlayerService;
 import com.jacstuff.musicplayer.view.utils.ThemeHelper;
 import com.jacstuff.musicplayer.view.art.AlbumArtHelper;
 import com.jacstuff.musicplayer.view.tab.TabHelper;
+import com.jacstuff.musicplayer.view.utils.VolumeHelper;
 import com.jacstuff.musicplayer.view.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
             sendMessage(NOTIFY_ARTISTS_TAB_TO_RESELECT_ITEM);
             sendMessage(NOTIFY_ALBUM_TAB_TO_RESELECT_ITEM);
             sendMessage(NOTIFY_ADD_RANDOM_TRACKS_DIALOG_TO_RELOAD);
+            new VolumeHelper(MainActivity.this, mediaPlayerService.getMediaPlayerHelper());
             isServiceConnected.set(true);
         }
 

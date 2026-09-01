@@ -11,7 +11,8 @@ public enum PrefKey {
     ARE_DUPLICATE_TRACKS_IGNORED("ignoreDuplicateTracks", true),
     TRACKS_PATH_STR("tracksPathnameString_1"),
     EXCLUDED_TRACKS_PATH_STR("excludeTracksWithPathname"),
-    IS_SHUFFLE_ENABLED("isShuffleEnabled", false);
+    IS_SHUFFLE_ENABLED("isShuffleEnabled", false),
+    IS_VOLUME_CONTROL_SHOWN("showVolumeControl", true);
 
 
     private final String keyStr;

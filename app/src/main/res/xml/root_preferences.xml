@@ -82,7 +82,19 @@
             app:defaultValue="5"
             app:min="0"
             app:useSimpleSummaryProvider="true" />
-
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/display_header">
+        <SwitchPreference
+            app:key="showVolumeControl"
+            app:title="@string/show_volume"
+            app:defaultValue="true"
+            app:enabled="true" />
+
+        <SwitchPreference
+            app:key="showArtwork"
+            app:title="@string/show_artwork"
+            app:defaultValue="true"
+            app:enabled="true" />
+    </PreferenceCategory>
 </PreferenceScreen>

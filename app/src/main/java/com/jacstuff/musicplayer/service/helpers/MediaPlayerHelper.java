@@ -36,6 +36,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
     private final int fadeOutTime = 400;
     @SuppressWarnings("FieldCanBeLocal")
     private VolumeShaper volumeShaper;
+    private float volume = 100;
 
 
     public MediaPlayerHelper(MediaPlayerService mediaPlayerService){
@@ -298,9 +299,14 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener {
 
 
     public void setVolume(float value){
-        float limitedValue = Math.clamp(value, 0, 100);
-        final float volume = (float) (1 - (Math.log(100 - limitedValue) / Math.log(100)));
-        mediaPlayer.setVolume(volume, volume);
+        volume = Math.clamp(value, 0, 100);
+        final float adjustedVolume = (float) (1 - (Math.log(100 - volume) / Math.log(100)));
+        mediaPlayer.setVolume(adjustedVolume, adjustedVolume);
+    }
+
+
+    public float getVolume(){
+        return volume;
     }
 
 
