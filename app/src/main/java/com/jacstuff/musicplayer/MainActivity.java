@@ -41,7 +41,6 @@ import com.jacstuff.musicplayer.service.playlist.PlaylistManager;
 import com.jacstuff.musicplayer.view.fragments.FragmentHelper;
 import com.jacstuff.musicplayer.view.fragments.MessageKey;
 import com.jacstuff.musicplayer.view.fragments.Message;
-import com.jacstuff.musicplayer.view.fragments.volume.CustomVolumeView;
 import com.jacstuff.musicplayer.view.utils.PlayerViewHelper;
 import com.jacstuff.musicplayer.view.search.SearchViewHelper;
 import com.jacstuff.musicplayer.service.MediaPlayerService;
@@ -69,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private TabHelper tabHelper;
     private final AtomicBoolean isServiceConnected = new AtomicBoolean(false);
     private PreferencesHelperImpl preferencesHelper;
+    private VolumeHelper volumeHelper;
 
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             sendMessage(NOTIFY_ARTISTS_TAB_TO_RESELECT_ITEM);
             sendMessage(NOTIFY_ALBUM_TAB_TO_RESELECT_ITEM);
             sendMessage(NOTIFY_ADD_RANDOM_TRACKS_DIALOG_TO_RELOAD);
-            new VolumeHelper(MainActivity.this, mediaPlayerService.getMediaPlayerHelper());
+            volumeHelper.setMediaPlayerHelper(mediaPlayerService.getMediaPlayerHelper());
             isServiceConnected.set(true);
         }
 
@@ -118,24 +118,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         requestPermissions();
+        setupVolume();
         assignTheme();
         setContentView(R.layout.fragment_main_screen);
         setupInsets();
         setupViewModel();
         initHelpers();
         checkPath();
-        setupVolume();
     }
 
 
     private void setupVolume(){
-        CustomVolumeView volumeView = findViewById(R.id.volumeControl);
-        volumeView.setOnVolumeChangeListener( percentage -> {
-            if(mediaPlayerService != null){
-                var mediaPlayerHelper = mediaPlayerService.getMediaPlayerHelper();
-                mediaPlayerHelper.setVolume(percentage);
-            }
-        });
+        volumeHelper = new VolumeHelper(MainActivity.this);
     }
 
 
@@ -209,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         themeHelper.restartActivityIfDifferentThemeSet(this);
+        volumeHelper.onStart();
         updateArtistsListInCaseMinTracksSettingHasChanged();
         checkPath();
     }
@@ -351,14 +346,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void startMediaPlayerService(){
-        var mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
-        var context = getApplicationContext();
-        context.startForegroundService(mediaPlayerServiceIntent);
-        context.bindService(mediaPlayerServiceIntent, serviceConnection, 0);
-    }
-
-
     public void requestTracksUpdate(){
         if(mediaPlayerService == null){
             startMediaPlayerService();
@@ -374,6 +361,14 @@ public class MainActivity extends AppCompatActivity {
         }else{
             mediaPlayerService.updateAlbumsView();
         }
+    }
+
+
+    public void startMediaPlayerService(){
+        var mediaPlayerServiceIntent = new Intent(this, MediaPlayerService.class);
+        var context = getApplicationContext();
+        context.startForegroundService(mediaPlayerServiceIntent);
+        context.bindService(mediaPlayerServiceIntent, serviceConnection, 0);
     }
 
 
