@@ -28,6 +28,7 @@ public class CustomVolumeView extends View {
     private final RectF progressRect = new RectF();
 
     private int progressColor   = 0xFF4CAF50;
+    int backgroundColor = 0xFF333333;
 
     private final float cornerRadius = 12f;
 
@@ -46,9 +47,9 @@ public class CustomVolumeView extends View {
         init();
     }
 
+
     private void init() {
         backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int backgroundColor = 0xFF333333;
         backgroundPaint.setColor(backgroundColor);
         backgroundPaint.setStyle(Paint.Style.FILL);
 
@@ -74,9 +75,12 @@ public class CustomVolumeView extends View {
     }
 
 
-    public void setProgressColor(int progress){
+    public void setColors(int progress, int background){
         this.progressColor = progress;
         progressPaint.setColor(progressColor);
+
+        this.backgroundColor = background;
+        backgroundPaint.setColor(backgroundColor);
         invalidate();
     }
 

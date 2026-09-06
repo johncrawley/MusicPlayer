@@ -44,12 +44,19 @@ public class VolumeHelper {
 
 
     private void setProgressColorOf(CustomVolumeView volumeView){
+        int progressColor = getColorFromAttribute(androidx.appcompat.R.attr.colorAccent);
+        int backgroundColor = getColorFromAttribute(R.attr.seek_bar_background);
+        volumeView.setColors(progressColor, backgroundColor);
+    }
+
+
+    private int getColorFromAttribute(int id){
         var typedValue = new TypedValue();
         var theme = mainActivity.getTheme();
-        theme.resolveAttribute(androidx.appcompat.R.attr.colorAccent, typedValue, true);
+        theme.resolveAttribute(id, typedValue, true);
 
         @ColorInt int color = typedValue.data;
-        volumeView.setProgressColor(color);
+        return color;
     }
 
 
