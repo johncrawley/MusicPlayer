@@ -16,7 +16,7 @@
         android:id="@+id/playlistRecyclerViewLayout"
         android:layout_width="@dimen/_100sdp"
         android:layout_height="@dimen/_200sdp"
-        android:background="@color/background"
+        android:background="?attr/list_background"
         android:layout_marginVertical="@dimen/_12sdp">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -28,7 +28,6 @@
             android:layout_marginBottom="@dimen/list_margin_bottom"
             android:fadeScrollbars="true"
             android:scrollbars="vertical"
-            android:background="@color/background"
             />
     </LinearLayout>
 

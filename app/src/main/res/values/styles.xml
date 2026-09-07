@@ -19,7 +19,7 @@
         <item name="android:fontFamily">@font/le_patin_magicien_xb7d</item>
         <item name="android:lineSpacingMultiplier">1.3</item>
         <item name="list_item_focused">@color/list_item_focused_day</item>
-        <item name="seek_bar_background">@color/seek_bar_background</item>
+        <item name="seek_bar_background">@color/seek_bar_background_day</item>
         <item name="track_info_background">@color/track_info_background_day</item>
         <item name="dialog_text_color">@color/dialog_text_color_day</item>
 
@@ -100,7 +100,7 @@
         <item name="materialButtonStyle">@style/customMaterialButtonStyleDarkText</item>
         <item name="colorPrimary">@color/primary_light_yellow_day</item>
         <item name="colorPrimaryDark">@color/primary_color_dark_light_yellow_day</item>
-        <item name="colorAccent">@color/color_accent_light_yellow</item>
+        <item name="colorAccent">@color/color_accent_light_yellow_day</item>
         <item name="android:textColor">@color/text_light_yellow_day</item>
         <item name="android:buttonTint">@color/primary_light_yellow</item>
         <item name="list_item_focused">@color/list_item_focused_light_yellow_day</item>
