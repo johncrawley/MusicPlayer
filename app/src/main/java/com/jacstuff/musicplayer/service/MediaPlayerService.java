@@ -399,11 +399,6 @@ public class MediaPlayerService extends Service implements AlbumArtConsumer {
     }
 
 
-    private void log(String msg){
-        System.out.println("^^^ MediaPlayerService: " +  msg);
-    }
-
-
     public String getReadyStatusStr(){
         return getApplicationContext().getString(R.string.status_ready);
     }

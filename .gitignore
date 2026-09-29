@@ -1,5 +1,6 @@
 *.iml
 *.aab
+/.idea/deploymentTargetSelector.xml
 .gradle
 /local.properties
 /.idea/libraries
